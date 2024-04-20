@@ -1,6 +1,39 @@
+#include "GameExceptions/InvalidRequestException.idl"
+#include "GameExceptions/NotLoggedInException.idl"
+#include "GameExceptions/ObjectExistenceException.idl"
+#include "Objects/Char.idl"
+#include "Objects/GameDetails.idl"
+#include "Objects/LeaderBoard.idl"
+#include "Objects/Lobby.idl"
+#include "Callback.idl"
+
 module LEXIGame {
 
+#include "Game.idl"
 
+interface GameRequest {
 
+    Room matchMake(Callback callback)
+    raises (InvalidRequestException, NotLoggedInException, ObjectExistenceException);
+
+    sequence < sequence < Char > > fetchWordbox(int roomid)
+    raises (InvalidRequestException);
+
+    void verifyWord(string word)
+    raises (InvalidRequestException);
+
+    sequence <string> fetchLeaderBoard()
+    raises (InvalidRequestException, NotLoggedInException, ObjectExistenceException);
+
+    int validateTotalPts(sequence <string> words)
+    raises (InvalidRequestException);
+
+    string fetchWinner()
+    raises (InvalidRequestException);
+
+    void saveToDb(Lobby game)
+    raises (InvalidRequestException);
+
+};
 
 };
