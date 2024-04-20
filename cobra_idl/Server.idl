@@ -1,0 +1,8 @@
+#include "Client.idl"
+
+module Server {
+  interface Server {
+    // type-operation-(client object), that is,
+//    wstring-operation-(in Client::Client object) ;
+  };
+};

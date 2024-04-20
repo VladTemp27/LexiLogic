@@ -1,4 +1,4 @@
-module GameExceptions {
+module exceptions {
 
     exception NotLoggedIn {
         string message;

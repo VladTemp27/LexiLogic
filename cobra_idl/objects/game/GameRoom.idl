@@ -1,8 +1,8 @@
-module GameObjects {
-
-    struct Room {
+module objects {
+module game {
+    struct GameRoom {
         attribute String roomID;
         attribute sequence <String> players;
-
+        };
     };
 };

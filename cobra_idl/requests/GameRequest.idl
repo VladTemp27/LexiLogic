@@ -1,15 +1,12 @@
-#include "GameExceptions/InvalidRequestException.idl"
-#include "GameExceptions/NotLoggedInException.idl"
-#include "GameExceptions/ObjectExistenceException.idl"
-#include "Objects/Char.idl"
-#include "Objects/GameDetails.idl"
-#include "Objects/LeaderBoard.idl"
-#include "Objects/Lobby.idl"
-#include "Callback.idl"
+#include "exceptions/InvalidRequestException.idl"
+#include "exceptions/NotLoggedInException.idl"
+#include "exceptions/ObjectExistenceException.idl"
+#include "objects/Char.idl"
+#include "objects/GameDetails.idl"
+#include "objects/Lobby.idl"
+#include "Client.idl"
 
-module LEXIGame {
-
-#include "Game.idl"
+module requests {
 
 interface GameRequest {
 

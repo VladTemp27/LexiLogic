@@ -1,8 +1,10 @@
-module PLayerObjects {
+module objects{
+module player {
     struct Player {
         attribute long id;
         attribute string name;
         attribute string password;
         attribute string lastLogin;
     };
+};
 };

@@ -1,11 +1,10 @@
-#include "Player.idl"
-#include "GameExceptions/InvalidRequestException.idl"
-#include "GameExceptions/UserExistenceException.idl"
+#include "objects/player/Player.idl"
+#include "exceptions/InvalidRequestException.idl"
+#include "exceptions/UserExistenceException.idl"
 
-    module callback {
+    module Client {
 
-        interface Callback {
-
+        interface Client {
             void uiCall()
             raises (InvalidRequestException)
 
@@ -14,8 +13,6 @@
 
             User getPlayer()
             raises (UserExistenceException)
-
-
 
         };
 

@@ -1,20 +1,17 @@
-#include "GameExceptions/InvalidCredentialsException.idl"
-#include "GameExceptions/AlreadyLoggedInException.idl"
-#include "GameExceptions/NotLoggedInException.idl"
-#include "GameExceptions/UserExistenceException.idl"
-#include "GameExceptions/InvalidRequestException.idl"
-#include "GameExceptions/InvalidWordException.idl"
-#include "GameExceptions/ObjectExistenceException.idl"
-#include "GameExceptions/NoPlayersAvailableException.idl"
-#include "Objects/GameDetails.idl"
-#include "Objects/LeaderBoard.idl"
-#include "Objects/Lobby.idl"
-#include "Objects/Player.idl"
-#include "Callback.idl"
+#include "exceptions/InvalidCredentialsException.idl"
+#include "exceptions/AlreadyLoggedInException.idl"
+#include "exceptions/NotLoggedInException.idl"
+#include "exceptions/UserExistenceException.idl"
+#include "exceptions/InvalidRequestException.idl"
+#include "exceptions/InvalidWordException.idl"
+#include "exceptions/ObjectExistenceException.idl"
+#include "exceptions/NoPlayersAvailableException.idl"
+#include "objects/game/GameDetail.idl"
+#include "objects/game/Lobby.idl"
+#include "objects/game/Player.idl"
+#include "Client.idl"
 
-module LEXIUser {
-
-#include "Game.idl"
+module requests {
 
 interface UserRequest {
 
@@ -35,7 +32,6 @@ interface UserRequest {
 
     void startGame()
     raises (NoPlayersAvailableException, NotLoggedInException);
-
 
     void submitWord(in string word)
     raises (InvalidWordException, NotLoggedInException);
