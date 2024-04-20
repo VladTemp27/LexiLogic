@@ -16,7 +16,7 @@ module LEXIUser {
 
 #include "Game.idl"
 
-interface UserManagementInterface {
+interface UserRequest {
 
     void login(Callback callback)
     raises (InvalidCredentialsException, AlreadyLoggedInException, UserExistenceException);
