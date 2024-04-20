@@ -1,0 +1,22 @@
+#include "Player.idl"
+#include "GameExceptions/InvalidRequestException.idl"
+#include "GameExceptions/UserExistenceException.idl"
+
+    module util {
+
+        interface ClientCallback {
+
+            void uiCall()
+            raises (InvalidRequestException)
+
+            void setUser(in Player player)
+            raises (InvalidRequestException)
+
+            User getPlayer()
+            raises (UserExistenceException)
+
+
+
+        };
+
+    };

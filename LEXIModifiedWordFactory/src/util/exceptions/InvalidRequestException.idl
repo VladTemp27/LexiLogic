@@ -1,0 +1,7 @@
+module GameExceptions {
+
+    exception InvalidRequest {
+        string message;
+    };
+
+};

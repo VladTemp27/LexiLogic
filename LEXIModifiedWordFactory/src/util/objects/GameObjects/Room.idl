@@ -1,0 +1,8 @@
+module GameObjects {
+
+    struct Room {
+        attribute String roomID;
+        attribute sequence <String> players;
+
+    };
+};

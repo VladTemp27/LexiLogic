@@ -1,0 +1,7 @@
+module GameExceptions {
+
+    exception InvalidWord {
+        string message;
+    };
+
+};

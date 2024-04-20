@@ -1,0 +1,8 @@
+module GameObjects {
+    #include "GameDetails.idl"
+    struct Lobby {
+        attribute long lobbyId;
+        attribute GameDetails lobbyDetails;
+        attribute string winner;
+    };
+};

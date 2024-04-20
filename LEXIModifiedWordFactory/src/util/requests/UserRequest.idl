@@ -1,0 +1,45 @@
+#include "GameExceptions/InvalidCredentialsException.idl"
+#include "GameExceptions/AlreadyLoggedInException.idl"
+#include "GameExceptions/NotLoggedInException.idl"
+#include "GameExceptions/UserExistenceException.idl"
+#include "GameExceptions/InvalidRequestException.idl"
+#include "GameExceptions/InvalidWordException.idl"
+#include "Objects/GameDetails.idl"
+#include "Objects/LeaderBoard.idl"
+#include "Objects/Lobby.idl"
+#include "Objects/Player.idl"
+
+module LEXIUser {
+
+#include "Game.idl"
+
+interface UserManagementInterface {
+
+    void login(Callback callback)
+    raises (InvalidCredentialsException, AlreadyLoggedInException, UserExistenceException);
+
+    void logout()
+    raises (NotLoggedInException);
+
+    boolean changePassword(in string username, in string newPassword)
+    raises (UserExistenceException, NotLoggedInException);
+
+    void startGame()
+    raises (NoPlayersAvailable, NotLoggedInException);
+
+
+    void submitWord(in string word)
+    raises (InvalidWordException, NotLoggedInException);
+
+    GameResult getGameResult()
+    raises (NotLoggedInException);
+
+    GameHistory getGameHistory()
+    raises (NotLoggedInException, InvalidRequestException);
+
+    sequence<LeaderboardEntry> getLeaderboard()
+    raises (NotLoggedInException);
+
+};
+
+};

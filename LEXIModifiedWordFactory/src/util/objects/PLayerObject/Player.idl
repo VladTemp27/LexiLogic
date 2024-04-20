@@ -1,0 +1,8 @@
+module PLayerObjects {
+    struct Player {
+        attribute long id;
+        attribute string name;
+        attribute string password;
+        attribute string lastLogin;
+    };
+};
