@@ -2,7 +2,7 @@
 #include "GameExceptions/InvalidRequestException.idl"
 #include "GameExceptions/UserExistenceException.idl"
 
-    module util {
+    module callback {
 
         interface ClientCallback {
 

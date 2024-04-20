@@ -1,0 +1,7 @@
+module GameExceptions {
+
+    exception NoPlayersAvailable {
+        string message;
+    };
+
+};

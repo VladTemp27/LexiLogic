@@ -4,10 +4,13 @@
 #include "GameExceptions/UserExistenceException.idl"
 #include "GameExceptions/InvalidRequestException.idl"
 #include "GameExceptions/InvalidWordException.idl"
+#include "GameExceptions/ObjectExistenceException.idl"
+#include "GameExceptions/NoPlayersAvailableException.idl"
 #include "Objects/GameDetails.idl"
 #include "Objects/LeaderBoard.idl"
 #include "Objects/Lobby.idl"
 #include "Objects/Player.idl"
+#include "Callback.idl"
 
 module LEXIUser {
 
@@ -21,23 +24,29 @@ interface UserManagementInterface {
     void logout()
     raises (NotLoggedInException);
 
-    boolean changePassword(in string username, in string newPassword)
-    raises (UserExistenceException, NotLoggedInException);
+    void changeUsername (in string username, in string newUsername)
+    raises (InvalidRequestException,UserExistenceException, NotLoggedInException, ObjectExistenceException);
+
+    void changePassword(in string username, in string newPassword)
+    raises (InvalidRequestException,UserExistenceException, NotLoggedInException, ObjectExistenceException);
+
+    void deleteProfile (in string username)
+    raises(InvalidRequestException,NotLoggedInException,ObjectExistenceException)
 
     void startGame()
-    raises (NoPlayersAvailable, NotLoggedInException);
+    raises (NoPlayersAvailableException, NotLoggedInException);
 
 
     void submitWord(in string word)
     raises (InvalidWordException, NotLoggedInException);
 
-    GameResult getGameResult()
+    void getGameResult()
     raises (NotLoggedInException);
 
-    GameHistory getGameHistory()
+    void getGameHistory()
     raises (NotLoggedInException, InvalidRequestException);
 
-    sequence<LeaderboardEntry> getLeaderboard()
+    sequence<LeaderBoard> getLeaderboard()
     raises (NotLoggedInException);
 
 };
