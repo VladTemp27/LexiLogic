@@ -1,7 +1,0 @@
-module exceptions {
-
-    exception NotLoggedIn {
-        string message;
-    };
-
-};

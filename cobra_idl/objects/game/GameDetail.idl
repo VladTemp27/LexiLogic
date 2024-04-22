@@ -1,9 +1,0 @@
-module objects {
-module game {
-    struct GameDetails {
-        attribute long playerID;
-        attribute long lobbyID;
-        attribute long totalPoints;
-    };
-};
-};
