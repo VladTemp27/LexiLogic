@@ -1,0 +1,65 @@
+#include "ClientCallback.idl"
+module BoggleApp {
+    module Exceptions{
+            exception AlreadyLoggedIn {
+                string message;
+            };
+            exception InvalidCredentials {
+                string message;
+            };
+            exception InvalidRequest {
+                string message;
+            };
+            exception InvalidWord {
+                string message;
+            };
+            exception NoPlayersAvailable {
+                string message;
+            };
+            exception NotLoggedIn {
+                string message;
+            };
+            exception ObjectExistence{
+                string message;
+            };
+            exception UserExistenceException {
+                string message;
+            };
+    };
+    module Services {
+        module Game {
+             interface GameService {
+                    struct GameDetail {
+                        long playerID;
+                        long lobbyID;
+                        long totalPoints;
+                    };
+
+                    struct GameRoom {
+                        string roomID;
+                        sequence <string> players;
+                    };
+
+                    struct Lobby {
+                        long lobbyId;
+                        string created_by;
+                        string winner;
+                    };
+             };
+        };
+
+        module Player {
+             interface PlayerService {
+                     struct Player {
+                             long id;
+                             string name;
+                             string password;
+                             string lastLogin;
+                     };
+
+                     void login(in Client::ClientCallback clientcallback)
+                     raises(Exceptions::AlreadyLoggedIn);
+             };
+        };
+    };
+};
