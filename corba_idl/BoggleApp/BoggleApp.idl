@@ -1,4 +1,4 @@
-#include "ClientCallback.idl"
+#include "../ClientCallback.idl"
 module BoggleApp {
     module Exceptions{
             exception AlreadyLoggedIn {
@@ -23,6 +23,9 @@ module BoggleApp {
                 string message;
             };
             exception UserExistenceException {
+                string message;
+            };
+            exception SQLError {
                 string message;
             };
     };
