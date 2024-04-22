@@ -10,7 +10,7 @@ module requests {
 
 interface GameRequest {
 
-    Room matchMake(Callback callback)
+    Room matchMake(Client client)
     raises (InvalidRequestException, NotLoggedInException, ObjectExistenceException);
 
     sequence < sequence < Char > > fetchWordbox(int roomid)

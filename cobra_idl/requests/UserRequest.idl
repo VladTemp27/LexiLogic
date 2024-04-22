@@ -15,7 +15,7 @@ module requests {
 
 interface UserRequest {
 
-    void login(Callback callback)
+    void login(Client client)
     raises (InvalidCredentialsException, AlreadyLoggedInException, UserExistenceException);
 
     void logout()
