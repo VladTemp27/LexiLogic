@@ -12,17 +12,17 @@
     <children>
         <ImageView fitHeight="500.0" fitWidth="800.0">
             <image>
-                <Image url="@icons/Background.png" />
+                <Image url="@../../icons/Background.png" />
             </image>
         </ImageView>
         <ImageView fitHeight="344.0" fitWidth="443.0" layoutX="33.0" layoutY="-2.0" pickOnBounds="true" preserveRatio="true">
             <image>
-                <Image url="@icons/Logo.png" />
+                <Image url="@../../icons/Logo.png" />
             </image>
         </ImageView>
         <ImageView fitHeight="229.0" fitWidth="233.0" layoutX="-69.0" layoutY="343.0" pickOnBounds="true" preserveRatio="true" rotate="40.0">
             <image>
-                <Image url="@icons/Axel.png" />
+                <Image url="@../../icons/Axel.png" />
             </image>
         </ImageView>
         <TextField fx:id="passwordField" layoutX="493.0" layoutY="218.0" prefHeight="44.0" prefWidth="276.0" promptText="Password" style="-fx-background-color: FFF8D6;">
