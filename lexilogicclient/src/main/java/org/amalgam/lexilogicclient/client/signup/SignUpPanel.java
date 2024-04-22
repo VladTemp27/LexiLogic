@@ -1,4 +1,4 @@
-package org.amalgam.lexilogicclient.common;
+package org.amalgam.lexilogicclient.client.signup;
 
 import javafx.application.Application;
 import javafx.stage.Stage;
