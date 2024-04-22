@@ -1,4 +1,4 @@
-#include "../ClientCallback.idl"
+#include "../ClientCallback.idl" // TODO: current path must be in /BoggleApp package
 module BoggleApp {
     module Exceptions{
             exception SQLError {
