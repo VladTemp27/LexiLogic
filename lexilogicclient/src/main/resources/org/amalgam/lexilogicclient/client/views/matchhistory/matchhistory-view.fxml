@@ -8,7 +8,6 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-
 <AnchorPane fx:id="matchHistoryPane" prefHeight="500.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.amalgam.lexilogicclient.client.matchhistory.MatchHistoryController">
    <children>
       <ImageView fitHeight="500.0" fitWidth="800.0">
@@ -56,7 +55,7 @@
             <Font name="Bowlby One SC Regular" size="40.0" />
          </font>
       </Label>
-      <TableView layoutX="28.0" layoutY="94.0" prefHeight="382.0" prefWidth="469.0">
+      <TableView layoutX="28.0" layoutY="94.0" prefHeight="382.0" prefWidth="469.0" style="-fx-background-color: transparent;">
         <columns>
           <TableColumn fx:id="gameID" prefWidth="109.0" text="Game ID" />
           <TableColumn fx:id="standing" prefWidth="249.0" text="Standing" />
