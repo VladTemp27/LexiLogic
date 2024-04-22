@@ -1,0 +1,68 @@
+#include "../BoggleApp/BoggleApp.idl"
+
+module DAL {
+
+    module DALUtil {
+        interface DatabaseUtil {
+            string getConnection() raises (BoggleApp::Exceptions::SQLError);
+            void closeConnection() raises (BoggleApp::Exceptions::SQLError);
+        };
+    };
+
+    module DALGameDetail {
+        struct GameDetail {
+            long playerID;
+            long lobbyID;
+            long totalPoints;
+        };
+
+        interface GameDetailsDAL {
+            void insertNewGameDetail(in long playerID, in long lobbyID, in long totalPoints) raises (BoggleApp::Exceptions::SQLError);
+            GameDetail getGameDetailByID(in long lobbyID) raises (BoggleApp::Exceptions::SQLError);
+        };
+    };
+
+    module DALLeaderBoard {
+        struct Leaderboard {
+            long leaderboardID;
+            long userID;
+            long totalPoints;
+        };
+
+        interface LeaderboardDAL {
+            void insertNewLeaderboard(in long userID, in long totalPoints) raises (BoggleApp::Exceptions::SQLError);
+            Leaderboard getLeaderboardByID(in long leaderboardID) raises (BoggleApp::Exceptions::SQLError);
+        };
+    };
+
+    module DALLobby {
+        struct Lobby {
+            string lobbyId;
+            string createdBy;
+            string winner;
+        };
+
+        interface LobbyDAL {
+            void insertNewLobby(in long lobbyId, in string createdBy, in string winner) raises (BoggleApp::Exceptions::SQLError);
+            Lobby getLobbyByID(in long lobbyId) raises (BoggleApp::Exceptions::SQLError);
+        };
+    };
+
+    module DALPlayer {
+        struct Player {
+            long id;
+            string name;
+            string password;
+            string lastLogin;
+        };
+
+        interface PlayerDAL {
+            void insertNewPlayer(in string username, in string password, in string lastLogin) raises (BoggleApp::Exceptions::SQLError);
+            Player getPlayerByID(in long playerID) raises (BoggleApp::Exceptions::SQLError);
+            void updatePassword(in long playerID, in string newPassword) raises (BoggleApp::Exceptions::SQLError);
+            void updateUsername(in long playerID, in string newUsername) raises (BoggleApp::Exceptions::SQLError);
+            void deletePlayer(in long playerID) raises (BoggleApp::Exceptions::SQLError);
+        };
+    };
+
+};

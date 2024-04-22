@@ -1,4 +1,4 @@
-#include "ClientCallback.idl"
+#include "../ClientCallback.idl"
 module BoggleApp {
     module Exceptions{
             exception SQLError {
