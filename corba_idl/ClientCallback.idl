@@ -1,5 +1,22 @@
-module Client {
-    interface ClientCallback {
+#include "../BoggleApp/BoggleApp.idl"
 
+module Client {
+    exception InvalidRequestException {
+        string reason;
+    };
+
+    exception UserExistenceException {
+        string reason;
+    };
+
+    interface ClientCallback {
+        void uiCall()
+        raises (BoggleApp::InvalidRequestException);
+
+        void setUser(in BoggleApp::Player player)
+        raises (BoggleApp::InvalidRequestException);
+
+        BoggleApp::User getPlayer()
+        raises (BoggleApp::UserExistenceException);
     };
 };
