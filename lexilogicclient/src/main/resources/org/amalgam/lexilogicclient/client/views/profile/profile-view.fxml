@@ -29,7 +29,7 @@
             <Image url="@../../../icons/CreamRectangle.png" />
          </image>
       </ImageView>
-      <ImageView fx:id="profileIcon" fitHeight="86.0" fitWidth="84.0" layoutX="263.0" layoutY="273.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="profileIcon" fitHeight="86.0" fitWidth="84.0" layoutX="269.0" layoutY="282.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../../../icons/Profile.png" />
          </image>
@@ -63,6 +63,12 @@
       <ImageView fx:id="backButtonImage" fitHeight="66.0" fitWidth="99.0" layoutX="13.0" layoutY="22.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../../../icons/BackButton.png" />
+         </image>
+      </ImageView>
+      <Button fx:id="editUsernameButton" layoutX="496.0" layoutY="284.0" mnemonicParsing="false" prefHeight="24.0" prefWidth="23.0" style="-fx-background-color: #FFF8D6;" />
+      <ImageView fitHeight="40.0" fitWidth="39.0" layoutX="484.0" layoutY="278.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../../../icons/EditUser.png" />
          </image>
       </ImageView>
    </children>
