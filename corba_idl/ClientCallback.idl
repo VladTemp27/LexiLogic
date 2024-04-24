@@ -1,0 +1,5 @@
+module Client {
+    interface ClientCallback {
+
+    };
+};

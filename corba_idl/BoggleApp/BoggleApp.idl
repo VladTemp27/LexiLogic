@@ -1,0 +1,147 @@
+#include "../ClientCallback.idl" // TODO: current path must be in /BoggleApp package
+module BoggleApp {
+    module Exceptions{
+            exception SQLError {
+                string reason;
+            };
+            exception AlreadyLoggedIn {
+                string message;
+            };
+            exception InvalidCredentials {
+                string message;
+            };
+            exception InvalidRequest {
+                string message;
+            };
+            exception InvalidWord {
+                string message;
+            };
+            exception NoPlayersAvailable {
+                string message;
+            };
+            exception NotLoggedIn {
+                string message;
+            };
+            exception ObjectExistence{
+                string message;
+            };
+            exception UserExistenceException {
+                string message;
+            };
+            exception ChangeUsernameFailed {
+                string reason;
+            };
+            exception ChangePasswordFailed {
+                string reason;
+            };
+            exception DeleteAccountFailed {
+                string reason;
+            };
+            exception SubmitWordFailed {
+                string reason;
+            };
+            exception StartGameFailed {
+                string reason;
+            };
+            exception MatchCreationFailed {
+                string reason;
+            };
+            exception WordFetchException {
+                string reason;
+            };
+            exception WordException {
+                string reason;
+            };
+    };
+    module Services {
+        module Game {
+             interface GameService {
+                    struct GameDetail {
+                        long playerID;
+                        long lobbyID;
+                        long totalPoints;
+                    };
+
+                    struct GameRoom {
+                        long roomID;
+                        sequence <string> players;
+                    };
+
+                    GameRoom matchMake(in Client::ClientCallback clientcallback)
+                    raises (Exceptions::MatchCreationFailed);
+
+                    typedef char Matrix [6][6];
+                    Matrix fetchWordBox(in long roomID)
+                    raises (Exceptions::WordFetchException);
+
+                    struct Lobby {
+                        long lobbyId;
+                        string created_by;
+                        string winner;
+                    };
+
+                    struct Leaderboard {
+                        long leaderboardID;
+                        long playerID;
+                        long totalPoints;
+                    };
+
+                    typedef sequence<Leaderboard> leaderboards;
+                    leaderboards getLeaderboards()
+                    raises (Exceptions::SQLError);
+
+                    void verifyWord(in string word)
+                    raises (Exceptions::WordException);
+
+                    typedef sequence<string> words;
+                    long validateTotalPoints(in words word) // sum of points per round of players
+                    raises (Exceptions::WordException);
+
+                    string fetchWinner()
+                    raises (Exceptions::SQLError);
+
+                    void insertLobby(in Lobby lobby)
+                    raises (Exceptions::SQLError);
+             };
+        };
+
+        module Player {
+             interface PlayerService {
+                     struct Player {
+                             long id;
+                             string name;
+                             string password;
+                             string lastLogin;
+                     };
+
+                     void login(in Client::ClientCallback clientcallback)
+                     raises(Exceptions::AlreadyLoggedIn, Exceptions::InvalidCredentials, Exceptions::UserExistenceException);
+
+                     void logout()
+                     raises (Exceptions::NotLoggedIn);
+
+                     void changeUsername (in string username, in string newUsername)
+                     raises (Exceptions::ChangeUsernameFailed);
+
+                     void changePassword(in string username, in string newPassword)
+                     raises (Exceptions::ChangeUsernameFailed);
+
+                     void deleteAccount (in string username)
+                     raises (Exceptions::DeleteAccountFailed);
+
+                     void submitWord(in string word)
+                     raises (Exceptions::SubmitWordFailed);
+
+                     void startGame()
+                     raises (Exceptions::StartGameFailed);
+
+                     void getGameResult()
+                     raises (Exceptions::SQLError);
+
+                     void getGameHistory()
+                     raises (Exceptions::SQLError);
+
+             };
+        };
+    };
+};

@@ -1,7 +1,0 @@
-module exceptions {
-
-    exception UserExistenceException {
-        string message;
-    };
-
-};
