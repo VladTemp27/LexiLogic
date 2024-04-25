@@ -105,6 +105,7 @@ module Service {
                 raises (PlayerExceptions::GameHistoryUnavailable);
         };
 
+
         interface PlayerCallback {
             void uiCall()
                 raises (PlayerExceptions::InvalidRequestException);
