@@ -1,5 +1,4 @@
 module Service {
-
     module PlayerExceptions {
         exception AlreadyLoggedIn {
             string message;
@@ -97,6 +96,29 @@ module Service {
 
             void startGame(in string username)
                 raises (PlayerExceptions::StartGameFailed);
+
+             struct GameDetail {
+                long playerID;
+                long lobbyID;
+                long totalPoints;
+            };
+
+            struct GameRoom {
+                long roomID;
+                sequence<string> players;
+            };
+
+             struct Lobby {
+                 long lobbyId;
+                 string created_by;
+                 string winner;
+             };
+
+             struct Leaderboard {
+                 long leaderboardID;
+                 long playerID;
+                 long totalPoints;
+             };
 
             void getGameResult() // To be discussed
                 raises (PlayerExceptions::GameResultUnavailable);

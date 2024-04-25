@@ -16,12 +16,6 @@ module DAL {
         string reason;
         };
     };
-    module DALUtil {
-        interface DatabaseUtil {
-            string getConnection() raises (SQLExceptions::SQLConnectionError);
-            void closeConnection() raises (SQLExceptions::SQLConnectionError);
-        };
-    };
 
     module DALGameDetail {
 
