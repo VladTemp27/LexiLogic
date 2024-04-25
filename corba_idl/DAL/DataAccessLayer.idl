@@ -1,11 +1,25 @@
-#include "../BoggleApp/BoggleApp.idl" // TODO: current path must be in /DAL package
-
 module DAL {
-
+    module SQLExceptions {
+        exception SQLConnectionError {
+        string reason;
+        };
+        exception SQLUpdateError {
+        string reason;
+        };
+        exception SQLCreateError {
+        string reason;
+        };
+        exception SQLDeleteError {
+        string reason;
+        };
+        exception SQLRetrieveError{
+        string reason;
+        };
+    };
     module DALUtil {
         interface DatabaseUtil {
-            string getConnection() raises (BoggleApp::Exceptions::SQLError);
-            void closeConnection() raises (BoggleApp::Exceptions::SQLError);
+            string getConnection() raises (SQLExceptions::SQLConnectionError);
+            void closeConnection() raises (SQLExceptions::SQLConnectionError);
         };
     };
 
@@ -16,9 +30,11 @@ module DAL {
             long totalPoints;
         };
 
+
+
         interface GameDetailsDAL {
-            void insertNewGameDetail(in long playerID, in long lobbyID, in long totalPoints) raises (BoggleApp::Exceptions::SQLError);
-            GameDetail getGameDetailByID(in long lobbyID) raises (BoggleApp::Exceptions::SQLError);
+            void insertNewGameDetail(in long playerID, in long lobbyID, in long totalPoints) raises (SQLExceptions::SQLCreateError);
+            GameDetail getGameDetailByID(in long lobbyID) raises (SQLExceptions::SQLRetrieveError);
         };
     };
 
@@ -30,8 +46,8 @@ module DAL {
         };
 
         interface LeaderboardDAL {
-            void insertNewLeaderboard(in long userID, in long totalPoints) raises (BoggleApp::Exceptions::SQLError);
-            Leaderboard getLeaderboardByID(in long leaderboardID) raises (BoggleApp::Exceptions::SQLError);
+            void insertNewLeaderboard(in long userID, in long totalPoints) raises (SQLExceptions::SQLCreateError);
+            Leaderboard getLeaderboardByID(in long leaderboardID) raises (SQLExceptions::SQLRetrieveError);
         };
     };
 
@@ -43,8 +59,8 @@ module DAL {
         };
 
         interface LobbyDAL {
-            void insertNewLobby(in long lobbyId, in string createdBy, in string winner) raises (BoggleApp::Exceptions::SQLError);
-            Lobby getLobbyByID(in long lobbyId) raises (BoggleApp::Exceptions::SQLError);
+            void insertNewLobby(in long lobbyId, in string createdBy, in string winner) raises (SQLExceptions::SQLCreateError);
+            Lobby getLobbyByID(in long lobbyId) raises (SQLExceptions::SQLRetrieveError);
         };
     };
 
@@ -57,11 +73,11 @@ module DAL {
         };
 
         interface PlayerDAL {
-            void insertNewPlayer(in string username, in string password, in string lastLogin) raises (BoggleApp::Exceptions::SQLError);
-            Player getPlayerByID(in long playerID) raises (BoggleApp::Exceptions::SQLError);
-            void updatePassword(in long playerID, in string newPassword) raises (BoggleApp::Exceptions::SQLError);
-            void updateUsername(in long playerID, in string newUsername) raises (BoggleApp::Exceptions::SQLError);
-            void deletePlayer(in long playerID) raises (BoggleApp::Exceptions::SQLError);
+            void insertNewPlayer(in string username, in string password, in string lastLogin) raises (SQLExceptions::SQLCreateError);
+            Player getPlayerByID(in long playerID) raises (SQLExceptions::SQLRetrieveError);
+            void updatePassword(in long playerID, in string newPassword) raises (SQLExceptions::SQLUpdateError);
+            void updateUsername(in long playerID, in string newUsername) raises (SQLExceptions::SQLUpdateError);
+            void deletePlayer(in long playerID) raises (SQLExceptions::SQLDeleteError);
         };
     };
 
