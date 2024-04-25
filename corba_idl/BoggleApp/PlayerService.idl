@@ -64,6 +64,10 @@ module Service {
         exception GameResultUnavailable {
             string reason;
         };
+
+        exception InGameException {
+            string reason;
+        }
     };
 
     module Player {
@@ -96,13 +100,13 @@ module Service {
                 raises (PlayerExceptions::SubmitWordFailed);
 
             void startGame(in string username)
-                raises (PlayerExceptions::StartGameFailed);
+                raises (PlayerExceptions::StartGameFailed, PlayerExceptions::InGameException);
 
             void getGameResult() // To be discussed
-                raises (PlayerExceptions::GameResultUnavailable);
+                raises (PlayerExceptions::GameResultUnavailable, PlayerExceptions::InGameException);
 
             void getGameHistory() // To be discussed
-                raises (PlayerExceptions::GameHistoryUnavailable);
+                raises (PlayerExceptions::GameHistoryUnavailable, PlayerExceptions::InGameException);
         };
 
 
