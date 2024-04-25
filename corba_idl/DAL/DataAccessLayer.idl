@@ -1,8 +1,5 @@
 module DAL {
     module SQLExceptions {
-        exception SQLConnectionError {
-        string reason;
-        };
         exception SQLUpdateError {
         string reason;
         };
