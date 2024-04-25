@@ -21,4 +21,9 @@ public class MatchHistoryController {
     private TableColumn standing;
     @FXML
     private TableColumn score;
+
+    @FXML
+    private void initialize() {
+
+    }
 }

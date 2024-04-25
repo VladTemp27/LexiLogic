@@ -57,9 +57,9 @@
       </Label>
       <TableView fx:id="matchTable" layoutX="28.0" layoutY="94.0" prefHeight="382.0" prefWidth="469.0" style="-fx-background-color: transparent;">
         <columns>
-          <TableColumn fx:id="gameID" prefWidth="109.0" text="Game ID" />
-          <TableColumn fx:id="standing" prefWidth="249.0" text="Standing" />
-            <TableColumn fx:id="score" minWidth="0.0" prefWidth="110.0" text="Score" />
+          <TableColumn fx:id="gameID" prefWidth="109.0" text="Game ID" style="-fx-background-color: transparent;" />
+          <TableColumn fx:id="standing" prefWidth="249.0" text="Standing" style="-fx-background-color: transparent;" />
+            <TableColumn fx:id="score" minWidth="0.0" prefWidth="110.0" text="Score" style="-fx-background-color: transparent;" />
         </columns>
       </TableView>
    </children>
