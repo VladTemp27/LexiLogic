@@ -1,4 +1,3 @@
-#include "../ClientCallback.idl" // TODO: current path must be in /BoggleApp package
 module BoggleApp {
     module Exceptions{
             exception SQLError {
@@ -52,96 +51,108 @@ module BoggleApp {
             exception WordException {
                 string reason;
             };
+            exception InvalidRequestException {
+                string reason;
+            };
     };
-    module Services {
-        module Game {
-             interface GameService {
-                    struct GameDetail {
-                        long playerID;
-                        long lobbyID;
-                        long totalPoints;
-                    };
+     module Player {
+        interface PlayerCallback;
+         interface PlayerService {
+                 struct Player {
+                         long id;
+                         string name;
+                         string password;
+                         string lastLogin;
+                 };
 
-                    struct GameRoom {
-                        long roomID;
-                        sequence <string> players;
-                    };
+                 void login(in PlayerCallback player_callback)
+                 raises(Exceptions::AlreadyLoggedIn, Exceptions::InvalidCredentials, Exceptions::UserExistenceException);
 
-                    GameRoom matchMake(in Client::ClientCallback clientcallback)
-                    raises (Exceptions::MatchCreationFailed);
+                 void logout()
+                 raises (Exceptions::NotLoggedIn);
 
-                    typedef char Matrix [6][6];
-                    Matrix fetchWordBox(in long roomID)
-                    raises (Exceptions::WordFetchException);
+                 void changeUsername (in string username, in string newUsername)
+                 raises (Exceptions::ChangeUsernameFailed);
 
-                    struct Lobby {
-                        long lobbyId;
-                        string created_by;
-                        string winner;
-                    };
+                 void changePassword(in string username, in string newPassword)
+                 raises (Exceptions::ChangeUsernameFailed);
 
-                    struct Leaderboard {
-                        long leaderboardID;
-                        long playerID;
-                        long totalPoints;
-                    };
+                 void deleteAccount (in string username)
+                 raises (Exceptions::DeleteAccountFailed);
 
-                    typedef sequence<Leaderboard> leaderboards;
-                    leaderboards getLeaderboards()
-                    raises (Exceptions::SQLError);
+                 void submitWord(in string word)
+                 raises (Exceptions::SubmitWordFailed);
 
-                    void verifyWord(in string word)
-                    raises (Exceptions::WordException);
+                 void startGame()
+                 raises (Exceptions::StartGameFailed);
 
-                    typedef sequence<string> words;
-                    long validateTotalPoints(in words word) // sum of points per round of players
-                    raises (Exceptions::WordException);
+                 void getGameResult()
+                 raises (Exceptions::SQLError);
 
-                    string fetchWinner()
-                    raises (Exceptions::SQLError);
+                 void getGameHistory()
+                 raises (Exceptions::SQLError);
+                 };
 
-                    void insertLobby(in Lobby lobby)
-                    raises (Exceptions::SQLError);
-             };
-        };
+                  interface PlayerCallback {
+                             void uiCall()
+                             raises (Exceptions::InvalidRequestException);
 
-        module Player {
-             interface PlayerService {
-                     struct Player {
-                             long id;
-                             string name;
-                             string password;
-                             string lastLogin;
-                     };
+                             void setUser(in PlayerService::Player player)
+                             raises (Exceptions::InvalidRequestException);
 
-                     void login(in Client::ClientCallback clientcallback)
-                     raises(Exceptions::AlreadyLoggedIn, Exceptions::InvalidCredentials, Exceptions::UserExistenceException);
+                             typedef PlayerService::Player player;
+                             player getPlayer()
+                             raises (Exceptions::InvalidRequestException);
+                         };
+            };
+   module Game {
+                interface GameService {
+                       struct GameDetail {
+                           long playerID;
+                           long lobbyID;
+                           long totalPoints;
+                       };
 
-                     void logout()
-                     raises (Exceptions::NotLoggedIn);
+                       struct GameRoom {
+                           long roomID;
+                           sequence <string> players;
+                       };
 
-                     void changeUsername (in string username, in string newUsername)
-                     raises (Exceptions::ChangeUsernameFailed);
+                       GameRoom matchMake(in Player::PlayerCallback player_callback)
+                       raises (Exceptions::MatchCreationFailed);
 
-                     void changePassword(in string username, in string newPassword)
-                     raises (Exceptions::ChangeUsernameFailed);
+                       typedef char Matrix [6][6];
+                       Matrix fetchWordBox(in long roomID)
+                       raises (Exceptions::WordFetchException);
 
-                     void deleteAccount (in string username)
-                     raises (Exceptions::DeleteAccountFailed);
+                       struct Lobby {
+                           long lobbyId;
+                           string created_by;
+                           string winner;
+                       };
 
-                     void submitWord(in string word)
-                     raises (Exceptions::SubmitWordFailed);
+                       struct Leaderboard {
+                           long leaderboardID;
+                           long playerID;
+                           long totalPoints;
+                       };
 
-                     void startGame()
-                     raises (Exceptions::StartGameFailed);
+                       typedef sequence<Leaderboard> leaderboards;
+                       leaderboards getLeaderboards()
+                       raises (Exceptions::SQLError);
 
-                     void getGameResult()
-                     raises (Exceptions::SQLError);
+                       void verifyWord(in string word)
+                       raises (Exceptions::WordException);
 
-                     void getGameHistory()
-                     raises (Exceptions::SQLError);
+                       typedef sequence<string> words;
+                       long validateTotalPoints(in words word) // sum of points per round of players
+                       raises (Exceptions::WordException);
 
-             };
-        };
-    };
+                       string fetchWinner()
+                       raises (Exceptions::SQLError);
+
+                       void insertLobby(in Lobby lobby)
+                       raises (Exceptions::SQLError);
+                };
+           };
 };
