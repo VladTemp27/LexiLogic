@@ -55,7 +55,7 @@
             <Font name="Bowlby One SC Regular" size="40.0" />
          </font>
       </Label>
-      <TableView layoutX="28.0" layoutY="94.0" prefHeight="382.0" prefWidth="469.0" style="-fx-background-color: transparent;">
+      <TableView fx:id="matchTable" layoutX="28.0" layoutY="94.0" prefHeight="382.0" prefWidth="469.0" style="-fx-background-color: transparent;">
         <columns>
           <TableColumn fx:id="gameID" prefWidth="109.0" text="Game ID" />
           <TableColumn fx:id="standing" prefWidth="249.0" text="Standing" />

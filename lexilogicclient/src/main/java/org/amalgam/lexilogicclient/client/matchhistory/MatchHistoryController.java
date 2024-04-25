@@ -3,6 +3,7 @@ package org.amalgam.lexilogicclient.client.matchhistory;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import javafx.scene.layout.AnchorPane;
 
 public class MatchHistoryController {
@@ -12,6 +13,8 @@ public class MatchHistoryController {
     private Label scoreLabel;
     @FXML
     private Label rankLabel;
+    @FXML
+    private TableView matchTable;
     @FXML
     private TableColumn gameID;
     @FXML
