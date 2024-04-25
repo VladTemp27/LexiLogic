@@ -1,0 +1,124 @@
+module Service {
+
+    module GameExceptions {
+        exception MatchCreationFailed {
+            string reason;
+        };
+
+        exception WordFetchException {
+            string reason;
+        };
+
+        exception InvalidWordFormat {
+            string reason;
+        };
+
+        exception InvalidRoomID {
+            string reason;
+        };
+
+        exception EmptyLeaderBoard {
+            string reason;
+        };
+
+        exception InvalidLobbyData {
+            string reason;
+        };
+
+        exception InvalidLobbyID {
+            string reason;
+        };
+
+        exception DuplicateWordException {
+            string reason;
+        };
+
+        exception InsufficientWordPoints {
+            string reason;
+        };
+
+        exception InvalidTotalPoints {
+            string reason;
+        };
+
+        exception WinnerDoesNotExist {
+            string reason;
+        };
+
+        exception InvalidRequestException {
+            string reason;
+        };
+    };
+
+    module GameService {
+        interface PlayerCallback;
+
+        interface GameService {
+              struct Player {
+                    long id;
+                    string name;
+                    string password;
+                    string lastLogin;
+              };
+
+            struct GameDetail {
+                long playerID;
+                long lobbyID;
+                long totalPoints;
+            };
+
+            struct GameRoom {
+                long roomID;
+                sequence<string> players;
+            };
+
+            GameRoom matchMake(in PlayerCallback player_callback)
+                raises (GameExceptions::MatchCreationFailed);
+
+            typedef char Matrix[6][6];
+            Matrix fetchWordBox(in long roomID)
+                raises (GameExceptions::WordFetchException, GameExceptions::InvalidRoomID);
+
+            struct Lobby {
+                long lobbyId;
+                string created_by;
+                string winner;
+            };
+
+            struct Leaderboard {
+                long leaderboardID;
+                long playerID;
+                long totalPoints;
+            };
+
+            typedef sequence<Leaderboard> leaderboards;
+            leaderboards getLeaderboards()
+                raises (GameExceptions::EmptyLeaderBoard);
+
+            void verifyWord(in string word)
+                raises (GameExceptions::InvalidWordFormat, GameExceptions::DuplicateWordException);
+
+            typedef sequence<string> words;
+            long validateTotalPoints(in words word) // sum of points per round of players
+                raises (GameExceptions::InsufficientWordPoints, GameExceptions::InvalidTotalPoints);
+
+            string fetchWinner(in long lobbyId)
+                raises (GameExceptions::InvalidLobbyID, GameExceptions::WinnerDoesNotExist);
+
+            void insertLobby(in Lobby lobby)
+                raises (GameExceptions::InvalidLobbyData);
+        };
+
+        interface PlayerCallback {
+            void uiCall()
+                raises (GameExceptions::InvalidRequestException);
+
+            void setUser(in GameService::Player player)
+                raises (GameExceptions::InvalidRequestException);
+
+            typedef GameService::Player player;
+            player getPlayer()
+                raises (GameExceptions::InvalidRequestException);
+        };
+    };
+};
