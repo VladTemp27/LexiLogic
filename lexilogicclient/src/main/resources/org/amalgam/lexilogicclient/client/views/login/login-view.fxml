@@ -25,25 +25,25 @@
                 <Image url="@../../../icons/Axel.png" />
             </image>
         </ImageView>
-        <TextField fx:id="passwordField" layoutX="493.0" layoutY="218.0" prefHeight="44.0" prefWidth="276.0" promptText="Password" style="-fx-background-color: FFF8D6;">
+        <TextField fx:id="passwordField" layoutX="491.0" layoutY="271.0" prefHeight="44.0" prefWidth="276.0" promptText="Password" style="-fx-background-color: FFF8D6;">
             <font>
                 <Font name="Brygada 1918 Regular" size="20.0" />
             </font></TextField>
-        <TextField fx:id="usernameField" layoutX="493.0" layoutY="155.0" prefHeight="44.0" prefWidth="276.0" promptText="Username" style="-fx-background-color: FFF8D6;">
+        <TextField fx:id="usernameField" layoutX="491.0" layoutY="212.0" prefHeight="44.0" prefWidth="276.0" promptText="Username" style="-fx-background-color: FFF8D6;">
             <font>
                 <Font name="Brygada 1918 Regular" size="20.0" />
             </font></TextField>
-        <Label layoutX="501.0" layoutY="94.0" text="Welcome Back!" textAlignment="CENTER" textFill="WHITE">
+        <Label layoutX="501.0" layoutY="138.0" text="Welcome Back!" textAlignment="CENTER" textFill="WHITE">
             <font>
                 <Font name="Bowlby One SC Regular" size="30.0" />
             </font>
         </Label>
-        <Button fx:id="loginButton" layoutX="655.0" layoutY="285.0" mnemonicParsing="false" prefHeight="47.0" prefWidth="114.0" style="-fx-background-color: #D9E0A2;" text="Login" textFill="#6b4406">
+        <Button fx:id="loginButton" layoutX="631.0" layoutY="332.0" mnemonicParsing="false" prefHeight="47.0" prefWidth="114.0" style="-fx-background-color: #D9E0A2;" text="Login" textFill="#6b4406">
             <font>
                 <Font name="Bowlby One SC Regular" size="20.0" />
             </font>
         </Button>
-      <Button fx:id="signUpButton" layoutX="193.0" layoutY="332.0" mnemonicParsing="false" prefHeight="47.0" prefWidth="124.0" style="-fx-background-color: #D9E0A2;" text="Sign-Up" textFill="#6b4406">
+      <Button fx:id="signUpButton" layoutX="136.0" layoutY="300.0" mnemonicParsing="false" prefHeight="47.0" prefWidth="124.0" style="-fx-background-color: #D9E0A2;" text="Sign-Up" textFill="#6b4406">
          <font>
             <Font name="Bowlby One SC Regular" size="20.0" />
          </font>
