@@ -5,6 +5,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.layout.AnchorPane;
+import org.amalgam.lexilogicclient.MainController;
 
 public class MatchHistoryController {
     @FXML
@@ -22,8 +23,18 @@ public class MatchHistoryController {
     @FXML
     private TableColumn score;
 
+    private MainController mainController;
+
+    /**
+     * Sets the Main Controller.
+     *
+     * @param mainController
+     */
+    public void setMainController(MainController mainController) {
+        this.mainController = mainController;
+    }
     @FXML
-    private void initialize() {
+    public void initialize() {
 
     }
 }
