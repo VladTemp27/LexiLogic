@@ -50,7 +50,7 @@ module Service {
         };
     };
 
-    module GameService {
+    module Game {
         interface PlayerCallback;
 
         interface GameService {
