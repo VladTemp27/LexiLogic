@@ -6,7 +6,11 @@ import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import org.amalgam.lexilogicclient.client.login.LoginController;
+import org.amalgam.lexilogicclient.client.mainmenu.MainMenuController;
 import org.amalgam.lexilogicclient.client.matchhistory.MatchHistoryController;
+import org.amalgam.lexilogicclient.client.profile.ProfileChangePassController;
+import org.amalgam.lexilogicclient.client.profile.ProfileChangeUsernameController;
+import org.amalgam.lexilogicclient.client.profile.ProfileController;
 import org.amalgam.lexilogicclient.client.signup.SignUpController;
 
 import java.io.IOException;
@@ -27,6 +31,18 @@ public class MainController {
     static MatchHistoryController matchHistoryController;
     static AnchorPane matchHistoryPanel;
 
+    static ProfileController profileController;
+    static AnchorPane profilePane;
+
+    static MainMenuController mainMenuController;
+    static AnchorPane mainmenuPane;
+
+    static ProfileChangeUsernameController profileChangeUsernameController;
+    static AnchorPane changeUsernamePane;
+
+    static ProfileChangePassController profileChangePassController;
+    static AnchorPane changepassPane;
+
     /**
      * Getters and Setters of Controllers and Panels
      */
@@ -34,6 +50,10 @@ public class MainController {
     public LoginController getLoginController() { return loginController; }
     public SignUpController getSignUpController() { return signUpController; }
     public MatchHistoryController getMatchHistoryController() { return matchHistoryController; }
+    public ProfileController getProfileController(){ return profileController;}
+    public ProfileChangeUsernameController getProfileChangeUsernameController(){ return profileChangeUsernameController;}
+    public ProfileChangePassController getProfileChangePassController(){return profileChangePassController;}
+    public MainMenuController getMainMenuController(){return mainMenuController;}
 
     /**
      * Loads and displays the login view.
@@ -138,4 +158,129 @@ public class MainController {
             e.printStackTrace();
         }
     }
+    public void loadProfileView(){
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/org/amalgam/lexilogicclient/client/views/profile/profile-view.fxml"));
+            AnchorPane profilePane = fxmlLoader.load();
+
+            InputStream inputStream = getClass().getResourceAsStream("icons/Logo.png");
+
+            if (inputStream != null) {
+                Image image = new Image(inputStream);
+                stage.getIcons().add(image);
+            } else {
+                System.err.println("Failed to load image: Logo.png");
+            }
+
+            Scene scene = new Scene(profilePane);
+
+            if (stage == null) {
+                throw new IllegalStateException("Stage is not set. Please set the stage before calling the panel.");
+            }
+
+            stage.setScene(scene);
+            stage.setResizable(false);
+            stage.setTitle("Lexi Logic");
+            ProfileController profileController = fxmlLoader.getController();
+            profileController.setMainController(this);
+            profileController.initialize();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    public void loadProfileChangeUsernameView(){
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/org/amalgam/lexilogicclient/client/views/profile/profileChangeUsername-view.fxml"));
+            AnchorPane changeUsernamePane = fxmlLoader.load();
+
+            InputStream inputStream = getClass().getResourceAsStream("icons/Logo.png");
+
+            if (inputStream != null) {
+                Image image = new Image(inputStream);
+                stage.getIcons().add(image);
+            } else {
+                System.err.println("Failed to load image: Logo.png");
+            }
+
+            Scene scene = new Scene(changeUsernamePane);
+
+            if (stage == null) {
+                throw new IllegalStateException("Stage is not set. Please set the stage before calling the panel.");
+            }
+
+            stage.setScene(scene);
+            stage.setResizable(false);
+            stage.setTitle("Lexi Logic");
+            ProfileChangeUsernameController profileChangeUsernameController = fxmlLoader.getController();
+            profileChangeUsernameController.setMainController(this);
+            profileChangeUsernameController.initialize();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    public void loadProfileChangePasswordView(){
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/org/amalgam/lexilogicclient/client/views/profile/profileChangePass-view.fxml"));
+            AnchorPane changepassPane = fxmlLoader.load();
+
+            InputStream inputStream = getClass().getResourceAsStream("icons/Logo.png");
+
+            if (inputStream != null) {
+                Image image = new Image(inputStream);
+                stage.getIcons().add(image);
+            } else {
+                System.err.println("Failed to load image: Logo.png");
+            }
+
+            Scene scene = new Scene(changepassPane);
+
+            if (stage == null) {
+                throw new IllegalStateException("Stage is not set. Please set the stage before calling the panel.");
+            }
+
+            stage.setScene(scene);
+            stage.setResizable(false);
+            stage.setTitle("Lexi Logic");
+            ProfileChangePassController profileChangePassController = fxmlLoader.getController();
+            profileChangePassController.setMainController(this);
+            profileChangePassController.initialize();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    public void loadMainMenuView(){
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/org/amalgam/lexilogicclient/client/views/mainmenu/mainmenu-view.fxml"));
+            AnchorPane mainmenuPane = fxmlLoader.load();
+
+            InputStream inputStream = getClass().getResourceAsStream("icons/Logo.png");
+
+            if (inputStream != null) {
+                Image image = new Image(inputStream);
+                stage.getIcons().add(image);
+            } else {
+                System.err.println("Failed to load image: Logo.png");
+            }
+
+            Scene scene = new Scene(mainmenuPane);
+
+            if (stage == null) {
+                throw new IllegalStateException("Stage is not set. Please set the stage before calling the panel.");
+            }
+
+            stage.setScene(scene);
+            stage.setResizable(false);
+            stage.setTitle("Lexi Logic");
+            MainMenuController mainMenuController = fxmlLoader.getController();
+            mainMenuController.setMainController(this);
+            mainMenuController.initialize();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 }
