@@ -1,8 +1,5 @@
 module DAL {
     module SQLExceptions {
-        exception SQLConnectionError {
-        string reason;
-        };
         exception SQLUpdateError {
         string reason;
         };
@@ -14,12 +11,6 @@ module DAL {
         };
         exception SQLRetrieveError{
         string reason;
-        };
-    };
-    module DALUtil {
-        interface DatabaseUtil {
-            string getConnection() raises (SQLExceptions::SQLConnectionError);
-            void closeConnection() raises (SQLExceptions::SQLConnectionError);
         };
     };
 
