@@ -1,3 +1,5 @@
+module org{
+module amalgam{
 module Service {
     module PlayerExceptions {
         exception AlreadyLoggedIn {
@@ -148,4 +150,6 @@ module Service {
                 raises (PlayerExceptions::InvalidRequest);
         };
     };
+};
+};
 };

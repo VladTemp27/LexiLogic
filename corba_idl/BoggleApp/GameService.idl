@@ -1,3 +1,5 @@
+module org{
+module amalgam{
 module Service {
     module GameExceptions {
         exception MatchCreationFailed {
@@ -119,4 +121,6 @@ module Service {
                 raises (GameExceptions::InvalidRequestException);
         };
     };
+};
+};
 };
