@@ -1,3 +1,5 @@
+//This is completely unnecessary, object of our server wouldn't and shouldn't be passed via orb therefore an idl
+//      for it is not needed.
 module Server {
   interface Server {
     // type-operation-(client object), that is,

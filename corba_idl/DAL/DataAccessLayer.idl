@@ -1,6 +1,5 @@
-module org {
-module amalgam {
-module lexilogicclient { // lexilogicserver | lexilogicclient
+module org{
+module amalgam{
 module DAL {
     module SQLExceptions {
         exception SQLUpdateError {
@@ -76,5 +75,3 @@ module DAL {
 };
 };
 };
-};
-

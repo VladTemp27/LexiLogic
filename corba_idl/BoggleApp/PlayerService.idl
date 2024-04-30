@@ -1,3 +1,5 @@
+module org{
+module amalgam{
 module Service {
     module PlayerExceptions {
         exception AlreadyLoggedIn {
@@ -52,9 +54,6 @@ module Service {
             string reason;
         };
 
-        exception InvalidRequestException {
-            string reason;
-        };
 
         exception GameHistoryUnavailable {
             string reason;
@@ -66,7 +65,7 @@ module Service {
 
         exception InGameException {
             string reason;
-        }
+        };
     };
 
     module Player {
@@ -133,14 +132,24 @@ module Service {
 
         interface PlayerCallback {
             void uiCall()
-                raises (PlayerExceptions::InvalidRequestException);
+                raises (PlayerExceptions::InvalidRequest);
 
             void setUser(in PlayerService::Player player)
-                raises (PlayerExceptions::InvalidRequestException);
+                raises (PlayerExceptions::InvalidRequest);
 
             typedef PlayerService::Player player;
             player getPlayer()
-                raises (PlayerExceptions::InvalidRequestException);
+                raises (PlayerExceptions::InvalidRequest);
+        };
+
+        interface ControllerInterface {
+           void setObjectsUser (in string objects)
+                 raises (PlayerExceptions::InvalidRequest, PlayerExceptions::UserExistenceException);
+
+           void fetchAndUpdate()
+                raises (PlayerExceptions::InvalidRequest);
         };
     };
+};
+};
 };
