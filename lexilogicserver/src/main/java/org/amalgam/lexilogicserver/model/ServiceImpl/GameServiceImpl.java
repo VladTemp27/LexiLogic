@@ -40,6 +40,8 @@ public class GameServiceImpl extends GameServicePOA {
 
     @Override
     public void insertLobby(Lobby lobby) throws InvalidLobbyData {
-
+        System.out.println(lobby.getLobbyId());
+        System.out.println(lobby.getCreated_by());
+        System.out.println(lobby.getWinner());
     }
 }

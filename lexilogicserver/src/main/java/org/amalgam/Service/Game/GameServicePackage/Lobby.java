@@ -25,4 +25,27 @@ public final class Lobby implements org.omg.CORBA.portable.IDLEntity
     winner = _winner;
   } // ctor
 
+  public int getLobbyId() {
+    return lobbyId;
+  }
+
+  public void setLobbyId(int lobbyId) {
+    this.lobbyId = lobbyId;
+  }
+
+  public String getCreated_by() {
+    return created_by;
+  }
+
+  public void setCreated_by(String created_by) {
+    this.created_by = created_by;
+  }
+
+  public String getWinner() {
+    return winner;
+  }
+
+  public void setWinner(String winner) {
+    this.winner = winner;
+  }
 } // class Lobby

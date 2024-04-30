@@ -25,4 +25,27 @@ public final class GameDetail implements org.omg.CORBA.portable.IDLEntity
     totalPoints = _totalPoints;
   } // ctor
 
+  public int getPlayerID() {
+    return playerID;
+  }
+
+  public void setPlayerID(int playerID) {
+    this.playerID = playerID;
+  }
+
+  public int getLobbyID() {
+    return lobbyID;
+  }
+
+  public void setLobbyID(int lobbyID) {
+    this.lobbyID = lobbyID;
+  }
+
+  public int getTotalPoints() {
+    return totalPoints;
+  }
+
+  public void setTotalPoints(int totalPoints) {
+    this.totalPoints = totalPoints;
+  }
 } // class GameDetail

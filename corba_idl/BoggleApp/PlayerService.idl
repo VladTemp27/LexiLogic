@@ -79,6 +79,7 @@ module Service {
                 string lastLogin;
             };
 
+
             void login(in PlayerCallback player_callback)
                 raises (PlayerExceptions::AlreadyLoggedIn, PlayerExceptions::InvalidCredentials, PlayerExceptions::UserExistenceException);
 
