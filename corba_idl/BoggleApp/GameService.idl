@@ -2,9 +2,6 @@ module org{
 module amalgam{
 module Service {
     module GameExceptions {
-        exception MatchCreationFailed {
-            string reason;
-        };
 
         exception WordFetchException {
             string reason;
@@ -26,7 +23,7 @@ module Service {
             string reason;
         };
 
-        exception InvalidLobbyID {
+        exception LobbyDoesNotExist {
             string reason;
         };
 
@@ -54,12 +51,12 @@ module Service {
     module Game {
         interface PlayerCallback;
         interface GameService {
-              struct Player {
-                    long id;
-                    string name;
-                    string password;
-                    string lastLogin;
-              };
+            struct Player {
+                long id;
+                string name;
+                string password;
+                string lastLogin;
+            };
 
             struct GameDetail {
                 long playerID;
@@ -72,8 +69,6 @@ module Service {
                 sequence<string> players;
             };
 
-            GameRoom matchMake(in PlayerCallback player_callback)
-                raises (GameExceptions::MatchCreationFailed);
 
             typedef char Matrix[6][6];
             Matrix fetchWordBox(in long roomID)
@@ -103,21 +98,22 @@ module Service {
                 raises (GameExceptions::InsufficientWordPoints, GameExceptions::InvalidTotalPoints);
 
             string fetchWinner(in long lobbyId)
-                raises (GameExceptions::InvalidLobbyID, GameExceptions::WinnerDoesNotExist);
+                raises (GameExceptions::LobbyDoesNotExist, GameExceptions::WinnerDoesNotExist);
 
             void insertLobby(in Lobby lobby)
                 raises (GameExceptions::InvalidLobbyData);
         };
 
         interface PlayerCallback {
-            void uiCall()
+
+            void uiCall(in long lobbyId)
                 raises (GameExceptions::InvalidRequestException);
 
-            void setUser(in GameService::Player player)
+            void setUser(in GameService::Player player, in long lobbyId)
                 raises (GameExceptions::InvalidRequestException);
 
             typedef GameService::Player player;
-            player getPlayer()
+            player getPlayer(in long lobbyId)
                 raises (GameExceptions::InvalidRequestException);
         };
     };
