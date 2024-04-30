@@ -11,12 +11,11 @@ package org.amalgam.DAL.DALLobby;
 public class _LobbyDALStub extends org.omg.CORBA.portable.ObjectImpl implements org.amalgam.DAL.DALLobby.LobbyDAL
 {
 
-  public void insertNewLobby (int lobbyId, String createdBy, String winner) throws org.amalgam.DAL.SQLExceptions.SQLCreateError
+  public void insertNewLobby (String createdBy, String winner) throws org.amalgam.DAL.SQLExceptions.SQLCreateError
   {
             org.omg.CORBA.portable.InputStream $in = null;
             try {
                 org.omg.CORBA.portable.OutputStream $out = _request ("insertNewLobby", true);
-                $out.write_long (lobbyId);
                 $out.write_string (createdBy);
                 $out.write_string (winner);
                 $in = _invoke ($out);
@@ -29,7 +28,7 @@ public class _LobbyDALStub extends org.omg.CORBA.portable.ObjectImpl implements 
                 else
                     throw new org.omg.CORBA.MARSHAL (_id);
             } catch (org.omg.CORBA.portable.RemarshalException $rm) {
-                insertNewLobby (lobbyId, createdBy, winner        );
+                insertNewLobby (createdBy, winner        );
             } finally {
                 _releaseReply ($in);
             }

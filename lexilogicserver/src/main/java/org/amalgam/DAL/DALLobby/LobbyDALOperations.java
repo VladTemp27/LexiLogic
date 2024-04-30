@@ -10,6 +10,6 @@ package org.amalgam.DAL.DALLobby;
 
 public interface LobbyDALOperations 
 {
-  void insertNewLobby (int lobbyId, String createdBy, String winner) throws org.amalgam.DAL.SQLExceptions.SQLCreateError;
+  void insertNewLobby (String createdBy, String winner) throws org.amalgam.DAL.SQLExceptions.SQLCreateError;
   org.amalgam.DAL.DALLobby.LobbyDALPackage.Lobby getLobbyByID (int lobbyId) throws org.amalgam.DAL.SQLExceptions.SQLRetrieveError;
 } // interface LobbyDALOperations

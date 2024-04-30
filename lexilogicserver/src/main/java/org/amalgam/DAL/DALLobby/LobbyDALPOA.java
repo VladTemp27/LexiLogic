@@ -35,10 +35,9 @@ public abstract class LobbyDALPOA extends org.omg.PortableServer.Servant
        case 0:  // org/amalgam/DAL/DALLobby/LobbyDAL/insertNewLobby
        {
          try {
-           int lobbyId = in.read_long ();
            String createdBy = in.read_string ();
            String winner = in.read_string ();
-           this.insertNewLobby (lobbyId, createdBy, winner);
+           this.insertNewLobby (createdBy, winner);
            out = $rh.createReply();
          } catch (org.amalgam.DAL.SQLExceptions.SQLCreateError $ex) {
            out = $rh.createExceptionReply ();

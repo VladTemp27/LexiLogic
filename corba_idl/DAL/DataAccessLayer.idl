@@ -50,7 +50,7 @@ module DAL {
                     string winner;
                 };
 
-            void insertNewLobby(in long lobbyId, in string createdBy, in string winner) raises (SQLExceptions::SQLCreateError);
+            void insertNewLobby(in string createdBy, in string winner) raises (SQLExceptions::SQLCreateError);
             Lobby getLobbyByID(in long lobbyId) raises (SQLExceptions::SQLRetrieveError);
         };
     };

@@ -10,7 +10,7 @@ package org.amalgam.DAL.DALLobby.LobbyDALPackage;
 
 public final class Lobby implements org.omg.CORBA.portable.IDLEntity
 {
-  public String lobbyId = null;
+  public int lobbyId = 0;
   public String createdBy = null;
   public String winner = null;
 
@@ -18,7 +18,7 @@ public final class Lobby implements org.omg.CORBA.portable.IDLEntity
   {
   } // ctor
 
-  public Lobby (String _lobbyId, String _createdBy, String _winner)
+  public Lobby (int _lobbyId, String _createdBy, String _winner)
   {
     lobbyId = _lobbyId;
     createdBy = _createdBy;

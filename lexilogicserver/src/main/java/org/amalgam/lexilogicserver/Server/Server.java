@@ -19,24 +19,18 @@ public class Server {
 			POA rootpoa = POAHelper.narrow(orb.resolve_initial_references("RootPOA"));
 			rootpoa.the_POAManager().activate();
 
-//			PlayerDALImpl playerDAL = new PlayerDALImpl();
 			GameServiceImpl gameService = new GameServiceImpl();
 
-//			orb.connect((Object) servant);
 			// get object reference from the servant
 			org.omg.CORBA.Object ref =
 					rootpoa.servant_to_reference(gameService);
 			GameService href = GameServiceHelper.narrow(ref);
-//			org.omg.CORBA.Object objRef = orb.resolve_initial_references("NameService");
-//			NamingContext ncRef = NamingContextHelper.narrow(objRef);
 			// get the root naming context
 			org.omg.CORBA.Object objRef =
 					orb.resolve_initial_references("NameService");
 
 			NamingContextExt ncRef = NamingContextExtHelper.narrow(objRef);
 			String name = "Player";
-//			NameComponent nc = new NameComponent("AgesDB", "");
-//			NameComponent path[] = {nc};
 			NameComponent path[] = ncRef.to_name(name);
 			ncRef.rebind(path, href);
 
