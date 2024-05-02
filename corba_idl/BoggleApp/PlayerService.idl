@@ -1,3 +1,5 @@
+#include "../corba_idl/BoggleApp/Objects.idl"
+
 module org{
 module amalgam{
 module Service {
@@ -66,18 +68,18 @@ module Service {
         exception InGameException {
             string reason;
         };
+
+        exception MatchCreationFailed {
+            string reason;
+        };
     };
 
-    module Player {
+    module PlayerServiceModule {
         interface PlayerCallback;
 
         interface PlayerService {
-            struct Player {
-                long id;
-                string name;
-                string password;
-                string lastLogin;
-            };
+
+            Objects :: Player;
 
             void login(in PlayerCallback player_callback)
                 raises (PlayerExceptions::AlreadyLoggedIn, PlayerExceptions::InvalidCredentials, PlayerExceptions::UserExistenceException);
@@ -100,7 +102,7 @@ module Service {
             void startGame(in string username)
                 raises (PlayerExceptions::StartGameFailed, PlayerExceptions::InGameException);
 
-             struct GameDetail {
+            struct GameDetail {
                 long playerID;
                 long lobbyID;
                 long totalPoints;
@@ -123,6 +125,9 @@ module Service {
                  long totalPoints;
              };
 
+            GameRoom matchMake (in PlayerCallback player_callback)
+                raises (PlayerExceptions::MatchCreationFailed);
+
             void getGameResult() // To be discussed
                 raises (PlayerExceptions::GameResultUnavailable, PlayerExceptions::InGameException);
 
@@ -131,6 +136,8 @@ module Service {
         };
 
         interface PlayerCallback {
+
+
             void uiCall()
                 raises (PlayerExceptions::InvalidRequest);
 
