@@ -48,7 +48,7 @@ module Service {
         };
     };
 
-    module Game {
+    module GameServiceModule {
         interface PlayerCallback;
         interface GameService {
             struct Player {

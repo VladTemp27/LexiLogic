@@ -1,3 +1,5 @@
+#include "../corba_idl/BoggleApp/Objects.idl"
+
 module org{
 module amalgam{
 module Service {
@@ -72,16 +74,12 @@ module Service {
         };
     };
 
-    module Player {
+    module PlayerServiceModule {
         interface PlayerCallback;
 
         interface PlayerService {
-            struct Player {
-                long id;
-                string name;
-                string password;
-                string lastLogin;
-            };
+
+            Objects :: Player;
 
             void login(in PlayerCallback player_callback)
                 raises (PlayerExceptions::AlreadyLoggedIn, PlayerExceptions::InvalidCredentials, PlayerExceptions::UserExistenceException);
