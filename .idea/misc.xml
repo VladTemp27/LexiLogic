@@ -4,8 +4,10 @@
   <component name="MavenProjectsManager">
     <option name="originalFiles">
       <list>
-        <option value="$PROJECT_DIR$/lexilogicclient/pom.xml" />
+        <option value="$PROJECT_DIR$/.idea/lexilogic/lexilogicserver/pom.xml" />
         <option value="$PROJECT_DIR$/lexilogicserver/pom.xml" />
+        <option value="$PROJECT_DIR$/lexilogicclient/pom.xml" />
+        <option value="$PROJECT_DIR$/lexilogicclient/backend/pom.xml" />
       </list>
     </option>
     <option name="ignoredFiles">
@@ -14,7 +16,7 @@
       </set>
     </option>
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_8" default="true" project-jdk-name="1.8" project-jdk-type="JavaSDK">
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_17" default="true">
     <output url="file://$PROJECT_DIR$/out" />
   </component>
 </project>
