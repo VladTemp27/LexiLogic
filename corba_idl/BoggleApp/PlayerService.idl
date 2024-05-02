@@ -1,5 +1,6 @@
+module org{
+module amalgam{
 module Service {
-
     module PlayerExceptions {
         exception AlreadyLoggedIn {
             string message;
@@ -53,9 +54,6 @@ module Service {
             string reason;
         };
 
-        exception InvalidRequestException {
-            string reason;
-        };
 
         exception GameHistoryUnavailable {
             string reason;
@@ -67,7 +65,11 @@ module Service {
 
         exception InGameException {
             string reason;
-        }
+        };
+
+        exception MatchCreationFailed {
+            string reason;
+        };
     };
 
     module Player {
@@ -102,6 +104,32 @@ module Service {
             void startGame(in string username)
                 raises (PlayerExceptions::StartGameFailed, PlayerExceptions::InGameException);
 
+            struct GameDetail {
+                long playerID;
+                long lobbyID;
+                long totalPoints;
+            };
+
+            struct GameRoom {
+                long roomID;
+                sequence<string> players;
+            };
+
+             struct Lobby {
+                 long lobbyId;
+                 string created_by;
+                 string winner;
+             };
+
+             struct Leaderboard {
+                 long leaderboardID;
+                 long playerID;
+                 long totalPoints;
+             };
+
+            GameRoom matchMake (in PlayerCallback player_callback)
+                raises (PlayerExceptions::MatchCreationFailed);
+
             void getGameResult() // To be discussed
                 raises (PlayerExceptions::GameResultUnavailable, PlayerExceptions::InGameException);
 
@@ -110,15 +138,27 @@ module Service {
         };
 
         interface PlayerCallback {
+
+
             void uiCall()
-                raises (PlayerExceptions::InvalidRequestException);
+                raises (PlayerExceptions::InvalidRequest);
 
             void setUser(in PlayerService::Player player)
-                raises (PlayerExceptions::InvalidRequestException);
+                raises (PlayerExceptions::InvalidRequest);
 
             typedef PlayerService::Player player;
             player getPlayer()
-                raises (PlayerExceptions::InvalidRequestException);
+                raises (PlayerExceptions::InvalidRequest);
+        };
+
+        interface ControllerInterface {
+           void setObjectsUser (in string objects)
+                 raises (PlayerExceptions::InvalidRequest, PlayerExceptions::UserExistenceException);
+
+           void fetchAndUpdate()
+                raises (PlayerExceptions::InvalidRequest);
         };
     };
+};
+};
 };
