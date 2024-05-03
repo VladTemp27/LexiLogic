@@ -1,0 +1,26 @@
+#include "ProgramObjects.idl"
+
+module org {
+    module amalgam {
+        module CallbackException {
+            exception InvalidRequestException {
+                string reason;
+            };
+        };
+        module Callback {
+             interface PlayerCallback {
+
+                typedef org::amalgam::Utils::Objects::Player Player;
+
+                void uiCall(in long lobbyId)
+                    raises (CallbackException::InvalidRequestException);
+
+                void setUser(in org::amalgam::Utils::Objects::Player player, in long lobbyId)
+                    raises (CallbackException::InvalidRequestException);
+
+                org::amalgam::Utils::Objects::Player getPlayer(in long lobbyId)
+                    raises (CallbackException::InvalidRequestException);
+            };
+        };
+    };
+};

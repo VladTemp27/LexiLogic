@@ -12,7 +12,7 @@ module org {
                     string message;
                 };
 
-                exception InvalidRequest {
+                exception InvalidPlayerRequest {
                     string message;
                 };
 
@@ -74,7 +74,6 @@ module org {
             };
 
             module PlayerServiceModule {
-                interface PlayerCallback;
 
                 interface PlayerService {
                     typedef org::amalgam::Utils::Objects::Player Player;
@@ -111,24 +110,12 @@ module org {
                         raises (PlayerExceptions::GameHistoryUnavailable, PlayerExceptions::InGameException);
                 };
 
-                interface PlayerCallback {
-                    void uiCall()
-                        raises (PlayerExceptions::InvalidRequest);
-
-                    void setUser(in PlayerService::Player player)
-                        raises (PlayerExceptions::InvalidRequest);
-
-                    typedef PlayerService::Player player;
-                    player getPlayer()
-                        raises (PlayerExceptions::InvalidRequest);
-                };
-
                 interface ControllerInterface {
                     void setObjectsUser(in string objects)
-                        raises (PlayerExceptions::InvalidRequest, PlayerExceptions::UserExistenceException);
+                        raises (PlayerExceptions::InvalidPlayerRequest, PlayerExceptions::UserExistenceException);
 
                     void fetchAndUpdate()
-                        raises (PlayerExceptions::InvalidRequest);
+                        raises (PlayerExceptions::InvalidPlayerRequest);
                 };
             };
         };
