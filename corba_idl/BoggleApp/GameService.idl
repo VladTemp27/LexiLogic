@@ -1,122 +1,95 @@
-module org{
-module amalgam{
-module Service {
-    module GameExceptions {
+#include "ProgramObjects.idl"
 
-        exception WordFetchException {
-            string reason;
-        };
+module org {
+    module amalgam {
+        module Service {
+            module GameExceptions {
+                exception WordFetchException {
+                    string reason;
+                };
 
-        exception InvalidWordFormat {
-            string reason;
-        };
+                exception InvalidWordFormat {
+                    string reason;
+                };
 
-        exception InvalidRoomID {
-            string reason;
-        };
+                exception InvalidRoomID {
+                    string reason;
+                };
 
-        exception EmptyLeaderBoard {
-            string reason;
-        };
+                exception EmptyLeaderBoard {
+                    string reason;
+                };
 
-        exception InvalidLobbyData {
-            string reason;
-        };
+                exception InvalidLobbyData {
+                    string reason;
+                };
 
-        exception LobbyDoesNotExist {
-            string reason;
-        };
+                exception LobbyDoesNotExist {
+                    string reason;
+                };
 
-        exception DuplicateWordException {
-            string reason;
-        };
+                exception DuplicateWordException {
+                    string reason;
+                };
 
-        exception InsufficientWordPoints {
-            string reason;
-        };
+                exception InsufficientWordPoints {
+                    string reason;
+                };
 
-        exception InvalidTotalPoints {
-            string reason;
-        };
+                exception InvalidTotalPoints {
+                    string reason;
+                };
 
-        exception WinnerDoesNotExist {
-            string reason;
-        };
+                exception WinnerDoesNotExist {
+                    string reason;
+                };
 
-        exception InvalidRequestException {
-            string reason;
+                exception InvalidRequestException {
+                    string reason;
+                };
+            };
+
+            module GameServiceModule {
+                interface PlayerCallback;
+
+                interface GameService {
+                    typedef org::amalgam::Utils::Objects::Player Player;
+                    typedef org::amalgam::Utils::Objects::Lobby Lobby;
+                    typedef org::amalgam::Utils::Objects::Leaderboard Leaderboard;
+
+                    typedef char Matrix[6][6];
+                    Matrix fetchWordBox(in long roomID)
+                        raises (GameExceptions::WordFetchException, GameExceptions::InvalidRoomID);
+
+                    typedef sequence<Leaderboard> leaderboards;
+                    leaderboards getLeaderboards()
+                        raises (GameExceptions::EmptyLeaderBoard);
+
+                    void verifyWord(in string word)
+                        raises (GameExceptions::InvalidWordFormat, GameExceptions::DuplicateWordException);
+
+                    typedef sequence<string> words;
+                    long validateTotalPoints(in words word)
+                        raises (GameExceptions::InsufficientWordPoints, GameExceptions::InvalidTotalPoints);
+
+                    string fetchWinner(in long lobbyId)
+                        raises (GameExceptions::LobbyDoesNotExist, GameExceptions::WinnerDoesNotExist);
+
+                    void insertLobby(in Lobby lobby)
+                        raises (GameExceptions::InvalidLobbyData);
+                };
+
+                interface PlayerCallback {
+                    void uiCall(in long lobbyId)
+                        raises (GameExceptions::InvalidRequestException);
+
+                    void setUser(in org::amalgam::Utils::Objects::Player player, in long lobbyId)
+                        raises (GameExceptions::InvalidRequestException);
+
+                    org::amalgam::Utils::Objects::Player getPlayer(in long lobbyId)
+                        raises (GameExceptions::InvalidRequestException);
+                };
+            };
         };
     };
-
-    module Game {
-        interface PlayerCallback;
-        interface GameService {
-            struct Player {
-                long id;
-                string name;
-                string password;
-                string lastLogin;
-            };
-
-            struct GameDetail {
-                long playerID;
-                long lobbyID;
-                long totalPoints;
-            };
-
-            struct GameRoom {
-                long roomID;
-                sequence<string> players;
-            };
-
-
-            typedef char Matrix[6][6];
-            Matrix fetchWordBox(in long roomID)
-                raises (GameExceptions::WordFetchException, GameExceptions::InvalidRoomID);
-
-            struct Lobby {
-                long lobbyId;
-                string created_by;
-                string winner;
-            };
-
-            struct Leaderboard {
-                long leaderboardID;
-                long playerID;
-                long totalPoints;
-            };
-
-            typedef sequence<Leaderboard> leaderboards;
-            leaderboards getLeaderboards()
-                raises (GameExceptions::EmptyLeaderBoard);
-
-            void verifyWord(in string word)
-                raises (GameExceptions::InvalidWordFormat, GameExceptions::DuplicateWordException);
-
-            typedef sequence<string> words;
-            long validateTotalPoints(in words word) // sum of points per round of players
-                raises (GameExceptions::InsufficientWordPoints, GameExceptions::InvalidTotalPoints);
-
-            string fetchWinner(in long lobbyId)
-                raises (GameExceptions::LobbyDoesNotExist, GameExceptions::WinnerDoesNotExist);
-
-            void insertLobby(in Lobby lobby)
-                raises (GameExceptions::InvalidLobbyData);
-        };
-
-        interface PlayerCallback {
-
-            void uiCall(in long lobbyId)
-                raises (GameExceptions::InvalidRequestException);
-
-            void setUser(in GameService::Player player, in long lobbyId)
-                raises (GameExceptions::InvalidRequestException);
-
-            typedef GameService::Player player;
-            player getPlayer(in long lobbyId)
-                raises (GameExceptions::InvalidRequestException);
-        };
-    };
-};
-};
 };
