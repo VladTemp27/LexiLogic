@@ -1,3 +1,5 @@
+module org{
+module amalgam{
 module Service {
     module PlayerExceptions {
         exception AlreadyLoggedIn {
@@ -64,6 +66,10 @@ module Service {
         exception InGameException {
             string reason;
         };
+
+        exception MatchCreationFailed {
+            string reason;
+        };
     };
 
     module Player {
@@ -98,7 +104,7 @@ module Service {
             void startGame(in string username)
                 raises (PlayerExceptions::StartGameFailed, PlayerExceptions::InGameException);
 
-             struct GameDetail {
+            struct GameDetail {
                 long playerID;
                 long lobbyID;
                 long totalPoints;
@@ -121,6 +127,9 @@ module Service {
                  long totalPoints;
              };
 
+            GameRoom matchMake (in PlayerCallback player_callback)
+                raises (PlayerExceptions::MatchCreationFailed);
+
             void getGameResult() // To be discussed
                 raises (PlayerExceptions::GameResultUnavailable, PlayerExceptions::InGameException);
 
@@ -129,6 +138,8 @@ module Service {
         };
 
         interface PlayerCallback {
+
+
             void uiCall()
                 raises (PlayerExceptions::InvalidRequest);
 
@@ -148,4 +159,6 @@ module Service {
                 raises (PlayerExceptions::InvalidRequest);
         };
     };
+};
+};
 };
