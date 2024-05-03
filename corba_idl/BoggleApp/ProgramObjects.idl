@@ -46,7 +46,7 @@ module org {
                     string reason;
                 };
 
-                exception PLayerDoesNotExistException {
+                exception PlayerDoesNotExistException {
                     string reason;
                 };
 
@@ -58,7 +58,7 @@ module org {
                     string reason;
                 };
 
-                exception PLayerListRetrievalException {
+                exception PlayerListRetrievalException {
                     string reason;
                 };
 
@@ -68,17 +68,17 @@ module org {
             };
 
             module Objects {
-                interface PLayer {
+                interface Player {
                     attribute long id;
                     attribute string name;
                     attribute string password;
                     attribute string lastLogin;
 
-                    void addPlayer(in PLayer player) raises (ObjectExceptions::DuplicatePlayerIDException, ObjectExceptions::InvalidPlayerDataException, ObjectExceptions::SQLError);
+                    void addPlayer(in Player player) raises (ObjectExceptions::DuplicatePlayerIDException, ObjectExceptions::InvalidPlayerDataException, ObjectExceptions::SQLError);
                     void updateName(in string newName) raises (ObjectExceptions::InvalidNameException, ObjectExceptions::SQLError);
                     void updatePassword(in string newPassword) raises (ObjectExceptions::InvalidPasswordException, ObjectExceptions::SQLError);
                     void updateLastLogin(in string newTime) raises (ObjectExceptions::UpdateLastLoginException, ObjectExceptions::SQLError);
-                    void deletePLayer(in long id) raises (ObjectExceptions::PLayerDoesNotExistException);
+                    void deletePlayer(in long id) raises (ObjectExceptions::PlayerDoesNotExistException);
                 };
 
                 interface GameDetail {
@@ -87,7 +87,7 @@ module org {
                     attribute long totalPoints;
 
                     void updateTotalPoints(in long newPoints) raises (ObjectExceptions::InvalidPointsException, ObjectExceptions::SQLError);
-                    long getPlayerID() raises (ObjectExceptions::PLayerDoesNotExistException);
+                    long getPlayerID() raises (ObjectExceptions::PlayerDoesNotExistException);
                     long getLobbyID() raises (ObjectExceptions::LobbyDoesNotExistException);
                 };
 
@@ -99,7 +99,7 @@ module org {
                     void addPlayer(in string playerName) raises (ObjectExceptions::PlayerAlreadyInRoom, ObjectExceptions::SQLError);
                     long getRoomID() raises (ObjectExceptions::RoomDoesNotExistException);
                     typedef sequence<string> list;
-                    list getPlayers() raises (ObjectExceptions::PLayerListRetrievalException);
+                    list getPlayers() raises (ObjectExceptions::PlayerListRetrievalException);
                 };
 
                 interface Lobby {
@@ -107,7 +107,7 @@ module org {
                     attribute string createdBy;
                     attribute string winner;
 
-                    void updateWinner(in string winnerName) raises (ObjectExceptions::InvalidNameException, ObjectExceptions::PLayerDoesNotExistException, ObjectExceptions::SQLError);
+                    void updateWinner(in string winnerName) raises (ObjectExceptions::InvalidNameException, ObjectExceptions::PlayerDoesNotExistException, ObjectExceptions::SQLError);
                     void closeLobby() raises (ObjectExceptions::LobbyDoesNotExistException, ObjectExceptions::CloseLobbyException, ObjectExceptions::SQLError);
                     long getLobbyID() raises (ObjectExceptions::LobbyIDRetrievalException);
                     string getCreatedBy() raises (ObjectExceptions::CreatedByRetrievalException);
@@ -119,7 +119,7 @@ module org {
                     attribute long totalPoints;
 
                     void updateTotalPoints(in long newPoints) raises (ObjectExceptions::InvalidPointsException, ObjectExceptions::SQLError);
-                    long getPlayerID() raises (ObjectExceptions::PLayerDoesNotExistException);
+                    long getPlayerID() raises (ObjectExceptions::PlayerDoesNotExistException);
                     long getLeaderboardID() raises (ObjectExceptions::LeaderboardIDRetrievalException);
                 };
             };
