@@ -277,10 +277,10 @@ public class MainController {
             MainMenuController mainMenuController = fxmlLoader.getController();
             mainMenuController.setMainController(this);
             mainMenuController.initialize();
+            mainMenuController.authenticate("admin","admin");
 
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
-
 }
