@@ -1,4 +1,4 @@
-package org.amalgam.lexilogicserver.model.utilsimpl;
+package org.amalgam.lexilogicserver.model.utilities.corbautils;
 
 import org.amalgam.Utils.ObjectExceptions.*;
 import org.amalgam.Utils.Objects.LobbyPOA;
