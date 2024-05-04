@@ -10,8 +10,11 @@ import java.util.LinkedList;
 
 public class GameRoomImpl extends GameRoomPOA {
     private int roomID;
-    private LinkedList<String> players = new LinkedList<>();
 
+    //TODO: should store player names inside GameDetail, and should add methods
+    //      to manipulate the game detail
+    private LinkedList<String> players = new LinkedList<>();
+    private LinkedList<GameDetailImpl> playerData = new LinkedList<>();
 
     @Override
     public int roomID() {
