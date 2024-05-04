@@ -1,4 +1,4 @@
-#include "ProgramObjects.idl"
+#include "ProgramUtilities.idl"
 
 module org {
     module amalgam {

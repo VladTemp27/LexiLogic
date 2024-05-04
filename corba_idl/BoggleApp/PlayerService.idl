@@ -1,4 +1,4 @@
-#include "ProgramObjects.idl"
+#include "ProgramUtilities.idl"
 module org {
     module amalgam {
         module Service {
@@ -8,10 +8,6 @@ module org {
                 };
 
                 exception InvalidCredentials {
-                    string message;
-                };
-
-                exception InvalidPlayerRequest {
                     string message;
                 };
 
@@ -77,7 +73,7 @@ module org {
                 interface PlayerService {
                     typedef org::amalgam::Utils::Objects::Player Player;
                     typedef org::amalgam::Utils::Objects::GameRoom GameRoom;
-                    typedef org::amalgam::Utils::Callback::PlayerCallback PlayerCallback;
+                    typedef org::amalgam::Utils::UIControllers::PlayerCallback PlayerCallback;
 
                     void login(in PlayerCallback player_callback)
                         raises (PlayerExceptions::AlreadyLoggedIn, PlayerExceptions::InvalidCredentials, PlayerExceptions::UserExistenceException);
@@ -108,14 +104,6 @@ module org {
 
                     void getGameHistory(in string playerName)
                         raises (PlayerExceptions::GameHistoryUnavailable, PlayerExceptions::InGameException);
-                };
-
-                interface ControllerInterface {
-                    void setObjectsUser(in string objects)
-                        raises (PlayerExceptions::InvalidPlayerRequest, PlayerExceptions::UserExistenceException);
-
-                    void fetchAndUpdate()
-                        raises (PlayerExceptions::InvalidPlayerRequest);
                 };
             };
         };

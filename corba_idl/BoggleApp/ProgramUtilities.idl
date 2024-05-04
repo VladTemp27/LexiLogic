@@ -1,7 +1,7 @@
 module org {
     module amalgam {
         module Utils {
-            module ObjectExceptions {
+            module UtilExceptions {
                 exception DuplicatePlayerIDException {
                     string reason;
                 };
@@ -65,6 +65,10 @@ module org {
                 exception LeaderboardIDRetrievalException {
                     string reason;
                 };
+
+                exception InvalidRequestException {
+                    string reason;
+                };
             };
 
             module Objects {
@@ -74,11 +78,11 @@ module org {
                     attribute string password;
                     attribute string lastLogin;
 
-                    void addPlayer(in Player player) raises (ObjectExceptions::DuplicatePlayerIDException, ObjectExceptions::InvalidPlayerDataException, ObjectExceptions::SQLError);
-                    void updateName(in string newName) raises (ObjectExceptions::InvalidNameException, ObjectExceptions::SQLError);
-                    void updatePassword(in string newPassword) raises (ObjectExceptions::InvalidPasswordException, ObjectExceptions::SQLError);
-                    void updateLastLogin(in string newTime) raises (ObjectExceptions::UpdateLastLoginException, ObjectExceptions::SQLError);
-                    void deletePlayer(in long id) raises (ObjectExceptions::PlayerDoesNotExistException);
+                    void addPlayer(in Player player) raises (UtilExceptions::DuplicatePlayerIDException, UtilExceptions::InvalidPlayerDataException, UtilExceptions::SQLError);
+                    void updateName(in string newName) raises (UtilExceptions::InvalidNameException, UtilExceptions::SQLError);
+                    void updatePassword(in string newPassword) raises (UtilExceptions::InvalidPasswordException, UtilExceptions::SQLError);
+                    void updateLastLogin(in string newTime) raises (UtilExceptions::UpdateLastLoginException, UtilExceptions::SQLError);
+                    void deletePlayer(in long id) raises (UtilExceptions::PlayerDoesNotExistException);
                 };
 
                 interface GameDetail {
@@ -86,9 +90,9 @@ module org {
                     attribute long lobbyID;
                     attribute long totalPoints;
 
-                    void updateTotalPoints(in long newPoints) raises (ObjectExceptions::InvalidPointsException, ObjectExceptions::SQLError);
-                    long getPlayerID() raises (ObjectExceptions::PlayerDoesNotExistException);
-                    long getLobbyID() raises (ObjectExceptions::LobbyDoesNotExistException);
+                    void updateTotalPoints(in long newPoints) raises (UtilExceptions::InvalidPointsException, UtilExceptions::SQLError);
+                    long getPlayerID() raises (UtilExceptions::PlayerDoesNotExistException);
+                    long getLobbyID() raises (UtilExceptions::LobbyDoesNotExistException);
                 };
 
                 interface GameRoom {
@@ -96,10 +100,10 @@ module org {
                     typedef sequence<string> PlayersList;
                     attribute PlayersList players;
 
-                    void addPlayer(in string playerName) raises (ObjectExceptions::PlayerAlreadyInRoom, ObjectExceptions::SQLError);
-                    long getRoomID() raises (ObjectExceptions::RoomDoesNotExistException);
+                    void addPlayer(in string playerName) raises (UtilExceptions::PlayerAlreadyInRoom, UtilExceptions::SQLError);
+                    long getRoomID() raises (UtilExceptions::RoomDoesNotExistException);
                     typedef sequence<string> list;
-                    list getPlayers() raises (ObjectExceptions::PlayerListRetrievalException);
+                    list getPlayers() raises (UtilExceptions::PlayerListRetrievalException);
                 };
 
                 interface Lobby {
@@ -107,10 +111,10 @@ module org {
                     attribute string createdBy;
                     attribute string winner;
 
-                    void updateWinner(in string winnerName) raises (ObjectExceptions::InvalidNameException, ObjectExceptions::PlayerDoesNotExistException, ObjectExceptions::SQLError);
-                    void closeLobby() raises (ObjectExceptions::LobbyDoesNotExistException, ObjectExceptions::CloseLobbyException, ObjectExceptions::SQLError);
-                    long getLobbyID() raises (ObjectExceptions::LobbyIDRetrievalException);
-                    string getCreatedBy() raises (ObjectExceptions::CreatedByRetrievalException);
+                    void updateWinner(in string winnerName) raises (UtilExceptions::InvalidNameException, UtilExceptions::PlayerDoesNotExistException, UtilExceptions::SQLError);
+                    void closeLobby() raises (UtilExceptions::LobbyDoesNotExistException, UtilExceptions::CloseLobbyException, UtilExceptions::SQLError);
+                    long getLobbyID() raises (UtilExceptions::LobbyIDRetrievalException);
+                    string getCreatedBy() raises (UtilExceptions::CreatedByRetrievalException);
                 };
 
                 interface Leaderboard {
@@ -118,29 +122,33 @@ module org {
                     attribute long playerID;
                     attribute long totalPoints;
 
-                    void updateTotalPoints(in long newPoints) raises (ObjectExceptions::InvalidPointsException, ObjectExceptions::SQLError);
-                    long getPlayerID() raises (ObjectExceptions::PlayerDoesNotExistException);
-                    long getLeaderboardID() raises (ObjectExceptions::LeaderboardIDRetrievalException);
+                    void updateTotalPoints(in long newPoints) raises (UtilExceptions::InvalidPointsException, UtilExceptions::SQLError);
+                    long getPlayerID() raises (UtilExceptions::PlayerDoesNotExistException);
+                    long getLeaderboardID() raises (UtilExceptions::LeaderboardIDRetrievalException);
                 };
             };
-             module CallbackException {
-                exception InvalidRequestException {
-                    string reason;
-                };
-            };
-             module Callback {
+
+             module UIControllers {
                  interface PlayerCallback {
 
                     typedef org::amalgam::Utils::Objects::Player Player;
 
                     void uiCall(in long lobbyId)
-                        raises (CallbackException::InvalidRequestException);
+                        raises (UtilExceptions::InvalidRequestException);
 
                     void setUser(in org::amalgam::Utils::Objects::Player player, in long lobbyId)
-                        raises (CallbackException::InvalidRequestException);
+                        raises (UtilExceptions::InvalidRequestException);
 
                     org::amalgam::Utils::Objects::Player getPlayer(in long lobbyId)
-                        raises (CallbackException::InvalidRequestException);
+                        raises (UtilExceptions::InvalidRequestException);
+                 };
+
+                 interface ControllerInterface {
+                     void setObjectsUser(in string objects)
+                         raises (UtilExceptions::InvalidRequestException);
+
+                     void fetchAndUpdate()
+                         raises (UtilExceptions::InvalidRequestException);
                  };
              };
         };
