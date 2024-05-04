@@ -158,6 +158,10 @@ public class MainController {
             e.printStackTrace();
         }
     }
+
+    /**
+     * Loads and displays the profile view.
+     */
     public void loadProfileView(){
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/org/amalgam/lexilogicclient/client/views/profile/profile-view.fxml"));
@@ -189,6 +193,10 @@ public class MainController {
             e.printStackTrace();
         }
     }
+
+    /**
+     * Loads and displays the profileChangeUsername view.
+     */
     public void loadProfileChangeUsernameView(){
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/org/amalgam/lexilogicclient/client/views/profile/profileChangeUsername-view.fxml"));
@@ -220,6 +228,10 @@ public class MainController {
             e.printStackTrace();
         }
     }
+
+    /**
+     * Loads and displays the profileChangePassword view.
+     */
     public void loadProfileChangePasswordView(){
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/org/amalgam/lexilogicclient/client/views/profile/profileChangePass-view.fxml"));
@@ -251,6 +263,10 @@ public class MainController {
             e.printStackTrace();
         }
     }
+
+    /**
+     * Loads and displays the mainMenu view.
+     */
     public void loadMainMenuView(){
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/org/amalgam/lexilogicclient/client/views/mainmenu/mainmenu-view.fxml"));
@@ -282,5 +298,4 @@ public class MainController {
             e.printStackTrace();
         }
     }
-
 }
