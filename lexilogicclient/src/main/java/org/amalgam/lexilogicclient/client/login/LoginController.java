@@ -78,6 +78,7 @@ public class LoginController {
         addHoverEffect(loginButton);
         addHoverEffect(signUpButton);
         signUpButton.setOnAction(event -> handleSignUp());
+        loginButton.setOnAction(event -> onLogin());
     }
 
     /**
@@ -86,9 +87,23 @@ public class LoginController {
      *
      */
     @FXML
-    public void OnLogin() {
+    public void onLogin() {
         String username = usernameField.getText();
         String password = passwordField.getText();
+
+        boolean isLoggedIn = loginAuthentication(username, password);
+
+        if (isLoggedIn) {
+            mainController.loadMainMenuView();
+        } else {
+            showAlert("Invalid username or password");
+        }
+    }
+
+    // Test Authentication
+    private boolean loginAuthentication(String username, String password) {
+        // TODO: Authentication of user from DataBase & Error Checking
+        return username.equals("admin") && password.equals("admin"); // For Testing Only
     }
 
     /**
