@@ -43,15 +43,9 @@ module org {
                 exception WinnerDoesNotExist {
                     string reason;
                 };
-
-                exception InvalidRequestException {
-                    string reason;
-                };
             };
 
             module GameServiceModule {
-                interface PlayerCallback;
-
                 interface GameService {
                     typedef org::amalgam::Utils::Objects::Player Player;
                     typedef org::amalgam::Utils::Objects::Lobby Lobby;
@@ -77,17 +71,6 @@ module org {
 
                     void insertLobby(in Lobby lobby)
                         raises (GameExceptions::InvalidLobbyData);
-                };
-
-                interface PlayerCallback {
-                    void uiCall(in long lobbyId)
-                        raises (GameExceptions::InvalidRequestException);
-
-                    void setUser(in org::amalgam::Utils::Objects::Player player, in long lobbyId)
-                        raises (GameExceptions::InvalidRequestException);
-
-                    org::amalgam::Utils::Objects::Player getPlayer(in long lobbyId)
-                        raises (GameExceptions::InvalidRequestException);
                 };
             };
         };

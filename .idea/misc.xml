@@ -6,14 +6,17 @@
       <list>
         <option value="$PROJECT_DIR$/lexilogicclient/pom.xml" />
         <option value="$PROJECT_DIR$/lexilogicserver/pom.xml" />
+        <option value="$PROJECT_DIR$/clientbackend/pom.xml" />
+        <option value="$PROJECT_DIR$/lexilogicclient/clientbackend/pom.xml" />
+        <option value="$PROJECT_DIR$/backend/pom.xml" />
+        <option value="$PROJECT_DIR$/lexilogicclient/backend/pom.xml" />
       </list>
     </option>
     <option name="ignoredFiles">
       <set>
-        <option value="$PROJECT_DIR$/.idea/lexilogic/lexilogicserver/pom.xml" />
+        <option value="$PROJECT_DIR$/backend/pom.xml" />
       </set>
     </option>
-    <option name="workspaceImportForciblyTurnedOn" value="true" />
   </component>
   <component name="ProjectRootManager" version="2" languageLevel="JDK_22" default="true" project-jdk-name="openjdk-22.0.1" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/out" />

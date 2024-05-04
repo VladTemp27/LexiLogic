@@ -1,5 +1,4 @@
 #include "ProgramObjects.idl"
-
 module org {
     module amalgam {
         module Service {
@@ -12,7 +11,7 @@ module org {
                     string message;
                 };
 
-                exception InvalidRequest {
+                exception InvalidPlayerRequest {
                     string message;
                 };
 
@@ -74,11 +73,11 @@ module org {
             };
 
             module PlayerServiceModule {
-                interface PlayerCallback;
 
                 interface PlayerService {
                     typedef org::amalgam::Utils::Objects::Player Player;
                     typedef org::amalgam::Utils::Objects::GameRoom GameRoom;
+                    typedef org::amalgam::Utils::Callback::PlayerCallback PlayerCallback;
 
                     void login(in PlayerCallback player_callback)
                         raises (PlayerExceptions::AlreadyLoggedIn, PlayerExceptions::InvalidCredentials, PlayerExceptions::UserExistenceException);
@@ -111,24 +110,12 @@ module org {
                         raises (PlayerExceptions::GameHistoryUnavailable, PlayerExceptions::InGameException);
                 };
 
-                interface PlayerCallback {
-                    void uiCall()
-                        raises (PlayerExceptions::InvalidRequest);
-
-                    void setUser(in PlayerService::Player player)
-                        raises (PlayerExceptions::InvalidRequest);
-
-                    typedef PlayerService::Player player;
-                    player getPlayer()
-                        raises (PlayerExceptions::InvalidRequest);
-                };
-
                 interface ControllerInterface {
                     void setObjectsUser(in string objects)
-                        raises (PlayerExceptions::InvalidRequest, PlayerExceptions::UserExistenceException);
+                        raises (PlayerExceptions::InvalidPlayerRequest, PlayerExceptions::UserExistenceException);
 
                     void fetchAndUpdate()
-                        raises (PlayerExceptions::InvalidRequest);
+                        raises (PlayerExceptions::InvalidPlayerRequest);
                 };
             };
         };
