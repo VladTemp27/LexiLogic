@@ -37,8 +37,8 @@ public class MainMenuController {
      * @param button The button to add hover effect to.
      */
     private void addHoverEffect(Button button) {
-        button.setOnMouseEntered(e -> button.setStyle("-fx-background-color: derive(#D9E0A2, -10%);"));
-        button.setOnMouseExited(e -> button.setStyle("-fx-background-color: #D9E0A2;"));
+        button.setOnMouseEntered(e -> button.setStyle("-fx-background-color: derive(#FFF8D6, -10%);"));
+        button.setOnMouseExited(e -> button.setStyle("-fx-background-color: #FFF8D6;"));
     }
 
     /**
