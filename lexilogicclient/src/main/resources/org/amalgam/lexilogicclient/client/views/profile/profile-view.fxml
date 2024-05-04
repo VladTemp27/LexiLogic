@@ -60,7 +60,7 @@
          </font>
       </Button>
       <Button fx:id="backButton" layoutX="38.0" layoutY="40.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="29.0" style="-fx-background-color: #FFFFFF;" />
-      <ImageView fx:id="backButtonImage" fitHeight="66.0" fitWidth="99.0" layoutX="13.0" layoutY="22.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="backButtonImage" fitHeight="66.0" fitWidth="99.0" layoutX="20.0" layoutY="20.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../../../icons/BackButton.png" />
          </image>
