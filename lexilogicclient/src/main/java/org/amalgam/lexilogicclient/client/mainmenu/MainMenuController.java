@@ -46,7 +46,7 @@ public class MainMenuController {
      *
      * @param message
      */
-    private void showAlert(String message){
+    public void showAlert(String message){
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Error");
         alert.setHeaderText(null);
@@ -97,6 +97,21 @@ public class MainMenuController {
         leaderboardsButton.setOnAction(event -> handleLeaderboards());
         historyButton.setOnAction(event -> handleHistory());
         exitButton.setOnAction(event -> handleExit());
+    }
+
+    /**
+     * Authenticates the user using the provided data.
+     *
+     * @param username and password authentication.
+     */
+    public void authenticate(String username, String password) {
+        // Check if the provided data matches the expected authentication data
+        if (username.equals("admin") && password.equals("admin")) {
+            System.out.println("Authentication successful.");
+        } else {
+            System.out.println("Authentication failed.");
+            showAlert("Authentication failed. Please try again.");
+        }
     }
     /**
      * Gets the objects used.
