@@ -1,5 +1,4 @@
 #include "ProgramObjects.idl"
-
 module org {
     module amalgam {
         module Service {
@@ -78,6 +77,7 @@ module org {
                 interface PlayerService {
                     typedef org::amalgam::Utils::Objects::Player Player;
                     typedef org::amalgam::Utils::Objects::GameRoom GameRoom;
+                    typedef org::amalgam::Utils::Callback::PlayerCallback PlayerCallback;
 
                     void login(in PlayerCallback player_callback)
                         raises (PlayerExceptions::AlreadyLoggedIn, PlayerExceptions::InvalidCredentials, PlayerExceptions::UserExistenceException);
