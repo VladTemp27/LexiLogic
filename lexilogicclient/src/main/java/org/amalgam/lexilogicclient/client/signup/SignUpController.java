@@ -76,6 +76,7 @@ public class SignUpController {
         addHoverEffect(signInButton);
         addHoverEffect(loginButton);
         loginButton.setOnAction(event -> handleLogin());
+        signInButton.setOnAction(event -> onSignUp());
     }
 
     /**
@@ -84,9 +85,23 @@ public class SignUpController {
      *
      */
     @FXML
-    public void OnSignUp() {
+    public void onSignUp() {
         String username = usernameField.getText();
         String password = passwordField.getText();
+
+        boolean isSignedUp = signUpAuthentication(username, password);
+
+        if (isSignedUp) {
+            mainController.loadLoginView();
+        } else {
+            showAlert("Failed to sign up. Please try again.");
+        }
+    }
+
+    // Test Logic
+    private boolean signUpAuthentication(String username, String password) {
+        //TODO: Uploading the user to the DataBase & Error Checking
+        return true;
     }
 
     /**
