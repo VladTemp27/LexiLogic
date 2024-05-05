@@ -1,20 +1,20 @@
-package org.amalgam.lexilogicserver.model.utilsimpl;
+package org.amalgam.lexilogicserver.model.utilities.corbautils;
 
 import org.amalgam.Utils.ObjectExceptions.PlayerAlreadyInRoom;
 import org.amalgam.Utils.ObjectExceptions.PlayerListRetrievalException;
 import org.amalgam.Utils.ObjectExceptions.RoomDoesNotExistException;
 import org.amalgam.Utils.ObjectExceptions.SQLError;
 import org.amalgam.Utils.Objects.GameRoomPOA;
+import org.amalgam.lexilogicserver.model.utilities.nativeutilities.PlayerGameData;
 
+import java.util.LinkedHashMap;
 import java.util.LinkedList;
 
 public class GameRoomImpl extends GameRoomPOA {
     private int roomID;
 
-    //TODO: should store player names inside GameDetail, and should add methods
-    //      to manipulate the game detail
     private LinkedList<String> players = new LinkedList<>();
-    private LinkedList<GameDetailImpl> playerData = new LinkedList<>();
+    LinkedHashMap<String, PlayerGameData> playerData = new LinkedHashMap<>();
 
     @Override
     public int roomID() {
@@ -47,11 +47,18 @@ public class GameRoomImpl extends GameRoomPOA {
 
     @Override
     public void addPlayer(String playerName) throws PlayerAlreadyInRoom, SQLError {
+        if(this.players.contains(playerName)){
+            throw new PlayerAlreadyInRoom("Player is already in the room");
+        }
         this.players.add(playerName);
     }
 
     @Override
     public int getRoomID() throws RoomDoesNotExistException {
+        if(this.roomID < 0){
+            throw new RoomDoesNotExistException("Room has not been initialized yet");
+        }
+
         return this.roomID;
     }
 

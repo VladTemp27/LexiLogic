@@ -4,7 +4,7 @@ import org.amalgam.Service.GameExceptions.*;
 import org.amalgam.Service.GameServiceModule.GameServicePOA;
 import org.amalgam.Utils.Objects.Leaderboard;
 import org.amalgam.Utils.Objects.Lobby;
-import org.amalgam.lexilogicserver.model.utilsimpl.GameRoomImpl;
+import org.amalgam.lexilogicserver.model.utilities.corbautils.GameRoomImpl;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;

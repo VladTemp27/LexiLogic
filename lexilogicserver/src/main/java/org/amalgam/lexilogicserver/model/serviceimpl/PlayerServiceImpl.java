@@ -4,12 +4,11 @@ import org.amalgam.Service.PlayerExceptions.*;
 import org.amalgam.Service.PlayerServiceModule.PlayerCallback;
 import org.amalgam.Service.PlayerServiceModule.PlayerServicePOA;
 import org.amalgam.Utils.Objects.GameRoom;
-import org.amalgam.lexilogicserver.model.utilsimpl.GameRoomImpl;
 
 import java.util.LinkedList;
 
 public class PlayerServiceImpl extends PlayerServicePOA {
-    LinkedList<PlayerCallbackImpl> playerSessions = new LinkedList<>();
+    LinkedList<PlayerCallback> playerSessions = new LinkedList<>();
     @Override
     public void login(PlayerCallback player_callback) throws AlreadyLoggedIn, InvalidCredentials, UserExistenceException {
 
