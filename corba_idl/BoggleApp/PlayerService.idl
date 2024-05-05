@@ -66,6 +66,10 @@ module org {
                 exception MatchCreationFailed {
                     string reason;
                 };
+
+                exception AccountCreationFailed{
+                    string reason;
+                };
             };
 
             module PlayerServiceModule {
@@ -80,6 +84,9 @@ module org {
 
                     void logout()
                         raises (PlayerExceptions::NotLoggedIn);
+
+                    void createAccount (in Player newPlayer)
+                        raises (PlayerExceptions::AccountCreationFailed);
 
                     void changeUsername(in string username, in string newUsername)
                         raises (PlayerExceptions::ChangeUsernameFailed);
