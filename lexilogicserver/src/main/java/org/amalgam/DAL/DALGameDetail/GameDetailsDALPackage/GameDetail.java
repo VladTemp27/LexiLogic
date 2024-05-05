@@ -24,5 +24,4 @@ public final class GameDetail implements org.omg.CORBA.portable.IDLEntity
     lobbyID = _lobbyID;
     totalPoints = _totalPoints;
   } // ctor
-
 } // class GameDetail
