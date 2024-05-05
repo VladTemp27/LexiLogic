@@ -78,6 +78,7 @@ module org {
                     typedef org::amalgam::Utils::Objects::Player Player;
                     typedef org::amalgam::Utils::Objects::GameRoom GameRoom;
                     typedef org::amalgam::Utils::UIControllers::PlayerCallback PlayerCallback;
+                    typedef org::amalgam::Utils::Objects::Lobby Lobby;
 
                     void login(in PlayerCallback player_callback)
                         raises (PlayerExceptions::AlreadyLoggedIn, PlayerExceptions::InvalidCredentials, PlayerExceptions::UserExistenceException);
@@ -109,7 +110,8 @@ module org {
                     string getGameResult(in string playerName)
                         raises (PlayerExceptions::GameResultUnavailable, PlayerExceptions::InGameException);
 
-                    void getGameHistory(in string playerName)
+                    typedef sequence <Lobby> history;
+                    history getGameHistory(in string playerName)
                         raises (PlayerExceptions::GameHistoryUnavailable, PlayerExceptions::InGameException);
                 };
             };
