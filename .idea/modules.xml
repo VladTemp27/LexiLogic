@@ -2,7 +2,11 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/2024-9342-finalsteam1.iml" filepath="$PROJECT_DIR$/.idea/2024-9342-finalsteam1.iml" />
+      <module fileurl="file://$PROJECT_DIR$/2024-9342-finalsteam11.iml" filepath="$PROJECT_DIR$/2024-9342-finalsteam11.iml" />
+      <module fileurl="file://$PROJECT_DIR$/clientbackend/src/main/main.iml" filepath="$PROJECT_DIR$/clientbackend/src/main/main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/lexilogicserver/src/main/main1.iml" filepath="$PROJECT_DIR$/lexilogicserver/src/main/main1.iml" />
+      <module fileurl="file://$PROJECT_DIR$/clientbackend/src/test/test.iml" filepath="$PROJECT_DIR$/clientbackend/src/test/test.iml" />
+      <module fileurl="file://$PROJECT_DIR$/lexilogicserver/src/test/test1.iml" filepath="$PROJECT_DIR$/lexilogicserver/src/test/test1.iml" />
     </modules>
   </component>
 </project>
