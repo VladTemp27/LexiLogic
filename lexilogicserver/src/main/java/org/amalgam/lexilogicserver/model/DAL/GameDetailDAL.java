@@ -1,9 +1,5 @@
-package org.amalgam.lexilogicserver.model.DALImpl;
+package org.amalgam.lexilogicserver.model.DAL;
 
-import org.amalgam.DAL.DALGameDetail.GameDetailsDALPOA;
-
-import org.amalgam.DAL.SQLExceptions.SQLCreateError;
-import org.amalgam.DAL.SQLExceptions.SQLRetrieveError;
 import org.amalgam.lexilogicserver.model.DatabaseUtil;
 import org.amalgam.lexilogicserver.model.utilities.corbautils.GameDetailImpl;
 
@@ -12,23 +8,24 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class GameDetailDALImpl extends GameDetailsDALPOA {
-    @Override
-    public void insertNewGameDetail(int playerID, int lobbyID, int totalPoints) throws SQLCreateError {
+public class GameDetailDAL {
+
+    public void insertNewGameDetail(int playerID, int lobbyID, int totalPoints) {
         try (Connection conn = DatabaseUtil.getConnection()){
-            PreparedStatement stmt = conn.prepareStatement("INSERT INTO gamedetails (playerID, lobbyID, totalPoints) VALUE (?, ?, ?)");
+            PreparedStatement stmt = conn.prepareStatement("INSERT INTO gamedetails (playerID, lobbyID, totalPoints) VALUES (?, ?, ?)");
             stmt.setInt(1, playerID);
             stmt.setInt(2, lobbyID);
             stmt.setInt(3, totalPoints);
             int rowsAffected = stmt.executeUpdate();
-            if (rowsAffected > 0) System.out.println("INSERT NEW GAME DETAIL SUCCESS");
+            if (rowsAffected > 0) {
+                System.out.println("INSERT NEW GAME DETAIL SUCCESS");
+            }
         } catch (SQLException | ClassNotFoundException | InstantiationException | IllegalAccessException e) {
-			throw new RuntimeException(e);
-		}
-	}
+            throw new RuntimeException(e);
+        }
+    }
 
-    @Override
-    public GameDetailImpl getGameDetailByID(int lobbyID) throws SQLRetrieveError {
+    public GameDetailImpl getGameDetailByID(int lobbyID) {
         try (Connection conn = DatabaseUtil.getConnection()) {
             PreparedStatement stmt = conn.prepareStatement("SELECT * FROM gamedetails WHERE lobbyID = ?");
             stmt.setInt(1, lobbyID);
@@ -39,8 +36,8 @@ public class GameDetailDALImpl extends GameDetailsDALPOA {
                     return null;
                 }
             }
-		} catch (SQLException | ClassNotFoundException | InstantiationException | IllegalAccessException e) {
-			throw new RuntimeException(e);
-		}
-	}
+        } catch (SQLException | ClassNotFoundException | InstantiationException | IllegalAccessException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }
