@@ -1,0 +1,61 @@
+#include "../BoggleApp/ProgramUtilities.idl"
+
+module org {
+    module amalgam {
+        module DAL {
+            module SQLExceptions {
+                exception SQLUpdateError {
+                    string reason;
+                };
+                exception SQLCreateError {
+                    string reason;
+                };
+                exception SQLDeleteError {
+                    string reason;
+                };
+                exception SQLRetrieveError{
+                    string reason;
+                };
+            };
+
+            module DALGameDetail {
+
+                interface GameDetailsDAL {
+
+                    typedef org::amalgam::Utils::Objects::GameDetail GameDetail;
+                    void insertNewGameDetail(in long playerID, in long lobbyID, in long totalPoints) raises (SQLExceptions::SQLCreateError);
+                    GameDetail getGameDetailByID(in long lobbyID) raises (SQLExceptions::SQLRetrieveError);
+                };
+            };
+
+            module DALLeaderBoard {
+                interface LeaderboardDAL {
+                    typedef org::amalgam::Utils::Objects::Leaderboard Leaderboard;
+                    void insertNewLeaderboard(in long userID, in long totalPoints) raises (SQLExceptions::SQLCreateError);
+                    Leaderboard getLeaderboardByID(in long leaderboardID) raises (SQLExceptions::SQLRetrieveError);
+                };
+            };
+
+            module DALLobby {
+                interface LobbyDAL {
+
+                    typedef org::amalgam::Utils::Objects::Lobby Lobby;
+                    void insertNewLobby(in long lobbyId, in string createdBy, in string winner) raises (SQLExceptions::SQLCreateError);
+                    Lobby getLobbyByID(in long lobbyId) raises (SQLExceptions::SQLRetrieveError);
+                };
+            };
+
+            module DALPlayer {
+                interface PlayerDAL {
+                    typedef org::amalgam::Utils::Objects::Player Player;
+
+                    void insertNewPlayer(in string username, in string password, in string lastLogin) raises (SQLExceptions::SQLCreateError);
+                    Player getPlayerByID(in long playerID) raises (SQLExceptions::SQLRetrieveError);
+                    void updatePassword(in long playerID, in string newPassword) raises (SQLExceptions::SQLUpdateError);
+                    void updateUsername(in long playerID, in string newUsername) raises (SQLExceptions::SQLUpdateError);
+                    void deletePlayer(in long playerID) raises (SQLExceptions::SQLDeleteError);
+                };
+            };
+        };
+    };
+};
