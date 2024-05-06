@@ -1,0 +1,156 @@
+module org {
+    module amalgam {
+        module Utils {
+            module UtilExceptions {
+                exception DuplicatePlayerIDException {
+                    string reason;
+                };
+
+                exception InvalidPlayerDataException {
+                    string reason;
+                };
+
+                exception SQLError {
+                    string reason;
+                };
+
+                exception InvalidNameException {
+                    string reason;
+                };
+
+                exception InvalidPasswordException {
+                    string reason;
+                };
+
+                exception UpdateLastLoginException {
+                    string reason;
+                };
+
+                exception InvalidPointsException {
+                    string reason;
+                };
+
+                exception PlayerAlreadyInRoom {
+                    string reason;
+                };
+
+                exception LobbyIDRetrievalException {
+                    string reason;
+                };
+
+                exception CreatedByRetrievalException {
+                    string reason;
+                };
+
+                exception CloseLobbyException {
+                    string reason;
+                };
+
+                exception PlayerDoesNotExistException {
+                    string reason;
+                };
+
+                exception LobbyDoesNotExistException {
+                    string reason;
+                };
+
+                exception RoomDoesNotExistException {
+                    string reason;
+                };
+
+                exception PlayerListRetrievalException {
+                    string reason;
+                };
+
+                exception LeaderboardIDRetrievalException {
+                    string reason;
+                };
+
+                exception InvalidRequestException {
+                    string reason;
+                };
+            };
+
+            module Objects {
+                interface Player {
+                    attribute long id;
+                    attribute string name;
+                    attribute string password;
+                    attribute string lastLogin;
+
+                    void addPlayer(in Player player) raises (UtilExceptions::DuplicatePlayerIDException, UtilExceptions::InvalidPlayerDataException, UtilExceptions::SQLError);
+                    void updateName(in string newName) raises (UtilExceptions::InvalidNameException, UtilExceptions::SQLError);
+                    void updatePassword(in string newPassword) raises (UtilExceptions::InvalidPasswordException, UtilExceptions::SQLError);
+                    void updateLastLogin(in string newTime) raises (UtilExceptions::UpdateLastLoginException, UtilExceptions::SQLError);
+                    void deletePlayer(in long id) raises (UtilExceptions::PlayerDoesNotExistException);
+                };
+
+                interface GameDetail {
+                    attribute long playerID;
+                    attribute long lobbyID;
+                    attribute long totalPoints;
+
+                    void updateTotalPoints(in long newPoints) raises (UtilExceptions::InvalidPointsException, UtilExceptions::SQLError);
+                    long getPlayerID() raises (UtilExceptions::PlayerDoesNotExistException);
+                    long getLobbyID() raises (UtilExceptions::LobbyDoesNotExistException);
+                };
+
+                interface GameRoom {
+                    attribute long roomID;
+                    typedef sequence<string> PlayersList;
+                    attribute PlayersList players;
+
+                    void addPlayer(in string playerName) raises (UtilExceptions::PlayerAlreadyInRoom, UtilExceptions::SQLError);
+                    long getRoomID() raises (UtilExceptions::RoomDoesNotExistException);
+                    typedef sequence<string> list;
+                    list getPlayers() raises (UtilExceptions::PlayerListRetrievalException);
+                };
+
+                interface Lobby {
+                    attribute long lobbyID;
+                    attribute string createdBy;
+                    attribute string winner;
+
+                    void updateWinner(in string winnerName) raises (UtilExceptions::InvalidNameException, UtilExceptions::PlayerDoesNotExistException, UtilExceptions::SQLError);
+                    void closeLobby() raises (UtilExceptions::LobbyDoesNotExistException, UtilExceptions::CloseLobbyException, UtilExceptions::SQLError);
+                    long getLobbyID() raises (UtilExceptions::LobbyIDRetrievalException);
+                    string getCreatedBy() raises (UtilExceptions::CreatedByRetrievalException);
+                };
+
+                interface Leaderboard {
+                    attribute long leaderboardID;
+                    attribute long playerID;
+                    attribute long totalPoints;
+
+                    void updateTotalPoints(in long newPoints) raises (UtilExceptions::InvalidPointsException, UtilExceptions::SQLError);
+                    long getPlayerID() raises (UtilExceptions::PlayerDoesNotExistException);
+                    long getLeaderboardID() raises (UtilExceptions::LeaderboardIDRetrievalException);
+                };
+            };
+
+             module UIControllers {
+                 interface PlayerCallback {
+
+                    typedef org::amalgam::Utils::Objects::Player Player;
+
+                    void uiCall(in long lobbyId)
+                        raises (UtilExceptions::InvalidRequestException);
+
+                    void setUser(in org::amalgam::Utils::Objects::Player player, in long lobbyId)
+                        raises (UtilExceptions::InvalidRequestException);
+
+                    org::amalgam::Utils::Objects::Player getPlayer(in long lobbyId)
+                        raises (UtilExceptions::InvalidRequestException);
+                 };
+
+                 interface ControllerInterface {
+                     void setObjectsUser(in string objects)
+                         raises (UtilExceptions::InvalidRequestException);
+
+                     void fetchAndUpdate()
+                         raises (UtilExceptions::InvalidRequestException);
+                 };
+             };
+        };
+    };
+};

@@ -1,0 +1,78 @@
+#include "ProgramUtilities.idl"
+
+module org {
+    module amalgam {
+        module Service {
+            module GameExceptions {
+                exception WordFetchException {
+                    string reason;
+                };
+
+                exception InvalidWordFormat {
+                    string reason;
+                };
+
+                exception InvalidRoomID {
+                    string reason;
+                };
+
+                exception EmptyLeaderBoard {
+                    string reason;
+                };
+
+                exception InvalidLobbyData {
+                    string reason;
+                };
+
+                exception LobbyDoesNotExist {
+                    string reason;
+                };
+
+                exception DuplicateWordException {
+                    string reason;
+                };
+
+                exception InsufficientWordPoints {
+                    string reason;
+                };
+
+                exception InvalidTotalPoints {
+                    string reason;
+                };
+
+                exception WinnerDoesNotExist {
+                    string reason;
+                };
+            };
+
+            module GameServiceModule {
+                interface GameService {
+                    typedef org::amalgam::Utils::Objects::Player Player;
+                    typedef org::amalgam::Utils::Objects::Lobby Lobby;
+                    typedef org::amalgam::Utils::Objects::Leaderboard Leaderboard;
+
+                    typedef char Matrix[6][6];
+                    Matrix fetchWordBox(in long roomID)
+                        raises (GameExceptions::WordFetchException, GameExceptions::InvalidRoomID);
+
+                    typedef sequence<Leaderboard> leaderboards;
+                    leaderboards getLeaderboards()
+                        raises (GameExceptions::EmptyLeaderBoard);
+
+                    void verifyWord(in string word)
+                        raises (GameExceptions::InvalidWordFormat, GameExceptions::DuplicateWordException);
+
+                    typedef sequence<string> words;
+                    long validateTotalPoints(in words word)
+                        raises (GameExceptions::InsufficientWordPoints, GameExceptions::InvalidTotalPoints);
+
+                    string fetchWinner(in long lobbyId)
+                        raises (GameExceptions::LobbyDoesNotExist, GameExceptions::WinnerDoesNotExist);
+
+                    void insertLobby(in Lobby lobby)
+                        raises (GameExceptions::InvalidLobbyData);
+                };
+            };
+        };
+    };
+};
