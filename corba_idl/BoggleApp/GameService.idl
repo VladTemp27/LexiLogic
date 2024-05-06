@@ -44,8 +44,8 @@ module org {
                     string reason;
                 };
             };
-
             module GameServiceModule {
+                // Add Matchmake request
                 interface GameService {
                     typedef org::amalgam::Utils::Objects::Player Player;
                     typedef org::amalgam::Utils::Objects::Lobby Lobby;
@@ -62,6 +62,7 @@ module org {
                     void verifyWord(in string word)
                         raises (GameExceptions::InvalidWordFormat, GameExceptions::DuplicateWordException);
 
+                    // keep but mark as deprecated in case
                     typedef sequence<string> words;
                     long validateTotalPoints(in words word)
                         raises (GameExceptions::InsufficientWordPoints, GameExceptions::InvalidTotalPoints);
@@ -69,6 +70,7 @@ module org {
                     string fetchWinner(in long lobbyId)
                         raises (GameExceptions::LobbyDoesNotExist, GameExceptions::WinnerDoesNotExist);
 
+                    // For deletion
                     void insertLobby(in Lobby lobby)
                         raises (GameExceptions::InvalidLobbyData);
                 };
