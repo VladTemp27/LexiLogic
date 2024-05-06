@@ -3,76 +3,35 @@
 module org {
     module amalgam {
         module Service {
-            module GameExceptions {
-                exception WordFetchException {
-                    string reason;
-                };
-
-                exception InvalidWordFormat {
-                    string reason;
-                };
-
-                exception InvalidRoomID {
-                    string reason;
-                };
-
-                exception EmptyLeaderBoard {
-                    string reason;
-                };
-
-                exception InvalidLobbyData {
-                    string reason;
-                };
-
-                exception LobbyDoesNotExist {
-                    string reason;
-                };
-
-                exception DuplicateWordException {
-                    string reason;
-                };
-
-                exception InsufficientWordPoints {
-                    string reason;
-                };
-
-                exception InvalidTotalPoints {
-                    string reason;
-                };
-
-                exception WinnerDoesNotExist {
-                    string reason;
-                };
-            };
             module GameServiceModule {
-                // Add Matchmake request
                 interface GameService {
-                    typedef org::amalgam::Utils::Objects::Player Player;
-                    typedef org::amalgam::Utils::Objects::Lobby Lobby;
+
                     typedef org::amalgam::Utils::Objects::Leaderboard Leaderboard;
+                    typedef org::amalgam::Utils::Objects::GameRoom GameRoom;
+                    typedef org::amalgam::Utils::UIControllers::PlayerCallback PlayerCallback;
+
+                    GameRoom matchMake(in PlayerCallback player_callback)
+                        raises (org::amalgam::Utils::Exceptions::MatchCreationFailedException);
 
                     typedef char Matrix[6][6];
                     Matrix fetchWordBox(in long roomID)
-                        raises (GameExceptions::WordFetchException, GameExceptions::InvalidRoomID);
+                        raises (org::amalgam::Utils::Exceptions::WordFetchFailedException, org::amalgam::Utils::Exceptions::InvalidRoomIDException);
 
                     typedef sequence<Leaderboard> leaderboards;
                     leaderboards getLeaderboards()
-                        raises (GameExceptions::EmptyLeaderBoard);
+                        raises (org::amalgam::Utils::Exceptions::EmptyLeaderBoardException);
 
                     void verifyWord(in string word)
-                        raises (GameExceptions::InvalidWordFormat, GameExceptions::DuplicateWordException);
+                        raises (org::amalgam::Utils::Exceptions::InvalidWordFormatException, org::amalgam::Utils::Exceptions::DuplicateWordException);
 
-                    // keep but mark as deprecated in case
+                    // Keep but mark as deprecated in case
                     typedef sequence<string> words;
                     long validateTotalPoints(in words word)
-                        raises (GameExceptions::InsufficientWordPoints, GameExceptions::InvalidTotalPoints);
+                        raises (org::amalgam::Utils::Exceptions::InsufficientWordPointsException, org::amalgam::Utils::Exceptions::InvalidTotalPointsException);
 
                     string fetchWinner(in long lobbyId)
-                        raises (GameExceptions::LobbyDoesNotExist, GameExceptions::WinnerDoesNotExist);
+                        raises (org::amalgam::Utils::Exceptions::LobbyDoesNotExistException, org::amalgam::Utils::Exceptions::WinnerDoesNotExistException);
 
-                    // For deletion
-                    void insertLobby(in Lobby lobby)
-                        raises (GameExceptions::InvalidLobbyData);
                 };
             };
         };
