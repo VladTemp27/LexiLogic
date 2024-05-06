@@ -91,18 +91,23 @@ module org {
                     void changePassword(in string username, in string newPassword)
                         raises (PlayerExceptions::ChangePasswordFailed);
 
+                    // a more appropriate term would be request deletion
                     void deleteAccount(in string username)
                         raises (PlayerExceptions::DeleteAccountFailed);
 
+                    // for deletion, already in game service
                     void submitWord(in string word, in string username)
                         raises (PlayerExceptions::SubmitWordFailed);
 
+                    // for deletion, is a duplicate request to matchmake
                     void startGame(in string username)
                         raises (PlayerExceptions::StartGameFailed, PlayerExceptions::InGameException);
 
+                    //Should be in game service
                     GameRoom matchMake(in PlayerCallback player_callback)
                         raises (PlayerExceptions::MatchCreationFailed);
 
+                    // Up for debate can be used as a fall back request if the other request fails
                     string getGameResult(in string playerName)
                         raises (PlayerExceptions::GameResultUnavailable, PlayerExceptions::InGameException);
 
@@ -114,6 +119,8 @@ module org {
                     void setObjectsUser(in string objects)
                         raises (PlayerExceptions::InvalidPlayerRequest, PlayerExceptions::UserExistenceException);
 
+
+                    // Should have 2 params first json second is data type
                     void fetchAndUpdate()
                         raises (PlayerExceptions::InvalidPlayerRequest);
                 };

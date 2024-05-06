@@ -136,9 +136,11 @@ module org {
                     void uiCall(in long lobbyId)
                         raises (CallbackException::InvalidRequestException);
 
+                    // For deletion
                     void setUser(in org::amalgam::Utils::Objects::Player player, in long lobbyId)
                         raises (CallbackException::InvalidRequestException);
 
+                    // For deletion
                     org::amalgam::Utils::Objects::Player getPlayer(in long lobbyId)
                         raises (CallbackException::InvalidRequestException);
                  };
