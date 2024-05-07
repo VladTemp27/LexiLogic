@@ -62,6 +62,7 @@ public class MainController {
     public void loadLoginView() {
         try {
             Font.loadFont(getClass().getResourceAsStream("/org/amalgam/fonts/BowlbyOneSC.ttf"), 20);
+            Font.loadFont(getClass().getResourceAsStream("/org/amalgam/fonts/Brygada1918.ttf"), 20);
 
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/org/amalgam/client/views/login/login-view.fxml"));
             AnchorPane loginPane = fxmlLoader.load();
@@ -98,6 +99,7 @@ public class MainController {
     public void loadSignUpView() {
         try {
             Font.loadFont(getClass().getResourceAsStream("/org/amalgam/fonts/BowlbyOneSC.ttf"), 20);
+            Font.loadFont(getClass().getResourceAsStream("/org/amalgam/fonts/Brygada1918.ttf"), 20);
 
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/org/amalgam/client/views/signup/signup-view.fxml"));
             AnchorPane signuppane = fxmlLoader.load();
@@ -135,6 +137,7 @@ public class MainController {
     public void loadMatchHistoryView() {
         try {
             Font.loadFont(getClass().getResourceAsStream("/org/amalgam/fonts/BowlbyOneSC.ttf"), 20);
+            Font.loadFont(getClass().getResourceAsStream("/org/amalgam/fonts/Brygada1918.ttf"), 20);
 
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/org/amalgam/client/views/matchhistory/matchhistory-view.fxml"));
             AnchorPane matchHistoryPane = fxmlLoader.load();
@@ -172,6 +175,7 @@ public class MainController {
     public void loadProfileView(){
         try {
             Font.loadFont(getClass().getResourceAsStream("/org/amalgam/fonts/BowlbyOneSC.ttf"), 20);
+            Font.loadFont(getClass().getResourceAsStream("/org/amalgam/fonts/Brygada1918.ttf"), 20);
 
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/org/amalgam/client/views/profile/profile-view.fxml"));
             AnchorPane profilePane = fxmlLoader.load();
@@ -209,6 +213,7 @@ public class MainController {
     public void loadProfileChangeUsernameView(){
         try {
             Font.loadFont(getClass().getResourceAsStream("/org/amalgam/fonts/BowlbyOneSC.ttf"), 20);
+            Font.loadFont(getClass().getResourceAsStream("/org/amalgam/fonts/Brygada1918.ttf"), 20);
 
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/org/amalgam/client/views/profile/profileChangeUsername-view.fxml"));
             AnchorPane changeUsernamePane = fxmlLoader.load();
@@ -246,6 +251,7 @@ public class MainController {
     public void loadProfileChangePasswordView(){
         try {
             Font.loadFont(getClass().getResourceAsStream("/org/amalgam/fonts/BowlbyOneSC.ttf"), 20);
+            Font.loadFont(getClass().getResourceAsStream("/org/amalgam/fonts/Brygada1918.ttf"), 20);
 
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/org/amalgam/client/views/profile/profileChangePass-view.fxml"));
             AnchorPane changepassPane = fxmlLoader.load();
@@ -283,6 +289,7 @@ public class MainController {
     public void loadMainMenuView(){
         try {
             Font.loadFont(getClass().getResourceAsStream("/org/amalgam/fonts/BowlbyOneSC.ttf"), 20);
+            Font.loadFont(getClass().getResourceAsStream("/org/amalgam/fonts/Brygada1918.ttf"), 20);
 
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/org/amalgam/client/views/mainmenu/mainmenu-view.fxml"));
             AnchorPane mainmenuPane = fxmlLoader.load();
