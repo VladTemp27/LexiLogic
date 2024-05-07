@@ -16,7 +16,6 @@
         <option value="$PROJECT_DIR$/backend/pom.xml" />
         <option value="$PROJECT_DIR$/clientbackend/pom.xml" />
         <option value="$PROJECT_DIR$/lexilogicclient/pom.xml" />
-        <option value="$PROJECT_DIR$/lexilogicserver/pom.xml" />
       </set>
     </option>
   </component>
