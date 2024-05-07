@@ -6,4 +6,14 @@ module org.amalgam.lexilogicclient {
 
     opens org.amalgam.lexilogicclient to javafx.fxml;
     exports org.amalgam.lexilogicclient;
+    opens org.amalgam.lexilogicclient.client.login to javafx.fxml;
+    exports org.amalgam.lexilogicclient.client.login;
+    opens org.amalgam.lexilogicclient.client.signup to javafx.fxml;
+    exports org.amalgam.lexilogicclient.client.signup;
+    opens org.amalgam.lexilogicclient.client.matchhistory to javafx.fxml;
+    exports org.amalgam.lexilogicclient.client.matchhistory;
+    opens org.amalgam.lexilogicclient.client.mainmenu to javafx.fxml;
+    exports org.amalgam.lexilogicclient.client.mainmenu;
+    opens org.amalgam.lexilogicclient.client.profile to javafx.fxml;
+    exports org.amalgam.lexilogicclient.client.profile;
 }
