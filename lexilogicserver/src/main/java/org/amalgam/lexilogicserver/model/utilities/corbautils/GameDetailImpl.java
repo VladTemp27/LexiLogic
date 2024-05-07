@@ -1,6 +1,6 @@
 package org.amalgam.lexilogicserver.model.utilities.corbautils;
 
-import org.amalgam.Utils.ObjectExceptions.InvalidPointsException;
+import  org.amalgam.Utils.ObjectExceptions.InvalidPointsException;
 import org.amalgam.Utils.ObjectExceptions.LobbyDoesNotExistException;
 import org.amalgam.Utils.ObjectExceptions.PlayerDoesNotExistException;
 import org.amalgam.Utils.ObjectExceptions.SQLError;
@@ -10,6 +10,11 @@ public class GameDetailImpl extends GameDetailPOA {
     private int playerID;
     private int lobbyID;
     private int totalPoints;
+
+    public GameDetailImpl(int playerID, int lobbyID, int totalPoints) {
+        super();
+    }
+
     @Override
     public int playerID() {
         return this.playerID;

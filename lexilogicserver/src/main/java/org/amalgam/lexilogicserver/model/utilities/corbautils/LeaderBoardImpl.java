@@ -7,6 +7,10 @@ import org.amalgam.Utils.ObjectExceptions.SQLError;
 import org.amalgam.Utils.Objects.LeaderboardPOA;
 
 public class LeaderBoardImpl extends LeaderboardPOA  {
+    public LeaderBoardImpl(int leaderBoardID, int userID, int totalPoints) {
+        super();
+    }
+
     @Override
     public int leaderboardID() {
         return 0;

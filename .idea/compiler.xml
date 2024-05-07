@@ -6,13 +6,13 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="lexilogicserver" />
-        <module name="lexilogicclient" />
-        <module name="clientbackend" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="backend" target="1.8" />
+      <module name="clientbackend" target="1.5" />
+      <module name="lexilogicclient" target="20" />
+      <module name="lexilogicserver" target="1.5" />
     </bytecodeTargetLevel>
   </component>
 </project>

@@ -4,7 +4,7 @@
 --
 -- Host: 127.0.0.1:3306
 -- Generation Time: Apr 22, 2024 at 12:08 PM
--- Server version: 8.2.0
+-- org.amalgam.lexilogicserver.Server.Server version: 8.2.0
 -- PHP Version: 8.2.13
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";

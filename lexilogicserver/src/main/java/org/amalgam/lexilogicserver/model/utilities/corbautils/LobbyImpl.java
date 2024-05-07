@@ -7,6 +7,11 @@ public class LobbyImpl extends LobbyPOA {
     private String createdBy;
     private int lobbyID;
     private String winner;
+
+    public LobbyImpl(int lobbyID, String createdBy, String winner) {
+        super();
+    }
+
     @Override
     public int lobbyID() {
         return this.lobbyID;

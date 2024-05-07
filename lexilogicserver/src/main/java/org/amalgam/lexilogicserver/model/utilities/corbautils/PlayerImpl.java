@@ -11,6 +11,11 @@ public class PlayerImpl extends PlayerPOA {
     private String name;
     private String password;
     private String lastLoggedIn;
+
+    public PlayerImpl(int fetchedPlayerID, String fetchedUsername, String fetchedPassword, String fetchedLastLogin) {
+        super();
+    }
+
     @Override
     public int id() {
         return this.id;
