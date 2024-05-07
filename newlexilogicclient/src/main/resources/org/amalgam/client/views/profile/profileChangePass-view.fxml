@@ -8,7 +8,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="changepassPane" prefHeight="407.0" prefWidth="504.0" style="-fx-background-color: #674C33;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.amalgam.lexilogicclient.client.profile.ProfileChangePassController">
+<AnchorPane fx:id="changepassPane" prefHeight="407.0" prefWidth="504.0" style="-fx-background-color: #674C33;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.amalgam.client.profile.ProfileChangePassController">
    <children>
       <ImageView fx:id="axelImage" fitHeight="225.0" fitWidth="229.0" layoutX="-28.0" layoutY="182.0" pickOnBounds="true">
          <image>

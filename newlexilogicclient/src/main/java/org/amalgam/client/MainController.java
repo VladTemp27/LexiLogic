@@ -35,13 +35,13 @@ public class MainController {
     static AnchorPane profilePane;
 
     static MainMenuController mainMenuController;
-    static AnchorPane mainmenuPane;
+    static AnchorPane mainMenuPane;
 
     static ProfileChangeUsernameController profileChangeUsernameController;
     static AnchorPane changeUsernamePane;
 
     static ProfileChangePassController profileChangePassController;
-    static AnchorPane changepassPane;
+    static AnchorPane changePassPane;
 
     /**
      * Getters and Setters of Controllers and Panels
@@ -60,10 +60,10 @@ public class MainController {
      */
     public void loadLoginView() {
         try {
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/org/amalgam/lexilogicclient/client/views/login/login-view.fxml"));
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/org/amalgam/client/views/login/login-view.fxml"));
             AnchorPane loginPane = fxmlLoader.load();
 
-            InputStream inputStream = getClass().getResourceAsStream("icons/Logo.png");
+            InputStream inputStream = getClass().getResourceAsStream("/org/amalgam/icons/Logo.png");
             if (inputStream != null) {
                 Image image = new Image(inputStream);
                 stage.getIcons().add(image);
@@ -94,10 +94,10 @@ public class MainController {
      */
     public void loadSignUpView() {
         try {
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/org/amalgam/lexilogicclient/client/views/signup/signup-view.fxml"));
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/org/amalgam/client/views/signup/signup-view.fxml"));
             AnchorPane signuppane = fxmlLoader.load();
 
-            InputStream inputStream = getClass().getResourceAsStream("icons/Logo.png");
+            InputStream inputStream = getClass().getResourceAsStream("/org/amalgam/icons/Logo.png");
 
             if (inputStream != null) {
                 Image image = new Image(inputStream);
@@ -129,10 +129,10 @@ public class MainController {
      */
     public void loadMatchHistoryView() {
         try {
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/org/amalgam/lexilogicclient/client/views/matchhistory/matchhistory-view.fxml"));
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/org/amalgam/client/views/matchhistory/matchhistory-view.fxml"));
             AnchorPane matchHistoryPane = fxmlLoader.load();
 
-            InputStream inputStream = getClass().getResourceAsStream("icons/Logo.png");
+            InputStream inputStream = getClass().getResourceAsStream("/org/amalgam/icons/Logo.png");
 
             if (inputStream != null) {
                 Image image = new Image(inputStream);
@@ -164,10 +164,10 @@ public class MainController {
      */
     public void loadProfileView(){
         try {
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/org/amalgam/lexilogicclient/client/views/profile/profile-view.fxml"));
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/org/amalgam/client/views/profile/profile-view.fxml"));
             AnchorPane profilePane = fxmlLoader.load();
 
-            InputStream inputStream = getClass().getResourceAsStream("icons/Logo.png");
+            InputStream inputStream = getClass().getResourceAsStream("/org/amalgam/icons/Logo.png");
 
             if (inputStream != null) {
                 Image image = new Image(inputStream);
@@ -199,10 +199,10 @@ public class MainController {
      */
     public void loadProfileChangeUsernameView(){
         try {
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/org/amalgam/lexilogicclient/client/views/profile/profileChangeUsername-view.fxml"));
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/org/amalgam/client/views/profile/profileChangeUsername-view.fxml"));
             AnchorPane changeUsernamePane = fxmlLoader.load();
 
-            InputStream inputStream = getClass().getResourceAsStream("icons/Logo.png");
+            InputStream inputStream = getClass().getResourceAsStream("/org/amalgam/icons/Logo.png");
 
             if (inputStream != null) {
                 Image image = new Image(inputStream);
@@ -234,10 +234,10 @@ public class MainController {
      */
     public void loadProfileChangePasswordView(){
         try {
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/org/amalgam/lexilogicclient/client/views/profile/profileChangePass-view.fxml"));
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/org/amalgam/client/views/profile/profileChangePass-view.fxml"));
             AnchorPane changepassPane = fxmlLoader.load();
 
-            InputStream inputStream = getClass().getResourceAsStream("icons/Logo.png");
+            InputStream inputStream = getClass().getResourceAsStream("/org/amalgam/icons/Logo.png");
 
             if (inputStream != null) {
                 Image image = new Image(inputStream);
@@ -269,10 +269,10 @@ public class MainController {
      */
     public void loadMainMenuView(){
         try {
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/org/amalgam/lexilogicclient/client/views/mainmenu/mainmenu-view.fxml"));
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/org/amalgam/client/views/mainmenu/mainmenu-view.fxml"));
             AnchorPane mainmenuPane = fxmlLoader.load();
 
-            InputStream inputStream = getClass().getResourceAsStream("icons/Logo.png");
+            InputStream inputStream = getClass().getResourceAsStream("/org/amalgam/icons/Logo.png");
 
             if (inputStream != null) {
                 Image image = new Image(inputStream);

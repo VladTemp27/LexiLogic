@@ -9,7 +9,7 @@ import org.amalgam.client.MainController;
 public class MainMenuController {
     //private variables
     @FXML
-    private AnchorPane mainmenuPane;
+    private AnchorPane mainMenuPane;
     @FXML
     private Button playButton;
     @FXML
