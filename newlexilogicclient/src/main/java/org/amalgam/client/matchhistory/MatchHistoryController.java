@@ -177,6 +177,7 @@ public class MatchHistoryController {
         populateMatchTable();
         populateRank();
         populateScore();
+        matchTable.setStyle("-fx-font-family: 'Brygada 1918';");
     }
 
     /**
