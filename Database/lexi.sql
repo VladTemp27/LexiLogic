@@ -101,6 +101,7 @@ CREATE TABLE IF NOT EXISTS `player` (
   `name` varchar(255) DEFAULT NULL,
   `password` varchar(255) DEFAULT NULL,
   `lastLogin` date DEFAULT NULL,
+  `forDeletion` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`playerID`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
@@ -108,9 +109,9 @@ CREATE TABLE IF NOT EXISTS `player` (
 -- Dumping data for table `player`
 --
 
-INSERT INTO `player` (`playerID`, `name`, `password`, `lastLogin`) VALUES
-(1, 'Marven', 'password123', '2024-04-21'),
-(2, 'Luis', 'password456', '2024-04-20');
+INSERT INTO `player` (`playerID`, `name`, `password`, `lastLogin`,`forDeletion`) VALUES
+(1, 'Marven', 'password123', '2024-04-21',NULL),
+(2, 'Luis', 'password456', '2024-04-20', NULL);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
