@@ -3,77 +3,63 @@ package org.amalgam.lexilogicserver.model.serviceimpl;
 import org.amalgam.Service.PlayerExceptions.*;
 import org.amalgam.Service.PlayerServiceModule.PlayerCallback;
 import org.amalgam.Service.PlayerServiceModule.PlayerServicePOA;
+import org.amalgam.Utils.Exceptions.*;
+import org.amalgam.Utils.Exceptions.InGameException;
+import org.amalgam.Utils.Exceptions.UserExistenceException;
 import org.amalgam.Utils.Objects.GameRoom;
+import org.amalgam.Utils.Objects.Lobby;
+import org.amalgam.Utils.Objects.Player;
+import org.amalgam.lexilogicserver.model.DAL.PlayerDAL;
 
 import java.util.LinkedList;
 
 public class PlayerServiceImpl extends PlayerServicePOA {
     LinkedList<PlayerCallback> playerSessions = new LinkedList<>();
+
+
     @Override
-    public void login(PlayerCallback player_callback) throws AlreadyLoggedIn, InvalidCredentials, UserExistenceException {
+    public void login(org.amalgam.Utils.UIControllers.PlayerCallback player_callback) throws AlreadyLoggedInException, InvalidCredentialsException, UserExistenceException {
 
     }
 
     @Override
-    public void logout() throws NotLoggedIn {
+    public void logout() throws NotLoggedInException {
 
     }
 
     @Override
-    public void changeUsername(String username, String newUsername) throws ChangeUsernameFailed {
-
+    public void createAccount(Player newPlayer) throws AccountCreationFailedException {
+        String username = newPlayer.name();
+        String password = newPlayer.password();
+        String lastLogin = newPlayer.lastLogin();
+        PlayerDAL.insertNewPlayer(username, password,lastLogin);
     }
 
     @Override
-    public void changePassword(String username, String newPassword) throws ChangePasswordFailed {
-
+    public void changeUsername(String username, String newUsername) throws ChangeUsernameFailedException {
+        int userId = PlayerDAL.getIDByUsername(username);
+        PlayerDAL.updateUsername(userId, newUsername);
     }
 
     @Override
-    public void deleteAccount(String username) throws DeleteAccountFailed {
-
+    public void changePassword(String username, String newPassword) throws ChangePasswordFailedException {
+        int userId = PlayerDAL.getIDByUsername(username);
+        PlayerDAL.updatePassword(userId, newPassword);
     }
 
-    /**
-     * @deprecated
-     * should be done under game service
-     * @param word
-     * @param username
-     * @throws SubmitWordFailed
-     */
-    @Deprecated
     @Override
-    public void submitWord(String word, String username) throws SubmitWordFailed {
-
-    }
-
-    /**
-     * @deprecated
-     *Is another term for matchmake, should be under gameservice
-     * @param username
-     * @throws StartGameFailed
-     * @throws InGameException
-     */
-    @Deprecated
-    @Override
-    public void startGame(String username) throws StartGameFailed, InGameException {
+    public void accountDeletionRequest(String username) throws DeleteAccountFailedException {
 
     }
 
     @Deprecated
     @Override
-    public GameRoom matchMake(PlayerCallback player_callback) throws MatchCreationFailed {
-        return null;
-    }
-
-    @Deprecated
-    @Override
-    public String getGameResult(String playerName) throws GameResultUnavailable, InGameException {
+    public String getGameResult(String playerName) throws GameResultUnavailableException, InGameException {
         return "";
     }
 
     @Override
-    public void getGameHistory(String playerName) throws GameHistoryUnavailable, InGameException {
-
+    public Lobby[] getGameHistory(String playerName) throws GameHistoryUnavailableException, InGameException {
+        return new Lobby[0];
     }
 }
