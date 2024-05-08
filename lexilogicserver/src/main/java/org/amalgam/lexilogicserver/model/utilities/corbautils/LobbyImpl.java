@@ -8,6 +8,12 @@ public class LobbyImpl extends LobbyPOA {
     private int lobbyID;
     private String winner;
 
+    public LobbyImpl (){
+       this.createdBy = "";
+       this.lobbyID = 0;
+       this.winner = "";
+    }
+
     public LobbyImpl(int lobbyID, String createdBy, String winner) {
         super();
     }
