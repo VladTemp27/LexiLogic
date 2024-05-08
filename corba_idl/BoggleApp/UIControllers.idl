@@ -1,0 +1,24 @@
+module org{
+    module amalgam {
+        module ControllerException {
+             exception InvalidRequestException {
+                  string message;
+            };
+        };
+
+        module UIControllers {
+             interface PlayerCallback {
+                void uiCall(in long lobbyId)
+                    raises (org::amalgam::ControllerException::InvalidRequestException);
+             };
+
+             interface ControllerInterface {
+                 void setObjectsUser(in string objects)
+                     raises (org::amalgam::ControllerException::InvalidRequestException);
+
+                 void fetchAndUpdate(in string jsonFileName, in any dataType)
+                     raises (org::amalgam::ControllerException::InvalidRequestException);
+             };
+        };
+    };
+};

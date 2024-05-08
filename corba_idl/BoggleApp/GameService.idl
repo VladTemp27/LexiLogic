@@ -1,4 +1,5 @@
 #include "ProgramUtilities.idl"
+#include "UIControllers.idl"
 
 module org {
     module amalgam {
@@ -8,7 +9,7 @@ module org {
 
                     typedef org::amalgam::Utils::Objects::Leaderboard Leaderboard;
                     typedef org::amalgam::Utils::Objects::GameRoom GameRoom;
-                    typedef org::amalgam::Utils::UIControllers::PlayerCallback PlayerCallback;
+                    typedef org::amalgam::UIControllers::PlayerCallback PlayerCallback;
 
                     GameRoom matchMake(in PlayerCallback player_callback)
                         raises (org::amalgam::Utils::Exceptions::MatchCreationFailedException);
