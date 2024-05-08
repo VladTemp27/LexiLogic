@@ -321,4 +321,42 @@ public class MainController {
             e.printStackTrace();
         }
     }
+
+    /**
+     * Loads and displays the game view.
+     */
+    public void loadGameView(){
+        try {
+            Font.loadFont(getClass().getResourceAsStream("/org/amalgam/fonts/BowlbyOneSC.ttf"), 20);
+            Font.loadFont(getClass().getResourceAsStream("/org/amalgam/fonts/Brygada1918.ttf"), 20);
+
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/org/amalgam/client/views/game/game-view.fxml"));
+            AnchorPane gamePane = fxmlLoader.load();
+
+            InputStream inputStream = getClass().getResourceAsStream("/org/amalgam/icons/Logo.png");
+
+            if (inputStream != null) {
+                Image image = new Image(inputStream);
+                stage.getIcons().add(image);
+            } else {
+                System.err.println("Failed to load image: Logo.png");
+            }
+
+            Scene scene = new Scene(gamePane);
+
+            if (stage == null) {
+                throw new IllegalStateException("Stage is not set. Please set the stage before calling the panel.");
+            }
+
+            stage.setScene(scene);
+            stage.setResizable(false);
+            stage.setTitle("Lexi Logic");
+            MainMenuController mainMenuController = fxmlLoader.getController();
+            mainMenuController.setMainController(this);
+            mainMenuController.initialize();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }
