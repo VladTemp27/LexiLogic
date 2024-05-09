@@ -7,6 +7,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class LobbyDAL {
     public void insertNewLobby(int lobbyId, String createdBy, String winner) {
@@ -37,5 +39,43 @@ public class LobbyDAL {
         } catch (SQLException | ClassNotFoundException | InstantiationException | IllegalAccessException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public List<LobbyImpl > getLobbyByUserID (int playerID){
+        List<LobbyImpl> lobbies = new ArrayList<>();
+        Connection connection = null;
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
+
+        try {
+            connection = DatabaseUtil.getConnection();
+
+            String query = "SELECT * FROM lobby WHERE playerID = ?";
+            statement = connection.prepareStatement(query);
+
+            statement.setInt(1,playerID);
+            resultSet = statement.executeQuery();
+
+            while (resultSet.next()){
+                LobbyImpl lobby = new LobbyImpl();
+                lobby.lobbyID(resultSet.getInt("lobbyID"));
+                lobby.createdBy(resultSet.getString("createdBy"));
+                lobby.winner(resultSet.getString("winner"));
+                lobbies.add(lobby);
+
+            }
+
+        } catch (SQLException | ClassNotFoundException | InstantiationException | IllegalAccessException e) {
+            throw new RuntimeException(e);
+        } finally {
+            try {
+                if (resultSet != null) resultSet.close();
+                if (statement != null) statement.close();
+                if (connection != null) connection.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return lobbies;
     }
 }

@@ -1,4 +1,6 @@
 #include "ProgramUtilities.idl"
+#include "UIControllers.idl"
+
 module org {
     module amalgam {
         module Service {
@@ -6,7 +8,7 @@ module org {
 
                 interface PlayerService {
                     typedef org::amalgam::Utils::Objects::Player Player;
-                    typedef org::amalgam::Utils::UIControllers::PlayerCallback PlayerCallback;
+                    typedef org::amalgam::UIControllers::PlayerCallback PlayerCallback;
                     typedef org::amalgam::Utils::Objects::Lobby Lobby;
 
                     void login(in PlayerCallback player_callback)
