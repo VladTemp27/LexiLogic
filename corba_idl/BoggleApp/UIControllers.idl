@@ -8,7 +8,9 @@ module org{
 
         module UIControllers {
              interface PlayerCallback {
-                void uiCall(in long lobbyId)
+                attribute string username;
+
+                void uiCall()
                     raises (org::amalgam::ControllerException::InvalidRequestException);
              };
 
@@ -16,7 +18,7 @@ module org{
                  void setObjectsUser(in string objects)
                      raises (org::amalgam::ControllerException::InvalidRequestException);
 
-                 void fetchAndUpdate(in string jsonFileName, in string dataType)
+                 void fetchAndUpdate(in string jsonString, in string dataType)
                      raises (org::amalgam::ControllerException::InvalidRequestException);
              };
         };

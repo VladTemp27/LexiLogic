@@ -9,10 +9,10 @@ module org {
                 interface PlayerService {
                     typedef org::amalgam::UIControllers::PlayerCallback PlayerCallback;
 
-                    void login(in PlayerCallback player_callback)
+                    void login(in PlayerCallback player_callback,in string password)
                         raises (org::amalgam::Utils::Exceptions::AlreadyLoggedInException, org::amalgam::Utils::Exceptions::InvalidCredentialsException, org::amalgam::Utils::Exceptions::UserExistenceException);
 
-                    void logout()
+                    void logout(in string username)
                         raises (org::amalgam::Utils::Exceptions::NotLoggedInException);
 
                     void createAccount (in string username, in string password)
@@ -27,7 +27,7 @@ module org {
                     void accountDeletionRequest(in string username)
                         raises (org::amalgam::Utils::Exceptions::DeleteAccountFailedException);
 
-                    string getGameHistory()
+                    string getGameHistory(in string username)
                         raises (org::amalgam::Utils::Exceptions::GameHistoryUnavailableException, org::amalgam::Utils::Exceptions::InGameException);
                 };
             };
