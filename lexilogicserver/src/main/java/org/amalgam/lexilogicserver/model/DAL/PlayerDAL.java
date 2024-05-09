@@ -1,15 +1,41 @@
 package org.amalgam.lexilogicserver.model.DAL;
 
 import org.amalgam.lexilogicserver.model.DatabaseUtil;
-import org.amalgam.lexilogicserver.model.utilities.corbautils.PlayerImpl;
+import org.amalgam.lexilogicserver.model.utilities.referenceobjects.Player;
 
+import javax.xml.crypto.Data;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class PlayerDAL {
-    public void insertNewPlayer(String username, String password) {
+
+    public static Player getPlayerByUsername(String username){
+        try(Connection conn = DatabaseUtil.getConnection()){
+            PreparedStatement stmnt = conn.prepareStatement("SELECT * FROM player WHERE username=?");
+            stmnt.setString(1, username);
+            ResultSet rs = stmnt.executeQuery();
+            if(rs.next()){
+                int fetchedPlayerID = rs.getInt("playerID");
+                String fetchedUsername = rs.getString("name");
+                String fetchedPassword = rs.getString("password");
+                String fetchedLastLogin = rs.getString("lastLogin");
+                return new Player(fetchedPlayerID, fetchedUsername, fetchedPassword, fetchedLastLogin);
+            }
+        }catch (SQLException e) {
+            throw new RuntimeException(e);
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        } catch (InstantiationException e) {
+            throw new RuntimeException(e);
+        } catch (IllegalAccessException e) {
+            throw new RuntimeException(e);
+        }
+        return null;
+    }
+
+    public static void insertNewPlayer(String username, String password) {
         try (Connection conn = DatabaseUtil.getConnection()) {
             PreparedStatement stmt = conn.prepareStatement("INSERT INTO player (name, password) VALUES (?, ?)");
             stmt.setString(1, username);
@@ -21,7 +47,7 @@ public class PlayerDAL {
         }
     }
 
-    public PlayerImpl getPlayerByID(int playerID) {
+    public static Player getPlayerByID(int playerID) {
         try (Connection conn = DatabaseUtil.getConnection()) {
             PreparedStatement stmt = conn.prepareStatement("SELECT * FROM player WHERE playerID = ?");
             stmt.setInt(1, playerID);
@@ -31,7 +57,7 @@ public class PlayerDAL {
                     String fetchedUsername = rs.getString("name");
                     String fetchedPassword = rs.getString("password");
                     String fetchedLastLogin = rs.getString("lastLogin");
-                    return new PlayerImpl(fetchedPlayerID, fetchedUsername, fetchedPassword, fetchedLastLogin);
+                    return new Player(fetchedPlayerID, fetchedUsername, fetchedPassword, fetchedLastLogin);
                 } else {
                     return null;
                 }
@@ -41,7 +67,7 @@ public class PlayerDAL {
         }
     }
 
-    public void updatePassword(int playerID, String newPassword) {
+    public static void updatePassword(int playerID, String newPassword) {
         try (Connection conn = DatabaseUtil.getConnection()) {
             PreparedStatement stmt = conn.prepareStatement("UPDATE player SET password = ? WHERE playerID = ?");
             stmt.setString(1, newPassword);
@@ -55,7 +81,7 @@ public class PlayerDAL {
         }
     }
 
-    public void updateUsername(int playerID, String newUsername) {
+    public static void updateUsername(int playerID, String newUsername) {
         try (Connection conn = DatabaseUtil.getConnection()) {
             PreparedStatement stmt = conn.prepareStatement("UPDATE player SET name = ? WHERE playerID = ?");
             stmt.setString(1, newUsername);

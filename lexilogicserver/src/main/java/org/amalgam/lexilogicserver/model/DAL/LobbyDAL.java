@@ -1,7 +1,7 @@
 package org.amalgam.lexilogicserver.model.DAL;
 
 import org.amalgam.lexilogicserver.model.DatabaseUtil;
-import org.amalgam.lexilogicserver.model.utilities.corbautils.LobbyImpl;
+import org.amalgam.lexilogicserver.model.utilities.referenceobjects.Lobby;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -25,13 +25,13 @@ public class LobbyDAL {
         }
     }
 
-    public LobbyImpl getLobbyByID(int lobbyId) {
+    public static Lobby getLobbyByID(int lobbyId) {
         try (Connection conn = DatabaseUtil.getConnection()) {
             PreparedStatement stmt = conn.prepareStatement("SELECT * FROM lobby WHERE lobbyID = ?");
             stmt.setInt(1, lobbyId);
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
-                    return new LobbyImpl(rs.getInt("lobbyID"), rs.getString("createdBy"), rs.getString("winner"));
+                    return new Lobby(rs.getInt("lobbyID"), rs.getString("createdBy"), rs.getString("winner"));
                 } else {
                     return null;
                 }
@@ -41,8 +41,8 @@ public class LobbyDAL {
         }
     }
 
-    public List<LobbyImpl > getLobbyByUserID (int playerID){
-        List<LobbyImpl> lobbies = new ArrayList<>();
+    public static List<Lobby > getLobbyByUserID (int playerID){
+        List<Lobby> lobbies = new ArrayList<>();
         Connection connection = null;
         PreparedStatement statement = null;
         ResultSet resultSet = null;
@@ -57,10 +57,10 @@ public class LobbyDAL {
             resultSet = statement.executeQuery();
 
             while (resultSet.next()){
-                LobbyImpl lobby = new LobbyImpl();
-                lobby.lobbyID(resultSet.getInt("lobbyID"));
-                lobby.createdBy(resultSet.getString("createdBy"));
-                lobby.winner(resultSet.getString("winner"));
+                Lobby lobby = new Lobby();
+                lobby.setLobbyID(resultSet.getInt("lobbyID"));
+                lobby.setCreatedBy(resultSet.getString("createdBy"));
+                lobby.setWinner(resultSet.getString("winner"));
                 lobbies.add(lobby);
 
             }
