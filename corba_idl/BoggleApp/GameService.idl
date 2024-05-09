@@ -7,11 +7,9 @@ module org {
             module GameServiceModule {
                 interface GameService {
 
-                    typedef org::amalgam::Utils::Objects::Leaderboard Leaderboard;
-                    typedef org::amalgam::Utils::Objects::GameRoom GameRoom;
                     typedef org::amalgam::UIControllers::PlayerCallback PlayerCallback;
 
-                    GameRoom matchMake(in PlayerCallback player_callback)
+                    string matchMake(in PlayerCallback player_callback)
                         raises (org::amalgam::Utils::Exceptions::MatchCreationFailedException);
 
                     typedef char Matrix[6][6];
