@@ -1,7 +1,7 @@
 package org.amalgam.backend.microservices;
 import org.amalgam.Utils.Exceptions.AccountCreationFailedException;
-import org.amalgam.lexilogicserver.model.utilities.corbautils.PlayerImpl;
 import org.amalgam.backend.microservices.serverconnection.ORBConnection;
+import org.amalgam.lexilogicserver.model.utilities.referenceobjects.Player;
 
 public class SignUpMicroservice {
 
@@ -9,7 +9,7 @@ public class SignUpMicroservice {
 
     public  void process (String username, String password){
 
-        PlayerImpl newPlayer = new PlayerImpl(username, password);
+        Player newPlayer = new Player(username, password);
 
         try {
             orbConnection.retrievePlayerRequestStub().createAccount(newPlayer);
