@@ -1,75 +1,180 @@
 module org {
     module amalgam {
         module Utils {
-            module UtilExceptions {
+            module Exceptions {
                 exception DuplicatePlayerIDException {
-                    string reason;
+                    string message;
                 };
 
                 exception InvalidPlayerDataException {
-                    string reason;
+                    string message;
                 };
 
                 exception SQLError {
-                    string reason;
+                    string message;
                 };
 
                 exception InvalidNameException {
-                    string reason;
+                    string message;
                 };
 
                 exception InvalidPasswordException {
-                    string reason;
+                    string message;
                 };
 
                 exception UpdateLastLoginException {
-                    string reason;
+                    string message;
                 };
 
                 exception InvalidPointsException {
-                    string reason;
+                    string message;
                 };
 
-                exception PlayerAlreadyInRoom {
-                    string reason;
+                exception PlayerAlreadyInRoomException {
+                    string message;
                 };
 
                 exception LobbyIDRetrievalException {
-                    string reason;
+                    string message;
                 };
 
                 exception CreatedByRetrievalException {
-                    string reason;
+                    string message;
                 };
 
                 exception CloseLobbyException {
-                    string reason;
+                    string message;
                 };
 
                 exception PlayerDoesNotExistException {
-                    string reason;
-                };
-
-                exception LobbyDoesNotExistException {
-                    string reason;
+                    string message;
                 };
 
                 exception RoomDoesNotExistException {
-                    string reason;
+                    string message;
                 };
 
                 exception PlayerListRetrievalException {
-                    string reason;
+                    string message;
                 };
 
                 exception LeaderboardIDRetrievalException {
-                    string reason;
+                    string message;
                 };
 
-                exception InvalidRequestException {
-                    string reason;
+
+                exception AlreadyLoggedInException {
+                    string message;
+                };
+
+                exception InvalidCredentialsException {
+                    string message;
+                };
+
+                exception InvalidWordException {
+                    string message;
+                };
+
+                exception NoPlayersAvailableException {
+                    string message;
+                };
+
+                exception NotLoggedInException {
+                    string message;
+                };
+
+                exception ObjectExistenceException {
+                    string message;
+                };
+
+                exception UserExistenceException {
+                    string message;
+                };
+
+                exception ChangeUsernameFailedException {
+                    string message;
+                };
+
+                exception ChangePasswordFailedException {
+                    string message;
+                };
+
+                exception DeleteAccountFailedException {
+                    string message;
+                };
+
+                exception SubmitWordFailedException {
+                    string message;
+                };
+
+                exception StartGameFailedException {
+                    string message;
+                };
+
+                exception GameHistoryUnavailableException {
+                    string message;
+                };
+
+                exception GameResultUnavailableException {
+                    string message;
+                };
+
+                exception InGameException {
+                    string message;
+                };
+
+                exception MatchCreationFailedException {
+                    string message;
+                };
+
+                exception AccountCreationFailedException{
+                    string message;
+                };
+
+
+
+                exception WordFetchFailedException {
+                    string message;
+                };
+
+                exception InvalidWordFormatException {
+                    string message;
+                };
+
+                exception InvalidRoomIDException {
+                    string message;
+                };
+
+                exception EmptyLeaderBoardException {
+                    string message;
+                };
+
+                exception InvalidLobbyDataException {
+                    string message;
+                };
+
+                exception LobbyDoesNotExistException {
+                    string message;
+                };
+
+                exception DuplicateWordException {
+                    string message;
+                };
+
+                exception InsufficientWordPointsException {
+                    string message;
+                };
+
+                exception InvalidTotalPointsException {
+                    string message;
+                };
+
+                exception WinnerDoesNotExistException {
+                    string message;
                 };
             };
+
+
 
             module Objects {
                 interface Player {
@@ -78,11 +183,11 @@ module org {
                     attribute string password;
                     attribute string lastLogin;
 
-                    void addPlayer(in Player player) raises (UtilExceptions::DuplicatePlayerIDException, UtilExceptions::InvalidPlayerDataException, UtilExceptions::SQLError);
-                    void updateName(in string newName) raises (UtilExceptions::InvalidNameException, UtilExceptions::SQLError);
-                    void updatePassword(in string newPassword) raises (UtilExceptions::InvalidPasswordException, UtilExceptions::SQLError);
-                    void updateLastLogin(in string newTime) raises (UtilExceptions::UpdateLastLoginException, UtilExceptions::SQLError);
-                    void deletePlayer(in long id) raises (UtilExceptions::PlayerDoesNotExistException);
+                    void addPlayer(in Player player) raises (Exceptions::DuplicatePlayerIDException, Exceptions::InvalidPlayerDataException, Exceptions::SQLError);
+                    void updateName(in string newName) raises (Exceptions::InvalidNameException, Exceptions::SQLError);
+                    void updatePassword(in string newPassword) raises (Exceptions::InvalidPasswordException, Exceptions::SQLError);
+                    void updateLastLogin(in string newTime) raises (Exceptions::UpdateLastLoginException, Exceptions::SQLError);
+                    void deletePlayer(in long id) raises (Exceptions::PlayerDoesNotExistException);
                 };
 
                 interface GameDetail {
@@ -90,9 +195,9 @@ module org {
                     attribute long lobbyID;
                     attribute long totalPoints;
 
-                    void updateTotalPoints(in long newPoints) raises (UtilExceptions::InvalidPointsException, UtilExceptions::SQLError);
-                    long getPlayerID() raises (UtilExceptions::PlayerDoesNotExistException);
-                    long getLobbyID() raises (UtilExceptions::LobbyDoesNotExistException);
+                    void updateTotalPoints(in long newPoints) raises (Exceptions::InvalidPointsException, Exceptions::SQLError);
+                    long getPlayerID() raises (Exceptions::PlayerDoesNotExistException);
+                    long getLobbyID() raises (Exceptions::LobbyDoesNotExistException);
                 };
 
                 interface GameRoom {
@@ -100,10 +205,10 @@ module org {
                     typedef sequence<string> PlayersList;
                     attribute PlayersList players;
 
-                    void addPlayer(in string playerName) raises (UtilExceptions::PlayerAlreadyInRoom, UtilExceptions::SQLError);
-                    long getRoomID() raises (UtilExceptions::RoomDoesNotExistException);
+                    void addPlayer(in string playerName) raises (Exceptions::PlayerAlreadyInRoomException, Exceptions::SQLError);
+                    long getRoomID() raises (Exceptions::RoomDoesNotExistException);
                     typedef sequence<string> list;
-                    list getPlayers() raises (UtilExceptions::PlayerListRetrievalException);
+                    list getPlayers() raises (Exceptions::PlayerListRetrievalException);
                 };
 
                 interface Lobby {
@@ -111,10 +216,10 @@ module org {
                     attribute string createdBy;
                     attribute string winner;
 
-                    void updateWinner(in string winnerName) raises (UtilExceptions::InvalidNameException, UtilExceptions::PlayerDoesNotExistException, UtilExceptions::SQLError);
-                    void closeLobby() raises (UtilExceptions::LobbyDoesNotExistException, UtilExceptions::CloseLobbyException, UtilExceptions::SQLError);
-                    long getLobbyID() raises (UtilExceptions::LobbyIDRetrievalException);
-                    string getCreatedBy() raises (UtilExceptions::CreatedByRetrievalException);
+                    void updateWinner(in string winnerName) raises (Exceptions::InvalidNameException, Exceptions::PlayerDoesNotExistException, Exceptions::SQLError);
+                    void closeLobby() raises (Exceptions::LobbyDoesNotExistException, Exceptions::CloseLobbyException, Exceptions::SQLError);
+                    long getLobbyID() raises (Exceptions::LobbyIDRetrievalException);
+                    string getCreatedBy() raises (Exceptions::CreatedByRetrievalException);
                 };
 
                 interface Leaderboard {
@@ -122,35 +227,11 @@ module org {
                     attribute long playerID;
                     attribute long totalPoints;
 
-                    void updateTotalPoints(in long newPoints) raises (UtilExceptions::InvalidPointsException, UtilExceptions::SQLError);
-                    long getPlayerID() raises (UtilExceptions::PlayerDoesNotExistException);
-                    long getLeaderboardID() raises (UtilExceptions::LeaderboardIDRetrievalException);
+                    void updateTotalPoints(in long newPoints) raises (Exceptions::InvalidPointsException, Exceptions::SQLError);
+                    long getPlayerID() raises (Exceptions::PlayerDoesNotExistException);
+                    long getLeaderboardID() raises (Exceptions::LeaderboardIDRetrievalException);
                 };
             };
-
-             module UIControllers {
-                 interface PlayerCallback {
-
-                    typedef org::amalgam::Utils::Objects::Player Player;
-
-                    void uiCall(in long lobbyId)
-                        raises (UtilExceptions::InvalidRequestException);
-
-                    void setUser(in org::amalgam::Utils::Objects::Player player, in long lobbyId)
-                        raises (UtilExceptions::InvalidRequestException);
-
-                    org::amalgam::Utils::Objects::Player getPlayer(in long lobbyId)
-                        raises (UtilExceptions::InvalidRequestException);
-                 };
-
-                 interface ControllerInterface {
-                     void setObjectsUser(in string objects)
-                         raises (UtilExceptions::InvalidRequestException);
-
-                     void fetchAndUpdate()
-                         raises (UtilExceptions::InvalidRequestException);
-                 };
-             };
         };
     };
 };
