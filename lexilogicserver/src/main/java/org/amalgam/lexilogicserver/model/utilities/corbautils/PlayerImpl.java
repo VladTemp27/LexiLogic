@@ -12,8 +12,17 @@ public class PlayerImpl extends PlayerPOA {
     private String password;
     private String lastLoggedIn;
 
-    public PlayerImpl(int fetchedPlayerID, String fetchedUsername, String fetchedPassword, String fetchedLastLogin) {
-        super();
+    public  PlayerImpl (String username, String password){
+        this.name = username;
+        this.password = password;
+
+    }
+
+    public PlayerImpl(int pLayerID,String username, String password, String lastLoggedIn){
+        this.id = pLayerID;
+        this.name = username;
+        this.password = password;
+        this.lastLoggedIn = lastLoggedIn;
     }
 
     @Override

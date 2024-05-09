@@ -9,12 +9,11 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class PlayerDAL {
-    public void insertNewPlayer(String username, String password, String lastLogin) {
+    public void insertNewPlayer(String username, String password) {
         try (Connection conn = DatabaseUtil.getConnection()) {
-            PreparedStatement stmt = conn.prepareStatement("INSERT INTO player (name, password, lastLogin) VALUES (?, ?, ?)");
+            PreparedStatement stmt = conn.prepareStatement("INSERT INTO player (name, password) VALUES (?, ?)");
             stmt.setString(1, username);
             stmt.setString(2, password);
-            stmt.setString(3, lastLogin);
             stmt.executeUpdate();
             System.out.println("CREATE NEW PLAYER SUCCESS");
         } catch (SQLException | ClassNotFoundException | InstantiationException | IllegalAccessException e) {
