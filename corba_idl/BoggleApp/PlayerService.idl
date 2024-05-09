@@ -7,9 +7,7 @@ module org {
             module PlayerServiceModule {
 
                 interface PlayerService {
-                    typedef org::amalgam::Utils::Objects::Player Player;
                     typedef org::amalgam::UIControllers::PlayerCallback PlayerCallback;
-                    typedef org::amalgam::Utils::Objects::Lobby Lobby;
 
                     void login(in PlayerCallback player_callback)
                         raises (org::amalgam::Utils::Exceptions::AlreadyLoggedInException, org::amalgam::Utils::Exceptions::InvalidCredentialsException, org::amalgam::Utils::Exceptions::UserExistenceException);
@@ -17,7 +15,7 @@ module org {
                     void logout()
                         raises (org::amalgam::Utils::Exceptions::NotLoggedInException);
 
-                    void createAccount (in Player newPlayer)
+                    void createAccount (in string username, in string password)
                         raises (org::amalgam::Utils::Exceptions::AccountCreationFailedException);
 
                     void changeUsername(in string username, in string newUsername)
@@ -29,11 +27,7 @@ module org {
                     void accountDeletionRequest(in string username)
                         raises (org::amalgam::Utils::Exceptions::DeleteAccountFailedException);
 
-                    string getGameResult(in string playerName)
-                        raises (org::amalgam::Utils::Exceptions::GameResultUnavailableException, org::amalgam::Utils::Exceptions::InGameException);
-
-                    typedef sequence <Lobby> history;
-                    history getGameHistory(in string playerName)
+                    string getGameHistory()
                         raises (org::amalgam::Utils::Exceptions::GameHistoryUnavailableException, org::amalgam::Utils::Exceptions::InGameException);
                 };
             };

@@ -18,16 +18,13 @@ module org {
                     Matrix fetchWordBox(in long roomID)
                         raises (org::amalgam::Utils::Exceptions::WordFetchFailedException, org::amalgam::Utils::Exceptions::InvalidRoomIDException);
 
-                    typedef sequence<Leaderboard> leaderboards;
-                    leaderboards getLeaderboards()
+                    string getLeaderboards()
                         raises (org::amalgam::Utils::Exceptions::EmptyLeaderBoardException);
 
                     void verifyWord(in string word)
                         raises (org::amalgam::Utils::Exceptions::InvalidWordFormatException, org::amalgam::Utils::Exceptions::DuplicateWordException);
 
-                    // Keep but mark as deprecated in case
-                    typedef sequence<string> words;
-                    long validateTotalPoints(in words word)
+                    long validateTotalPoints()
                         raises (org::amalgam::Utils::Exceptions::InsufficientWordPointsException, org::amalgam::Utils::Exceptions::InvalidTotalPointsException);
 
                     string fetchWinner(in long lobbyId)
