@@ -23,5 +23,8 @@ goto :eof
 
 
 :main
+    if exist compiled\ (
+        rd compiled /s /q
+    )
     call :generateServer
     call :generateClient
