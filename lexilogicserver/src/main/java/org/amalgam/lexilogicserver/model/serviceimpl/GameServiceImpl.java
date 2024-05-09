@@ -1,18 +1,15 @@
 package org.amalgam.lexilogicserver.model.serviceimpl;
 
-import org.amalgam.Service.GameExceptions.*;
 import org.amalgam.Service.GameServiceModule.GameServicePOA;
+import org.amalgam.UIControllers.PlayerCallback;
 import org.amalgam.Utils.Exceptions.*;
 import org.amalgam.Utils.Exceptions.DuplicateWordException;
-import org.amalgam.Utils.Objects.GameRoom;
-import org.amalgam.Utils.Objects.Leaderboard;
-import org.amalgam.Utils.Objects.Lobby;
-import org.amalgam.Utils.UIControllers.PlayerCallback;
 
 public class GameServiceImpl extends GameServicePOA {
+
     @Override
-    public GameRoom matchMake(PlayerCallback player_callback) throws MatchCreationFailedException {
-        return null;
+    public String matchMake(PlayerCallback player_callback) throws MatchCreationFailedException {
+        return "";
     }
 
     @Override
@@ -21,8 +18,8 @@ public class GameServiceImpl extends GameServicePOA {
     }
 
     @Override
-    public Leaderboard[] getLeaderboards() throws EmptyLeaderBoardException {
-        return new Leaderboard[0];
+    public String getLeaderboards() throws EmptyLeaderBoardException {
+        return "";
     }
 
     @Override
@@ -31,7 +28,7 @@ public class GameServiceImpl extends GameServicePOA {
     }
 
     @Override
-    public int validateTotalPoints(String[] word) throws InsufficientWordPointsException, InvalidTotalPointsException {
+    public int validateTotalPoints() throws InsufficientWordPointsException, InvalidTotalPointsException {
         return 0;
     }
 
