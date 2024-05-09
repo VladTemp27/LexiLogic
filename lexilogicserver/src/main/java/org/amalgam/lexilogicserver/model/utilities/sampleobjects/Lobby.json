@@ -1,0 +1,10 @@
+{
+  "object": "lobby",
+  "lobby":[
+    {
+      "lobbyID": "",
+      "createBy": "",
+      "winner": ""
+    }
+  ]
+}
