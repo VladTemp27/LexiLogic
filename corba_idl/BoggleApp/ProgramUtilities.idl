@@ -183,11 +183,10 @@ module org {
                     attribute string password;
                     attribute string lastLogin;
 
-                    void addPlayer(in Player player) raises (Exceptions::DuplicatePlayerIDException, Exceptions::InvalidPlayerDataException, Exceptions::SQLError);
+
                     void updateName(in string newName) raises (Exceptions::InvalidNameException, Exceptions::SQLError);
                     void updatePassword(in string newPassword) raises (Exceptions::InvalidPasswordException, Exceptions::SQLError);
                     void updateLastLogin(in string newTime) raises (Exceptions::UpdateLastLoginException, Exceptions::SQLError);
-                    void deletePlayer(in long id) raises (Exceptions::PlayerDoesNotExistException);
                 };
 
                 interface GameDetail {
@@ -217,7 +216,6 @@ module org {
                     attribute string winner;
 
                     void updateWinner(in string winnerName) raises (Exceptions::InvalidNameException, Exceptions::PlayerDoesNotExistException, Exceptions::SQLError);
-                    void closeLobby() raises (Exceptions::LobbyDoesNotExistException, Exceptions::CloseLobbyException, Exceptions::SQLError);
                     long getLobbyID() raises (Exceptions::LobbyIDRetrievalException);
                     string getCreatedBy() raises (Exceptions::CreatedByRetrievalException);
                 };
