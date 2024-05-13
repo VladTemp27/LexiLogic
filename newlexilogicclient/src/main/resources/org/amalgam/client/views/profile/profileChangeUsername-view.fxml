@@ -41,7 +41,7 @@
             <Image url="@../../../icons/Profile.png" />
          </image>
       </ImageView>
-      <TextField fx:id="newUsernameField" layoutX="176.0" layoutY="152.0" prefHeight="40.0" prefWidth="224.0" promptText="new username" style="-fx-background-color: #B07C3B;">
+      <TextField fx:id="newUsernameField" layoutX="176.0" layoutY="152.0" prefHeight="40.0" prefWidth="224.0" promptText="new username" style="-fx-background-color: #B07C3B; -fx-prompt-text-fill: #FFFFFF;">
          <font>
             <Font name="Brygada 1918 Regular" size="18.0" />
          </font>
