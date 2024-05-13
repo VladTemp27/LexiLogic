@@ -1,5 +1,6 @@
 package org.amalgam.client.loading;
 
+import javafx.fxml.FXML;
 import org.amalgam.client.MainController;
 
 public class LoadingController {
@@ -32,5 +33,10 @@ public class LoadingController {
     //TODO: @Override
     private void fetchAndUpdate() {
         //TODO: Fetching of Data
+    }
+
+    @FXML
+    public void initialize() {
+        // animation for the loading log (c.o lestat)
     }
 }
