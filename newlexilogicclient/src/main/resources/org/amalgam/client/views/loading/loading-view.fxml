@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane fx:id="loadingPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.amalgam.client.loading.LoadingController">
+   <children>
+      <ImageView fx:id="backgroundImage" fitHeight="510.0" fitWidth="800.0" layoutY="-6.0" pickOnBounds="true">
+         <image>
+            <Image url="@../../../../../../../../../lexilogicclient/target/classes/org/amalgam/lexilogicclient/icons/Background.png" />
+         </image>
+      </ImageView>
+      <ImageView fx:id="axelImage" fitHeight="200.0" fitWidth="192.0" layoutX="543.0" layoutY="307.0" pickOnBounds="true">
+         <image>
+            <Image url="@../../../../../../../../../lexilogicclient/target/classes/org/amalgam/lexilogicclient/icons/Axel.png" />
+         </image>
+      </ImageView>
+      <ImageView fx:id="logoImage" fitHeight="306.0" fitWidth="434.0" layoutX="206.0" pickOnBounds="true">
+         <image>
+            <Image url="@../../../../../../../../../lexilogicclient/target/classes/org/amalgam/lexilogicclient/icons/Logo.png" />
+         </image>
+      </ImageView>
+      <ImageView fx:id="loadingLogImage" fitHeight="77.0" fitWidth="97.0" layoutX="375.0" layoutY="307.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../../../../../../../../target/classes/org/amalgam/icons/LoadingLog.png" />
+         </image>
+      </ImageView>
+   </children>
+</AnchorPane>
