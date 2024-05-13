@@ -6,6 +6,8 @@ import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
+import org.amalgam.client.leaderboards.LeaderboardsController;
+import org.amalgam.client.leaderboards.LeaderboardsPanel;
 import org.amalgam.client.loading.LoadingController;
 import org.amalgam.client.login.LoginController;
 import org.amalgam.client.mainmenu.MainMenuController;
@@ -48,6 +50,9 @@ public class MainController {
     static LoadingController loadingController;
     static AnchorPane loadingPane;
 
+    static LeaderboardsController leaderboardsController;
+    static AnchorPane leaderboardsPane;
+
     /**
      * Getters and Setters of Controllers and Panels
      */
@@ -60,6 +65,7 @@ public class MainController {
     public ProfileChangePassController getProfileChangePassController(){return profileChangePassController;}
     public MainMenuController getMainMenuController(){return mainMenuController;}
     public LoadingController getLoadingController(){return loadingController;}
+    public LeaderboardsController getLeaderboardsController(){return leaderboardsController;}
 
     /**
      * Loads and displays the login view.
@@ -372,7 +378,7 @@ public class MainController {
             Font.loadFont(getClass().getResourceAsStream("/org/amalgam/fonts/BowlbyOneSC.ttf"), 20);
             Font.loadFont(getClass().getResourceAsStream("/org/amalgam/fonts/Brygada1918.ttf"), 20);
 
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/org/amalgam/client/views/game/loading-view.fxml"));
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/org/amalgam/client/views/loading/loading-view.fxml"));
             AnchorPane loadingPane = fxmlLoader.load();
 
             InputStream inputStream = getClass().getResourceAsStream("/org/amalgam/icons/Logo.png");
@@ -393,13 +399,50 @@ public class MainController {
             stage.setScene(scene);
             stage.setResizable(false);
             stage.setTitle("Lexi Logic");
-            MainMenuController mainMenuController = fxmlLoader.getController();
-            mainMenuController.setMainController(this);
-            mainMenuController.initialize();
+            LeaderboardsController leaderboardsController1 = fxmlLoader.getController();
+            loadingController.setMainController(this);
+            loadingController.initialize();
 
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
 
+    /**
+     * Load and display leaderboards view
+     */
+    public void loadLeaderboardsView(){
+        try {
+            Font.loadFont(getClass().getResourceAsStream("/org/amalgam/fonts/BowlbyOneSC.ttf"), 20);
+            Font.loadFont(getClass().getResourceAsStream("/org/amalgam/fonts/Brygada1918.ttf"), 20);
+
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/org/amalgam/client/views/leaderboards/leaderboards-view.fxml"));
+            AnchorPane leaderboardsPane = fxmlLoader.load();
+
+            InputStream inputStream = getClass().getResourceAsStream("/org/amalgam/icons/Logo.png");
+
+            if (inputStream != null) {
+                Image image = new Image(inputStream);
+                stage.getIcons().add(image);
+            } else {
+                System.err.println("Failed to load image: Logo.png");
+            }
+
+            Scene scene = new Scene(leaderboardsPane);
+
+            if (stage == null) {
+                throw new IllegalStateException("Stage is not set. Please set the stage before calling the panel.");
+            }
+
+            stage.setScene(scene);
+            stage.setResizable(false);
+            stage.setTitle("Lexi Logic");
+            LeaderboardsController leaderboardsController = fxmlLoader.getController();
+            leaderboardsController.setMainController(this);
+            leaderboardsController.initialize();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
