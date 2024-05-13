@@ -62,7 +62,6 @@ public class PlayerServiceImpl extends PlayerServicePOA {
     @Deprecated
     @Override
     public void createAccount(String username, String password) throws AccountCreationFailedException {
-
     }
 
     @Override
@@ -77,7 +76,7 @@ public class PlayerServiceImpl extends PlayerServicePOA {
 
     @Override
     public void accountDeletionRequest(String username) throws DeleteAccountFailedException {
-
+          PlayerDAL.markAccountForDeletion(username);
     }
 
     @Override
