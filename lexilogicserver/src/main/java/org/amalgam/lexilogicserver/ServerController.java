@@ -32,6 +32,7 @@ public class ServerController {
     static AnchorPane runServerPane;
 
 
+
     /**
      * Getters and Setters of Controllers and Panels
      */
@@ -56,6 +57,15 @@ public class ServerController {
     }
 
     /**
+     * Server starter method
+     */
+
+    public void startServer() {
+        // insert logic heree :)
+        System.out.println("Server started.");
+    }
+
+    /**
      * Loads and displays the server main menu view.
      */
     public void loadServerMainMenu() {
@@ -64,7 +74,7 @@ public class ServerController {
             Font.loadFont(getClass().getResourceAsStream("/org/amalgam/fonts/Brygada1918.ttf"), 20);
 
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/org/amalgam/server.views/servermainmenu/servermainmenu-view.fxml"));
-            AnchorPane serverMainMenu = fxmlLoader.load();
+            AnchorPane serverMainMenuPane = fxmlLoader.load();
 
             InputStream inputStream = getClass().getResourceAsStream("/org/amalgam/icons/Logo.png");
             if (inputStream != null) {
@@ -74,7 +84,7 @@ public class ServerController {
                 System.err.println("Failed to load image: Logo.png");
             }
 
-            Scene scene = new Scene(serverMainMenu);
+            Scene scene = new Scene(serverMainMenuPane);
 
             if (stage == null) {
                 throw new IllegalStateException("Stage is not set. Please set the stage before calling the panel.");
