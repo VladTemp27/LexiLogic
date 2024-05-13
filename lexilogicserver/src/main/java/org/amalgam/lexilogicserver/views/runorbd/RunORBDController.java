@@ -61,7 +61,7 @@ public class RunORBDController {
      * @param port     The port to validate.
      * @return True if hostname and port are valid, false otherwise.
      */
-    private boolean isValidHostAndPort(String hostname, int port) {
+    private boolean isValidHostAndPort(String hostname, int port) { //TODO: Checking of Validity of Host and Port
         try {
             // Create a socket with a timeout
             Socket socket = new Socket();
@@ -77,7 +77,7 @@ public class RunORBDController {
      * Handles the Run ORBD Button.
      */
     @FXML
-    public void handleRunORBDButton() {
+    public void handleRunORBDButton() { //TODO: Checking of Validity of Host and Port
         String hostname = hostNameField.getText().trim();
         String portText = portField.getText().trim();
 
