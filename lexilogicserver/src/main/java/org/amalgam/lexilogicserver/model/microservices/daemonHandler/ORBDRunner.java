@@ -6,8 +6,8 @@ import java.util.concurrent.Callable;
 
 //Use this object when running the daemon
 //Submit this to an ExecutorService of sort
-public class ORBRunner implements Callable<Integer> {
-    private ORBOperationCallback callback;
+public class ORBDRunner implements Callable<Integer> {
+    private ORBDOperationCallback callback;
     private int port;
     private String hostname;
 
@@ -17,7 +17,7 @@ public class ORBRunner implements Callable<Integer> {
      * @param port         Port where to run the daemon(Integer)
      * @param hostname     Hostname where to run the daemon(String)
      */
-    public ORBRunner(ORBOperationCallback callback, int port, String hostname) {
+    public ORBDRunner(ORBDOperationCallback callback, int port, String hostname) {
         this.callback = callback;
         this.port = port;
         this.hostname = hostname;
