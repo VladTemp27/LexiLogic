@@ -7,7 +7,11 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import java.net.InetSocketAddress;
 import java.net.Socket;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
 import org.amalgam.lexilogicserver.ServerController;
+import org.amalgam.lexilogicserver.model.microservices.daemonHandler.ORBDRunner;
 
 public class RunORBDController {
 
@@ -21,6 +25,8 @@ public class RunORBDController {
     @FXML
     private Button runORBDButton;
     private ServerController serverController;
+
+    private ExecutorService executorService = Executors.newSingleThreadExecutor();
 
     /**
      * Sets the Main Controller.
@@ -92,6 +98,7 @@ public class RunORBDController {
 
             // Validate hostname and port
             if (isValidHostAndPort(hostname, port)) {
+                ServerController.ORBExitCode = executorService.submit(new ORBDRunner(serverController, port,hostname));
                 if (serverController != null) {
                     serverController.loadServerMainMenu();
                 } else {

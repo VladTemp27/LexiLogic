@@ -6,6 +6,8 @@ import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
+import org.amalgam.lexilogicserver.model.microservices.daemonHandler.ORBDException;
+import org.amalgam.lexilogicserver.model.microservices.daemonHandler.ORBDOperationCallback;
 import org.amalgam.lexilogicserver.views.addplayer.AddPlayerController;
 import org.amalgam.lexilogicserver.views.changegame.ChangeGameController;
 import org.amalgam.lexilogicserver.views.runserver.RunServerRunningController;
@@ -15,21 +17,24 @@ import org.amalgam.lexilogicserver.views.runserver.RunServerController;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.concurrent.Future;
 
-public class ServerController {
+public class ServerController implements ORBDOperationCallback {
     public Stage stage;
 
-    static ServerMainMenuController serverMainMenuController;
-    static AnchorPane serverMainMenuPane;
+    public static ServerMainMenuController serverMainMenuController;
+    public static AnchorPane serverMainMenuPane;
 
-    static ChangeGameController changeGameController;
-    static AnchorPane changeGamePane;
+    public static ChangeGameController changeGameController;
+    public static AnchorPane changeGamePane;
 
-    static RunORBDController runORBDController;
-    static AnchorPane runORBDPane;
+    public static RunORBDController runORBDController;
+    public static AnchorPane runORBDPane;
 
-    static RunServerController runServerController;
-    static AnchorPane runServerPane;
+    public static RunServerController runServerController;
+    public static AnchorPane runServerPane;
+
+    public static Future<Integer> ORBExitCode;
 
 
     /**
@@ -274,6 +279,16 @@ public class ServerController {
 
         } catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void notifyOrbExit() throws ORBDException {
+        try {
+            //TODO: Prompt with ui that ORB has exited
+            System.out.println("ORB has exited with exit code: " + ORBExitCode.get());
+        }catch(Exception e){
+            System.out.println(e.getMessage());
         }
     }
 }
