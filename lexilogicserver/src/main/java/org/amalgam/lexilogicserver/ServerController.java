@@ -6,7 +6,9 @@ import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
+import org.amalgam.lexilogicserver.views.addplayer.AddPlayerController;
 import org.amalgam.lexilogicserver.views.changegame.ChangeGameController;
+import org.amalgam.lexilogicserver.views.runserver.RunServerRunningController;
 import org.amalgam.lexilogicserver.views.servermainmenu.ServerMainMenuController;
 import org.amalgam.lexilogicserver.views.runorbd.RunORBDController;
 import org.amalgam.lexilogicserver.views.runserver.RunServerController;
@@ -128,6 +130,43 @@ public class ServerController {
     }
 
     /**
+     * Loads and displays the run server view.
+     */
+    public void loadRunServerRunning() {
+        try {
+            Font.loadFont(getClass().getResourceAsStream("/org/amalgam/fonts/BowlbyOneSC.ttf"), 20);
+            Font.loadFont(getClass().getResourceAsStream("/org/amalgam/fonts/Brygada1918.ttf"), 20);
+
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/org/amalgam/server.views/runserver/runserverrunning-view.fxml"));
+            AnchorPane runServerRunning = fxmlLoader.load();
+
+            InputStream inputStream = getClass().getResourceAsStream("/org/amalgam/icons/Logo.png");
+            if (inputStream != null) {
+                Image image = new Image(inputStream);
+                stage.getIcons().add(image);
+            } else {
+                System.err.println("Failed to load image: Logo.png");
+            }
+
+            Scene scene = new Scene(runServerRunning);
+
+            if (stage == null) {
+                throw new IllegalStateException("Stage is not set. Please set the stage before calling the panel.");
+            }
+
+            stage.setScene(scene);
+            stage.setResizable(false);
+            stage.setTitle("Lexi Logic");
+            RunServerRunningController runServerRunningController = fxmlLoader.getController();
+            runServerRunningController.setServerController(this);
+            runServerRunningController.initialize();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
      * Loads and displays the run orbd view.
      */
     public void loadRunORBD() {
@@ -195,6 +234,43 @@ public class ServerController {
             ChangeGameController changeGameController = fxmlLoader.getController();
             changeGameController.setServerController(this);
             changeGameController.initialize();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+        /**
+     * Loads and displays the change game view.
+     */
+    public void loadAddPlayer() {
+        try {
+            Font.loadFont(getClass().getResourceAsStream("/org/amalgam/fonts/BowlbyOneSC.ttf"), 20);
+            Font.loadFont(getClass().getResourceAsStream("/org/amalgam/fonts/Brygada1918.ttf"), 20);
+
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/org/amalgam/server.views/addplayer/addplyer-view.fxml"));
+            AnchorPane addPlayer = fxmlLoader.load();
+
+            InputStream inputStream = getClass().getResourceAsStream("/org/amalgam/icons/Logo.png");
+            if (inputStream != null) {
+                Image image = new Image(inputStream);
+                stage.getIcons().add(image);
+            } else {
+                System.err.println("Failed to load image: Logo.png");
+            }
+
+            Scene scene = new Scene(addPlayer);
+
+            if (stage == null) {
+                throw new IllegalStateException("Stage is not set. Please set the stage before calling the panel.");
+            }
+
+            stage.setScene(scene);
+            stage.setResizable(false);
+            stage.setTitle("Lexi Logic");
+            AddPlayerController addPlayerController = fxmlLoader.getController();
+            addPlayerController.setServerController(this);
+            addPlayerController.initialize();
 
         } catch (IOException e) {
             e.printStackTrace();
