@@ -1,4 +1,11 @@
 package org.amalgam.lexilogicserver.views.runserver;
 
-public class RunServerPanel {
+import javafx.application.Application;
+import javafx.stage.Stage;
+
+public class RunServerPanel extends Application {
+    @Override
+    public void start(Stage stage) throws Exception {
+    }
 }
+

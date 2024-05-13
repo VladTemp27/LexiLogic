@@ -9,10 +9,10 @@ public class ChangeGameController {
     /**
      * Sets the Main Controller.
      *
-     * @param mainController
+     * @param serverController
      */
-    public void setServerController(ServerController mainController) {
-        this.serverController = mainController;
+    public void setServerController(ServerController serverController) {
+        this.serverController = serverController;
     }
 
      /**
