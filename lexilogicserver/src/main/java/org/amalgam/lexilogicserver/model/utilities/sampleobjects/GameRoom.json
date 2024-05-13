@@ -1,0 +1,14 @@
+{
+  "object": "gameroom",
+  "gameroom": [
+    {
+      "roomID":"",
+      "players": [
+        {
+          "username": "",
+          "pts": ""
+        }
+      ]
+    }
+  ]
+}

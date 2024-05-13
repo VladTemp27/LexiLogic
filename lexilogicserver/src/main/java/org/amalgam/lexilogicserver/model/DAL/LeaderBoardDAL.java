@@ -1,7 +1,8 @@
 package org.amalgam.lexilogicserver.model.DAL;
 
 import org.amalgam.lexilogicserver.model.DatabaseUtil;
-import org.amalgam.lexilogicserver.model.utilities.corbautils.LeaderBoardImpl;
+import org.amalgam.lexilogicserver.model.utilities.referenceobjects.LeaderBoard;
+import org.amalgam.lexilogicserver.model.utilities.referenceobjects.Player;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -24,13 +25,14 @@ public class LeaderBoardDAL {
         }
     }
 
-    public LeaderBoardImpl getLeaderboardByID(int leaderboardID) {
+    public LeaderBoard getLeaderboardByID(int leaderboardID) {
         try (Connection conn = DatabaseUtil.getConnection()) {
             PreparedStatement stmt = conn.prepareStatement("SELECT * FROM leaderboards WHERE leaderBoardID = ?");
             stmt.setInt(1, leaderboardID);
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
-                    return new LeaderBoardImpl(rs.getInt("leaderBoardID"), rs.getInt("userID"), rs.getInt("totalPoints"));
+                    Player player = PlayerDAL.getPlayerByID(rs.getInt("userID"));
+                    return new LeaderBoard(rs.getInt("leaderBoardID"), player.getUsername(), rs.getInt("totalPoints"));
                 } else {
                     return null;
                 }

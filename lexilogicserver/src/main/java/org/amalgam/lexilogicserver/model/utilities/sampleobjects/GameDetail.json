@@ -1,0 +1,10 @@
+{
+  "object": "game-detail",
+  "game-detail": [
+    {
+      "playerID": "",
+      "lobbyID": "",
+      "totalPoints": ""
+    }
+  ]
+}

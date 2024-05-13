@@ -62,11 +62,6 @@ module org {
                     string message;
                 };
 
-                exception InvalidRequestException {
-                    string message;
-                };
-
-
 
                 exception AlreadyLoggedInException {
                     string message;
@@ -178,84 +173,6 @@ module org {
                     string message;
                 };
             };
-
-
-
-            module Objects {
-                interface Player {
-                    attribute long id;
-                    attribute string name;
-                    attribute string password;
-                    attribute string lastLogin;
-
-                    void addPlayer(in Player player) raises (Exceptions::DuplicatePlayerIDException, Exceptions::InvalidPlayerDataException, Exceptions::SQLError);
-                    void updateName(in string newName) raises (Exceptions::InvalidNameException, Exceptions::SQLError);
-                    void updatePassword(in string newPassword) raises (Exceptions::InvalidPasswordException, Exceptions::SQLError);
-                    void updateLastLogin(in string newTime) raises (Exceptions::UpdateLastLoginException, Exceptions::SQLError);
-                    void deletePlayer(in long id) raises (Exceptions::PlayerDoesNotExistException);
-                };
-
-                interface GameDetail {
-                    attribute long playerID;
-                    attribute long lobbyID;
-                    attribute long totalPoints;
-
-                    void updateTotalPoints(in long newPoints) raises (Exceptions::InvalidPointsException, Exceptions::SQLError);
-                    long getPlayerID() raises (Exceptions::PlayerDoesNotExistException);
-                    long getLobbyID() raises (Exceptions::LobbyDoesNotExistException);
-                };
-
-                interface GameRoom {
-                    attribute long roomID;
-                    typedef sequence<string> PlayersList;
-                    attribute PlayersList players;
-
-                    void addPlayer(in string playerName) raises (Exceptions::PlayerAlreadyInRoomException, Exceptions::SQLError);
-                    long getRoomID() raises (Exceptions::RoomDoesNotExistException);
-                    typedef sequence<string> list;
-                    list getPlayers() raises (Exceptions::PlayerListRetrievalException);
-                };
-
-                interface Lobby {
-                    attribute long lobbyID;
-                    attribute string createdBy;
-                    attribute string winner;
-
-                    void updateWinner(in string winnerName) raises (Exceptions::InvalidNameException, Exceptions::PlayerDoesNotExistException, Exceptions::SQLError);
-                    void closeLobby() raises (Exceptions::LobbyDoesNotExistException, Exceptions::CloseLobbyException, Exceptions::SQLError);
-                    long getLobbyID() raises (Exceptions::LobbyIDRetrievalException);
-                    string getCreatedBy() raises (Exceptions::CreatedByRetrievalException);
-                };
-
-                interface Leaderboard {
-                    attribute long leaderboardID;
-                    attribute long playerID;
-                    attribute long totalPoints;
-
-                    void updateTotalPoints(in long newPoints) raises (Exceptions::InvalidPointsException, Exceptions::SQLError);
-                    long getPlayerID() raises (Exceptions::PlayerDoesNotExistException);
-                    long getLeaderboardID() raises (Exceptions::LeaderboardIDRetrievalException);
-                };
-            };
-
-             module UIControllers {
-                 interface PlayerCallback {
-
-                    typedef org::amalgam::Utils::Objects::Player Player;
-
-                    void uiCall(in long lobbyId)
-                        raises (Exceptions::InvalidRequestException);
-
-                 };
-
-                 interface ControllerInterface {
-                     void setObjectsUser(in string objects)
-                         raises (Exceptions::InvalidRequestException);
-
-                     void fetchAndUpdate(in string jsonFileName, in any dataType)
-                         raises (Exceptions::InvalidRequestException);
-                 };
-             };
         };
     };
 };

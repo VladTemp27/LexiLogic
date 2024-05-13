@@ -1,12 +1,14 @@
 package org.amalgam.lexilogicserver.model.DAL;
 
 import org.amalgam.lexilogicserver.model.DatabaseUtil;
-import org.amalgam.lexilogicserver.model.utilities.corbautils.GameDetailImpl;
+import org.amalgam.lexilogicserver.model.utilities.referenceobjects.GameDetail;
+import org.amalgam.lexilogicserver.model.utilities.referenceobjects.Player;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.LinkedList;
 
 public class GameDetailDAL {
 
@@ -25,13 +27,14 @@ public class GameDetailDAL {
         }
     }
 
-    public GameDetailImpl getGameDetailByID(int lobbyID) {
+    public GameDetail getGameDetailByID(int lobbyID) {
         try (Connection conn = DatabaseUtil.getConnection()) {
             PreparedStatement stmt = conn.prepareStatement("SELECT * FROM gamedetails WHERE lobbyID = ?");
             stmt.setInt(1, lobbyID);
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
-                    return new GameDetailImpl(rs.getInt("playerID"), rs.getInt("lobbyID"), rs.getInt("totalPoints"));
+                    Player player = PlayerDAL.getPlayerByID(rs.getInt("playerID"));
+                    return new GameDetail(player.getUsername(), rs.getInt("lobbyID"), rs.getInt("totalPoints"));
                 } else {
                     return null;
                 }
@@ -39,5 +42,23 @@ public class GameDetailDAL {
         } catch (SQLException | ClassNotFoundException | InstantiationException | IllegalAccessException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public static LinkedList<GameDetail> getGameDetailByPID(int playerID) {
+        LinkedList<GameDetail> listOfGameDetail = new LinkedList<>();
+        try (Connection conn = DatabaseUtil.getConnection()) {
+            PreparedStatement stmt = conn.prepareStatement("SELECT * FROM gamedetails WHERE playerID = ?");
+            stmt.setInt(1, playerID);
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    Player player = PlayerDAL.getPlayerByID(rs.getInt("playerID"));
+                    GameDetail detail =  new GameDetail(player.getUsername(), rs.getInt("lobbyID"), rs.getInt("totalPoints"));
+                    listOfGameDetail.add(detail);
+                }
+            }
+        } catch (SQLException | ClassNotFoundException | InstantiationException | IllegalAccessException e) {
+            throw new RuntimeException(e);
+        }
+        return listOfGameDetail;
     }
 }

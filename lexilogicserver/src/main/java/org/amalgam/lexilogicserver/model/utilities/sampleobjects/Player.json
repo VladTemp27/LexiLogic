@@ -1,0 +1,10 @@
+{
+  "object": "player",
+  "player": [
+    {
+      "playerID":"",
+      "name": "",
+      "lastLogin": ""
+    }
+  ]
+}
