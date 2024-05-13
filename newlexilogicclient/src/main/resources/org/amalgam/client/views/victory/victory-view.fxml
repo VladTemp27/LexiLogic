@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane fx:id="victoryPanel" prefHeight="500.0" prefWidth="800.0" style="-fx-background-color: transparent;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.amalgam.client.victory.VictoryController">
+   <children>
+      <ImageView fitHeight="500.0" fitWidth="800.0" layoutX="40.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../../../icons/WoodPanel.png" />
+         </image>
+      </ImageView>
+      <Label layoutX="195.0" layoutY="186.0" text="Victory !" textFill="#d6ef4c">
+         <font>
+            <Font name="Bowlby One SC Regular" size="80.0" />
+         </font>
+      </Label>
+      <Button fx:id="playAgainButton" layoutX="355.0" layoutY="314.0" mnemonicParsing="false" style="-fx-background-color: #9CA16F;" text="PLAY AGAIN" textFill="WHITE">
+         <font>
+            <Font name="Brygada 1918 Regular" size="30.0" />
+         </font>
+      </Button>
+      <Button fx:id="backButton" layoutX="228.0" layoutY="307.0" mnemonicParsing="false" style="-fx-background-color: transparent;">
+         <graphic>
+            <ImageView fitHeight="64.0" fitWidth="63.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../../icons/BackButton.png" />
+               </image>
+            </ImageView>
+         </graphic></Button>
+   </children>
+</AnchorPane>

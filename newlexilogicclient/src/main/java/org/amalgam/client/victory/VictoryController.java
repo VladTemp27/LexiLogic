@@ -1,25 +1,21 @@
-package org.amalgam.client.signup;
+package org.amalgam.client.victory;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
-import javafx.scene.control.TextField;
+import javafx.scene.effect.ColorAdjust;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import org.amalgam.client.MainController;
 
-public class SignUpController {
+public class VictoryController {
 
-    // Private Variables
     @FXML
-    private AnchorPane signUpPane;
+    private AnchorPane victoryPanel;
     @FXML
-    private Button signInButton;
+    private Button playAgainButton;
     @FXML
-    private Button loginButton;
-    @FXML
-    private TextField usernameField;
-    @FXML
-    private TextField passwordField;
+    private Button backButton;
 
     private MainController mainController;
 
@@ -37,7 +33,27 @@ public class SignUpController {
      *
      * @param button The button to add hover effect to.
      */
-    private void addHoverEffect(Button button) {
+    private void addBackHoverEffect(Button button) {
+        ImageView imageView = (ImageView) button.getGraphic();
+        ColorAdjust colorAdjust = new ColorAdjust();
+
+        button.setOnMouseEntered(e -> {
+            colorAdjust.setBrightness(-0.3); // Decrease brightness to make it darker
+            imageView.setEffect(colorAdjust);
+        });
+
+        button.setOnMouseExited(e -> {
+            colorAdjust.setBrightness(0); // Reset brightness
+            imageView.setEffect(colorAdjust);
+        });
+    }
+
+    /**
+     * Adds hover effect to the given button.
+     *
+     * @param button The button to add hover effect to.
+     */
+    private void addPlayAgainHoverEffect(Button button) {
         button.setOnMouseEntered(e -> button.setStyle("-fx-background-color: derive(#D9E0A2, -10%);"));
         button.setOnMouseExited(e -> button.setStyle("-fx-background-color: #D9E0A2;"));
     }
@@ -55,19 +71,25 @@ public class SignUpController {
         alert.showAndWait();
     }
 
-    // TODO: Uploading the user to the DataBase & Error Checking
-    // Test Authentication
-    private boolean signUpAuthentication(String username, String password) {
-        return true;
+    /**
+     * Shows the game panel when pressed.
+     */
+    @FXML
+    public void handleBack() {
+        if (mainController != null) {
+            //TODO: mainController.loadGameView();
+        } else {
+            System.out.println("MainController is not set.");
+        }
     }
 
     /**
-     * Shows the login view when pressed.
+     * Shows the game panel when pressed.
      */
     @FXML
-    public void handleLogin() {
+    public void handlePlayAgain() {
         if (mainController != null) {
-            mainController.loadLoginView();
+            //TODO: mainController.loadGameView();
         } else {
             System.out.println("MainController is not set.");
         }
@@ -79,29 +101,11 @@ public class SignUpController {
      */
     @FXML
     public void initialize() {
-        addHoverEffect(signInButton);
-        addHoverEffect(loginButton);
-        loginButton.setOnAction(event -> handleLogin());
-        signInButton.setOnAction(event -> onSignUp());
-    }
-
-    /**
-     * Handles the Login of the user.
-     *
-     *
-     */
-    @FXML
-    public void onSignUp() {
-        String username = usernameField.getText();
-        String password = passwordField.getText();
-
-        boolean isSignedUp = signUpAuthentication(username, password);
-
-        if (isSignedUp) {
-            mainController.loadLoginView();
-        } else {
-            showAlert("Failed to sign up. Please try again.");
-        }
+        addPlayAgainHoverEffect(playAgainButton);
+        addBackHoverEffect(backButton);
+        backButton.setOnAction(event -> handleBack());
+        playAgainButton.setOnAction(event -> handlePlayAgain());
+        victoryPanel.setStyle("-fx-background-color: transparent;");
     }
 
     /**

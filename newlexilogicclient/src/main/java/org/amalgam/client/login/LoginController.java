@@ -57,6 +57,12 @@ public class LoginController {
         alert.showAndWait();
     }
 
+    // TODO: Authentication of user from DataBase & Error Checking
+    // Test Authentication
+    private boolean loginAuthentication(String username, String password) {
+        return username.equals("admin") && password.equals("admin"); // For Testing Only
+    }
+
     /**
      * Shows the signup panel when pressed.
      */
@@ -98,12 +104,6 @@ public class LoginController {
         } else {
             showAlert("Invalid username or password");
         }
-    }
-
-    // Test Authentication
-    private boolean loginAuthentication(String username, String password) {
-        // TODO: Authentication of user from DataBase & Error Checking
-        return username.equals("admin") && password.equals("admin"); // For Testing Only
     }
 
     /**
