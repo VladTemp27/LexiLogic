@@ -8,13 +8,8 @@ import org.omg.CosNaming.NamingContextPackage.InvalidName;
 import org.omg.CosNaming.NamingContextPackage.NotFound;
 
 public class ValidateTotalPointsMicroservice {
-    private final ORBConnection orbConnection;
 
-    public ValidateTotalPointsMicroservice(ORBConnection orbConnection) {
-        this.orbConnection = new ORBConnection(1099, "localhost");
-    }
-
-    public int process (){
+    public int process (ORBConnection orbConnection){
         try {
             return orbConnection.retrieveGameService().validateTotalPoints();
         } catch (InsufficientWordPointsException | InvalidTotalPointsException | InvalidName | CannotProceed |
