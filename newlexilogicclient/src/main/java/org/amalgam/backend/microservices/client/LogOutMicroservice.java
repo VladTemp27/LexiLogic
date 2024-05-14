@@ -7,13 +7,8 @@ import org.omg.CosNaming.NamingContextPackage.InvalidName;
 import org.omg.CosNaming.NamingContextPackage.NotFound;
 
 public class LogOutMicroservice {
-    private final ORBConnection orbConnection;
 
-    public LogOutMicroservice(ORBConnection orbConnection) {
-        this.orbConnection = new ORBConnection(1099, "localhost");
-    }
-
-    public void process (String username){
+    public void process (ORBConnection orbConnection, String username){
         try {
             orbConnection.retrievePlayerRequestStub().logout(username);
 
