@@ -8,13 +8,8 @@ import org.omg.CosNaming.NamingContextPackage.InvalidName;
 import org.omg.CosNaming.NamingContextPackage.NotFound;
 
 public class FetchWordBoxMicroservice {
-    private final ORBConnection orbConnection;
 
-    public FetchWordBoxMicroservice(ORBConnection orbConnection) {
-        this.orbConnection = new ORBConnection(1099, "localhost");
-    }
-
-    public char [][] process (int roomID){
+    public char [][] process (ORBConnection orbConnection, int roomID){
         try {
             return orbConnection.retrieveGameService().fetchWordBox(roomID);
         } catch (WordFetchFailedException | InvalidRoomIDException | InvalidName | CannotProceed | NotFound e) {
