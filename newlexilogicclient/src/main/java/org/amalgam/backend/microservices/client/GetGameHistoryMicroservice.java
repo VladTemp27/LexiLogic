@@ -8,13 +8,8 @@ import org.omg.CosNaming.NamingContextPackage.InvalidName;
 import org.omg.CosNaming.NamingContextPackage.NotFound;
 
 public class GetGameHistoryMicroservice {
-    private final ORBConnection orbConnection;
 
-    public GetGameHistoryMicroservice(ORBConnection orbConnection) {
-        this.orbConnection = new ORBConnection(1099, "localhost");
-    }
-
-    public String process (String username){
+    public String process (ORBConnection orbConnection, String username){
         try {
            return orbConnection.retrievePlayerRequestStub().getGameHistory(username);
         } catch (GameHistoryUnavailableException | InGameException | InvalidName | CannotProceed | NotFound e) {
