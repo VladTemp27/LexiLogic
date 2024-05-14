@@ -8,13 +8,8 @@ import org.omg.CosNaming.NamingContextPackage.InvalidName;
 import org.omg.CosNaming.NamingContextPackage.NotFound;
 
 public class FetchWinnerMicroservice {
-    private final ORBConnection orbConnection;
 
-    public FetchWinnerMicroservice(ORBConnection orbConnection) {
-        this.orbConnection = new ORBConnection(1099, "localhost");
-    }
-
-    public String process (int lobbyID){
+    public String process (ORBConnection orbConnection, int lobbyID){
         try {
             return orbConnection.retrieveGameService().fetchWinner(lobbyID);
         } catch (LobbyDoesNotExistException | WinnerDoesNotExistException | InvalidName | CannotProceed | NotFound e) {
