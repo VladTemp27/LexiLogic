@@ -9,14 +9,8 @@ import org.omg.CosNaming.NamingContextPackage.NotFound;
 
 public class MatchMakeMicroservice {
 
-    private final ORBConnection orbConnection;
 
-
-    public MatchMakeMicroservice(ORBConnection orbConnection) {
-        this.orbConnection = new ORBConnection(1099, "localhost");
-    }
-
-    public String process (PlayerCallback playerCallback){
+    public String process (ORBConnection orbConnection, PlayerCallback playerCallback){
         try {
           return orbConnection.retrieveGameService().matchMake(playerCallback);
         } catch (MatchCreationFailedException | InvalidName | CannotProceed | NotFound e) {
