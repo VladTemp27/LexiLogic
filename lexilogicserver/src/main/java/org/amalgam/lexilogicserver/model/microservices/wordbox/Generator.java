@@ -10,6 +10,8 @@ public class Generator {
     private LinkedList<String> wordList;
     private char[][] charMatrix;
     int rowSize, colSize;
+    private int vowelCount;
+    private int consonantCount;
 
     /**
      * Default constructor of generator, this object will be used when generating a wordbox
@@ -50,12 +52,43 @@ public class Generator {
 
     //Method for generating a random lower case character a - z
     private char randomLowerCaseCharacter(){
-        int leftLimit = 97; // 'a' character
-        int rightLimit = 122; // 'z' character
         Random random = new Random();
+        char[] characterList;
+        char randomChar;
+        if(vowelCount == 7){
+            characterList = getConsonantOrVowelList(1);
+            int randomIndex = random.nextInt(characterList.length);
+            randomChar = characterList[randomIndex];
+            return randomChar;
+        }
 
-        char c = (char) (random.nextInt(rightLimit - leftLimit + 1) + leftLimit);
-        return c;
+        if(consonantCount == 13){
+            characterList = getConsonantOrVowelList(0);
+            int randomIndex = random.nextInt(characterList.length);
+            randomChar = characterList[randomIndex];
+            return randomChar;
+        }
+        int randomCharType = random.nextInt(2);
+
+        characterList = getConsonantOrVowelList(randomCharType);
+        int randomIndex = random.nextInt(characterList.length);
+        randomChar = characterList[randomIndex];
+        return randomChar;
+    }
+
+    private char[] getConsonantOrVowelList(int charType){
+        char[] vowels = {'a','e','i','o','u'};
+        char[] consonants = {
+                'b', 'c', 'd', 'f', 'g', 'h', 'j', 'k', 'l', 'm', 'n', 'p', 'q', 'r', 's', 't', 'v', 'w', 'x', 'y', 'z'
+        };
+        switch(charType){
+            case 0:
+                return vowels;
+            case 1:
+                return consonants;
+        }
+        return null;
+
     }
 
 }
