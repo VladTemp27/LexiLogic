@@ -14,7 +14,7 @@ public class CreateAccountRequestMicroservice {
         this.orbConnection = new ORBConnection(1099, "localhost");
     }
 
-    public void process (String username, String password)  {
+    public void process (ORBConnection orbConnection, String username, String password)  {
         try {
             orbConnection.retrievePlayerRequestStub().createAccount(username,password);
         } catch (AccountCreationFailedException | InvalidName | CannotProceed | NotFound e) {
