@@ -7,13 +7,9 @@ import org.omg.CosNaming.NamingContextPackage.InvalidName;
 import org.omg.CosNaming.NamingContextPackage.NotFound;
 
 public class GetLeaderBoardsMicroservice {
-    private final ORBConnection orbConnection;
 
-    public GetLeaderBoardsMicroservice(ORBConnection orbConnection) {
-        this.orbConnection = new ORBConnection(1099, "localhost");
-    }
 
-    public String process (){
+    public String process (ORBConnection orbConnection){
         try {
             return orbConnection.retrieveGameService().getLeaderboards();
         } catch (EmptyLeaderBoardException | InvalidName | CannotProceed | NotFound e) {
