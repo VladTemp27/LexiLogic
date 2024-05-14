@@ -8,7 +8,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="signUpPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.amalgam.client.signup.SignUpController">
+<AnchorPane fx:id="signUpPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.amalgam.client.signup.SignUpController">
     <children>
         <ImageView fitHeight="500.0" fitWidth="800.0">
             <image>
@@ -25,11 +25,11 @@
                 <Image url="@../../../icons/Axel.png" />
             </image>
         </ImageView>
-        <TextField fx:id="passwordField" layoutX="491.0" layoutY="271.0" prefHeight="44.0" prefWidth="276.0" promptText="Password" style="-fx-background-color: FFF8D6;">
+        <TextField fx:id="passwordField" layoutX="491.0" layoutY="271.0" prefHeight="44.0" prefWidth="276.0" promptText="Password" style="-fx-background-color: FFF8D6; -fx-prompt-text-fill: #FFFFFF;">
             <font>
                 <Font name="Brygada 1918 Regular" size="20.0" />
             </font></TextField>
-        <TextField fx:id="usernameField" layoutX="491.0" layoutY="212.0" prefHeight="44.0" prefWidth="276.0" promptText="Username" style="-fx-background-color: FFF8D6;">
+        <TextField fx:id="usernameField" layoutX="491.0" layoutY="212.0" prefHeight="44.0" prefWidth="276.0" promptText="Username" style="-fx-background-color: FFF8D6; -fx-prompt-text-fill: #FFFFFF;">
             <font>
                 <Font name="Brygada 1918 Regular" size="20.0" />
             </font></TextField>

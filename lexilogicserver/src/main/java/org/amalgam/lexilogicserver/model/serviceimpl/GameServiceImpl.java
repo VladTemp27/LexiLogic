@@ -11,8 +11,12 @@ import org.amalgam.lexilogicserver.model.utilities.referenceobjects.LeaderBoard;
 
 import java.util.LinkedList;
 import java.util.List;
+import org.amalgam.lexilogicserver.model.utilities.referenceobjects.GameRoom;
+
+import java.util.LinkedList;
 
 public class GameServiceImpl extends GameServicePOA {
+    LinkedList<GameRoom> rooms = new LinkedList<>();
 
     @Override
     public String matchMake(PlayerCallback player_callback) throws MatchCreationFailedException {
@@ -25,7 +29,7 @@ public class GameServiceImpl extends GameServicePOA {
     }
 
     @Override
-    public static String getLeaderboards() throws EmptyLeaderBoardException {
+    public String getLeaderboards() throws EmptyLeaderBoardException {
         List<LeaderBoard> leaderboards = LeaderBoardDAL.fetchLeaderBoards();
 
         if (leaderboards.isEmpty()) {
@@ -35,20 +39,18 @@ public class GameServiceImpl extends GameServicePOA {
         JsonArray leaderboardArray = new JsonArray();
         for (LeaderBoard leaderboard : leaderboards) {
             JsonObject leaderboardObj = new JsonObject();
-            leaderboardObj.put("username", leaderboard.getUsername());
-            leaderboardObj.put("pts", leaderboard.getPoints());
-            leaderboardObj.put("rank", leaderboard.getRank());
-            leaderboardArray.put(leaderboardObj);
+            leaderboardObj.addProperty("username", leaderboard.getUsername());
+            leaderboardObj.addProperty("pts", leaderboard.getPoints());
+            leaderboardObj.addProperty("rank", leaderboard.getRank());
+            leaderboardArray.add(leaderboardObj);
         }
 
         JsonObject result = new JsonObject();
-        result.put("object", "leaderboard");
-        result.put("leaderboard", leaderboardArray);
+        result.addProperty("object", "leaderboard");
+        result.add("leaderboard", leaderboardArray);
 
         return result.toString();
     }
-
-
 
     @Override
     public void verifyWord(String word) throws InvalidWordFormatException, DuplicateWordException {

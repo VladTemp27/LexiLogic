@@ -5,11 +5,13 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
+import org.amalgam.ControllerException.InvalidRequestException;
+import org.amalgam.UIControllers.ControllerInterfacePOA;
 import org.amalgam.client.MainController;
 
 import java.io.IOException;
 
-public class LoginController {
+public class LoginController extends ControllerInterfacePOA {
 
     // Private Variables
     @FXML
@@ -57,6 +59,12 @@ public class LoginController {
         alert.showAndWait();
     }
 
+    // TODO: Authentication of user from DataBase & Error Checking
+    // Test Authentication
+    private boolean loginAuthentication(String username, String password) {
+        return username.equals("admin") && password.equals("admin"); // For Testing Only
+    }
+
     /**
      * Shows the signup panel when pressed.
      */
@@ -100,12 +108,6 @@ public class LoginController {
         }
     }
 
-    // Test Authentication
-    private boolean loginAuthentication(String username, String password) {
-        // TODO: Authentication of user from DataBase & Error Checking
-        return username.equals("admin") && password.equals("admin"); // For Testing Only
-    }
-
     /**
      * Gets the objects used.
      * This method returns a string indicating the type of objects used by the controller.
@@ -126,5 +128,15 @@ public class LoginController {
     //TODO: @Override
     private void fetchAndUpdate() {
         //TODO: Fetching of Data
+    }
+
+    @Override
+    public void setObjectsUser(String objects) throws InvalidRequestException {
+
+    }
+
+    @Override
+    public void fetchAndUpdate(String jsonString, String dataType) throws InvalidRequestException {
+
     }
 }

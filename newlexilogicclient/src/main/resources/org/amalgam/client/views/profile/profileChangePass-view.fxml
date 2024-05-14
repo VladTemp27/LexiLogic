@@ -8,7 +8,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="changepassPane" prefHeight="407.0" prefWidth="504.0" style="-fx-background-color: #674C33;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.amalgam.lexilogicclient.client.profile.ProfileChangePassController">
+<AnchorPane fx:id="changepassPane" prefHeight="407.0" prefWidth="504.0" style="-fx-background-color: #674C33;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.amalgam.client.profile.ProfileChangePassController">
    <children>
       <ImageView fx:id="axelImage" fitHeight="225.0" fitWidth="229.0" layoutX="-28.0" layoutY="182.0" pickOnBounds="true">
          <image>
@@ -35,12 +35,12 @@
             <Font name="Bowlby One SC Regular" size="20.0" />
          </font>
       </Label>
-      <TextField fx:id="oldPasswordField" layoutX="189.0" layoutY="151.0" prefHeight="49.0" prefWidth="252.0" promptText="old password" style="-fx-background-color: #B07C3B;">
+      <TextField fx:id="oldPasswordField" layoutX="189.0" layoutY="151.0" prefHeight="49.0" prefWidth="252.0" promptText="old password" style="-fx-background-color: #B07C3B; -fx-prompt-text-fill: #FFFFFF;">
          <font>
             <Font name="Brygada 1918 Regular" size="18.0" />
          </font>
       </TextField>
-      <TextField fx:id="newPasswordField" layoutX="189.0" layoutY="219.0" prefHeight="49.0" prefWidth="252.0" promptText="new password" style="-fx-background-color: #B07C3B;">
+      <TextField fx:id="newPasswordField" layoutX="189.0" layoutY="219.0" prefHeight="49.0" prefWidth="252.0" promptText="new password" style="-fx-background-color: #B07C3B; -fx-prompt-text-fill: #FFFFFF;">
          <font>
             <Font name="Brygada 1918 Regular" size="18.0" />
          </font>

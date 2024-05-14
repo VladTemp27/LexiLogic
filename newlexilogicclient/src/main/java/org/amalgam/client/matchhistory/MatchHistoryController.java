@@ -1,13 +1,19 @@
 package org.amalgam.client.matchhistory;
 
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.effect.ColorAdjust;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
+import org.amalgam.ControllerException.InvalidRequestException;
+import org.amalgam.UIControllers.ControllerInterfacePOA;
 import org.amalgam.client.MainController;
 
-public class MatchHistoryController {
+public class MatchHistoryController extends ControllerInterfacePOA {
     @FXML
     private AnchorPane matchHistoryPane;
     @FXML
@@ -15,13 +21,13 @@ public class MatchHistoryController {
     @FXML
     private Label rankLabel;
     @FXML
-    private TableView matchTable;
+    private TableView<MatchData> matchTable;
     @FXML
-    private TableColumn gameID;
+    private TableColumn<MatchData, String> gameID;
     @FXML
-    private TableColumn standing;
+    private TableColumn<MatchData, String> standing;
     @FXML
-    private TableColumn score;
+    private TableColumn<MatchData, Integer> score;
     @FXML
     private Button backButton;
 
@@ -56,7 +62,6 @@ public class MatchHistoryController {
         });
     }
 
-
     /**
      * Shows an alert to a user if there is an error.
      *
@@ -70,7 +75,67 @@ public class MatchHistoryController {
         alert.showAndWait();
     }
 
+    // TODO: Should be moved into a separated data class
+    // For Testing
+    private ObservableList<MatchData> matchDataList = FXCollections.observableArrayList(
+            new MatchData("1", "Win", 100),
+            new MatchData("2", "Loss", 50),
+            new MatchData("3", "Win", 120)
+    );
 
+
+    @Override
+    public void setObjectsUser(String objects) throws InvalidRequestException {
+
+    }
+
+    @Override
+    public void fetchAndUpdate(String jsonString, String dataType) throws InvalidRequestException {
+
+    }
+
+    //TODO: This should be moved into an Object for Client Side
+    private static class MatchData {
+        private String gameID;
+        private String standing;
+        private int score;
+        private int highestRank;
+        private int highestScore;
+
+        public MatchData(String gameID, String standing, int score) {
+            this.gameID = gameID;
+            this.standing = standing;
+            this.score = score;
+        }
+
+        public String getGameID() {
+            return gameID;
+        }
+
+        public String getStanding() {
+            return standing;
+        }
+
+        public int getScore() {
+            return score;
+        }
+
+        public int getHighestRank() {
+            return highestRank;
+        }
+
+        public void setHighestRank(int highestRank) {
+            this.highestRank = highestRank;
+        }
+
+        public int getHighestScore() {
+            return highestScore;
+        }
+
+        public void setHighestScore(int highestScore) {
+            this.highestScore = highestScore;
+        }
+    }
 
     /**
      * Shows the main menu panel when pressed.
@@ -84,19 +149,34 @@ public class MatchHistoryController {
         }
     }
 
+    /**
+     * Populates the Match History Table.
+     */
     @FXML
     public void populateMatchTable() {
+        gameID.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getGameID()));
+        standing.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getStanding()));
+        score.setCellValueFactory(data -> new SimpleIntegerProperty(data.getValue().getScore()).asObject());
 
+        matchTable.setItems(matchDataList);
     }
 
+    /**
+     * Populates the Highest Rank of the Player
+     */
     @FXML
     public void populateRank() {
-
+        //TODO: Get the Highest Rank of the Player
+        rankLabel.setText("1"); // For Testing
     }
 
+    /**
+     * Populates the Highest Score of the Player
+     */
     @FXML
     public void populateScore() {
-
+        //TODO: Get the Highest Score of the Player
+        scoreLabel.setText("5000");
     }
 
     /**
@@ -107,28 +187,11 @@ public class MatchHistoryController {
     public void initialize() {
         addHoverEffect(backButton);
         backButton.setOnAction(event -> handleBack());
-
+        populateMatchTable();
+        populateRank();
+        populateScore();
+        matchTable.setStyle("-fx-font-family: 'Brygada 1918';");
     }
 
-    /**
-     * Gets the objects used.
-     * This method returns a string indicating the type of objects used by the controller.
-     *
-     * @return A string representing the objects used.
-     */
-    //TODO: @Override
-    private void getObjectsUsed() {
-        //TODO: Return Value
-        //return "user";
-    }
 
-    /**
-     * Fetches and updates data remotely.
-     * This method is called to update the data displayed in the UI.
-     *
-     */
-    //TODO: @Override
-    private void fetchAndUpdate() {
-        //TODO: Fetching of Data
-    }
 }

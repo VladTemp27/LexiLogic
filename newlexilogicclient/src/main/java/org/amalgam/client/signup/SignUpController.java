@@ -55,6 +55,12 @@ public class SignUpController {
         alert.showAndWait();
     }
 
+    // TODO: Uploading the user to the DataBase & Error Checking
+    // Test Authentication
+    private boolean signUpAuthentication(String username, String password) {
+        return true;
+    }
+
     /**
      * Shows the login view when pressed.
      */
@@ -96,12 +102,6 @@ public class SignUpController {
         } else {
             showAlert("Failed to sign up. Please try again.");
         }
-    }
-
-    // Test Logic
-    private boolean signUpAuthentication(String username, String password) {
-        //TODO: Uploading the user to the DataBase & Error Checking
-        return true;
     }
 
     /**
