@@ -11,13 +11,8 @@ import org.omg.CosNaming.NamingContextPackage.NotFound;
 
 public class LoginMicroservice {
 
-    private final ORBConnection orbConnection;
 
-    public LoginMicroservice() {
-        this.orbConnection = new ORBConnection(1099, "localhost");
-    }
-
-    public void process (PlayerCallback playerCallback, String password) {
+    public void process (ORBConnection orbConnection, PlayerCallback playerCallback, String password) {
         try {
             orbConnection.retrievePlayerRequestStub().login(playerCallback, password);
         } catch (AlreadyLoggedInException | InvalidCredentialsException | UserExistenceException | InvalidName |
