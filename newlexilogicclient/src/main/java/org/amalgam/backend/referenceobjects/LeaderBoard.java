@@ -5,6 +5,8 @@ public class LeaderBoard {
     private String username;
     private int points;
 
+    private int playerRank;
+
     public LeaderBoard() {
     }
 
@@ -36,5 +38,13 @@ public class LeaderBoard {
 
     public void setPoints(int points) {
         this.points = points;
+    }
+
+    public int getPlayerRank() {
+        return playerRank;
+    }
+
+    public void setPlayerRank(int rank) {
+        this.playerRank = rank;
     }
 }
