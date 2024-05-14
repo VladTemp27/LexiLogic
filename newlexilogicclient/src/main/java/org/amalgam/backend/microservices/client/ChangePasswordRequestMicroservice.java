@@ -8,13 +8,8 @@ import org.omg.CosNaming.NamingContextPackage.NotFound;
 
 public class ChangePasswordRequestMicroservice {
 
-    private final ORBConnection orbConnection;
 
-    public ChangePasswordRequestMicroservice(ORBConnection orbConnection) {
-        this.orbConnection = new ORBConnection(1099, "localhost");
-    }
-
-    public void process (String username, String newPassword){
+    public void process (ORBConnection orbConnection,String username, String newPassword){
         try {
             orbConnection.retrievePlayerRequestStub().changePassword(username,newPassword);
         } catch (ChangePasswordFailedException | InvalidName | CannotProceed | NotFound e) {
