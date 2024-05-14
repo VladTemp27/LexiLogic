@@ -7,10 +7,12 @@ import javafx.fxml.FXML;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.transform.Rotate;
 import javafx.util.Duration;
+import org.amalgam.ControllerException.InvalidRequestException;
+import org.amalgam.UIControllers.ControllerInterfacePOA;
 import org.amalgam.client.MainController;
 import javafx.scene.image.ImageView;
 
-public class LoadingController {
+public class LoadingController extends ControllerInterfacePOA {
 
     // Private Variables
     @FXML
@@ -65,5 +67,15 @@ public class LoadingController {
     public void initialize() {
         // animation for the loading log (c.o lestat)
         animateLog();
+    }
+
+    @Override
+    public void setObjectsUser(String objects) throws InvalidRequestException {
+
+    }
+
+    @Override
+    public void fetchAndUpdate(String jsonString, String dataType) throws InvalidRequestException {
+
     }
 }

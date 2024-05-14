@@ -6,9 +6,11 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextInputControl;
 import javafx.scene.layout.AnchorPane;
+import org.amalgam.ControllerException.InvalidRequestException;
+import org.amalgam.UIControllers.ControllerInterfacePOA;
 import org.amalgam.client.MainController;
 
-public class ProfileChangePassController {
+public class ProfileChangePassController extends ControllerInterfacePOA {
 // private variables
     @FXML
     private AnchorPane changepassPane;
@@ -72,25 +74,14 @@ public class ProfileChangePassController {
         saveButton.setOnAction(event -> handleSave());
         backButton.setOnAction(event -> handleBack());
     }
-    /**
-     * Gets the objects used.
-     * This method returns a string indicating the type of objects used by the controller.
-     *
-     * @return A string representing the objects used.
-     */
-    //TODO: @Override
-    private void getObjectsUsed() {
-        //TODO: Return Value
-        //return "user";
+
+    @Override
+    public void setObjectsUser(String objects) throws InvalidRequestException {
+
     }
 
-    /**
-     * Fetches and updates data remotely.
-     * This method is called to update the data displayed in the UI.
-     *
-     */
-    //TODO: @Override
-    private void fetchAndUpdate() {
-        //TODO: Fetching of Data
+    @Override
+    public void fetchAndUpdate(String jsonString, String dataType) throws InvalidRequestException {
+
     }
 }
