@@ -5,9 +5,9 @@ import org.amalgam.backend.microservices.client.LoginMicroservice;
 import org.amalgam.backend.microservices.serverconnection.ORBConnection;
 
 public class LoginModel {
-    private ORBConnection orbConnection;
-    private PlayerCallback playerCallback;
-    private LoginMicroservice loginMicroservice;
+    private final ORBConnection orbConnection;
+    private final PlayerCallback playerCallback;
+    private final LoginMicroservice loginMicroservice;
 
     public LoginModel (ORBConnection orbConnection, PlayerCallback playerCallback){
         this.orbConnection = orbConnection;
