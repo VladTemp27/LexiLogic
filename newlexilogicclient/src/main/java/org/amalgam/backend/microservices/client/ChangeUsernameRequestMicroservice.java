@@ -8,14 +8,7 @@ import org.omg.CosNaming.NamingContextPackage.NotFound;
 
 public class ChangeUsernameRequestMicroservice {
 
-    private final ORBConnection orbConnection;
-
-
-    public ChangeUsernameRequestMicroservice(ORBConnection orbConnection) {
-        this.orbConnection = new ORBConnection(1099, "localhost");
-    }
-
-    public void process (String username, String newUsername){
+    public void process (ORBConnection orbConnection, String username, String newUsername){
         try {
             orbConnection.retrievePlayerRequestStub().changeUsername(username,newUsername);
         } catch (ChangeUsernameFailedException | InvalidName | CannotProceed | NotFound e) {
