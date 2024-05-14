@@ -1,6 +1,5 @@
 package org.amalgam.client.profile;
 
-import org.amalgam.ControllerException.InvalidRequestException;
 import org.amalgam.UIControllers.PlayerCallback;
 import org.amalgam.backend.microservices.client.ChangePasswordRequestMicroservice;
 import org.amalgam.backend.microservices.serverconnection.ORBConnection;
