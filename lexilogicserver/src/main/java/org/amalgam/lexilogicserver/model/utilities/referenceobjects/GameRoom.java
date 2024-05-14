@@ -7,23 +7,30 @@ import org.amalgam.lexilogicserver.model.microservices.wordbox.Reader;
 import org.amalgam.lexilogicserver.model.microservices.wordbox.WordBox;
 
 import java.io.FileNotFoundException;
+import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class GameRoom implements NTimerCallback {
+
     private int roomID;
     private LinkedList<PlayerGameDetail> details;
-    private boolean gameDone;
+    private boolean roundDone;
     private ExecutorService executor = Executors.newSingleThreadExecutor();
     private WordBox wordBox;
+    private LinkedHashMap<Integer, String> rounds = new LinkedHashMap<>();
 
-    public GameRoom(int roomID, LinkedList<PlayerGameDetail> details, int minGameDuration) {
+
+    public GameRoom(int roomID, LinkedList<PlayerGameDetail> details, int secondsRoundDuration) throws FileNotFoundException {
         this.roomID = roomID;
         this.details = details;
-        executor.submit(new NTimer(minGameDuration*60, this));
+        rounds.put(1, null);
+        generateWordBox();
+        executor.submit(new NTimer(secondsRoundDuration, this));
     }
 
+    //call this to generate a wordBox, generates a new wordbox for every invocation
     private void generateWordBox() throws FileNotFoundException {
         wordBox = new WordBox(new Generator(new Reader("file"), true, 6, 6));
     }
@@ -41,8 +48,6 @@ public class GameRoom implements NTimerCallback {
 
     }
 
-
-
     private int getIndexByUsername(String username){
         for(PlayerGameDetail detail : details){
             if(detail.getUsername().equals(username)){
@@ -52,6 +57,7 @@ public class GameRoom implements NTimerCallback {
         return -1;
     }
 
+    //Check if word submitted is not unique
     private boolean checkIfDupe(String submittedWord){
         for(PlayerGameDetail gameDetail : details){
             if(gameDetail.listOfWordsContains(submittedWord)){
@@ -80,8 +86,9 @@ public class GameRoom implements NTimerCallback {
         return details;
     }
 
-    public boolean isGameDone() {
-        return gameDone;
+    //Might not be needed
+    public boolean isRoundDone() {
+        return roundDone;
     }
 
     public void addPlayerDetail(String username){
@@ -89,8 +96,35 @@ public class GameRoom implements NTimerCallback {
         details.add(playerDetail);
     }
 
+    //Checker if winner is available returns null if winner is nut available
+    private String winnerAvailable(){
+        StringBuilder winner = new StringBuilder();
+        LinkedHashMap<String, Integer> roundWinners = new LinkedHashMap<>();
+        for(int x = 1; x < rounds.size(); x++){
+            String roundWinner = rounds.get(x);
+            if(roundWinners.containsKey(roundWinner)){
+                int initialVal = roundWinners.get(roundWinner);
+                roundWinners.replace(roundWinner, initialVal+1);
+                continue;
+            }
+            roundWinners.put(roundWinner, 1);
+        }
+
+        if(roundWinners.containsValue(3)){
+            roundWinners.forEach((key, value) -> {
+                if(value==3){
+                    winner.append(value);
+                }
+            });
+            return winner.toString();
+        }
+        return null;
+    }
+
+    // TODO: should check if winner is available then tell players in game room winner has been decided and a new
+    //          round has started
     @Override
     public void timerDone() {
-        this.gameDone = true;
+        this.roundDone = true;
     }
 }
