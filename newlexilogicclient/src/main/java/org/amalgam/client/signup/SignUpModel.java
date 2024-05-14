@@ -5,8 +5,8 @@ import org.amalgam.backend.microservices.client.CreateAccountRequestMicroservice
 import org.amalgam.backend.microservices.serverconnection.ORBConnection;
 
 public class SignUpModel {
-    private ORBConnection orbConnection;
-    private CreateAccountRequestMicroservice signUpMicroservices;
+    private final ORBConnection orbConnection;
+    private final CreateAccountRequestMicroservice signUpMicroservices;
 
     public SignUpModel (ORBConnection orbConnection, PlayerCallback playerCallback){
         this.orbConnection = orbConnection;
