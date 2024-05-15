@@ -18,6 +18,8 @@ public class ServerMainMenuController {
     private Button runORBDButton;
     @FXML
     private Button runServerButton;
+    @FXML
+    private Button accountDeletionButton;
     private ServerController serverController;
 
     /**
@@ -34,7 +36,7 @@ public class ServerMainMenuController {
      *
      * @param button The button to add hover effect to.
      */
-    private void addRunHoverEffect(javafx.scene.control.Button button) {
+    private void addRunHoverEffect(Button button) {
         button.setOnMouseEntered(e -> button.setStyle("-fx-background-color: derive(#9CA16F, -10%);"));
         button.setOnMouseExited(e -> button.setStyle("-fx-background-color: #9CA16F;"));
     }
@@ -44,7 +46,7 @@ public class ServerMainMenuController {
      *
      * @param button The button to add hover effect to.
      */
-    private void addHoverEffect(javafx.scene.control.Button button) {
+    private void addHoverEffect(Button button) {
         button.setOnMouseEntered(e -> button.setStyle("-fx-background-color: derive(#B07C3B, -10%);"));
         button.setOnMouseExited(e -> button.setStyle("-fx-background-color: #B07C3B;"));
     }
@@ -85,6 +87,17 @@ public class ServerMainMenuController {
         }
     }
     /**
+     * Handles the account deletion button
+     */
+    @FXML
+    public void handleAccountDeletionButton(){
+        if(serverController !=null){
+            serverController.loadAccountDeletion();
+        }else {
+            System.out.println("Server controller is not set.");
+        }
+    }
+    /**
      * Handles the run ORBD Button
      */
     @FXML
@@ -116,10 +129,12 @@ public class ServerMainMenuController {
         addHoverEffect(changeGameButton);
         addHoverEffect(runORBDButton);
         addRunHoverEffect(runServerButton);
+        addHoverEffect(accountDeletionButton);
         addPlayerButton.setOnAction(event -> handleAddPlayerButton());
         changeGameButton.setOnAction(event -> handleChangeGameButton());
         runORBDButton.setOnAction(event -> handleRunORBDButton());
         runServerButton.setOnAction(event -> handleRunServerButton());
+        accountDeletionButton.setOnAction(event -> handleAccountDeletionButton());
 
     }
 }
