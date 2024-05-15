@@ -36,7 +36,6 @@ public class GameRoom implements NTimerCallback {
         this.secondsRoundDuration = secondsRoundDuration;
         this.playerCallbacks = playerCallbacks;
         currentRound = 1;
-        rounds.put(currentRound, null);
         generateWordBox();
         stagePlayers();
 
@@ -220,7 +219,22 @@ public class GameRoom implements NTimerCallback {
     }
 
     private String getRoundWinner(){
-
+        List<String> keys = new ArrayList<>(details.keySet());
+        String keyWithMaxValue = null;
+        int maxPoints = 0;
+        for(String key : keys){
+            if(keyWithMaxValue==null){
+                keyWithMaxValue = key;
+                maxPoints = details.get(keyWithMaxValue).getPoints();
+                continue;
+            }
+            int currentPoints = details.get(key).getPoints();
+            if(currentPoints>maxPoints){
+                keyWithMaxValue = key;
+                maxPoints = details.get(keyWithMaxValue).getPoints();
+            }
+        }
+        return keyWithMaxValue;
     }
 
 
@@ -229,6 +243,10 @@ public class GameRoom implements NTimerCallback {
     @Override
     public void timerDone() {
         this.roundDone = true;
+        String roundWinner = getRoundWinner();
+        rounds.put(currentRound, roundWinner);
+        currentRound++;
+        //Use broadcast with builder
         stagePlayers();
     }
 
