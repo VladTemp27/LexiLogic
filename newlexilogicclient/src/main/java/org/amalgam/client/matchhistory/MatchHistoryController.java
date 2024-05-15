@@ -10,10 +10,9 @@ import javafx.scene.effect.ColorAdjust;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import org.amalgam.ControllerException.InvalidRequestException;
-import org.amalgam.UIControllers.ControllerInterfacePOA;
 import org.amalgam.client.MainController;
 
-public class MatchHistoryController extends ControllerInterfacePOA {
+public class MatchHistoryController{
     @FXML
     private AnchorPane matchHistoryPane;
     @FXML
@@ -75,6 +74,25 @@ public class MatchHistoryController extends ControllerInterfacePOA {
         alert.showAndWait();
     }
 
+    /**
+     * Gets the objects used.
+     * This method returns a string indicating the type of objects used by the controller.
+     *
+     * @return A string representing the objects used.
+     */
+    public void setObjectsUser(String objects) throws InvalidRequestException {
+
+    }
+
+    /**
+     * Fetches and updates data remotely.
+     * This method is called to update the data displayed in the UI.
+     *
+     */
+    public void fetchAndUpdate(String jsonString, String dataType) throws InvalidRequestException {
+
+    }
+
     // TODO: Should be moved into a separated data class
     // For Testing
     private ObservableList<MatchData> matchDataList = FXCollections.observableArrayList(
@@ -82,17 +100,6 @@ public class MatchHistoryController extends ControllerInterfacePOA {
             new MatchData("2", "Loss", 50),
             new MatchData("3", "Win", 120)
     );
-
-
-    @Override
-    public void setObjectsUser(String objects) throws InvalidRequestException {
-
-    }
-
-    @Override
-    public void fetchAndUpdate(String jsonString, String dataType) throws InvalidRequestException {
-
-    }
 
     //TODO: This should be moved into an Object for Client Side
     private static class MatchData {
@@ -192,6 +199,4 @@ public class MatchHistoryController extends ControllerInterfacePOA {
         populateScore();
         matchTable.setStyle("-fx-font-family: 'Brygada 1918';");
     }
-
-
 }

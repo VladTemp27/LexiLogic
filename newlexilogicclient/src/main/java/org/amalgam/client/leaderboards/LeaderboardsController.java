@@ -10,10 +10,9 @@ import javafx.scene.effect.ColorAdjust;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import org.amalgam.ControllerException.InvalidRequestException;
-import org.amalgam.UIControllers.ControllerInterfacePOA;
 import org.amalgam.client.MainController;
 
-public class LeaderboardsController extends ControllerInterfacePOA {
+public class LeaderboardsController {
     @FXML
     private AnchorPane leaderboardsPane;
     @FXML
@@ -63,6 +62,25 @@ public class LeaderboardsController extends ControllerInterfacePOA {
     }
 
     /**
+     * Gets the objects used.
+     * This method returns a string indicating the type of objects used by the controller.
+     *
+     * @return A string representing the objects used.
+     */
+    public void setObjectsUser(String objects) throws InvalidRequestException {
+
+    }
+
+    /**
+     * Fetches and updates data remotely.
+     * This method is called to update the data displayed in the UI.
+     *
+     */
+    public void fetchAndUpdate(String jsonString, String dataType) throws InvalidRequestException {
+
+    }
+
+    /**
      * Shows an alert to a user if there is an error.
      *
      * @param message
@@ -82,16 +100,6 @@ public class LeaderboardsController extends ControllerInterfacePOA {
             new LeaderboardsData("2", "Mark Lestat", 1100),
             new LeaderboardsData("3", "Lenar Domingo", 1000)
     );
-
-    @Override
-    public void setObjectsUser(String objects) throws InvalidRequestException {
-
-    }
-
-    @Override
-    public void fetchAndUpdate(String jsonString, String dataType) throws InvalidRequestException {
-
-    }
 
     // TODO: This should be moved into an object for client side
     private static class LeaderboardsData {
