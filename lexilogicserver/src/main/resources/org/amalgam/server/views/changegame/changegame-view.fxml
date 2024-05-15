@@ -13,7 +13,7 @@
    <children>
       <ImageView fitHeight="285.0" fitWidth="412.0" layoutX="68.0" layoutY="46.0" pickOnBounds="true">
          <image>
-            <Image url="@../../icons/YellowBox.png" />
+            <Image url="@../../../icons/YellowBox.png" />
          </image>
       </ImageView>
       <Label layoutX="88.0" layoutY="62.0" prefHeight="60.0" prefWidth="386.0" text="change Game options" textFill="#674c33">
@@ -40,7 +40,7 @@
       </Button>
       <ImageView fitHeight="155.0" fitWidth="150.0" layoutX="-19.0" layoutY="217.0" pickOnBounds="true" preserveRatio="true" rotate="-3.8">
          <image>
-            <Image url="@../../icons/Axel.png" />
+            <Image url="@../../../icons/Axel.png" />
          </image>
       </ImageView>
    </children>
