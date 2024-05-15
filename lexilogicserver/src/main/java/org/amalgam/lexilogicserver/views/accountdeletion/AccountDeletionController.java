@@ -37,7 +37,7 @@ public class AccountDeletionController {
      *
      * @param button The button to add hover effect to.
      */
-    private void addHoverEffect(javafx.scene.control.Button button) {
+    private void addHoverEffect(Button button) {
         button.setOnMouseEntered(e -> button.setStyle("-fx-background-color: derive(#9CA16F, -10%);"));
         button.setOnMouseExited(e -> button.setStyle("-fx-background-color: #9CA16F;"));
     }

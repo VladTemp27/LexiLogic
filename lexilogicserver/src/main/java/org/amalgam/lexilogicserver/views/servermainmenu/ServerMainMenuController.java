@@ -128,8 +128,8 @@ public class ServerMainMenuController {
         addHoverEffect(addPlayerButton);
         addHoverEffect(changeGameButton);
         addHoverEffect(runORBDButton);
-        addRunHoverEffect(runServerButton);
         addHoverEffect(accountDeletionButton);
+        addRunHoverEffect(runServerButton);
         addPlayerButton.setOnAction(event -> handleAddPlayerButton());
         changeGameButton.setOnAction(event -> handleChangeGameButton());
         runORBDButton.setOnAction(event -> handleRunORBDButton());

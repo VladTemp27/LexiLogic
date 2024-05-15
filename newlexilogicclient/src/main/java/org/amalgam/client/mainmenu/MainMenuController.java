@@ -1,8 +1,11 @@
 package org.amalgam.client.mainmenu;
 
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.Dialog;
 import javafx.scene.layout.AnchorPane;
 import org.amalgam.ControllerException.InvalidRequestException;
 import org.amalgam.client.MainController;
@@ -22,6 +25,8 @@ public class MainMenuController {
     @FXML
     private Button profileButton;
     private MainController mainController;
+    private MainMenuModel mainMenuModel;
+
 
     /**
      * Sets the Main Controller.
@@ -30,6 +35,9 @@ public class MainMenuController {
      */
     public void setMainController(MainController mainController) {
         this.mainController = mainController;
+    }
+    public void setMainMenuModel(MainMenuModel mainMenuModel) {
+        this.mainMenuModel = mainMenuModel;
     }
 
     /**
@@ -74,10 +82,21 @@ public class MainMenuController {
 
     }
 
+    /**
+     * Handle the play button
+     */
     @FXML
     public void handlePlay(){
-        // insert main controller statement for opening play panel
+        if (mainMenuModel != null) {
+            String result = mainMenuModel.matchMake();
+        } else {
+            System.out.println("MainMenuModel is not set.");
+        }
     }
+
+    /**
+     * Handle the profile button
+     */
    @FXML
    public void handleProfile(){
        if (mainController != null) {
@@ -86,10 +105,22 @@ public class MainMenuController {
            System.out.println("MainController is not set.");
        }
    }
+
+    /**
+     * Handle the leaderboards button
+     */
    @FXML
    public void handleLeaderboards(){
-        // handle to load leaderboards view
+        if(mainController !=null){
+            mainController.loadLeaderboardsView();
+        }else {
+            System.out.println("Server controller is not set.");
+        }
    }
+
+    /**
+     * Handle the history button
+     */
    @FXML
    public void handleHistory(){
        if (mainController != null) {
@@ -98,10 +129,22 @@ public class MainMenuController {
            System.out.println("MainController is not set.");
        }
    }
+
+    /**
+     * Handle the exit button
+     */
    @FXML
    public void handleExit(){
-        // insert exception for exiting application
-   }
+       Dialog<ButtonType> confirmationDialog = new Dialog<>();
+       confirmationDialog.setTitle("Confirm Exit");
+       confirmationDialog.setHeaderText("Are you sure you want to exit?");
+       confirmationDialog.getDialogPane().getButtonTypes().addAll(ButtonType.YES, ButtonType.CANCEL);
+
+       confirmationDialog.showAndWait().ifPresent(response -> {
+           if (response == ButtonType.YES) {
+               Platform.exit();
+           }
+       });   }
     /**
      * Initializes the controller.
      * This method sets up the UI components and initializes the data model.
@@ -126,7 +169,6 @@ public class MainMenuController {
      * @param username and password authentication.
      */
     public void authenticate(String username, String password) {
-        // Check if the provided data matches the expected authentication data
         if (username.equals("admin") && password.equals("admin")) {
             System.out.println("Authentication successful.");
         } else {

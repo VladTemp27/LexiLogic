@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ProgressIndicator?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane fx:id="runServerPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="500.0" style="-fx-background-color: #674C33;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.amalgam.lexilogicserver.views.runserver.RunServerController">
+   <children>
+      <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="-25.0" layoutY="215.0" pickOnBounds="true" preserveRatio="true" rotate="270.0">
+         <image>
+            <Image url="@../../../icons/Axel.png" />
+         </image>
+      </ImageView>
+      <ImageView fitHeight="324.0" fitWidth="397.0" layoutX="53.0" layoutY="38.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../../../icons/YellowBox.png" />
+         </image>
+      </ImageView>
+      <ImageView fitHeight="201.0" fitWidth="276.0" layoutX="112.0" layoutY="118.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../../../icons/GreenBox.png" />
+         </image>
+      </ImageView>
+      <Label layoutX="153.0" layoutY="61.0" text="Run Server" textFill="#6b4406">
+         <font>
+            <Font name="Bowlby One SC Regular" size="30.0" />
+         </font>
+      </Label>
+      <Label fx:id="serverUpdateLabel" layoutX="129.0" layoutY="132.0" prefHeight="143.0" prefWidth="241.0" textAlignment="JUSTIFY" textFill="WHITE">
+         <font>
+            <Font name="Brygada 1918 Regular" size="20.0" />
+         </font>
+      </Label>
+      <ProgressIndicator fx:id="progressIndicator" layoutX="230.0" layoutY="307.0" prefHeight="40.0" prefWidth="40.0" progress="-1" style="-fx-progress-color: #9CA16F;" />
+   </children>
+</AnchorPane>

@@ -75,7 +75,7 @@ public class ServerController implements ORBDOperationCallback {
             Font.loadFont(getClass().getResourceAsStream("/org/amalgam/fonts/BowlbyOneSC.ttf"), 20);
             Font.loadFont(getClass().getResourceAsStream("/org/amalgam/fonts/Brygada1918.ttf"), 20);
 
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/org/amalgam/server.views/servermainmenu/servermainmenu-view.fxml"));
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/org/amalgam/server/views/servermainmenu/servermainmenu-view.fxml"));
             AnchorPane serverMainMenuPane = fxmlLoader.load();
 
             InputStream inputStream = getClass().getResourceAsStream("/org/amalgam/icons/Logo.png");
@@ -112,7 +112,7 @@ public class ServerController implements ORBDOperationCallback {
             Font.loadFont(getClass().getResourceAsStream("/org/amalgam/fonts/BowlbyOneSC.ttf"), 20);
             Font.loadFont(getClass().getResourceAsStream("/org/amalgam/fonts/Brygada1918.ttf"), 20);
 
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/org/amalgam/server.views/runserver/runserver-view.fxml"));
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/org/amalgam/server/views/runserver/runserver-view.fxml"));
             AnchorPane runServer = fxmlLoader.load();
 
             InputStream inputStream = getClass().getResourceAsStream("/org/amalgam/icons/Logo.png");
@@ -149,7 +149,7 @@ public class ServerController implements ORBDOperationCallback {
             Font.loadFont(getClass().getResourceAsStream("/org/amalgam/fonts/BowlbyOneSC.ttf"), 20);
             Font.loadFont(getClass().getResourceAsStream("/org/amalgam/fonts/Brygada1918.ttf"), 20);
 
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/org/amalgam/server.views/runserver/runserverrunning-view.fxml"));
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/org/amalgam/server/views/runserver/runserverrunning-view.fxml"));
             AnchorPane runServerRunning = fxmlLoader.load();
 
             InputStream inputStream = getClass().getResourceAsStream("/org/amalgam/icons/Logo.png");
@@ -186,7 +186,7 @@ public class ServerController implements ORBDOperationCallback {
             Font.loadFont(getClass().getResourceAsStream("/org/amalgam/fonts/BowlbyOneSC.ttf"), 20);
             Font.loadFont(getClass().getResourceAsStream("/org/amalgam/fonts/Brygada1918.ttf"), 20);
 
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/org/amalgam/server.views/runorbd/runorbd-view.fxml"));
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/org/amalgam/server/views/runorbd/runorbd-view.fxml"));
             AnchorPane runORBD = fxmlLoader.load();
 
             InputStream inputStream = getClass().getResourceAsStream("/org/amalgam/icons/Logo.png");
@@ -223,7 +223,7 @@ public class ServerController implements ORBDOperationCallback {
             Font.loadFont(getClass().getResourceAsStream("/org/amalgam/fonts/BowlbyOneSC.ttf"), 20);
             Font.loadFont(getClass().getResourceAsStream("/org/amalgam/fonts/Brygada1918.ttf"), 20);
 
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/org/amalgam/server.views/changegame/changegame-view.fxml"));
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/org/amalgam/server/views/changegame/changegame-view.fxml"));
             AnchorPane changeGame = fxmlLoader.load();
 
             InputStream inputStream = getClass().getResourceAsStream("/org/amalgam/icons/Logo.png");
@@ -260,7 +260,7 @@ public class ServerController implements ORBDOperationCallback {
             Font.loadFont(getClass().getResourceAsStream("/org/amalgam/fonts/BowlbyOneSC.ttf"), 20);
             Font.loadFont(getClass().getResourceAsStream("/org/amalgam/fonts/Brygada1918.ttf"), 20);
 
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/org/amalgam/server.views/addplayer/addplayer-view.fxml"));
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/org/amalgam/server/views/addplayer/addplayer-view.fxml"));
             AnchorPane addPlayer = fxmlLoader.load();
 
             InputStream inputStream = getClass().getResourceAsStream("/org/amalgam/icons/Logo.png");
@@ -297,7 +297,7 @@ public class ServerController implements ORBDOperationCallback {
             Font.loadFont(getClass().getResourceAsStream("/org/amalgam/fonts/BowlbyOneSC.ttf"), 20);
             Font.loadFont(getClass().getResourceAsStream("/org/amalgam/fonts/Brygada1918.ttf"), 20);
 
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/org/amalgam/server.views/accountdeletion/accountdeletion-view.fxml"));
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/org/amalgam/server/views/accountdeletion/accountdeletion-view.fxml"));
             AnchorPane accountDeletionPane = fxmlLoader.load();
 
             InputStream inputStream = getClass().getResourceAsStream("/org/amalgam/icons/Logo.png");
