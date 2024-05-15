@@ -22,6 +22,8 @@ public class AddPlayerController {
 
     @FXML
     private TextField usernameTextfield;
+    @FXML
+    private Button backButton;
 
     private List<Player> players;
 
@@ -49,7 +51,6 @@ public class AddPlayerController {
         if(serverController != null){
             String username = usernameTextfield.getText();
             if (!username.isEmpty()) {
-                //addPlayer(username);
                 // TODO: Connect to microservice for adding player (server)
             } else {
                 showAlert("Username cannot be empty.");
@@ -60,8 +61,19 @@ public class AddPlayerController {
     }
 
     @FXML
+    public void handleBackButton(){
+        if(serverController !=null){
+            serverController.loadServerMainMenu();
+        }else {
+            System.out.println("Server controller is not set.");
+        }
+    }
+
+    @FXML
     public void initialize() {
         addHoverEffect(addPlayerButton);
+        addHoverEffect(backButton);
         addPlayerButton.setOnAction(event -> handleAddPlayer());
+        backButton.setOnAction(event -> handleBackButton());
     }
 }
