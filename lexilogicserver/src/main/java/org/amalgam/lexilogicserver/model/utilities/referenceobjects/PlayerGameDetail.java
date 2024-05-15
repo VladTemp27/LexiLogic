@@ -50,4 +50,7 @@ public class PlayerGameDetail {
     public LinkedList<String> getWords() {
         return words;
     }
+    public LinkedList<String> getDupedWords() {
+        return dupedWords;
+    }
 }

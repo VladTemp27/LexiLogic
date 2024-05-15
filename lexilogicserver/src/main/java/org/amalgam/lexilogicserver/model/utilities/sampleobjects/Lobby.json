@@ -3,7 +3,7 @@
   "lobby":[
     {
       "lobbyID": "",
-      "createBy": "",
+      "createdBy": "",
       "winner": ""
     }
   ]

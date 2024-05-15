@@ -40,6 +40,8 @@ public class RunServerController {
         alert.showAndWait();
     }
 
+    // This is logically incorrect
+    @Deprecated
     public void ifServerIsRunning() {
         if (serverController != null) {
             serverController.loadRunServerRunning();

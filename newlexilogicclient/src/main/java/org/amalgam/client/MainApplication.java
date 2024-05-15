@@ -9,7 +9,7 @@ public class MainApplication extends Application {
 
         MainController mainController = new MainController();
         mainController.setStage(primaryStage);
-        mainController.loadLoginView();
+        mainController.loadLoadingView();
         primaryStage.show();
     }
 

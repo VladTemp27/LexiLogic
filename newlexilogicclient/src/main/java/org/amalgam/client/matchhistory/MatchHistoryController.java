@@ -9,9 +9,11 @@ import javafx.scene.control.*;
 import javafx.scene.effect.ColorAdjust;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
+import org.amalgam.ControllerException.InvalidRequestException;
+import org.amalgam.UIControllers.ControllerInterfacePOA;
 import org.amalgam.client.MainController;
 
-public class MatchHistoryController {
+public class MatchHistoryController extends ControllerInterfacePOA {
     @FXML
     private AnchorPane matchHistoryPane;
     @FXML
@@ -80,6 +82,17 @@ public class MatchHistoryController {
             new MatchData("2", "Loss", 50),
             new MatchData("3", "Win", 120)
     );
+
+
+    @Override
+    public void setObjectsUser(String objects) throws InvalidRequestException {
+
+    }
+
+    @Override
+    public void fetchAndUpdate(String jsonString, String dataType) throws InvalidRequestException {
+
+    }
 
     //TODO: This should be moved into an Object for Client Side
     private static class MatchData {
@@ -180,25 +193,5 @@ public class MatchHistoryController {
         matchTable.setStyle("-fx-font-family: 'Brygada 1918';");
     }
 
-    /**
-     * Gets the objects used.
-     * This method returns a string indicating the type of objects used by the controller.
-     *
-     * @return A string representing the objects used.
-     */
-    //TODO: @Override
-    private void getObjectsUsed() {
-        //TODO: Return Value
-        //return "user";
-    }
 
-    /**
-     * Fetches and updates data remotely.
-     * This method is called to update the data displayed in the UI.
-     *
-     */
-    //TODO: @Override
-    private void fetchAndUpdate() {
-        //TODO: Fetching of Data
-    }
 }

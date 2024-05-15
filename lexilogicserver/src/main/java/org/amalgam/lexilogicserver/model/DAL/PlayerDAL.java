@@ -107,4 +107,21 @@ public class PlayerDAL {
             throw new RuntimeException(e);
         }
     }
+
+        public static void markAccountForDeletion(String playerName) {
+        try (Connection conn = DatabaseUtil.getConnection()) {
+            PreparedStatement stmt = conn.prepareStatement("UPDATE player SET forDeletion = 'true' WHERE name = ?");
+            stmt.setString(1, playerName);
+            int rowsAffected = stmt.executeUpdate();
+            if (rowsAffected > 0) {
+                System.out.println("Account marked for deletion successfully.");
+            } else {
+                throw new RuntimeException("Failed to mark account for deletion.");
+            }
+        } catch (SQLException | ClassNotFoundException | InstantiationException | IllegalAccessException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+
 }
