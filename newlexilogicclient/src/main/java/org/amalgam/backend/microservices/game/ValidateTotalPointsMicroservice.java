@@ -7,6 +7,7 @@ import org.omg.CosNaming.NamingContextPackage.CannotProceed;
 import org.omg.CosNaming.NamingContextPackage.InvalidName;
 import org.omg.CosNaming.NamingContextPackage.NotFound;
 
+@Deprecated
 public class ValidateTotalPointsMicroservice {
 
     public int process (ORBConnection orbConnection){
