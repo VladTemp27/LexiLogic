@@ -13,6 +13,7 @@ import org.amalgam.lexilogicserver.model.utilities.referenceobjects.PlayerGameDe
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -110,8 +111,28 @@ public class GameRoom implements NTimerCallback {
 
         if(wordBox.verifyWord(word)==0)return; // should just throw exception
 
-        details.get(username).addWord(word);    // should update using replace
+        PlayerGameDetail gameDetail = details.get(username);
+        gameDetail.addWord(word);
+        details.replace(username, gameDetail);
 
+        updatePoints(username);
+    }
+
+    private void updatePoints(String username){
+
+        PlayerGameDetail detail = details.get(username);
+        int pts = calculatePoints(detail.getWords());
+        detail.setPoints(pts);
+        details.replace(username, detail);
+
+    }
+
+    private int calculatePoints(LinkedList<String> listOfWords){
+        int pts = 0;
+        for(String word : listOfWords){
+            pts += word.length();
+        }
+        return pts;
     }
 
     public void broadcast(String jsonString) throws InvalidRequestException {
@@ -187,15 +208,19 @@ public class GameRoom implements NTimerCallback {
             roundWinners.put(roundWinner, 1);
         }
 
-        if(roundWinners.containsValue(3)){
+        if (roundWinners.containsValue(3)) {
             roundWinners.forEach((key, value) -> {
-                if(value==3){
+                if (value == 3) {
                     winner.append(value);
                 }
             });
             return winner.toString();
         }
         return null;
+    }
+
+    private String getRoundWinner(){
+
     }
 
 
