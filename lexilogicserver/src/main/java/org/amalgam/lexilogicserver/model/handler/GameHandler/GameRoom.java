@@ -19,8 +19,8 @@ import java.util.concurrent.Executors;
 
 public class GameRoom implements NTimerCallback {
 
-    private int roomID;
-    private LinkedHashMap<String,PlayerGameDetail> details;
+    private int roomID, currentRound, secondsRoundDuration;
+    private LinkedHashMap<String,PlayerGameDetail> details, defaultDetails;
     private boolean roundDone;
     private ExecutorService executor = Executors.newSingleThreadExecutor();
     private WordBox wordBox;
@@ -28,13 +28,73 @@ public class GameRoom implements NTimerCallback {
     private LinkedHashMap<String,PlayerCallback> playerCallbacks = new LinkedHashMap<>();
 
 
+
     public GameRoom(int roomID, LinkedHashMap<String,PlayerGameDetail> details,LinkedHashMap<String,PlayerCallback> playerCallbacks ,int secondsRoundDuration) throws FileNotFoundException {
         this.roomID = roomID;
-        this.details = details;
+        this.defaultDetails = details;
+        this.secondsRoundDuration = secondsRoundDuration;
         this.playerCallbacks = playerCallbacks;
-        rounds.put(1, null);
+        currentRound = 1;
+        rounds.put(currentRound, null);
         generateWordBox();
+        stagePlayers();
+
+    }
+
+    public void setPlayerReady(String username){
+        PlayerGameDetail detail = details.get(username);
+        detail.setReady(true);
+
+        if(!isAllPlayersReady()){
+            return;
+        }
+
+        roundStart();
+    }
+
+    private void stagePlayers() {
+        details = defaultDetails; // resets details to default unready state
+        String w;
+        if((w = winnerAvailable())!=null){
+            try{
+                String response = ""; // Use response builder for this, broadcast state game done, + winner(variable w)
+                broadcast(response);
+                //TODO convert this to reference objects and push to database using DAL
+            }catch(Exception e){
+                e.printStackTrace();
+            }
+        }
+        roundDone = false;
+        //give initial gameroom object + state = staging(countdown 5 secs then send request ready)
+        String jsonString = ""; //Use response builder here
+        try {
+            broadcast(jsonString);
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    private void roundStart(){
+        try {
+            //Use GameRoomResponseBuilder here to tell clients state is game started + game rooms 😁
+            String data = "";
+
+            broadcast(data);
+        }catch(InvalidRequestException e){
+            System.out.println(e.getMessage());
+        }
         executor.submit(new NTimer(secondsRoundDuration, this));
+    }
+
+    private boolean isAllPlayersReady(){
+        List<String> keys = new ArrayList<>(details.keySet());
+        for(String key: keys){
+            PlayerGameDetail currentPlayer = details.get(key);
+            if(!currentPlayer.isReady()){
+                return false;
+            }
+        }
+        return true;
     }
 
     //call this to generate a wordBox, generates a new wordbox for every invocation
@@ -50,7 +110,7 @@ public class GameRoom implements NTimerCallback {
 
         if(wordBox.verifyWord(word)==0)return; // should just throw exception
 
-        details.get(username).addWord(word);
+        details.get(username).addWord(word);    // should update using replace
 
     }
 
@@ -144,6 +204,7 @@ public class GameRoom implements NTimerCallback {
     @Override
     public void timerDone() {
         this.roundDone = true;
+        stagePlayers();
     }
 
     @Override
