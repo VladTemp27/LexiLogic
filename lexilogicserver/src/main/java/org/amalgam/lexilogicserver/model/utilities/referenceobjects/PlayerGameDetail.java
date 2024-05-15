@@ -9,6 +9,7 @@ public class PlayerGameDetail {
     private int points = 0;
     private LinkedList<String> words=new LinkedList<>();;
     private LinkedList<String> dupedWords=new LinkedList<>();
+    private boolean ready = false;
 
     public PlayerGameDetail(String username) {
         this.username = username;
@@ -52,5 +53,13 @@ public class PlayerGameDetail {
     }
     public LinkedList<String> getDupedWords() {
         return dupedWords;
+    }
+
+    public boolean isReady() {
+        return ready;
+    }
+
+    public void setReady(boolean ready) {
+        this.ready = ready;
     }
 }
