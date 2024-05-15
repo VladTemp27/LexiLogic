@@ -36,6 +36,9 @@ public class GameServiceImpl extends GameServicePOA {
             throw new EmptyLeaderBoardException("Leaderboard is empty");
         }
 
+        JsonObject rootObject = new JsonObject();
+        rootObject.addProperty("object", "leaderboard");
+
         JsonArray leaderboardArray = new JsonArray();
         for (LeaderBoard leaderboard : leaderboards) {
             JsonObject leaderboardObj = new JsonObject();
@@ -45,12 +48,11 @@ public class GameServiceImpl extends GameServicePOA {
             leaderboardArray.add(leaderboardObj);
         }
 
-        JsonObject result = new JsonObject();
-        result.addProperty("object", "leaderboard");
-        result.add("leaderboard", leaderboardArray);
+        rootObject.add("leaderboard", leaderboardArray);
 
-        return result.toString();
+        return rootObject.toString();
     }
+
 
     @Override
     public void verifyWord(String word) throws InvalidWordFormatException, DuplicateWordException {
