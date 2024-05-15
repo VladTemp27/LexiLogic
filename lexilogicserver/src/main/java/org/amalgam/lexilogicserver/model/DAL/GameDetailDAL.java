@@ -59,7 +59,9 @@ public class GameDetailDAL {
         } catch (ClassNotFoundException | InstantiationException | IllegalAccessException e) {
             throw new RuntimeException(e);
         }catch(SQLException e ){
-            System.out.println("RS Closed");
+            if(!e.getMessage().equals("Operation not allowed after ResultSet closed")){
+                e.printStackTrace();
+            }
         }
         return listOfGameDetail;
     }
