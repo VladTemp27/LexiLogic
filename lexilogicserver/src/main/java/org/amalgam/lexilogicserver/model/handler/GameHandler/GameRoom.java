@@ -1,30 +1,37 @@
-package org.amalgam.lexilogicserver.model.utilities.referenceobjects;
+package org.amalgam.lexilogicserver.model.handler.GameHandler;
 
+import org.amalgam.ControllerException.InvalidRequestException;
+import org.amalgam.UIControllers.PlayerCallback;
 import org.amalgam.lexilogicserver.model.microservices.NTimer;
 import org.amalgam.lexilogicserver.model.microservices.NTimerCallback;
 import org.amalgam.lexilogicserver.model.microservices.wordbox.Generator;
 import org.amalgam.lexilogicserver.model.microservices.wordbox.Reader;
 import org.amalgam.lexilogicserver.model.microservices.wordbox.WordBox;
+import org.amalgam.lexilogicserver.model.utilities.referenceobjects.GameDetail;
+import org.amalgam.lexilogicserver.model.utilities.referenceobjects.PlayerGameDetail;
 
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
-import java.util.LinkedList;
+import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class GameRoom implements NTimerCallback {
 
     private int roomID;
-    private LinkedList<PlayerGameDetail> details;
+    private LinkedHashMap<String,PlayerGameDetail> details;
     private boolean roundDone;
     private ExecutorService executor = Executors.newSingleThreadExecutor();
     private WordBox wordBox;
     private LinkedHashMap<Integer, String> rounds = new LinkedHashMap<>();
+    private LinkedHashMap<String,PlayerCallback> playerCallbacks = new LinkedHashMap<>();
 
 
-    public GameRoom(int roomID, LinkedList<PlayerGameDetail> details, int secondsRoundDuration) throws FileNotFoundException {
+    public GameRoom(int roomID, LinkedHashMap<String,PlayerGameDetail> details,LinkedHashMap<String,PlayerCallback> playerCallbacks ,int secondsRoundDuration) throws FileNotFoundException {
         this.roomID = roomID;
         this.details = details;
+        this.playerCallbacks = playerCallbacks;
         rounds.put(1, null);
         generateWordBox();
         executor.submit(new NTimer(secondsRoundDuration, this));
@@ -36,30 +43,43 @@ public class GameRoom implements NTimerCallback {
     }
 
     public void submitWord(String word, String username){
-        int userIndex = getIndexByUsername(username);
-        if(userIndex<0){
-            return; //instead of return should just throw some kind of exception
+        if(roundDone){
+            return;
         }
         if(checkIfDupe(word)) return; // should just throw exception of duped word
 
         if(wordBox.verifyWord(word)==0)return; // should just throw exception
 
-        details.get(userIndex).addWord(word);
+        details.get(username).addWord(word);
 
     }
 
-    private int getIndexByUsername(String username){
-        for(PlayerGameDetail detail : details){
-            if(detail.getUsername().equals(username)){
-                return details.indexOf(detail);
-            }
+    public void broadcast(String jsonString) throws InvalidRequestException {
+        List<String> keys = new ArrayList<>(playerCallbacks.keySet());
+        for(String key: keys){
+            PlayerCallback callback = playerCallbacks.get(key);
+            callback.uiCall(jsonString);
         }
-        return -1;
     }
+
+    //Method overload
+    public void broadcast(String username, String jsonString) throws InvalidRequestException{
+        List<String> keys = new ArrayList<>(playerCallbacks.keySet());
+        for(String key: keys){
+            if(!key.equals(username)){
+                continue;
+            }
+            PlayerCallback callback = playerCallbacks.get(key);
+            callback.uiCall(jsonString);
+        }
+    }
+
 
     //Check if word submitted is not unique
     private boolean checkIfDupe(String submittedWord){
-        for(PlayerGameDetail gameDetail : details){
+        List<String> keys = new ArrayList<>(details.keySet());
+        for(String key : keys){
+            PlayerGameDetail gameDetail = details.get(key);
             if(gameDetail.listOfWordsContains(submittedWord)){
                 markWordAsDuped(submittedWord);
                 return true;
@@ -69,7 +89,9 @@ public class GameRoom implements NTimerCallback {
     }
 
     private void markWordAsDuped(String dupeWord){
-        for(PlayerGameDetail gameDetail : details){
+        List<String> keys = new ArrayList<>(details.keySet());
+        for(String key : keys){
+            PlayerGameDetail gameDetail = details.get(key);
             gameDetail.addDupedWord(dupeWord);
         }
     }
@@ -82,18 +104,13 @@ public class GameRoom implements NTimerCallback {
         this.roomID = roomID;
     }
 
-    public LinkedList<PlayerGameDetail> getDetails() {
+    public LinkedHashMap<String, PlayerGameDetail> getDetails() {
         return details;
     }
 
     //Might not be needed
     public boolean isRoundDone() {
         return roundDone;
-    }
-
-    public void addPlayerDetail(String username){
-        PlayerGameDetail playerDetail = new PlayerGameDetail(username);
-        details.add(playerDetail);
     }
 
     //Checker if winner is available returns null if winner is nut available
@@ -121,10 +138,16 @@ public class GameRoom implements NTimerCallback {
         return null;
     }
 
+
     // TODO: should check if winner is available then tell players in game room winner has been decided and a new
     //          round has started
     @Override
     public void timerDone() {
         this.roundDone = true;
+    }
+
+    @Override
+    public void timeIs() {
+
     }
 }
