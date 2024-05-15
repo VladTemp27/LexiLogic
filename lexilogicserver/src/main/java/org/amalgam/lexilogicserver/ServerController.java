@@ -62,15 +62,6 @@ public class ServerController implements ORBDOperationCallback {
     }
 
     /**
-     * Server starter method
-     */
-
-    public void startServer() {
-        // insert logic heree :)
-        System.out.println("Server started.");
-    }
-
-    /**
      * Loads and displays the server main menu view.
      */
     public void loadServerMainMenu() {
@@ -255,15 +246,15 @@ public class ServerController implements ORBDOperationCallback {
         }
     }
 
-        /**
-     * Loads and displays the change game view.
+    /**
+     * Loads and displays the add player view.
      */
     public void loadAddPlayer() {
         try {
             Font.loadFont(getClass().getResourceAsStream("/org/amalgam/fonts/BowlbyOneSC.ttf"), 20);
             Font.loadFont(getClass().getResourceAsStream("/org/amalgam/fonts/Brygada1918.ttf"), 20);
 
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/org/amalgam/server.views/addplayer/addplyer-view.fxml"));
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/org/amalgam/server.views/addplayer/addplayer-view.fxml"));
             AnchorPane addPlayer = fxmlLoader.load();
 
             InputStream inputStream = getClass().getResourceAsStream("/org/amalgam/icons/Logo.png");

@@ -11,9 +11,7 @@ import org.amalgam.lexilogicserver.model.utilities.referenceobjects.LeaderBoard;
 
 import java.util.LinkedList;
 import java.util.List;
-import org.amalgam.lexilogicserver.model.utilities.referenceobjects.GameRoom;
-
-import java.util.LinkedList;
+import org.amalgam.lexilogicserver.model.handler.GameHandler.GameRoom;
 
 public class GameServiceImpl extends GameServicePOA {
     LinkedList<GameRoom> rooms = new LinkedList<>();

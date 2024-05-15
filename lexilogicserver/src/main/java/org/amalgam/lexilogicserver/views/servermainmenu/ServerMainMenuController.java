@@ -34,9 +34,19 @@ public class ServerMainMenuController {
      *
      * @param button The button to add hover effect to.
      */
-    private void addHoverEffect(javafx.scene.control.Button button) {
+    private void addRunHoverEffect(javafx.scene.control.Button button) {
         button.setOnMouseEntered(e -> button.setStyle("-fx-background-color: derive(#9CA16F, -10%);"));
         button.setOnMouseExited(e -> button.setStyle("-fx-background-color: #9CA16F;"));
+    }
+
+        /**
+     * Adds hover effect to the given button.
+     *
+     * @param button The button to add hover effect to.
+     */
+    private void addHoverEffect(javafx.scene.control.Button button) {
+        button.setOnMouseEntered(e -> button.setStyle("-fx-background-color: derive(#B07C3B, -10%);"));
+        button.setOnMouseExited(e -> button.setStyle("-fx-background-color: #B07C3B;"));
     }
 
     /**
@@ -91,7 +101,7 @@ public class ServerMainMenuController {
     @FXML
     public void handleRunServerButton(){
         if(serverController !=null){
-            serverController.startServer();
+            serverController.loadRunServer();
         }else {
             System.out.println("Server controller is not set");
         }
@@ -105,7 +115,7 @@ public class ServerMainMenuController {
         addHoverEffect(addPlayerButton);
         addHoverEffect(changeGameButton);
         addHoverEffect(runORBDButton);
-        addHoverEffect(runServerButton);
+        addRunHoverEffect(runServerButton);
         addPlayerButton.setOnAction(event -> handleAddPlayerButton());
         changeGameButton.setOnAction(event -> handleChangeGameButton());
         runORBDButton.setOnAction(event -> handleRunORBDButton());
