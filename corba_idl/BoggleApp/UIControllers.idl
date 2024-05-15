@@ -10,16 +10,8 @@ module org{
              interface PlayerCallback {
                 attribute string username;
 
-                void uiCall()
+                void uiCall(in string jsonString)
                     raises (org::amalgam::ControllerException::InvalidRequestException);
-             };
-
-             interface ControllerInterface {
-                 void setObjectsUser(in string objects)
-                     raises (org::amalgam::ControllerException::InvalidRequestException);
-
-                 void fetchAndUpdate(in string jsonString, in string dataType)
-                     raises (org::amalgam::ControllerException::InvalidRequestException);
              };
         };
     };

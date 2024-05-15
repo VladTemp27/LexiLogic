@@ -3,7 +3,7 @@ package org.amalgam.lexilogicserver.model.microservices.daemonHandler;
 import java.util.concurrent.*;
 
 //Sample Implementation of the ORBRunner
-public class ORBDExample implements ORBOperationCallback{
+public class ORBDExample implements ORBDOperationCallback {
     private Future<Integer> exitCode;
     private int exit;
 
@@ -15,14 +15,14 @@ public class ORBDExample implements ORBOperationCallback{
     public void run(){
         ExecutorService executor = Executors.newSingleThreadExecutor();
 
-        ORBRunner orbRunner = new ORBRunner(this, 2018, "localhost");
-        exitCode = executor.submit(orbRunner);
+        ORBDRunner orbdRunner = new ORBDRunner(this, 2018, "localhost");
+        exitCode = executor.submit(orbdRunner);
     }
     @Override
-    public void notifyOrbExit() throws ORBException {
+    public void notifyOrbExit() throws ORBDException {
         try {
             exit = exitCode.get();
-            throw new ORBException("ORB has exited with exit code: " + exitCode.get());
+            throw new ORBDException("ORB has exited with exit code: " + exitCode.get());
         }catch(Exception e){
             throw new RuntimeException(e.getMessage());
         }

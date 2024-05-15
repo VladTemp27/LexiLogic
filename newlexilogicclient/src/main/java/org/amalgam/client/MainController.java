@@ -399,7 +399,7 @@ public class MainController {
             stage.setScene(scene);
             stage.setResizable(false);
             stage.setTitle("Lexi Logic");
-            LeaderboardsController leaderboardsController1 = fxmlLoader.getController();
+            LoadingController loadingController = fxmlLoader.getController();
             loadingController.setMainController(this);
             loadingController.initialize();
 

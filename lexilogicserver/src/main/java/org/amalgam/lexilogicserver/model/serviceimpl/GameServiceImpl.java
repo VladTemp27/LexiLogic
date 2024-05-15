@@ -1,12 +1,17 @@
 package org.amalgam.lexilogicserver.model.serviceimpl;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import org.amalgam.Service.GameServiceModule.GameServicePOA;
 import org.amalgam.UIControllers.PlayerCallback;
 import org.amalgam.Utils.Exceptions.*;
 import org.amalgam.Utils.Exceptions.DuplicateWordException;
-import org.amalgam.lexilogicserver.model.utilities.referenceobjects.GameRoom;
+import org.amalgam.lexilogicserver.model.DAL.LeaderBoardDAL;
+import org.amalgam.lexilogicserver.model.utilities.referenceobjects.LeaderBoard;
 
 import java.util.LinkedList;
+import java.util.List;
+import org.amalgam.lexilogicserver.model.handler.GameHandler.GameRoom;
 
 public class GameServiceImpl extends GameServicePOA {
     LinkedList<GameRoom> rooms = new LinkedList<>();
@@ -23,7 +28,26 @@ public class GameServiceImpl extends GameServicePOA {
 
     @Override
     public String getLeaderboards() throws EmptyLeaderBoardException {
-        return "";
+        List<LeaderBoard> leaderboards = LeaderBoardDAL.fetchLeaderBoards();
+
+        if (leaderboards.isEmpty()) {
+            throw new EmptyLeaderBoardException("Leaderboard is empty");
+        }
+
+        JsonArray leaderboardArray = new JsonArray();
+        for (LeaderBoard leaderboard : leaderboards) {
+            JsonObject leaderboardObj = new JsonObject();
+            leaderboardObj.addProperty("username", leaderboard.getUsername());
+            leaderboardObj.addProperty("pts", leaderboard.getPoints());
+            leaderboardObj.addProperty("rank", leaderboard.getRank());
+            leaderboardArray.add(leaderboardObj);
+        }
+
+        JsonObject result = new JsonObject();
+        result.addProperty("object", "leaderboard");
+        result.add("leaderboard", leaderboardArray);
+
+        return result.toString();
     }
 
     @Override
