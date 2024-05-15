@@ -19,6 +19,26 @@ public class PlayerGameDetail {
     public PlayerGameDetail() {
     }
 
+    public void submitWord(String word, WordBox wordBox){
+        if(words.contains(word)){
+            dupedWords.add(word);
+        }
+        if(wordBox.verifyWord(word)!= 0){
+            words.add(word);
+            calculatePoints();
+        }
+    }
+
+    private void calculatePoints(){
+        for(String word : words){
+            points += word.length();
+        }
+
+        for(String duped: dupedWords){
+            points -= duped.length();
+        }
+    }
+
     public String getUsername() {
         return username;
     }
@@ -30,16 +50,7 @@ public class PlayerGameDetail {
     public LinkedList<String> getWords() {
         return words;
     }
-
-    public void addWord(String word){
-        words.add(word);
-    }
-
-    public void addDupedWord(String word){
-        dupedWords.add(word);
-    }
-
-    public boolean listOfWordsContains(String word){
-        return words.contains(word);
+    public LinkedList<String> getDupedWords() {
+        return dupedWords;
     }
 }
