@@ -40,12 +40,36 @@ public class GameRoomResponseBuilder {
     }
 
 
-    public static String buildStagePlayersResponse(int countdown) {
+    public static String buildStagePlayersResponse(GameRoom gameRoom, int countdown) {
+        LinkedHashMap<String, PlayerGameDetail> details = gameRoom.getDetails();
+
         JsonObject response = new JsonObject();
         response.addProperty("state", "staging");
         response.addProperty("countdown", countdown);
+
+        JsonObject gameRoomJson = new JsonObject();
+        details.forEach((username, playerDetail) -> {
+            JsonObject playerInfo = new JsonObject();
+            playerInfo.addProperty("username", username);
+            playerInfo.addProperty("points", playerDetail.getPoints());
+            playerInfo.addProperty("ready", playerDetail.isReady());
+
+            JsonArray wordsArray = new JsonArray();
+            playerDetail.getWords().forEach(wordsArray::add);
+            playerInfo.add("words", wordsArray);
+
+            JsonArray dupedWordsArray = new JsonArray();
+            playerDetail.getDupedWords().forEach(dupedWordsArray::add);
+            playerInfo.add("duped_words", dupedWordsArray);
+
+            gameRoomJson.add(username, playerInfo);
+        });
+
+        response.add("game_room", gameRoomJson);
+
         return response.toString();
     }
+
 
 
     public static String buildWinnerResponse(String winner) {
