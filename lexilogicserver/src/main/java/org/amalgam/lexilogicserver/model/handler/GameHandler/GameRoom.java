@@ -58,7 +58,7 @@ public class GameRoom implements NTimerCallback {
         String w;
         if((w = winnerAvailable())!=null){
             try{
-                String response = ""; // Use response builder for this, broadcast state game done, + winner(variable w)
+                String response = GameRoomResponseBuilder.buildWinnerResponse(w); // Use response builder for this, broadcast state game done, + winner(variable w)
                 broadcast(response);
                 //TODO convert this to reference objects and push to database using DAL
             }catch(Exception e){
@@ -67,7 +67,7 @@ public class GameRoom implements NTimerCallback {
         }
         roundDone = false;
         //give initial gameroom object + state = staging(countdown 5 secs then send request ready)
-        String jsonString = ""; //Use response builder here
+        String jsonString = GameRoomResponseBuilder.buildStagePlayersResponse(this,5); //Use response builder here
         try {
             broadcast(jsonString);
         }catch(Exception e){
@@ -78,8 +78,7 @@ public class GameRoom implements NTimerCallback {
     private void roundStart(){
         try {
             //Use GameRoomResponseBuilder here to tell clients state is game started + game rooms 😁
-            String data = "";
-
+            String data = GameRoomResponseBuilder.buildGameStartedResponse(this);
             broadcast(data);
         }catch(InvalidRequestException e){
             System.out.println(e.getMessage());
