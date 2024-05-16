@@ -27,6 +27,7 @@ public class GameRoom implements NTimerCallback {
     private WordBox wordBox;
     private LinkedHashMap<Integer, String> rounds = new LinkedHashMap<>();
     private LinkedHashMap<String,PlayerCallback> playerCallbacks = new LinkedHashMap<>();
+    private LinkedHashMap<String, Integer> totalPointsPerPlayer;
 
 
 
@@ -237,6 +238,23 @@ public class GameRoom implements NTimerCallback {
         return keyWithMaxValue;
     }
 
+    public void tallyRoundTotalPoints(){
+        List<String> keys = new ArrayList<>(details.keySet());
+        if(!totalPointsPerPlayer.isEmpty()) {
+            for (String key : keys) {
+                PlayerGameDetail playerGameDetail = details.get(key);
+                totalPointsPerPlayer.replace(key, playerGameDetail.getPoints());
+            }
+        }
+
+        for(String key : keys){
+            PlayerGameDetail playergameDetail = details.get(key);
+            totalPointsPerPlayer.put(key, playergameDetail.getPoints());
+        }
+
+    }
+
+
 
     // TODO: should check if winner is available then tell players in game room winner has been decided and a new
     //          round has started
@@ -245,6 +263,7 @@ public class GameRoom implements NTimerCallback {
         this.roundDone = true;
         String roundWinner = getRoundWinner();
         rounds.put(currentRound, roundWinner);
+        tallyRoundTotalPoints();
         currentRound++;
         //Use broadcast with builder
         stagePlayers();
