@@ -48,6 +48,8 @@ public class PlayerGameDetail {
         return points;
     }
 
+    public void setPoints(int points){this.points = points;}
+
     public LinkedList<String> getWords() {
         return words;
     }

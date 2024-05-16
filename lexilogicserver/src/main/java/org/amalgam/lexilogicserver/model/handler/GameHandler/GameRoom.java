@@ -13,6 +13,7 @@ import org.amalgam.lexilogicserver.model.utilities.referenceobjects.PlayerGameDe
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -26,6 +27,7 @@ public class GameRoom implements NTimerCallback {
     private WordBox wordBox;
     private LinkedHashMap<Integer, String> rounds = new LinkedHashMap<>();
     private LinkedHashMap<String,PlayerCallback> playerCallbacks = new LinkedHashMap<>();
+    private LinkedHashMap<String, Integer> totalPointsPerPlayer;
 
 
 
@@ -35,7 +37,6 @@ public class GameRoom implements NTimerCallback {
         this.secondsRoundDuration = secondsRoundDuration;
         this.playerCallbacks = playerCallbacks;
         currentRound = 1;
-        rounds.put(currentRound, null);
         generateWordBox();
         stagePlayers();
 
@@ -110,8 +111,28 @@ public class GameRoom implements NTimerCallback {
 
         if(wordBox.verifyWord(word)==0)return; // should just throw exception
 
-        details.get(username).addWord(word);    // should update using replace
+        PlayerGameDetail gameDetail = details.get(username);
+        gameDetail.addWord(word);
+        details.replace(username, gameDetail);
 
+        updatePoints(username);
+    }
+
+    private void updatePoints(String username){
+
+        PlayerGameDetail detail = details.get(username);
+        int pts = calculatePoints(detail.getWords());
+        detail.setPoints(pts);
+        details.replace(username, detail);
+
+    }
+
+    private int calculatePoints(LinkedList<String> listOfWords){
+        int pts = 0;
+        for(String word : listOfWords){
+            pts += word.length();
+        }
+        return pts;
     }
 
     public void broadcast(String jsonString) throws InvalidRequestException {
@@ -187,9 +208,9 @@ public class GameRoom implements NTimerCallback {
             roundWinners.put(roundWinner, 1);
         }
 
-        if(roundWinners.containsValue(3)){
+        if (roundWinners.containsValue(3)) {
             roundWinners.forEach((key, value) -> {
-                if(value==3){
+                if (value == 3) {
                     winner.append(value);
                 }
             });
@@ -198,12 +219,53 @@ public class GameRoom implements NTimerCallback {
         return null;
     }
 
+    private String getRoundWinner(){
+        List<String> keys = new ArrayList<>(details.keySet());
+        String keyWithMaxValue = null;
+        int maxPoints = 0;
+        for(String key : keys){
+            if(keyWithMaxValue==null){
+                keyWithMaxValue = key;
+                maxPoints = details.get(keyWithMaxValue).getPoints();
+                continue;
+            }
+            int currentPoints = details.get(key).getPoints();
+            if(currentPoints>maxPoints){
+                keyWithMaxValue = key;
+                maxPoints = details.get(keyWithMaxValue).getPoints();
+            }
+        }
+        return keyWithMaxValue;
+    }
+
+    public void tallyRoundTotalPoints(){
+        List<String> keys = new ArrayList<>(details.keySet());
+        if(!totalPointsPerPlayer.isEmpty()) {
+            for (String key : keys) {
+                PlayerGameDetail playerGameDetail = details.get(key);
+                totalPointsPerPlayer.replace(key, playerGameDetail.getPoints());
+            }
+        }
+
+        for(String key : keys){
+            PlayerGameDetail playergameDetail = details.get(key);
+            totalPointsPerPlayer.put(key, playergameDetail.getPoints());
+        }
+
+    }
+
+
 
     // TODO: should check if winner is available then tell players in game room winner has been decided and a new
     //          round has started
     @Override
     public void timerDone() {
         this.roundDone = true;
+        String roundWinner = getRoundWinner();
+        rounds.put(currentRound, roundWinner);
+        tallyRoundTotalPoints();
+        currentRound++;
+        //Use broadcast with builder
         stagePlayers();
     }
 

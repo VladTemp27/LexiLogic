@@ -7,10 +7,9 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.TextInputControl;
 import javafx.scene.layout.AnchorPane;
 import org.amalgam.ControllerException.InvalidRequestException;
-import org.amalgam.UIControllers.ControllerInterfacePOA;
 import org.amalgam.client.MainController;
 
-public class ProfileChangePassController extends ControllerInterfacePOA {
+public class ProfileChangePassController {
 // private variables
     @FXML
     private AnchorPane changepassPane;
@@ -74,13 +73,10 @@ public class ProfileChangePassController extends ControllerInterfacePOA {
         saveButton.setOnAction(event -> handleSave());
         backButton.setOnAction(event -> handleBack());
     }
-
-    @Override
     public void setObjectsUser(String objects) throws InvalidRequestException {
 
     }
 
-    @Override
     public void fetchAndUpdate(String jsonString, String dataType) throws InvalidRequestException {
 
     }
