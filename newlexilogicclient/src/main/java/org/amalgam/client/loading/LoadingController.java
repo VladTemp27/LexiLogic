@@ -8,11 +8,10 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.transform.Rotate;
 import javafx.util.Duration;
 import org.amalgam.ControllerException.InvalidRequestException;
-import org.amalgam.UIControllers.ControllerInterfacePOA;
 import org.amalgam.client.MainController;
 import javafx.scene.image.ImageView;
 
-public class LoadingController extends ControllerInterfacePOA {
+public class LoadingController{
 
     // Private Variables
     @FXML
@@ -69,12 +68,12 @@ public class LoadingController extends ControllerInterfacePOA {
         animateLog();
     }
 
-    @Override
+
     public void setObjectsUser(String objects) throws InvalidRequestException {
 
     }
 
-    @Override
+
     public void fetchAndUpdate(String jsonString, String dataType) throws InvalidRequestException {
 
     }

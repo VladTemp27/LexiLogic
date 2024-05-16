@@ -10,10 +10,10 @@ import javafx.scene.effect.ColorAdjust;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import org.amalgam.ControllerException.InvalidRequestException;
-import org.amalgam.UIControllers.ControllerInterfacePOA;
+
 import org.amalgam.client.MainController;
 
-public class LeaderboardsController extends ControllerInterfacePOA {
+public class LeaderboardsController{
     @FXML
     private AnchorPane leaderboardsPane;
     @FXML
@@ -83,12 +83,11 @@ public class LeaderboardsController extends ControllerInterfacePOA {
             new LeaderboardsData("3", "Lenar Domingo", 1000)
     );
 
-    @Override
+
     public void setObjectsUser(String objects) throws InvalidRequestException {
 
     }
 
-    @Override
     public void fetchAndUpdate(String jsonString, String dataType) throws InvalidRequestException {
 
     }

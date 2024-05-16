@@ -10,10 +10,9 @@ import javafx.scene.effect.ColorAdjust;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import org.amalgam.ControllerException.InvalidRequestException;
-import org.amalgam.UIControllers.ControllerInterfacePOA;
 import org.amalgam.client.MainController;
 
-public class MatchHistoryController extends ControllerInterfacePOA {
+public class MatchHistoryController {
     @FXML
     private AnchorPane matchHistoryPane;
     @FXML
@@ -83,13 +82,10 @@ public class MatchHistoryController extends ControllerInterfacePOA {
             new MatchData("3", "Win", 120)
     );
 
-
-    @Override
     public void setObjectsUser(String objects) throws InvalidRequestException {
 
     }
 
-    @Override
     public void fetchAndUpdate(String jsonString, String dataType) throws InvalidRequestException {
 
     }
