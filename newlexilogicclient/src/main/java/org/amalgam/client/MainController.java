@@ -28,35 +28,35 @@ public class MainController {
     /**
      * Controller and Panel Variables
      */
-    static LoginController loginController;
-    static AnchorPane loginPanel;
+    public static LoginController loginController;
+    public static AnchorPane loginPanel;
 
-    static SignUpController signUpController;
-    static AnchorPane signUpPanel;
+    public static SignUpController signUpController;
+    public static AnchorPane signUpPanel;
 
-    static MatchHistoryController matchHistoryController;
-    static AnchorPane matchHistoryPanel;
+    public static MatchHistoryController matchHistoryController;
+    public static AnchorPane matchHistoryPanel;
 
-    static ProfileController profileController;
-    static AnchorPane profilePane;
+    public static ProfileController profileController;
+    public static AnchorPane profilePane;
 
-    static MainMenuController mainMenuController;
-    static AnchorPane mainMenuPane;
+    public static MainMenuController mainMenuController;
+    public static AnchorPane mainMenuPane;
 
-    static ProfileChangeUsernameController profileChangeUsernameController;
-    static AnchorPane changeUsernamePane;
+    public static ProfileChangeUsernameController profileChangeUsernameController;
+    public static AnchorPane changeUsernamePane;
 
-    static ProfileChangePassController profileChangePassController;
-    static AnchorPane changePassPane;
+    public static ProfileChangePassController profileChangePassController;
+    public static AnchorPane changePassPane;
 
-    static LoadingController loadingController;
-    static AnchorPane loadingPane;
+    public static LoadingController loadingController;
+    public static AnchorPane loadingPane;
 
-    static LeaderboardsController leaderboardsController;
-    static AnchorPane leaderboardsPane;
+    public static LeaderboardsController leaderboardsController;
+    public static AnchorPane leaderboardsPane;
 
-    static GameController gameController;
-    static AnchorPane gamePane;
+    public static GameController gameController;
+    public static AnchorPane gamePane;
 
     /**
      * Getters and Setters of Controllers and Panels
