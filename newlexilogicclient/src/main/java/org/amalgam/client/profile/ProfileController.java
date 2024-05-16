@@ -4,6 +4,8 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.effect.ColorAdjust;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import org.amalgam.ControllerException.InvalidRequestException;
 import org.amalgam.client.MainController;
@@ -45,8 +47,18 @@ public class ProfileController {
      * @param button The button to add hover effect to.
      */
     private void addHoverEffect(Button button) {
-        button.setOnMouseEntered(e -> button.setStyle("-fx-background-color: derive(#D9E0A2, -10%);"));
-        button.setOnMouseExited(e -> button.setStyle("-fx-background-color: #D9E0A2;"));
+        ImageView imageView = (ImageView) button.getGraphic();
+        ColorAdjust colorAdjust = new ColorAdjust();
+
+        button.setOnMouseEntered(e -> {
+            colorAdjust.setBrightness(-0.3); // Decrease brightness to make it darker
+            imageView.setEffect(colorAdjust);
+        });
+
+        button.setOnMouseExited(e -> {
+            colorAdjust.setBrightness(0); // Reset brightness
+            imageView.setEffect(colorAdjust);
+        });
     }
 
     /**
