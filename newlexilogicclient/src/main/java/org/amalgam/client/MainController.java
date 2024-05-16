@@ -6,6 +6,8 @@ import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
+import org.amalgam.client.game.GameController;
+import org.amalgam.client.game.GameModel;
 import org.amalgam.client.leaderboards.LeaderboardsController;
 import org.amalgam.client.leaderboards.LeaderboardsPanel;
 import org.amalgam.client.loading.LoadingController;
@@ -53,6 +55,9 @@ public class MainController {
     static LeaderboardsController leaderboardsController;
     static AnchorPane leaderboardsPane;
 
+    static GameController gameController;
+    static AnchorPane gamePane;
+
     /**
      * Getters and Setters of Controllers and Panels
      */
@@ -66,6 +71,7 @@ public class MainController {
     public MainMenuController getMainMenuController(){return mainMenuController;}
     public LoadingController getLoadingController(){return loadingController;}
     public LeaderboardsController getLeaderboardsController(){return leaderboardsController;}
+    public GameController getGameController(){return gameController;}
 
     /**
      * Loads and displays the login view.
@@ -362,9 +368,9 @@ public class MainController {
             stage.setScene(scene);
             stage.setResizable(false);
             stage.setTitle("Lexi Logic");
-            MainMenuController mainMenuController = fxmlLoader.getController();
-            mainMenuController.setMainController(this);
-            mainMenuController.initialize();
+            GameController gameController = fxmlLoader.getController();
+            gameController.setMainController(this);
+            gameController.initialize();
 
         } catch (IOException e) {
             e.printStackTrace();
