@@ -87,10 +87,10 @@ public class MainMenuController {
      */
     @FXML
     public void handlePlay(){
-        if (mainMenuModel != null) {
-            String result = mainMenuModel.matchMake();
+        if (mainController != null) {
+            mainController.loadGameView();
         } else {
-            System.out.println("MainMenuModel is not set.");
+            System.out.println("Main Controller is not set.");
         }
     }
 
