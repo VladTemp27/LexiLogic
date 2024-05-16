@@ -8,7 +8,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="loginPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.amalgam.client.login.LoginController">
+<AnchorPane fx:id="loginPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.amalgam.client.login.LoginController">
     <children>
         <ImageView fitHeight="500.0" fitWidth="800.0">
             <image>
@@ -43,10 +43,5 @@
                 <Font name="Bowlby One SC Regular" size="20.0" />
             </font>
         </Button>
-      <Button fx:id="signUpButton" layoutX="136.0" layoutY="300.0" mnemonicParsing="false" prefHeight="47.0" prefWidth="124.0" style="-fx-background-color: #D9E0A2;" text="Sign-Up" textFill="#6b4406">
-         <font>
-            <Font name="Bowlby One SC Regular" size="20.0" />
-         </font>
-      </Button>
     </children>
 </AnchorPane>
