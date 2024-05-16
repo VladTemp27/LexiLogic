@@ -26,7 +26,9 @@ public class ORBDRunner implements Callable<Integer> {
     @Override
     public Integer call() throws Exception {
         // Create ProcessBuilder for orbd command
-        ProcessBuilder builder = new ProcessBuilder("orbd", "-ORBInitialPort", String.valueOf(port), "-ORBInitialHost", hostname);
+        ProcessBuilder builder = new ProcessBuilder("orbd","-J-verbose",
+                "-J-Djava.net.preferIPv4Stack=true",
+                "-J-Djava.net.preferIPv6Addresses=false", "-ORBInitialPort", String.valueOf(port), "-ORBInitialHost", hostname);
 
         // Redirect error stream to output
         builder.redirectErrorStream(true);

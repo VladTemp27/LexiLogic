@@ -14,21 +14,24 @@ import org.omg.CosNaming.NamingContextPackage.CannotProceed;
 import org.omg.CosNaming.NamingContextPackage.NotFound;
 import org.omg.PortableServer.POA;
 import org.omg.PortableServer.POAHelper;
+import org.omg.PortableServer.POAManagerPackage.AdapterInactive;
 
 public class ORBConnection {
     private int port;
     private String hostname;
     private ORB orb;
     private NamingContextExt namingContextExt;
+    private POA rootPOA;
 
     public ORBConnection(int port, String hostname){
         this.port = port;
         this.hostname = hostname;
     }
 
-    public void start() throws InvalidName {
+    public void start() throws InvalidName, AdapterInactive {
         this.orb = ORB.init(generateArgs(), null);
         POA rootPOA = POAHelper.narrow(orb.resolve_initial_references("RootPOA"));
+        rootPOA.the_POAManager().activate();
 
         this.namingContextExt = NamingContextExtHelper.narrow(orb.resolve_initial_references("NameService"));
     }
@@ -39,6 +42,10 @@ public class ORBConnection {
 
     public GameService retrieveGameService() throws org.omg.CosNaming.NamingContextPackage.InvalidName, CannotProceed, NotFound {
         return GameServiceHelper.narrow(namingContextExt.resolve_str("GameService"));
+    }
+
+    public POA getPOA(){
+        return rootPOA;
     }
 
     private String[] generateArgs(){
