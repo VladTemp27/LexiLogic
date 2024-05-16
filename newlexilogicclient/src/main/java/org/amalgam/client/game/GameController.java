@@ -183,18 +183,21 @@ public class GameController {
      */
     @FXML
     public void initialize(){
+        // Initialize the game model
+        gameModel = new GameModel(orbConnection);
 
-        // initialization of the letter labels
-         letterLabels = new Label[]{firstLetter, secondLetter, thirdLetter, fourthLetter, fifthLetter,
+        // Initialize letter labels array
+        letterLabels = new Label[]{firstLetter, secondLetter, thirdLetter, fourthLetter, fifthLetter,
                 sixthLetter, seventhLetter, eightLetter, ninthLetter, tenthLetter,
                 eleventhLetter, twelfthLetter, thirteenthLetter, fourteenthLetter, fifteenthLetter,
                 sixteenthLetter, seventeenthLetter, eighteenthLetter, ninteenthLetter, twentiethLetter};
-                gameModel = new GameModel(orbConnection);
-            randomizeLetters(); // Randomize again on every fetch
 
-        // initialization of the timer per round
+        // Randomize letters
+        randomizeLetters();
+
+        // Start timer
         startTimer();
-        // TODO: insert the logic for starting a round here
     }
+
 }
 
