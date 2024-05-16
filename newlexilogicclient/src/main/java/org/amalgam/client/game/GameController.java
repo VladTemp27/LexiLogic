@@ -149,7 +149,6 @@ public class GameController {
         }, 0, 1000); // Start immediately, then update every second
     }
 
-
     /**
      * Method for randomizing letters inside the word box
      */
