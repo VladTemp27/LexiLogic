@@ -46,7 +46,7 @@ public class ProfileController {
      *
      * @param button The button to add hover effect to.
      */
-    private void addHoverEffect(Button button) {
+    private void addHoverEffectImage(Button button) {
         ImageView imageView = (ImageView) button.getGraphic();
         ColorAdjust colorAdjust = new ColorAdjust();
 
@@ -59,6 +59,13 @@ public class ProfileController {
             colorAdjust.setBrightness(0); // Reset brightness
             imageView.setEffect(colorAdjust);
         });
+    }
+
+    private void addHoverEffect(Button button){
+        String originalColor = button.getStyle(); // Store the original color
+
+        button.setOnMouseEntered(e -> button.setStyle("-fx-background-color: derive(" + originalColor + ", -10%);"));
+        button.setOnMouseExited(e -> button.setStyle(originalColor));
     }
 
     /**
@@ -152,8 +159,8 @@ public class ProfileController {
     @FXML
     public void initialize() {
         addHoverEffect(changePasswordButton);
-        addHoverEffect(editUsernameButton);
-        addHoverEffect(backButton);
+        addHoverEffectImage(editUsernameButton);
+        addHoverEffectImage(backButton);
         addHoverEffect(deleteButton);
         addHoverEffect(logoutButton);
         changePasswordButton.setOnAction(event -> handleChangePassword());
