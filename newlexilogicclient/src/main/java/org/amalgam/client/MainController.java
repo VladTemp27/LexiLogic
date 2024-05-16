@@ -6,6 +6,8 @@ import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
+import org.amalgam.UIControllers.PlayerCallback;
+import org.amalgam.backend.microservices.serverconnection.ORBConnection;
 import org.amalgam.client.leaderboards.LeaderboardsController;
 import org.amalgam.client.leaderboards.LeaderboardsPanel;
 import org.amalgam.client.loading.LoadingController;
@@ -16,6 +18,7 @@ import org.amalgam.client.profile.ProfileChangePassController;
 import org.amalgam.client.profile.ProfileChangeUsernameController;
 import org.amalgam.client.profile.ProfileController;
 import org.amalgam.client.signup.SignUpController;
+import org.omg.CORBA.ORBPackage.InvalidName;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -52,21 +55,16 @@ public class MainController {
 
     static LeaderboardsController leaderboardsController;
     static AnchorPane leaderboardsPane;
+    public static ORBConnection orbConnection;
 
-    /**
-     * Getters and Setters of Controllers and Panels
-     */
-    public void setStage(Stage stage) { this.stage = stage;}
-    public LoginController getLoginController() { return loginController; }
-    public SignUpController getSignUpController() { return signUpController; }
-    public MatchHistoryController getMatchHistoryController() { return matchHistoryController; }
-    public ProfileController getProfileController(){ return profileController;}
-    public ProfileChangeUsernameController getProfileChangeUsernameController(){ return profileChangeUsernameController;}
-    public ProfileChangePassController getProfileChangePassController(){return profileChangePassController;}
-    public MainMenuController getMainMenuController(){return mainMenuController;}
-    public LoadingController getLoadingController(){return loadingController;}
-    public LeaderboardsController getLeaderboardsController(){return leaderboardsController;}
-
+    public MainController() {
+        orbConnection = new ORBConnection(2018, "localhost");
+        try {
+            orbConnection.start();
+        } catch (InvalidName e) {
+            throw new RuntimeException(e);
+        }
+    }
     /**
      * Loads and displays the login view.
      */
@@ -445,4 +443,18 @@ public class MainController {
             e.printStackTrace();
         }
     }
+
+    /**
+     * Getters and Setters of Controllers and Panels
+     */
+    public void setStage(Stage stage) { this.stage = stage;}
+    public LoginController getLoginController() { return loginController; }
+    public SignUpController getSignUpController() { return signUpController; }
+    public MatchHistoryController getMatchHistoryController() { return matchHistoryController; }
+    public ProfileController getProfileController(){ return profileController;}
+    public ProfileChangeUsernameController getProfileChangeUsernameController(){ return profileChangeUsernameController;}
+    public ProfileChangePassController getProfileChangePassController(){return profileChangePassController;}
+    public MainMenuController getMainMenuController(){return mainMenuController;}
+    public LoadingController getLoadingController(){return loadingController;}
+    public LeaderboardsController getLeaderboardsController(){return leaderboardsController;}
 }
