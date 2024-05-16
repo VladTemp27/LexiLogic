@@ -18,6 +18,8 @@ public class ChangeGameController {
     private TextField changeGameTextfield;
     @FXML
     private Button saveButton;
+    @FXML
+    private Button backButton;
     private ServerController serverController;
 
     /**
@@ -64,13 +66,26 @@ public class ChangeGameController {
         }
     }
     /**
+     * Handles the back button
+     */
+    @FXML
+    public void handleBackButton(){
+        if(serverController !=null){
+            serverController.loadServerMainMenu();
+        } else {
+            System.out.println("Server controller is not set.");
+        }
+    }
+    /**
      * Initializes the controller.
      * This method sets up the UI components and initializes the data model.
      */
     @FXML
     public void initialize() {
         addHoverEffect(saveButton);
+        addHoverEffect(backButton);
         saveButton.setOnAction(event -> handleSaveButton());
+        backButton.setOnAction(event -> handleBackButton());
 
     }
 }
