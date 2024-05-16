@@ -7,7 +7,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="profilePane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.amalgam.client.profile.ProfileController">
+<AnchorPane fx:id="profilePane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.amalgam.client.profile.ProfileController">
    <children>
       <ImageView fx:id="backgroundImage" fitHeight="500.0" fitWidth="806.0" pickOnBounds="true">
          <image>
@@ -59,18 +59,21 @@
             <Font name="Bowlby One SC Regular" size="14.0" />
          </font>
       </Button>
-      <Button fx:id="backButton" layoutX="38.0" layoutY="19.0" mnemonicParsing="false" prefHeight="47.0" prefWidth="56.0" style="-fx-background-color: transparent;" />
-      <Button fx:id="editUsernameButton" layoutX="496.0" layoutY="284.0" mnemonicParsing="false" prefHeight="24.0" prefWidth="23.0" style="-fx-background-color: #FFF8D6;" />
-      <Button fx:id="editUsernameButton" layoutX="492.0" layoutY="284.0" mnemonicParsing="false" prefHeight="24.0" prefWidth="30.0" style="-fx-background-color: transparent;" />
-      <ImageView fx:id="backButtonImage" fitHeight="66.0" fitWidth="99.0" layoutX="28.0" layoutY="19.0" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="@../../../icons/BackButton.png" />
-         </image>
-      </ImageView>
-      <ImageView fitHeight="40.0" fitWidth="39.0" layoutX="483.0" layoutY="278.0" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="@../../../icons/EditUser.png" />
-         </image>
-      </ImageView>
+      <Button fx:id="backButton" layoutX="25.0" layoutY="21.0" mnemonicParsing="false" prefHeight="47.0" prefWidth="56.0" style="-fx-background-color: transparent;">
+         <graphic>
+            <ImageView fx:id="backButtonImage" fitHeight="66.0" fitWidth="99.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../../icons/BackButton.png" />
+               </image>
+            </ImageView>
+         </graphic></Button>
+      <Button fx:id="editUsernameButton" layoutX="476.0" layoutY="274.0" mnemonicParsing="false" prefHeight="24.0" prefWidth="23.0" style="-fx-background-color: transparent;">
+         <graphic>
+            <ImageView fitHeight="40.0" fitWidth="39.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../../icons/EditUser.png" />
+               </image>
+            </ImageView>
+         </graphic></Button>
    </children>
 </AnchorPane>
