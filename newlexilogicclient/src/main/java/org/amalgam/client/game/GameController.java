@@ -18,7 +18,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 public class GameController {
-    // private variables
+    //Game private variables
     @FXML
     private AnchorPane gamePane;
     @FXML
@@ -86,12 +86,27 @@ public class GameController {
     @FXML
     private Label twentiethLetter;
     @FXML
+    private TextField lexiTextfield;
+    @FXML
     private Label yourLexiLabel;
     private Label[] letterLabels; // Array to hold letter labels
     private Timer timer;
 
+
+    //Round Countdown private variables
     @FXML
-    private TextField lexiTextfield;
+    private AnchorPane roundCountdownPane;
+    @FXML
+    private Label roundStartingInLabel;
+    @FXML
+    private Label RCtimeLabel;
+    @FXML
+    private Label RCroundNumberLabel;
+
+    //TODO: Victory private variables
+    //TODO: Game Over private variables
+
+    // common private variables
     private GameModel gameModel;
     private ORBConnection orbConnection;
     private MainController mainController;
