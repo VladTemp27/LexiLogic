@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="leaderboardsPane" prefHeight="500.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.amalgam.client.leaderboards.LeaderboardsController">
+<AnchorPane fx:id="leaderboardsPane" prefHeight="500.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.amalgam.client.leaderboards.LeaderboardsController">
     <children>
         <ImageView fitHeight="500.0" fitWidth="800.0">
             <image>
@@ -68,7 +68,7 @@
         </TableView>
         <Button fx:id="backButton" layoutY="6.0" onAction="#handleBack" style="-fx-background-color: transparent;">
             <graphic>
-                <ImageView fitHeight="68.0" fitWidth="69.0" pickOnBounds="true" preserveRatio="true">
+                <ImageView fitHeight="58.0" fitWidth="58.0" pickOnBounds="true" preserveRatio="true">
                     <image>
                         <Image url="@../../../icons/BackButton.png" />
                     </image>
