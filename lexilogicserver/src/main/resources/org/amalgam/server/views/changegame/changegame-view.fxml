@@ -8,7 +8,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="changeGamePane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="500.0" style="-fx-background-color: #674C33;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.amalgam.lexilogicserver.views.changegame.ChangeGameController">
+<AnchorPane fx:id="changeGamePane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="500.0" style="-fx-background-color: #674C33;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.amalgam.lexilogicserver.views.changegame.ChangeGameController">
    <children>
       <ImageView fitHeight="285.0" fitWidth="412.0" layoutX="68.0" layoutY="46.0" pickOnBounds="true">
          <image>
@@ -42,11 +42,13 @@
             <Image url="@../../../icons/Axel.png" />
          </image>
       </ImageView>
-      <Button fx:id="backButton" layoutX="14.0" layoutY="22.0" mnemonicParsing="false" prefHeight="24.0" prefWidth="38.0" />
-      <ImageView fitHeight="53.0" fitWidth="46.0" layoutX="10.0" layoutY="11.0" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="@../../../icons/BackButton.png" />
-         </image>
-      </ImageView>
+      <Button fx:id="backButton" layoutX="5.0" layoutY="11.0" mnemonicParsing="false" prefHeight="46.0" prefWidth="56.0" style="-fx-background-color: transparent;">
+         <graphic>
+            <ImageView fitHeight="53.0" fitWidth="46.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../../icons/BackButton.png" />
+               </image>
+            </ImageView>
+         </graphic></Button>
    </children>
 </AnchorPane>
