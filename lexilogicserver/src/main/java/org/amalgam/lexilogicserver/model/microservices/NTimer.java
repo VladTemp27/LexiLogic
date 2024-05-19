@@ -1,7 +1,5 @@
 package org.amalgam.lexilogicserver.model.microservices;
 
-import java.util.concurrent.Callable;
-
 public class NTimer implements Runnable {
     private int secondsDuration;
     private NTimerCallback callback;

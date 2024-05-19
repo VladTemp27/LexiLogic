@@ -8,7 +8,10 @@ import javafx.scene.layout.AnchorPane;
 import org.amalgam.ControllerException.InvalidRequestException;
 import org.amalgam.PlayerCallbackImpl;
 import org.amalgam.UIControllers.PlayerCallback;
+import org.amalgam.UIControllers.PlayerCallbackHelper;
 import org.amalgam.client.MainController;
+import org.omg.PortableServer.POAPackage.ServantNotActive;
+import org.omg.PortableServer.POAPackage.WrongPolicy;
 import sun.security.tools.keytool.Main;
 
 public class LoginController {
@@ -27,7 +30,7 @@ public class LoginController {
 
     private MainController mainController;
     private LoginModel loginModel = new LoginModel(MainController.orbConnection, null);
-    public static  PlayerCallback playerCallback;
+    public PlayerCallback playerCallback;
 
     /**
      * Sets the Main Controller.
@@ -81,10 +84,15 @@ public class LoginController {
     }
 
     // TODO: Authentication of user from DataBase & Error Checking
-    // Test Authentication
     private boolean loginAuthentication(String username, String password) {
-        playerCallback = new PlayerCallbackImpl();
-        playerCallback.username(username);
+        PlayerCallbackImpl playerCallbackImpl = new PlayerCallbackImpl();
+        playerCallbackImpl.username(username);
+        PlayerCallback playerCallback = null;
+        try {
+            playerCallback = PlayerCallbackHelper.narrow(MainController.orbConnection.getPOA().servant_to_reference(playerCallbackImpl));
+        } catch (ServantNotActive | WrongPolicy e) {
+            throw new RuntimeException(e);
+        }
         loginModel.setPlayerCallback(playerCallback);
         return loginModel.login(password);
     }

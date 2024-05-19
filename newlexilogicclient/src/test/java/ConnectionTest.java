@@ -28,12 +28,12 @@ public class ConnectionTest {
             NamingContextExt namingReference = NamingContextExtHelper.narrow(orb.resolve_initial_references("NameService"));
             playerServiceStub = PlayerServiceHelper.narrow(namingReference.resolve_str("PlayerService"));
             CallbackImpl callback = new CallbackImpl();
-            callback.username("lou");
+            callback.username("Luis");
 
             PlayerCallback callbackReference = PlayerCallbackHelper.narrow(rootPOA.servant_to_reference(callback));
 
-
-            playerServiceStub.login(callbackReference, "123");
+            playerServiceStub.login(callbackReference, "password456");
+            System.out.println("SUCCESS");
         }catch(Exception e){
             e.printStackTrace();
         }

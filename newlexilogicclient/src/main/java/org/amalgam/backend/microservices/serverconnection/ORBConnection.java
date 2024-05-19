@@ -30,7 +30,7 @@ public class ORBConnection {
 
     public void start() throws InvalidName, AdapterInactive {
         this.orb = ORB.init(generateArgs(), null);
-        POA rootPOA = POAHelper.narrow(orb.resolve_initial_references("RootPOA"));
+        rootPOA = POAHelper.narrow(orb.resolve_initial_references("RootPOA"));
         rootPOA.the_POAManager().activate();
 
         this.namingContextExt = NamingContextExtHelper.narrow(orb.resolve_initial_references("NameService"));
@@ -50,10 +50,9 @@ public class ORBConnection {
 
     private String[] generateArgs(){
         String[] arguments = new String[4];
-        arguments[0] = "ORBInitialPort";
+        arguments[0] = "-ORBInitialPort";
         arguments[1] = String.valueOf(port);
-
-        arguments[2] = "ORBInitialHost";
+        arguments[2] = "-ORBInitialHost";
         arguments[3] = hostname;
 
         return arguments;

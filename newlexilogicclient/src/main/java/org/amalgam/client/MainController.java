@@ -19,6 +19,7 @@ import org.amalgam.client.profile.ProfileChangeUsernameController;
 import org.amalgam.client.profile.ProfileController;
 import org.amalgam.client.signup.SignUpController;
 import org.omg.CORBA.ORBPackage.InvalidName;
+import org.omg.PortableServer.POAManagerPackage.AdapterInactive;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -58,13 +59,13 @@ public class MainController {
     public static ORBConnection orbConnection;
 
     public MainController() {
-        orbConnection = new ORBConnection(2018, "localhost");
+        orbConnection = new ORBConnection(2018, "corba.server");
         try {
             orbConnection.start();
-        } catch (InvalidName e) {
+        } catch (InvalidName | AdapterInactive e) {
             throw new RuntimeException(e);
         }
-    }
+	}
     /**
      * Loads and displays the login view.
      */
@@ -324,7 +325,6 @@ public class MainController {
             MainMenuController mainMenuController = fxmlLoader.getController();
             mainMenuController.setMainController(this);
             mainMenuController.initialize();
-            mainMenuController.authenticate("admin","admin");
 
         } catch (IOException e) {
             e.printStackTrace();
