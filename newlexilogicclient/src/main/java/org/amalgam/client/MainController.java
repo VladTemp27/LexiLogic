@@ -6,8 +6,8 @@ import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
-import org.amalgam.client.game.GameController;
-import org.amalgam.client.game.GameModel;
+import org.amalgam.UIControllers.PlayerCallback;
+import org.amalgam.backend.microservices.serverconnection.ORBConnection;
 import org.amalgam.client.leaderboards.LeaderboardsController;
 import org.amalgam.client.leaderboards.LeaderboardsPanel;
 import org.amalgam.client.loading.LoadingController;
@@ -18,6 +18,8 @@ import org.amalgam.client.profile.ProfileChangePassController;
 import org.amalgam.client.profile.ProfileChangeUsernameController;
 import org.amalgam.client.profile.ProfileController;
 import org.amalgam.client.signup.SignUpController;
+import org.omg.CORBA.ORBPackage.InvalidName;
+import org.omg.PortableServer.POAManagerPackage.AdapterInactive;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -28,51 +30,42 @@ public class MainController {
     /**
      * Controller and Panel Variables
      */
-    public static LoginController loginController;
-    public static AnchorPane loginPanel;
+    static LoginController loginController;
+    static AnchorPane loginPanel;
 
-    public static SignUpController signUpController;
-    public static AnchorPane signUpPanel;
+    static SignUpController signUpController;
+    static AnchorPane signUpPanel;
 
-    public static MatchHistoryController matchHistoryController;
-    public static AnchorPane matchHistoryPanel;
+    static MatchHistoryController matchHistoryController;
+    static AnchorPane matchHistoryPanel;
 
-    public static ProfileController profileController;
-    public static AnchorPane profilePane;
+    static ProfileController profileController;
+    static AnchorPane profilePane;
 
-    public static MainMenuController mainMenuController;
-    public static AnchorPane mainMenuPane;
+    static MainMenuController mainMenuController;
+    static AnchorPane mainMenuPane;
 
-    public static ProfileChangeUsernameController profileChangeUsernameController;
-    public static AnchorPane changeUsernamePane;
+    static ProfileChangeUsernameController profileChangeUsernameController;
+    static AnchorPane changeUsernamePane;
 
-    public static ProfileChangePassController profileChangePassController;
-    public static AnchorPane changePassPane;
+    static ProfileChangePassController profileChangePassController;
+    static AnchorPane changePassPane;
 
-    public static LoadingController loadingController;
-    public static AnchorPane loadingPane;
+    static LoadingController loadingController;
+    static AnchorPane loadingPane;
 
-    public static LeaderboardsController leaderboardsController;
-    public static AnchorPane leaderboardsPane;
+    static LeaderboardsController leaderboardsController;
+    static AnchorPane leaderboardsPane;
+    public static ORBConnection orbConnection;
 
-    public static GameController gameController;
-    public static AnchorPane gamePane;
-
-    /**
-     * Getters and Setters of Controllers and Panels
-     */
-    public void setStage(Stage stage) { this.stage = stage;}
-    public LoginController getLoginController() { return loginController; }
-    public SignUpController getSignUpController() { return signUpController; }
-    public MatchHistoryController getMatchHistoryController() { return matchHistoryController; }
-    public ProfileController getProfileController(){ return profileController;}
-    public ProfileChangeUsernameController getProfileChangeUsernameController(){ return profileChangeUsernameController;}
-    public ProfileChangePassController getProfileChangePassController(){return profileChangePassController;}
-    public MainMenuController getMainMenuController(){return mainMenuController;}
-    public LoadingController getLoadingController(){return loadingController;}
-    public LeaderboardsController getLeaderboardsController(){return leaderboardsController;}
-    public GameController getGameController(){return gameController;}
-
+    public MainController() {
+        orbConnection = new ORBConnection(2018, "corba.server");
+        try {
+            orbConnection.start();
+        } catch (InvalidName | AdapterInactive e) {
+            throw new RuntimeException(e);
+        }
+	}
     /**
      * Loads and displays the login view.
      */
@@ -332,7 +325,6 @@ public class MainController {
             MainMenuController mainMenuController = fxmlLoader.getController();
             mainMenuController.setMainController(this);
             mainMenuController.initialize();
-            mainMenuController.authenticate("admin","admin");
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -368,9 +360,9 @@ public class MainController {
             stage.setScene(scene);
             stage.setResizable(false);
             stage.setTitle("Lexi Logic");
-            GameController gameController = fxmlLoader.getController();
-            gameController.setMainController(this);
-            gameController.initialize();
+            MainMenuController mainMenuController = fxmlLoader.getController();
+            mainMenuController.setMainController(this);
+            mainMenuController.initialize();
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -451,4 +443,18 @@ public class MainController {
             e.printStackTrace();
         }
     }
+
+    /**
+     * Getters and Setters of Controllers and Panels
+     */
+    public void setStage(Stage stage) { this.stage = stage;}
+    public LoginController getLoginController() { return loginController; }
+    public SignUpController getSignUpController() { return signUpController; }
+    public MatchHistoryController getMatchHistoryController() { return matchHistoryController; }
+    public ProfileController getProfileController(){ return profileController;}
+    public ProfileChangeUsernameController getProfileChangeUsernameController(){ return profileChangeUsernameController;}
+    public ProfileChangePassController getProfileChangePassController(){return profileChangePassController;}
+    public MainMenuController getMainMenuController(){return mainMenuController;}
+    public LoadingController getLoadingController(){return loadingController;}
+    public LeaderboardsController getLeaderboardsController(){return leaderboardsController;}
 }
