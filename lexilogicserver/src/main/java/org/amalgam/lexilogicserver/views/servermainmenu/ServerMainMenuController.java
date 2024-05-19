@@ -3,6 +3,8 @@ package org.amalgam.lexilogicserver.views.servermainmenu;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.effect.ColorAdjust;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import org.amalgam.lexilogicserver.ServerController;
 
@@ -41,14 +43,11 @@ public class ServerMainMenuController {
         button.setOnMouseExited(e -> button.setStyle("-fx-background-color: #9CA16F;"));
     }
 
-        /**
-     * Adds hover effect to the given button.
-     *
-     * @param button The button to add hover effect to.
-     */
-    private void addHoverEffect(Button button) {
-        button.setOnMouseEntered(e -> button.setStyle("-fx-background-color: derive(#B07C3B, -10%);"));
-        button.setOnMouseExited(e -> button.setStyle("-fx-background-color: #B07C3B;"));
+    private void addHoverEffect(Button button){
+        String originalColor = button.getStyle(); // Store the original color
+
+        button.setOnMouseEntered(e -> button.setStyle("-fx-background-color: derive(" + originalColor + ", -10%);"));
+        button.setOnMouseExited(e -> button.setStyle(originalColor));
     }
 
     /**
