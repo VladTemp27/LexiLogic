@@ -47,15 +47,17 @@ public class GameDetailDAL {
     public static LinkedList<GameDetail> getGameDetailByPID(int playerID) {
         LinkedList<GameDetail> listOfGameDetail = new LinkedList<>();
         try (Connection conn = DatabaseUtil.getConnection()) {
-            PreparedStatement stmt = conn.prepareStatement("SELECT * FROM gamedetails WHERE playerID = ?");
+            String query = "SELECT gd.playerID, gd.lobbyID, gd.totalPoints, p.name" +
+                           "FROM gamedetails gd WHERE playerID = ?"+
+                           "JOIN player p USING(playerID)";
+            PreparedStatement stmt = conn.prepareStatement(query);
             stmt.setInt(1, playerID);
             try (ResultSet rs = stmt.executeQuery()) {
                 while (rs.next()) {
-                    int retrievedID = rs.getInt("playerID");
+                    String username = rs.getString("name");
                     int lobbyID = rs.getInt("lobbyID");
                     int totalPoints = rs.getInt("totalPoints");
-                    Player player = PlayerDAL.getPlayerByID(retrievedID); // this might be causing some problem with result set
-                    GameDetail detail =  new GameDetail(player.getUsername(), lobbyID, totalPoints);
+                    GameDetail detail =  new GameDetail(username, lobbyID, totalPoints);
                     listOfGameDetail.add(detail);
                 }
             }
