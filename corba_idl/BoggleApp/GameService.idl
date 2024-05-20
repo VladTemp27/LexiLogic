@@ -19,7 +19,7 @@ module org {
                     string getLeaderboards()
                         raises (org::amalgam::Utils::Exceptions::EmptyLeaderBoardException);
 
-                    void verifyWord(in string word)
+                    void verifyWord(in string word,in string username ,in long gameRoomID)
                         raises (org::amalgam::Utils::Exceptions::InvalidWordFormatException, org::amalgam::Utils::Exceptions::DuplicateWordException);
 
                     long validateTotalPoints()
@@ -28,6 +28,7 @@ module org {
                     string fetchWinner(in long lobbyId)
                         raises (org::amalgam::Utils::Exceptions::LobbyDoesNotExistException, org::amalgam::Utils::Exceptions::WinnerDoesNotExistException);
 
+                   string playerReady(in string username, in long gameRoomID);
                 };
             };
         };

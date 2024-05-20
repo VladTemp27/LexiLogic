@@ -11,17 +11,17 @@
    <children>
       <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="-25.0" layoutY="215.0" pickOnBounds="true" preserveRatio="true" rotate="270.0">
          <image>
-            <Image url="@../../icons/Axel.png" />
+            <Image url="@../../../icons/Axel.png" />
          </image>
       </ImageView>
       <ImageView fitHeight="324.0" fitWidth="397.0" layoutX="53.0" layoutY="38.0" pickOnBounds="true" preserveRatio="true">
          <image>
-            <Image url="@../../icons/YellowBox.png" />
+            <Image url="@../../../icons/YellowBox.png" />
          </image>
       </ImageView>
       <ImageView fitHeight="201.0" fitWidth="276.0" layoutX="112.0" layoutY="118.0" pickOnBounds="true" preserveRatio="true">
          <image>
-            <Image url="@../../icons/GreenBox.png" />
+            <Image url="@../../../icons/GreenBox.png" />
          </image>
       </ImageView>
       <Label layoutX="153.0" layoutY="61.0" text="Run Server" textFill="#6b4406">

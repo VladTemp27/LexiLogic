@@ -3,7 +3,7 @@ package org.amalgam.client.signup;
 import org.amalgam.UIControllers.PlayerCallback;
 import org.amalgam.backend.microservices.client.CreateAccountRequestMicroservice;
 import org.amalgam.backend.microservices.serverconnection.ORBConnection;
-
+@Deprecated
 public class SignUpModel {
     private final ORBConnection orbConnection;
     private final CreateAccountRequestMicroservice signUpMicroservices;

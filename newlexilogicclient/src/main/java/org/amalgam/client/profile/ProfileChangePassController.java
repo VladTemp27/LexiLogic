@@ -3,11 +3,14 @@ package org.amalgam.client.profile;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.control.TextInputControl;
+import javafx.scene.effect.ColorAdjust;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import org.amalgam.ControllerException.InvalidRequestException;
 import org.amalgam.client.MainController;
+import org.amalgam.client.login.LoginController;
 
 public class ProfileChangePassController {
 // private variables
@@ -21,8 +24,11 @@ public class ProfileChangePassController {
     private TextField oldPasswordField;
     @FXML
     private TextField newPasswordField;
+    @FXML
+    private Label usernameLabel;
     private MainController mainController;
-
+    public ProfileChangePassModel profileChangePassModel = new ProfileChangePassModel(MainController.orbConnection,
+            LoginController.playerCallback);
     /**
      * Sets the Main Controller.
      *
@@ -37,9 +43,26 @@ public class ProfileChangePassController {
      *
      * @param button The button to add hover effect to.
      */
-    private void addHoverEffect(Button button) {
-        button.setOnMouseEntered(e -> button.setStyle("-fx-background-color: derive(#D9E0A2, -10%);"));
-        button.setOnMouseExited(e -> button.setStyle("-fx-background-color: #D9E0A2;"));
+    private void addHoverEffectImage(Button button) {
+        ImageView imageView = (ImageView) button.getGraphic();
+        ColorAdjust colorAdjust = new ColorAdjust();
+
+        button.setOnMouseEntered(e -> {
+            colorAdjust.setBrightness(-0.3); // Decrease brightness to make it darker
+            imageView.setEffect(colorAdjust);
+        });
+
+        button.setOnMouseExited(e -> {
+            colorAdjust.setBrightness(0); // Reset brightness
+            imageView.setEffect(colorAdjust);
+        });
+    }
+
+    private void addHoverEffect(Button button){
+        String originalColor = button.getStyle(); // Store the original color
+
+        button.setOnMouseEntered(e -> button.setStyle("-fx-background-color: derive(" + originalColor + ", -10%);"));
+        button.setOnMouseExited(e -> button.setStyle(originalColor));
     }
 
     /**
@@ -54,13 +77,52 @@ public class ProfileChangePassController {
         alert.setContentText(message);
         alert.showAndWait();
     }
+
+    private void showSuccess(String message){
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
+    }
+
+    /**
+     * Gets the objects used.
+     * This method returns a string indicating the type of objects used by the controller.
+     *
+     * @return A string representing the objects used.
+     */
+    public void setObjectsUser(String objects) throws InvalidRequestException {
+
+    }
+
+    /**
+     * Fetches and updates data remotely.
+     * This method is called to update the data displayed in the UI.
+     *
+     */
+    public void fetchAndUpdate(String jsonString, String dataType) throws InvalidRequestException {
+
+    }
+
     @FXML
     public void handleSave(){
+        String oldPassword = oldPasswordField.getText();
+        if (!oldPassword.equals(LoginController.password)){
+            showAlert("Old password do not match, please try again");
+        } else {
+            showSuccess("Password has been changed");
+            profileChangePassModel.changePassword(newPasswordField.getText());
+        }
         // handles the save button when the username is changed
     }
     @FXML
     public void handleBack(){
         // handle action to go back to profile view when pressed
+        if (mainController != null) {
+            mainController.loadProfileView();
+        } else {
+            System.out.println("MainController is not set.");
+        }
     }
     /**
      * Initializes the controller.
@@ -68,16 +130,10 @@ public class ProfileChangePassController {
      */
     @FXML
     public void initialize() {
+        usernameLabel.setText(LoginController.username);
         addHoverEffect(saveButton);
-        addHoverEffect(backButton);
+        addHoverEffectImage(backButton);
         saveButton.setOnAction(event -> handleSave());
         backButton.setOnAction(event -> handleBack());
-    }
-    public void setObjectsUser(String objects) throws InvalidRequestException {
-
-    }
-
-    public void fetchAndUpdate(String jsonString, String dataType) throws InvalidRequestException {
-
     }
 }

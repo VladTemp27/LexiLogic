@@ -43,6 +43,7 @@ public class RunServerController {
     // This is logically incorrect
     @Deprecated
     public void ifServerIsRunning() {
+        // Put this method inside your method (this is just to make sure that once the server is running, it will then load this panel.)
         if (serverController != null) {
             serverController.loadRunServerRunning();
         } else {
