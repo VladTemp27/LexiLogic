@@ -81,23 +81,24 @@ public class PlayerServiceImpl extends PlayerServicePOA {
     @Override
     public String getGameHistory(String username) throws GameHistoryUnavailableException, InGameException {
         LinkedList<GameDetail> details = GameDetailDAL.getGameDetailByPID(PlayerDAL.getPlayerByUsername(username).getUserID());
-        LinkedList<Lobby> lobbies = new LinkedList<Lobby>();
         Gson gson = new Gson();
-        for(GameDetail detail : details){
-            lobbies.add(LobbyDAL.getLobbyByID(detail.getLobbyID()));
+        JsonObject rootObject = new JsonObject();;
+        rootObject.addProperty("object", "lobby");
+        JsonArray lobbyArray = new JsonArray();
+        for (GameDetail detail : details) {
+            Lobby lobby = LobbyDAL.getLobbyByID(detail.getLobbyID());
+            if (lobby != null) {
+                JsonObject info = new JsonObject();
+                info.addProperty("lobbyID", String.valueOf(lobby.getLobbyID()));
+                info.addProperty("username", detail.getUsername());
+                info.addProperty("score", detail.getTotalPoints());
+                info.addProperty("createdBy", lobby.getCreatedBy());
+                info.addProperty("winner", lobby.getWinner());
+                lobbyArray.add(info);
+            }
         }
 
-        JsonObject rootObject = new JsonObject();
-        rootObject.addProperty("object","lobby");
-        JsonArray lobbyArray = new JsonArray();
-        for(Lobby lobby : lobbies){
-            JsonObject info = new JsonObject();
-            info.addProperty("lobbyID",String.valueOf(lobby.getLobbyID()));
-            info.addProperty("createdBy",lobby.getCreatedBy());
-            info.addProperty("winner",lobby.getWinner());
-            lobbyArray.add(info);
-        }
-        rootObject.add("lobby",lobbyArray);
+        rootObject.add("lobby", lobbyArray);
         return gson.toJson(rootObject);
     }
 }

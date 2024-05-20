@@ -90,7 +90,6 @@ public class MainMenuController {
    public void handleLeaderboards(){
         // handle to load leaderboards view
        mainController.loadLeaderboardsView();
-       System.out.println("Leaderboard panel");
    }
    @FXML
    public void handleHistory(){

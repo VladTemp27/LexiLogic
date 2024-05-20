@@ -1,5 +1,6 @@
 package org.amalgam.client.matchhistory;
 
+import com.google.gson.*;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -10,8 +11,13 @@ import javafx.scene.effect.ColorAdjust;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import org.amalgam.ControllerException.InvalidRequestException;
+import org.amalgam.backend.microservices.objectparser.JsonObjectParser;
 import org.amalgam.client.MainController;
+import org.amalgam.client.leaderboards.LeaderboardsController;
+import org.amalgam.client.leaderboards.LeaderboardsModel;
 import org.amalgam.client.login.LoginController;
+
+import java.util.List;
 
 public class MatchHistoryController{
     @FXML
@@ -28,9 +34,10 @@ public class MatchHistoryController{
     private TableColumn<MatchData, Integer> score;
     @FXML
     private Button backButton;
-
     private MainController mainController;
     public MatchHistoryModel matchHistoryModel = new MatchHistoryModel(MainController.orbConnection, LoginController.playerCallback);
+    public LeaderboardsModel leaderboardsModel = new LeaderboardsModel(MainController.orbConnection,
+            LoginController.playerCallback);
 
     /**
      * Sets the Main Controller.
@@ -93,30 +100,16 @@ public class MatchHistoryController{
 
     }
 
-    // TODO: Should be moved into a separated data class
-    // For Testing
-//    private ObservableList<MatchData> matchDataList = FXCollections.observableArrayList(
-//            new MatchData("1", "Win", 100),
-//            new MatchData("2", "Loss", 50),
-//            new MatchData("3", "Win", 120)
-//    );
-
     //TODO: This should be moved into an Object for Client Side
     private static class MatchData {
-        private String gameID;
         private String standing;
         private int score;
         private int highestRank;
         private int highestScore;
 
-        public MatchData(String gameID, String standing, int score) {
-            this.gameID = gameID;
+        public MatchData(String standing, int score) {
             this.standing = standing;
             this.score = score;
-        }
-
-        public String getGameID() {
-            return gameID;
         }
 
         public String getStanding() {
@@ -193,6 +186,16 @@ public class MatchHistoryController{
     public void initialize() {
         addHoverEffect(backButton);
         backButton.setOnAction(event -> handleBack());
+        List<LeaderboardsController.LeaderboardsData> leaderboardsDataList =
+                JsonObjectParser.parseLeaderboardsData(leaderboardsModel.getLeaderBoards());
+        if (leaderboardsDataList != null) {
+                for (LeaderboardsController.LeaderboardsData lb : leaderboardsDataList) {
+                    if (lb.getUsername().equals(LoginController.username)){
+                        rankLabel.setText(lb.getRank());
+                        scoreLabel.setText(String.valueOf(lb.getScore()));
+                    }
+            }
+        }
         populateMatchTable();
         matchTable.setItems(FXCollections.observableArrayList(
                 getMatchHistoryDataList()
@@ -202,7 +205,23 @@ public class MatchHistoryController{
 
     private ObservableList<MatchData> getMatchHistoryDataList() {
         ObservableList<MatchData> matchHistoryData = FXCollections.observableArrayList();
-        System.out.println(matchHistoryModel.getMatchHistory());
+        JsonElement rootElement = JsonParser.parseString(matchHistoryModel.getMatchHistory());
+        JsonObject rootObject = rootElement.getAsJsonObject();
+        JsonArray array = rootObject.getAsJsonArray("lobby");
+        for(JsonElement element : array){
+            JsonObject cObject = element.getAsJsonObject();
+            JsonElement lobbyID = cObject.get("lobbyID");
+            JsonElement username = cObject.get("username");
+            JsonElement score = cObject.get("score");
+            JsonElement createdBy = cObject.get("createdBy");
+            JsonElement winner = cObject.get("winner");
+
+            if (LoginController.username.equals(winner.getAsString())) {
+                matchHistoryData.add(new MatchData("Win",Integer.parseInt(score.getAsString())));
+            } else {
+                matchHistoryData.add(new MatchData("Lose",Integer.parseInt(score.getAsString())));
+            }
+        }
         return matchHistoryData;
     }
 }

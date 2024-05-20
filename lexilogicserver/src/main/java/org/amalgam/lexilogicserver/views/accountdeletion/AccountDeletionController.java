@@ -9,8 +9,6 @@ import javafx.scene.effect.ColorAdjust;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import org.amalgam.lexilogicserver.ServerController;
-import org.amalgam.lexilogicserver.model.utilities.referenceobjects.Player;
-
 public class AccountDeletionController {
     //private variables
     @FXML
@@ -56,7 +54,6 @@ public class AccountDeletionController {
 
     private void addHoverEffect(Button button){
         String originalColor = button.getStyle(); // Store the original color
-
         button.setOnMouseEntered(e -> button.setStyle("-fx-background-color: derive(" + originalColor + ", -10%);"));
         button.setOnMouseExited(e -> button.setStyle(originalColor));
     }
