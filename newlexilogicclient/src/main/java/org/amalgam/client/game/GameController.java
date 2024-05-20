@@ -82,7 +82,7 @@ public class GameController {
     @FXML
     private Label eighteenthLetter;
     @FXML
-    private Label ninteenthLetter;
+    private Label nineteenthLetter;
     @FXML
     private Label twentiethLetter;
     @FXML
@@ -103,8 +103,19 @@ public class GameController {
     @FXML
     private Label RCroundNumberLabel;
 
-    //TODO: Victory private variables
-    //TODO: Game Over private variables
+    @FXML
+    private AnchorPane gameOverPanel;
+    @FXML
+    private Button playAgainButtonGO;
+    @FXML
+    private Button backButtonGO;
+
+    @FXML
+    private AnchorPane victoryPanel;
+    @FXML
+    private Button playAgainButtonV;
+    @FXML
+    private Button backButtonV;
 
     // common private variables
     private GameModel gameModel;
@@ -191,6 +202,34 @@ public class GameController {
         startTimer();
      }
 
+    private void showRoundCountdown() {
+        gamePane.setVisible(false);
+        roundCountdownPane.setVisible(true);
+        gameOverPanel.setVisible(false);
+        victoryPanel.setVisible(false);
+    }
+
+    private void showGame() {
+        gamePane.setVisible(true);
+        roundCountdownPane.setVisible(false);
+        gameOverPanel.setVisible(false);
+        victoryPanel.setVisible(false);
+    }
+
+    private void showGameOver() {
+        gamePane.setVisible(true);
+        roundCountdownPane.setVisible(false);
+        gameOverPanel.setVisible(true);
+        victoryPanel.setVisible(false);
+    }
+
+    private void showVictory() {
+        gamePane.setVisible(true);
+        roundCountdownPane.setVisible(false);
+        victoryPanel.setVisible(true);
+        gameOverPanel.setVisible(false);
+    }
+
     /**
      * Initializes the controller.
      * This method sets up the UI components and initializes the data model.
@@ -204,7 +243,7 @@ public class GameController {
         letterLabels = new Label[]{firstLetter, secondLetter, thirdLetter, fourthLetter, fifthLetter,
                 sixthLetter, seventhLetter, eightLetter, ninthLetter, tenthLetter,
                 eleventhLetter, twelfthLetter, thirteenthLetter, fourteenthLetter, fifteenthLetter,
-                sixteenthLetter, seventeenthLetter, eighteenthLetter, ninteenthLetter, twentiethLetter};
+                sixteenthLetter, seventeenthLetter, eighteenthLetter, nineteenthLetter, twentiethLetter};
 
         // Randomize letters
         randomizeLetters();
