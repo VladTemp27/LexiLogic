@@ -9,6 +9,7 @@ import javafx.stage.Stage;
 import org.amalgam.Service.GameServiceModule.GameService;
 import org.amalgam.UIControllers.PlayerCallback;
 import org.amalgam.backend.microservices.serverconnection.ORBConnection;
+import org.amalgam.client.howtoplay.HowToPlayController;
 import org.amalgam.client.leaderboards.LeaderboardsController;
 import org.amalgam.client.leaderboards.LeaderboardsPanel;
 import org.amalgam.client.loading.LoadingController;
@@ -31,32 +32,37 @@ public class MainController {
     /**
      * Controller and Panel Variables
      */
-    static LoginController loginController;
-    static AnchorPane loginPanel;
+    public static LoginController loginController;
+    public static AnchorPane loginPanel;
 
-    static SignUpController signUpController;
-    static AnchorPane signUpPanel;
+    public static SignUpController signUpController;
+    public static AnchorPane signUpPanel;
 
-    static MatchHistoryController matchHistoryController;
-    static AnchorPane matchHistoryPanel;
+    public static MatchHistoryController matchHistoryController;
+    public static AnchorPane matchHistoryPanel;
 
-    static ProfileController profileController;
-    static AnchorPane profilePane;
+    public static ProfileController profileController;
+    public static AnchorPane profilePane;
 
-    static MainMenuController mainMenuController;
-    static AnchorPane mainMenuPane;
+    public static MainMenuController mainMenuController;
+    public static AnchorPane mainMenuPane;
 
-    static ProfileChangeUsernameController profileChangeUsernameController;
-    static AnchorPane changeUsernamePane;
+    public static ProfileChangeUsernameController profileChangeUsernameController;
+    public static AnchorPane changeUsernamePane;
 
-    static ProfileChangePassController profileChangePassController;
-    static AnchorPane changePassPane;
+    public static ProfileChangePassController profileChangePassController;
+    public static AnchorPane changePassPane;
 
-    static LoadingController loadingController;
-    static AnchorPane loadingPane;
+    public static LoadingController loadingController;
+    public static AnchorPane loadingPane;
 
-    static LeaderboardsController leaderboardsController;
-    static AnchorPane leaderboardsPane;
+    public static LeaderboardsController leaderboardsController;
+    public static AnchorPane leaderboardsPane;
+
+    public static HowToPlayController howToPlayController;
+    public static AnchorPane howToPlayPane;
+
+
     public static ORBConnection orbConnection;
 
     public MainController() {
@@ -444,6 +450,40 @@ public class MainController {
             e.printStackTrace();
         }
     }
+    public void loadHowToPlayView(){
+        try {
+            Font.loadFont(getClass().getResourceAsStream("/org/amalgam/fonts/BowlbyOneSC.ttf"), 20);
+            Font.loadFont(getClass().getResourceAsStream("/org/amalgam/fonts/Brygada1918.ttf"), 20);
+
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/org/amalgam/client/views/howtoplay/howtoplay-view.fxml"));
+            AnchorPane howToPlayPane = fxmlLoader.load();
+
+            InputStream inputStream = getClass().getResourceAsStream("/org/amalgam/icons/Logo.png");
+
+            if (inputStream != null) {
+                Image image = new Image(inputStream);
+                stage.getIcons().add(image);
+            } else {
+                System.err.println("Failed to load image: Logo.png");
+            }
+
+            Scene scene = new Scene(howToPlayPane);
+
+            if (stage == null) {
+                throw new IllegalStateException("Stage is not set. Please set the stage before calling the panel.");
+            }
+
+            stage.setScene(scene);
+            stage.setResizable(false);
+            stage.setTitle("Lexi Logic");
+            LeaderboardsController leaderboardsController = fxmlLoader.getController();
+            leaderboardsController.setMainController(this);
+            leaderboardsController.initialize();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     /**
      * Getters and Setters of Controllers and Panels
@@ -458,4 +498,5 @@ public class MainController {
     public MainMenuController getMainMenuController(){return mainMenuController;}
     public LoadingController getLoadingController(){return loadingController;}
     public LeaderboardsController getLeaderboardsController(){return leaderboardsController;}
+    public HowToPlayController getHowToPlayController(){return howToPlayController;}
 }
