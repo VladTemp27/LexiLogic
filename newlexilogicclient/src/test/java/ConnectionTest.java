@@ -24,13 +24,14 @@ public class ConnectionTest {
 
     public static void main(String[] args)  {
         try{
-            ORB orb = ORB.init(generateArgs(2018, "localhost"), null);
+            ORB orb = ORB.init(generateArgs(2018, "corbaserver"), null);
             POA rootPOA = POAHelper.narrow(orb.resolve_initial_references("RootPOA"));
             rootPOA.the_POAManager().activate();
 
             NamingContextExt namingReference = NamingContextExtHelper.narrow(orb.resolve_initial_references("NameService"));
             playerServiceStub = PlayerServiceHelper.narrow(namingReference.resolve_str("PlayerService"));
             gameServiceStub = GameServiceHelper.narrow(namingReference.resolve_str("GameService"));
+            System.out.println("Stubs received");
             CallbackImpl callback = new CallbackImpl();
             callback.username("Luis");
 
