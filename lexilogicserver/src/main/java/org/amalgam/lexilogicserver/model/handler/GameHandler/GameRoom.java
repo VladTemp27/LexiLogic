@@ -7,7 +7,6 @@ import org.amalgam.lexilogicserver.model.microservices.NTimerCallback;
 import org.amalgam.lexilogicserver.model.microservices.wordbox.Generator;
 import org.amalgam.lexilogicserver.model.microservices.wordbox.Reader;
 import org.amalgam.lexilogicserver.model.microservices.wordbox.WordBox;
-import org.amalgam.lexilogicserver.model.utilities.referenceobjects.GameDetail;
 import org.amalgam.lexilogicserver.model.utilities.referenceobjects.PlayerGameDetail;
 
 import java.io.FileNotFoundException;
