@@ -78,6 +78,13 @@ public class ProfileChangePassController {
         alert.showAndWait();
     }
 
+    private void showSuccess(String message){
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
+    }
+
     /**
      * Gets the objects used.
      * This method returns a string indicating the type of objects used by the controller.
@@ -101,9 +108,10 @@ public class ProfileChangePassController {
     public void handleSave(){
         String oldPassword = oldPasswordField.getText();
         if (!oldPassword.equals(LoginController.password)){
-            System.out.println("ERROR");
+            showAlert("Old password do not match, please try again");
         } else {
-            System.out.println("PASSWORD CHANGED");
+            showSuccess("Password has been changed");
+            profileChangePassModel.changePassword(newPasswordField.getText());
         }
         // handles the save button when the username is changed
     }

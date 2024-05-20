@@ -58,7 +58,7 @@
         </Label>
         <TableView fx:id="leaderboardsTable" layoutX="28.0" layoutY="94.0" prefHeight="382.0" prefWidth="469.0" style="-fx-background-color: transparent;" stylesheets="@../../../css/tableview.css">
             <columns>
-                <TableColumn fx:id="rank" maxWidth="469.0" prefWidth="109.0" style="-fx-background-color: transparent;" text="Game ID" />
+                <TableColumn fx:id="rank" maxWidth="469.0" prefWidth="109.0" style="-fx-background-color: transparent;" text="Rank" />
                 <TableColumn fx:id="username" maxWidth="469.0" prefWidth="249.0" style="-fx-background-color: transparent;" text="Standing" />
                 <TableColumn fx:id="score" maxWidth="469.0" minWidth="0.0" prefWidth="110.0" style="-fx-background-color: transparent;" text="Score" />
             </columns>

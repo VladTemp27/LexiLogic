@@ -28,7 +28,7 @@ public class ProfileController {
     @FXML
     private Label usernameLabel;
     private MainController mainController;
-    private ProfileModel profileModel;
+    private ProfileModel profileModel = new ProfileModel(MainController.orbConnection, LoginController.playerCallback);
 
 
     /**
@@ -156,6 +156,7 @@ public class ProfileController {
             profileModel.accountDeletionRequest();
             showAlert("Account deletion request sent successfully.");
         } catch (Exception e) {
+            System.out.println(e.getCause());
             showAlert("Error during account deletion: " + e.getMessage());
         }    }
 
