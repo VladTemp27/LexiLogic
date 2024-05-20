@@ -85,6 +85,7 @@ public class ProfileChangeUsernameController {
      */
     @FXML
     public void initialize() {
+
         addHoverEffect(saveButton);
         addHoverEffect(backButton);
         saveButton.setOnAction(event -> handleSave());

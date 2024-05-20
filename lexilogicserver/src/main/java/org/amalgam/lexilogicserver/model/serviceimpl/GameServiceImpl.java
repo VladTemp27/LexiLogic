@@ -26,6 +26,7 @@ public class GameServiceImpl extends GameServicePOA {
         return new char[0][];
     }
 
+    // TODO: why there is JSON
     @Override
     public String getLeaderboards() throws EmptyLeaderBoardException {
         List<LeaderBoard> leaderboards = LeaderBoardDAL.fetchLeaderBoards();
@@ -34,21 +35,24 @@ public class GameServiceImpl extends GameServicePOA {
             throw new EmptyLeaderBoardException("Leaderboard is empty");
         }
 
-        JsonObject rootObject = new JsonObject();
-        rootObject.addProperty("object", "leaderboard");
+//        JsonObject rootObject = new JsonObject();
 
         JsonArray leaderboardArray = new JsonArray();
         for (LeaderBoard leaderboard : leaderboards) {
-            JsonObject leaderboardObj = new JsonObject();
-            leaderboardObj.addProperty("username", leaderboard.getUsername());
-            leaderboardObj.addProperty("pts", leaderboard.getPoints());
-            leaderboardObj.addProperty("rank", leaderboard.getRank());
-            leaderboardArray.add(leaderboardObj);
+            leaderboardArray.add(leaderboard.getUsername());
+            leaderboardArray.add(leaderboard.getPoints());
+            leaderboardArray.add(leaderboard.getRank());
+//            JsonObject leaderboardObj = new JsonObject();
+//            leaderboardObj.addProperty("username", leaderboard.getUsername());
+//            leaderboardObj.addProperty("pts", leaderboard.getPoints());
+//            leaderboardObj.addProperty("rank", leaderboard.getRank());
+//            leaderboardArray.add(leaderboardObj);
         }
 
-        rootObject.add("leaderboard", leaderboardArray);
+//        rootObject.add("leaderboard", leaderboardArray);
 
-        return rootObject.toString();
+//        return rootObject.toString();
+        return leaderboardArray.toString();
     }
 
 

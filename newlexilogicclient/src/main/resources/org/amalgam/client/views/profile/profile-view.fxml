@@ -39,11 +39,6 @@
             <Font name="Bowlby One SC Regular" size="24.0" />
          </font>
       </Label>
-      <Label fx:id="scoreLabel" layoutX="355.0" layoutY="313.0" prefHeight="40.0" prefWidth="156.0" text="20238" textFill="#485613">
-         <font>
-            <Font name="Bowlby One SC Regular" size="18.0" />
-         </font>
-      </Label>
       <Button fx:id="changePasswordButton" layoutX="305.0" layoutY="369.0" mnemonicParsing="false" prefHeight="33.0" prefWidth="198.0" style="-fx-background-color: #4b5320;" text="CHANGE PASSWORD" textFill="#f2eeee">
          <font>
             <Font name="Bowlby One SC Regular" size="14.0" />
@@ -59,7 +54,7 @@
             <Font name="Bowlby One SC Regular" size="14.0" />
          </font>
       </Button>
-      <Button fx:id="backButton" layoutX="38.0" layoutY="40.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="29.0" style="-fx-background-color: #FFFFFF;" />
+      <Button fx:id="backButton" layoutX="400.0" layoutY="400.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="29.0" style="-fx-background-color: #FFFFFF;" />
       <ImageView fx:id="backButtonImage" fitHeight="66.0" fitWidth="99.0" layoutX="20.0" layoutY="20.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../../../icons/BackButton.png" />

@@ -6,6 +6,7 @@ import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
+import org.amalgam.Service.GameServiceModule.GameService;
 import org.amalgam.UIControllers.PlayerCallback;
 import org.amalgam.backend.microservices.serverconnection.ORBConnection;
 import org.amalgam.client.leaderboards.LeaderboardsController;
@@ -59,7 +60,7 @@ public class MainController {
     public static ORBConnection orbConnection;
 
     public MainController() {
-        orbConnection = new ORBConnection(2018, "corba.server");
+        orbConnection = new ORBConnection(2018, "localhost");
         try {
             orbConnection.start();
         } catch (InvalidName | AdapterInactive e) {

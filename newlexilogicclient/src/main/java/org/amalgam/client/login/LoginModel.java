@@ -13,7 +13,7 @@ import org.omg.CosNaming.NamingContextPackage.NotFound;
 public class LoginModel {
     private final ORBConnection orbConnection;
     private final LoginMicroservice loginMicroservice;
-    private PlayerCallback playerCallback;
+    public static PlayerCallback playerCallback;
 
 
     public LoginModel (ORBConnection orbConnection, PlayerCallback playerCallback){

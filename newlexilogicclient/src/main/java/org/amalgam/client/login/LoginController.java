@@ -27,10 +27,11 @@ public class LoginController {
     private TextField usernameField;
     @FXML
     private TextField passwordField;
-
     private MainController mainController;
     private LoginModel loginModel = new LoginModel(MainController.orbConnection, null);
-    public PlayerCallback playerCallback;
+    public static PlayerCallback playerCallback;
+    public static String username;
+    public static String password;
 
     /**
      * Sets the Main Controller.
@@ -83,11 +84,10 @@ public class LoginController {
 
     }
 
-    // TODO: Authentication of user from DataBase & Error Checking
     private boolean loginAuthentication(String username, String password) {
         PlayerCallbackImpl playerCallbackImpl = new PlayerCallbackImpl();
         playerCallbackImpl.username(username);
-        PlayerCallback playerCallback = null;
+        LoginController.playerCallback = null;
         try {
             playerCallback = PlayerCallbackHelper.narrow(MainController.orbConnection.getPOA().servant_to_reference(playerCallbackImpl));
         } catch (ServantNotActive | WrongPolicy e) {
@@ -128,8 +128,8 @@ public class LoginController {
      */
     @FXML
     public void onLogin() {
-        String username = usernameField.getText();
-        String password = passwordField.getText();
+        username = usernameField.getText();
+        password = passwordField.getText();
 
         boolean isLoggedIn = loginAuthentication(username, password);
 

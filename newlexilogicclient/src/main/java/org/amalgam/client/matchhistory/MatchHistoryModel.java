@@ -16,7 +16,7 @@ public class MatchHistoryModel {
         this.gameHistoryMicroservice = new GetGameHistoryMicroservice();
     }
 
-    public String getMathcHistory () {
+    public String getMatchHistory () {
        return gameHistoryMicroservice.process(orbConnection, playerCallback.username());
     }
 }
