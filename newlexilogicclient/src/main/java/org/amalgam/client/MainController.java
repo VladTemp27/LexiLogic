@@ -8,6 +8,7 @@ import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import org.amalgam.UIControllers.PlayerCallback;
 import org.amalgam.backend.microservices.serverconnection.ORBConnection;
+import org.amalgam.client.game.GameController;
 import org.amalgam.client.leaderboards.LeaderboardsController;
 import org.amalgam.client.leaderboards.LeaderboardsPanel;
 import org.amalgam.client.loading.LoadingController;
@@ -56,6 +57,10 @@ public class MainController {
 
     static LeaderboardsController leaderboardsController;
     static AnchorPane leaderboardsPane;
+
+    static GameController gameController;
+    static AnchorPane gamePane;
+
     public static ORBConnection orbConnection;
 
     public MainController() {
@@ -457,4 +462,5 @@ public class MainController {
     public MainMenuController getMainMenuController(){return mainMenuController;}
     public LoadingController getLoadingController(){return loadingController;}
     public LeaderboardsController getLeaderboardsController(){return leaderboardsController;}
+    public GameController getGameController(){return gameController;}
 }
