@@ -8,7 +8,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="changepassPane" prefHeight="407.0" prefWidth="504.0" style="-fx-background-color: #674C33;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.amalgam.client.profile.ProfileChangePassController">
+<AnchorPane fx:id="changepassPane" prefHeight="407.0" prefWidth="504.0" style="-fx-background-color: #674C33;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.amalgam.client.profile.ProfileChangePassController">
    <children>
       <ImageView fx:id="axelImage" fitHeight="225.0" fitWidth="229.0" layoutX="-28.0" layoutY="182.0" pickOnBounds="true">
          <image>
@@ -30,11 +30,6 @@
             <Font name="Bowlby One SC Regular" size="24.0" />
          </font>
       </Label>
-      <Label fx:id="scoreLabel" layoutX="253.0" layoutY="86.0" text="20238" textFill="#485613">
-         <font>
-            <Font name="Bowlby One SC Regular" size="20.0" />
-         </font>
-      </Label>
       <TextField fx:id="oldPasswordField" layoutX="189.0" layoutY="151.0" prefHeight="49.0" prefWidth="252.0" promptText="old password" style="-fx-background-color: #B07C3B; -fx-prompt-text-fill: #FFFFFF;">
          <font>
             <Font name="Brygada 1918 Regular" size="18.0" />
@@ -50,8 +45,8 @@
             <Font name="Brygada 1918 Regular" size="20.0" />
          </font>
       </Button>
-      <Button fx:id="backButton" layoutX="28.0" layoutY="21.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="33.0" style="-fx-background-color: #FFFFFF;" />
-      <ImageView fx:id="backButtonImage" fitHeight="68.0" fitWidth="72.0" layoutX="11.0" layoutY="12.0" pickOnBounds="true" preserveRatio="true">
+      <Button fx:id="backButton" layoutX="14.0" layoutY="10.0" mnemonicParsing="false" prefHeight="61.0" prefWidth="71.0" style="-fx-background-color: transparent;" />
+      <ImageView fx:id="backButtonImage" fitHeight="54.0" fitWidth="54.0" layoutX="23.0" layoutY="13.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../../../icons/BackButton.png" />
          </image>

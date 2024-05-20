@@ -25,11 +25,11 @@
                 <Image url="@../../../icons/Axel.png" />
             </image>
         </ImageView>
-        <TextField fx:id="passwordField" layoutX="491.0" layoutY="271.0" prefHeight="44.0" prefWidth="276.0" promptText="Password" style="-fx-background-color: FFF8D6; -fx-prompt-text-fill: #FFFFFF;">
+        <TextField fx:id="passwordField" layoutX="491.0" layoutY="271.0" prefHeight="44.0" prefWidth="276.0" promptText="Password" style="-fx-background-color: FFF8D6; -fx-prompt-text-fill: #6b4406;">
             <font>
                 <Font name="Brygada 1918 Regular" size="20.0" />
             </font></TextField>
-        <TextField fx:id="usernameField" layoutX="491.0" layoutY="212.0" prefHeight="44.0" prefWidth="276.0" promptText="Username" style="-fx-background-color: FFF8D6; -fx-prompt-text-fill: #FFFFFF;">
+        <TextField fx:id="usernameField" layoutX="491.0" layoutY="212.0" prefHeight="44.0" prefWidth="276.0" promptText="Username" style="-fx-background-color: FFF8D6; -fx-prompt-text-fill: #6b4406;">
             <font>
                 <Font name="Brygada 1918 Regular" size="20.0" />
             </font></TextField>

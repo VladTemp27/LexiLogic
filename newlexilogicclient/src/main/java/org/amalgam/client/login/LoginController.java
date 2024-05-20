@@ -6,9 +6,13 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import org.amalgam.ControllerException.InvalidRequestException;
+import org.amalgam.PlayerCallbackImpl;
+import org.amalgam.UIControllers.PlayerCallback;
+import org.amalgam.UIControllers.PlayerCallbackHelper;
 import org.amalgam.client.MainController;
-
-import java.io.IOException;
+import org.omg.PortableServer.POAPackage.ServantNotActive;
+import org.omg.PortableServer.POAPackage.WrongPolicy;
+import sun.security.tools.keytool.Main;
 
 public class LoginController {
 
@@ -23,8 +27,11 @@ public class LoginController {
     private TextField usernameField;
     @FXML
     private TextField passwordField;
-
     private MainController mainController;
+    private LoginModel loginModel = new LoginModel(MainController.orbConnection, null);
+    public static PlayerCallback playerCallback;
+    public static String username;
+    public static String password;
 
     /**
      * Sets the Main Controller.
@@ -58,22 +65,36 @@ public class LoginController {
         alert.showAndWait();
     }
 
-    // TODO: Authentication of user from DataBase & Error Checking
-    // Test Authentication
-    private boolean loginAuthentication(String username, String password) {
-        return username.equals("admin") && password.equals("admin"); // For Testing Only
+    /**
+     * Gets the objects used.
+     * This method returns a string indicating the type of objects used by the controller.
+     *
+     * @return A string representing the objects used.
+     */
+    public void setObjectsUser(String objects) throws InvalidRequestException {
+
     }
 
     /**
-     * Shows the signup panel when pressed.
+     * Fetches and updates data remotely.
+     * This method is called to update the data displayed in the UI.
+     *
      */
-    @FXML
-    public void handleSignUp() {
-        if (mainController != null) {
-            mainController.loadSignUpView();
-        } else {
-            System.out.println("MainController is not set.");
+    public void fetchAndUpdate(String jsonString, String dataType) throws InvalidRequestException {
+
+    }
+
+    private boolean loginAuthentication(String username, String password) {
+        PlayerCallbackImpl playerCallbackImpl = new PlayerCallbackImpl();
+        playerCallbackImpl.username(username);
+        LoginController.playerCallback = null;
+        try {
+            playerCallback = PlayerCallbackHelper.narrow(MainController.orbConnection.getPOA().servant_to_reference(playerCallbackImpl));
+        } catch (ServantNotActive | WrongPolicy e) {
+            throw new RuntimeException(e);
         }
+        loginModel.setPlayerCallback(playerCallback);
+        return loginModel.login(password);
     }
 
     /**
@@ -83,8 +104,6 @@ public class LoginController {
     @FXML
     public void initialize() {
         addHoverEffect(loginButton);
-        addHoverEffect(signUpButton);
-        signUpButton.setOnAction(event -> handleSignUp());
         loginButton.setOnAction(event -> onLogin());
     }
 
@@ -95,8 +114,8 @@ public class LoginController {
      */
     @FXML
     public void onLogin() {
-        String username = usernameField.getText();
-        String password = passwordField.getText();
+        username = usernameField.getText();
+        password = passwordField.getText();
 
         boolean isLoggedIn = loginAuthentication(username, password);
 
@@ -105,36 +124,5 @@ public class LoginController {
         } else {
             showAlert("Invalid username or password");
         }
-    }
-
-    /**
-     * Gets the objects used.
-     * This method returns a string indicating the type of objects used by the controller.
-     *
-     * @return A string representing the objects used.
-     */
-    //TODO: @Override
-    private void getObjectsUsed() {
-        //TODO: Return Value
-        //return "user";
-    }
-
-    /**
-     * Fetches and updates data remotely.
-     * This method is called to update the data displayed in the UI.
-     *
-     */
-    //TODO: @Override
-    private void fetchAndUpdate() {
-        //TODO: Fetching of Data
-    }
-
-    public void setObjectsUser(String objects) throws InvalidRequestException {
-
-    }
-
-
-    public void fetchAndUpdate(String jsonString, String dataType) throws InvalidRequestException {
-
     }
 }

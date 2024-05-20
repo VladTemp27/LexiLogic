@@ -47,9 +47,10 @@ public class GameDetailDAL {
     public static LinkedList<GameDetail> getGameDetailByPID(int playerID) {
         LinkedList<GameDetail> listOfGameDetail = new LinkedList<>();
         try (Connection conn = DatabaseUtil.getConnection()) {
-            String query = "SELECT gd.playerID, gd.lobbyID, gd.totalPoints, p.name" +
-                           "FROM gamedetails gd WHERE playerID = ?"+
-                           "JOIN player p USING(playerID)";
+            String query = "SELECT gd.playerID, gd.lobbyID, gd.totalPoints, p.name " +
+                           "FROM gamedetails gd "+
+                           "JOIN player p USING(playerID) "+
+                           "WHERE playerID = ?";
             PreparedStatement stmt = conn.prepareStatement(query);
             stmt.setInt(1, playerID);
             try (ResultSet rs = stmt.executeQuery()) {

@@ -2,7 +2,7 @@
   "object": "game-detail",
   "game-detail": [
     {
-      "playerID": "",
+      "playerName": "",
       "lobbyID": "",
       "totalPoints": ""
     }

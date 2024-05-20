@@ -11,7 +11,7 @@ import org.amalgam.ControllerException.InvalidRequestException;
 import org.amalgam.client.MainController;
 import javafx.scene.image.ImageView;
 
-public class LoadingController{
+public class LoadingController {
 
     // Private Variables
     @FXML
@@ -28,17 +28,6 @@ public class LoadingController{
     public void setMainController(MainController mainController) {
         this.mainController = mainController;
     }
-    /**
-     * Gets the objects used.
-     * This method returns a string indicating the type of objects used by the controller.
-     *
-     * @return A string representing the objects used.
-     */
-    //TODO: @Override
-    private void getObjectsUsed() {
-        //TODO: Return Value
-        //return "user";
-    }
 
     public void animateLog(){
         RotateTransition rotateTransition = new RotateTransition();
@@ -49,6 +38,15 @@ public class LoadingController{
         rotateTransition.setByAngle(360);
         rotateTransition.setAxis(Rotate.Z_AXIS);
         rotateTransition.play();
+    }
+
+    /**
+     * Gets the objects used.
+     * This method returns a string indicating the type of objects used by the controller.
+     *
+     * @return A string representing the objects used.
+     */
+    public void setObjectsUser(String objects) throws InvalidRequestException {
 
     }
 
@@ -57,24 +55,13 @@ public class LoadingController{
      * This method is called to update the data displayed in the UI.
      *
      */
-    //TODO: @Override
-    private void fetchAndUpdate() {
-        //TODO: Fetching of Data
+    public void fetchAndUpdate(String jsonString, String dataType) throws InvalidRequestException {
+
     }
 
     @FXML
     public void initialize() {
         // animation for the loading log (c.o lestat)
         animateLog();
-    }
-
-
-    public void setObjectsUser(String objects) throws InvalidRequestException {
-
-    }
-
-
-    public void fetchAndUpdate(String jsonString, String dataType) throws InvalidRequestException {
-
     }
 }

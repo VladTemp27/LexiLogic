@@ -12,7 +12,7 @@ public class PlayerDAL {
 
     public static Player getPlayerByUsername(String username){
         try(Connection conn = DatabaseUtil.getConnection()){
-            PreparedStatement stmnt = conn.prepareStatement("SELECT * FROM player WHERE username=?");
+            PreparedStatement stmnt = conn.prepareStatement("SELECT * FROM player WHERE name=?");
             stmnt.setString(1, username);
             ResultSet rs = stmnt.executeQuery();
             if(rs.next()){
