@@ -46,8 +46,8 @@ public class ORBServer implements Runnable{
 
             NamingContextExt nameService = NamingContextExtHelper.narrow(orb.resolve_initial_references("NameService"));
 
-            NameComponent[] gameServicePath = nameService.to_name("GameService");
             NameComponent[] playerServicePath = nameService.to_name("PlayerService");
+            NameComponent[] gameServicePath = nameService.to_name("GameService");
 
             nameService.rebind(gameServicePath, gameServiceReference);
             nameService.rebind(playerServicePath, playerServiceReference);

@@ -8,6 +8,7 @@ import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import org.amalgam.lexilogicserver.model.microservices.daemonHandler.ORBDException;
 import org.amalgam.lexilogicserver.model.microservices.daemonHandler.ORBDOperationCallback;
+import org.amalgam.lexilogicserver.views.accountdeletion.AccountDeletionController;
 import org.amalgam.lexilogicserver.views.addplayer.AddPlayerController;
 import org.amalgam.lexilogicserver.views.changegame.ChangeGameController;
 import org.amalgam.lexilogicserver.views.runserver.RunServerRunningController;
@@ -34,7 +35,12 @@ public class ServerController implements ORBDOperationCallback {
     public static RunServerController runServerController;
     public static AnchorPane runServerPane;
 
+    public static AccountDeletionController accountDeletionController;
+    static AnchorPane accountDeletionPane;
+    
     public static Future<Integer> ORBExitCode;
+    
+
 
 
     /**
@@ -59,6 +65,7 @@ public class ServerController implements ORBDOperationCallback {
     public RunServerController getRunServerController() {
         return runServerController;
     }
+    public AccountDeletionController getAccountDeletionController(){return accountDeletionController;}
 
     /**
      * Loads and displays the server main menu view.
@@ -68,8 +75,8 @@ public class ServerController implements ORBDOperationCallback {
             Font.loadFont(getClass().getResourceAsStream("/org/amalgam/fonts/BowlbyOneSC.ttf"), 20);
             Font.loadFont(getClass().getResourceAsStream("/org/amalgam/fonts/Brygada1918.ttf"), 20);
 
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/org/amalgam/server.views/servermainmenu/servermainmenu-view.fxml"));
-            AnchorPane serverMainMenu = fxmlLoader.load();
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/org/amalgam/server/views/servermainmenu/servermainmenu-view.fxml"));
+            AnchorPane serverMainMenuPane = fxmlLoader.load();
 
             InputStream inputStream = getClass().getResourceAsStream("/org/amalgam/icons/Logo.png");
             if (inputStream != null) {
@@ -79,7 +86,7 @@ public class ServerController implements ORBDOperationCallback {
                 System.err.println("Failed to load image: Logo.png");
             }
 
-            Scene scene = new Scene(serverMainMenu);
+            Scene scene = new Scene(serverMainMenuPane);
 
             if (stage == null) {
                 throw new IllegalStateException("Stage is not set. Please set the stage before calling the panel.");
@@ -105,7 +112,7 @@ public class ServerController implements ORBDOperationCallback {
             Font.loadFont(getClass().getResourceAsStream("/org/amalgam/fonts/BowlbyOneSC.ttf"), 20);
             Font.loadFont(getClass().getResourceAsStream("/org/amalgam/fonts/Brygada1918.ttf"), 20);
 
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/org/amalgam/server.views/runserver/runserver-view.fxml"));
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/org/amalgam/server/views/runserver/runserver-view.fxml"));
             AnchorPane runServer = fxmlLoader.load();
 
             InputStream inputStream = getClass().getResourceAsStream("/org/amalgam/icons/Logo.png");
@@ -142,7 +149,7 @@ public class ServerController implements ORBDOperationCallback {
             Font.loadFont(getClass().getResourceAsStream("/org/amalgam/fonts/BowlbyOneSC.ttf"), 20);
             Font.loadFont(getClass().getResourceAsStream("/org/amalgam/fonts/Brygada1918.ttf"), 20);
 
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/org/amalgam/server.views/runserver/runserverrunning-view.fxml"));
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/org/amalgam/server/views/runserver/runserverrunning-view.fxml"));
             AnchorPane runServerRunning = fxmlLoader.load();
 
             InputStream inputStream = getClass().getResourceAsStream("/org/amalgam/icons/Logo.png");
@@ -179,7 +186,7 @@ public class ServerController implements ORBDOperationCallback {
             Font.loadFont(getClass().getResourceAsStream("/org/amalgam/fonts/BowlbyOneSC.ttf"), 20);
             Font.loadFont(getClass().getResourceAsStream("/org/amalgam/fonts/Brygada1918.ttf"), 20);
 
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/org/amalgam/server.views/runorbd/runorbd-view.fxml"));
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/org/amalgam/server/views/runorbd/runorbd-view.fxml"));
             AnchorPane runORBD = fxmlLoader.load();
 
             InputStream inputStream = getClass().getResourceAsStream("/org/amalgam/icons/Logo.png");
@@ -216,7 +223,7 @@ public class ServerController implements ORBDOperationCallback {
             Font.loadFont(getClass().getResourceAsStream("/org/amalgam/fonts/BowlbyOneSC.ttf"), 20);
             Font.loadFont(getClass().getResourceAsStream("/org/amalgam/fonts/Brygada1918.ttf"), 20);
 
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/org/amalgam/server.views/changegame/changegame-view.fxml"));
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/org/amalgam/server/views/changegame/changegame-view.fxml"));
             AnchorPane changeGame = fxmlLoader.load();
 
             InputStream inputStream = getClass().getResourceAsStream("/org/amalgam/icons/Logo.png");
@@ -245,15 +252,15 @@ public class ServerController implements ORBDOperationCallback {
         }
     }
 
-        /**
-     * Loads and displays the change game view.
+    /**
+     * Loads and displays the add player view.
      */
     public void loadAddPlayer() {
         try {
             Font.loadFont(getClass().getResourceAsStream("/org/amalgam/fonts/BowlbyOneSC.ttf"), 20);
             Font.loadFont(getClass().getResourceAsStream("/org/amalgam/fonts/Brygada1918.ttf"), 20);
 
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/org/amalgam/server.views/addplayer/addplyer-view.fxml"));
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/org/amalgam/server/views/addplayer/addplayer-view.fxml"));
             AnchorPane addPlayer = fxmlLoader.load();
 
             InputStream inputStream = getClass().getResourceAsStream("/org/amalgam/icons/Logo.png");
@@ -282,7 +289,44 @@ public class ServerController implements ORBDOperationCallback {
         }
     }
 
-    @Override
+    /**
+     * Load and displays the Account Deletion view
+     */
+    public void loadAccountDeletion(){
+        try {
+            Font.loadFont(getClass().getResourceAsStream("/org/amalgam/fonts/BowlbyOneSC.ttf"), 20);
+            Font.loadFont(getClass().getResourceAsStream("/org/amalgam/fonts/Brygada1918.ttf"), 20);
+
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/org/amalgam/server/views/accountdeletion/accountdeletion-view.fxml"));
+            AnchorPane accountDeletionPane = fxmlLoader.load();
+
+            InputStream inputStream = getClass().getResourceAsStream("/org/amalgam/icons/Logo.png");
+            if (inputStream != null) {
+                Image image = new Image(inputStream);
+                stage.getIcons().add(image);
+            } else {
+                System.err.println("Failed to load image: Logo.png");
+            }
+
+            Scene scene = new Scene(accountDeletionPane);
+
+            if (stage == null) {
+                throw new IllegalStateException("Stage is not set. Please set the stage before calling the panel.");
+            }
+
+            stage.setScene(scene);
+            stage.setResizable(false);
+            stage.setTitle("Lexi Logic");
+            AccountDeletionController accountDeletionController = fxmlLoader.getController();
+            accountDeletionController.setServerController(this);
+            accountDeletionController.initialize();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    
     public void notifyOrbExit() throws ORBDException {
         try {
             //TODO: Prompt with ui that ORB has exited

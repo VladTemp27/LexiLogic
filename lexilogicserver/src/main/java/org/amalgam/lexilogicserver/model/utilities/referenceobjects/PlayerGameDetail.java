@@ -34,10 +34,6 @@ public class PlayerGameDetail {
         return words;
     }
 
-    public LinkedList<String> getDupedWords(){
-        return dupedWords;
-    }
-
     public void addWord(String word){
         words.add(word);
     }

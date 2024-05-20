@@ -16,7 +16,7 @@
                 <Image url="@../../../icons/Background.png" />
             </image>
         </ImageView>
-        <ImageView fitHeight="65.0" fitWidth="475.0" layoutX="164.0" layoutY="13.0">
+        <ImageView fitHeight="65.0" fitWidth="510.0" layoutX="180.0" layoutY="13.0">
             <image>
                 <Image url="@../../../icons/Wood.png" />
             </image>
@@ -36,9 +36,9 @@
                 <Image url="@../../../icons/Elephant.png" />
             </image>
         </ImageView>
-        <Label alignment="CENTER" layoutX="198.0" layoutY="-4.0" prefHeight="98.0" prefWidth="404.0" text="Adventures" textAlignment="CENTER" textFill="#5b331e">
+        <Label alignment="CENTER" layoutX="183.0" layoutY="-4.0" prefHeight="98.0" prefWidth="502.0" text="jungle warriors" textAlignment="CENTER" textFill="#5b331e">
             <font>
-                <Font name="Bowlby One SC Regular" size="60.0" />
+                <Font name="Bowlby One SC Regular" size="48.0" />
             </font>
         </Label>
         <Label alignment="CENTER" layoutX="539.0" layoutY="213.0" prefHeight="98.0" prefWidth="163.0" text="RANK :" textAlignment="CENTER" textFill="#674c33">
@@ -58,7 +58,7 @@
         </Label>
         <TableView fx:id="leaderboardsTable" layoutX="28.0" layoutY="94.0" prefHeight="382.0" prefWidth="469.0" style="-fx-background-color: transparent;" stylesheets="@../../../css/tableview.css">
             <columns>
-                <TableColumn fx:id="rank" maxWidth="469.0" prefWidth="109.0" style="-fx-background-color: transparent;" text="Game ID" />
+                <TableColumn fx:id="rank" maxWidth="469.0" prefWidth="109.0" style="-fx-background-color: transparent;" text="Rank" />
                 <TableColumn fx:id="username" maxWidth="469.0" prefWidth="249.0" style="-fx-background-color: transparent;" text="Standing" />
                 <TableColumn fx:id="score" maxWidth="469.0" minWidth="0.0" prefWidth="110.0" style="-fx-background-color: transparent;" text="Score" />
             </columns>
@@ -68,7 +68,7 @@
         </TableView>
         <Button fx:id="backButton" layoutY="6.0" onAction="#handleBack" style="-fx-background-color: transparent;">
             <graphic>
-                <ImageView fitHeight="68.0" fitWidth="69.0" pickOnBounds="true" preserveRatio="true">
+                <ImageView fitHeight="58.0" fitWidth="58.0" pickOnBounds="true" preserveRatio="true">
                     <image>
                         <Image url="@../../../icons/BackButton.png" />
                     </image>

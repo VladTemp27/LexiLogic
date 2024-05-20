@@ -58,7 +58,6 @@
       </Label>
       <TableView fx:id="matchTable" layoutX="28.0" layoutY="94.0" prefHeight="382.0" prefWidth="469.0" style="-fx-background-color: transparent;" stylesheets="@../../../css/tableview.css">
          <columns>
-            <TableColumn fx:id="gameID" maxWidth="469.0" prefWidth="109.0" style="-fx-background-color: transparent;" text="Game ID" />
             <TableColumn fx:id="standing" maxWidth="469.0" prefWidth="249.0" style="-fx-background-color: transparent;" text="Standing" />
             <TableColumn fx:id="score" maxWidth="469.0" minWidth="0.0" prefWidth="110.0" style="-fx-background-color: transparent;" text="Score" />
          </columns>

@@ -11,8 +11,9 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import org.amalgam.ControllerException.InvalidRequestException;
 import org.amalgam.client.MainController;
+import org.amalgam.client.login.LoginController;
 
-public class MatchHistoryController {
+public class MatchHistoryController{
     @FXML
     private AnchorPane matchHistoryPane;
     @FXML
@@ -22,8 +23,6 @@ public class MatchHistoryController {
     @FXML
     private TableView<MatchData> matchTable;
     @FXML
-    private TableColumn<MatchData, String> gameID;
-    @FXML
     private TableColumn<MatchData, String> standing;
     @FXML
     private TableColumn<MatchData, Integer> score;
@@ -31,6 +30,7 @@ public class MatchHistoryController {
     private Button backButton;
 
     private MainController mainController;
+    public MatchHistoryModel matchHistoryModel = new MatchHistoryModel(MainController.orbConnection, LoginController.playerCallback);
 
     /**
      * Sets the Main Controller.
@@ -74,21 +74,32 @@ public class MatchHistoryController {
         alert.showAndWait();
     }
 
-    // TODO: Should be moved into a separated data class
-    // For Testing
-    private ObservableList<MatchData> matchDataList = FXCollections.observableArrayList(
-            new MatchData("1", "Win", 100),
-            new MatchData("2", "Loss", 50),
-            new MatchData("3", "Win", 120)
-    );
-
+    /**
+     * Gets the objects used.
+     * This method returns a string indicating the type of objects used by the controller.
+     *
+     * @return A string representing the objects used.
+     */
     public void setObjectsUser(String objects) throws InvalidRequestException {
 
     }
 
+    /**
+     * Fetches and updates data remotely.
+     * This method is called to update the data displayed in the UI.
+     *
+     */
     public void fetchAndUpdate(String jsonString, String dataType) throws InvalidRequestException {
 
     }
+
+    // TODO: Should be moved into a separated data class
+    // For Testing
+//    private ObservableList<MatchData> matchDataList = FXCollections.observableArrayList(
+//            new MatchData("1", "Win", 100),
+//            new MatchData("2", "Loss", 50),
+//            new MatchData("3", "Win", 120)
+//    );
 
     //TODO: This should be moved into an Object for Client Side
     private static class MatchData {
@@ -150,11 +161,10 @@ public class MatchHistoryController {
      */
     @FXML
     public void populateMatchTable() {
-        gameID.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getGameID()));
         standing.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getStanding()));
         score.setCellValueFactory(data -> new SimpleIntegerProperty(data.getValue().getScore()).asObject());
 
-        matchTable.setItems(matchDataList);
+//        matchTable.setItems(matchDataList);
     }
 
     /**
@@ -184,10 +194,15 @@ public class MatchHistoryController {
         addHoverEffect(backButton);
         backButton.setOnAction(event -> handleBack());
         populateMatchTable();
-        populateRank();
-        populateScore();
+        matchTable.setItems(FXCollections.observableArrayList(
+                getMatchHistoryDataList()
+        ));
         matchTable.setStyle("-fx-font-family: 'Brygada 1918';");
     }
 
-
+    private ObservableList<MatchData> getMatchHistoryDataList() {
+        ObservableList<MatchData> matchHistoryData = FXCollections.observableArrayList();
+        System.out.println(matchHistoryModel.getMatchHistory());
+        return matchHistoryData;
+    }
 }

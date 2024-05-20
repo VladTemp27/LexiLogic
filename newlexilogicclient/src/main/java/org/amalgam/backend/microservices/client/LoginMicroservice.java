@@ -12,13 +12,9 @@ import org.omg.CosNaming.NamingContextPackage.NotFound;
 public class LoginMicroservice {
 
 
-    public void process (ORBConnection orbConnection, PlayerCallback playerCallback, String password) {
-        try {
-            orbConnection.retrievePlayerRequestStub().login(playerCallback, password);
-        } catch (AlreadyLoggedInException | InvalidCredentialsException | UserExistenceException | InvalidName |
-                 CannotProceed | NotFound e){
-            throw new RuntimeException(e);
-        }
+    public boolean process (ORBConnection orbConnection, PlayerCallback playerCallback, String password) throws AlreadyLoggedInException, InvalidCredentialsException, InvalidName, CannotProceed, NotFound, UserExistenceException {
+        orbConnection.retrievePlayerRequestStub().login(playerCallback, password);
+        return true;
     }
 
 }

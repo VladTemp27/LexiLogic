@@ -4,6 +4,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.layout.AnchorPane;
+import org.amalgam.ControllerException.InvalidRequestException;
 import org.amalgam.client.MainController;
 
 public class MainMenuController {
@@ -53,6 +54,26 @@ public class MainMenuController {
         alert.setContentText(message);
         alert.showAndWait();
     }
+
+    /**
+     * Gets the objects used.
+     * This method returns a string indicating the type of objects used by the controller.
+     *
+     * @return A string representing the objects used.
+     */
+    public void setObjectsUser(String objects) throws InvalidRequestException {
+
+    }
+
+    /**
+     * Fetches and updates data remotely.
+     * This method is called to update the data displayed in the UI.
+     *
+     */
+    public void fetchAndUpdate(String jsonString, String dataType) throws InvalidRequestException {
+
+    }
+
     @FXML
     public void handlePlay(){
         // insert main controller statement for opening play panel
@@ -68,6 +89,8 @@ public class MainMenuController {
    @FXML
    public void handleLeaderboards(){
         // handle to load leaderboards view
+       mainController.loadLeaderboardsView();
+       System.out.println("Leaderboard panel");
    }
    @FXML
    public void handleHistory(){
@@ -97,41 +120,5 @@ public class MainMenuController {
         leaderboardsButton.setOnAction(event -> handleLeaderboards());
         historyButton.setOnAction(event -> handleHistory());
         exitButton.setOnAction(event -> handleExit());
-    }
-
-    /**
-     * Authenticates the user using the provided data.
-     *
-     * @param username and password authentication.
-     */
-    public void authenticate(String username, String password) {
-        // Check if the provided data matches the expected authentication data
-        if (username.equals("admin") && password.equals("admin")) {
-            System.out.println("Authentication successful.");
-        } else {
-            System.out.println("Authentication failed.");
-            showAlert("Authentication failed. Please try again.");
-        }
-    }
-    /**
-     * Gets the objects used.
-     * This method returns a string indicating the type of objects used by the controller.
-     *
-     * @return A string representing the objects used.
-     */
-    //TODO: @Override
-    private void getObjectsUsed() {
-        //TODO: Return Value
-        //return "user";
-    }
-
-    /**
-     * Fetches and updates data remotely.
-     * This method is called to update the data displayed in the UI.
-     *
-     */
-    //TODO: @Override
-    private void fetchAndUpdate() {
-        //TODO: Fetching of Data
     }
 }

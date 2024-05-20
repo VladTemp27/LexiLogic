@@ -47,17 +47,27 @@ public class GameDetailDAL {
     public static LinkedList<GameDetail> getGameDetailByPID(int playerID) {
         LinkedList<GameDetail> listOfGameDetail = new LinkedList<>();
         try (Connection conn = DatabaseUtil.getConnection()) {
-            PreparedStatement stmt = conn.prepareStatement("SELECT * FROM gamedetails WHERE playerID = ?");
+            String query = "SELECT gd.playerID, gd.lobbyID, gd.totalPoints, p.name " +
+                           "FROM gamedetails gd "+
+                           "JOIN player p USING(playerID) "+
+                           "WHERE playerID = ?";
+            PreparedStatement stmt = conn.prepareStatement(query);
             stmt.setInt(1, playerID);
             try (ResultSet rs = stmt.executeQuery()) {
                 while (rs.next()) {
-                    Player player = PlayerDAL.getPlayerByID(rs.getInt("playerID"));
-                    GameDetail detail =  new GameDetail(player.getUsername(), rs.getInt("lobbyID"), rs.getInt("totalPoints"));
+                    String username = rs.getString("name");
+                    int lobbyID = rs.getInt("lobbyID");
+                    int totalPoints = rs.getInt("totalPoints");
+                    GameDetail detail =  new GameDetail(username, lobbyID, totalPoints);
                     listOfGameDetail.add(detail);
                 }
             }
-        } catch (SQLException | ClassNotFoundException | InstantiationException | IllegalAccessException e) {
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException e) {
             throw new RuntimeException(e);
+        }catch(SQLException e ){
+            if(!e.getMessage().equals("Operation not allowed after ResultSet closed")){
+                e.printStackTrace();
+            }
         }
         return listOfGameDetail;
     }

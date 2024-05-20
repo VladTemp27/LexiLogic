@@ -4,7 +4,10 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import javafx.scene.effect.ColorAdjust;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
+import org.amalgam.ControllerException.InvalidRequestException;
 import org.amalgam.client.MainController;
 
 public class ProfileChangeUsernameController {
@@ -33,9 +36,26 @@ public class ProfileChangeUsernameController {
      *
      * @param button The button to add hover effect to.
      */
-    private void addHoverEffect(Button button) {
-        button.setOnMouseEntered(e -> button.setStyle("-fx-background-color: derive(#D9E0A2, -10%);"));
-        button.setOnMouseExited(e -> button.setStyle("-fx-background-color: #D9E0A2;"));
+    private void addHoverEffectImage(Button button) {
+        ImageView imageView = (ImageView) button.getGraphic();
+        ColorAdjust colorAdjust = new ColorAdjust();
+
+        button.setOnMouseEntered(e -> {
+            colorAdjust.setBrightness(-0.3); // Decrease brightness to make it darker
+            imageView.setEffect(colorAdjust);
+        });
+
+        button.setOnMouseExited(e -> {
+            colorAdjust.setBrightness(0); // Reset brightness
+            imageView.setEffect(colorAdjust);
+        });
+    }
+
+    private void addHoverEffect(Button button){
+        String originalColor = button.getStyle(); // Store the original color
+
+        button.setOnMouseEntered(e -> button.setStyle("-fx-background-color: derive(" + originalColor + ", -10%);"));
+        button.setOnMouseExited(e -> button.setStyle(originalColor));
     }
 
     /**
@@ -50,6 +70,26 @@ public class ProfileChangeUsernameController {
         alert.setContentText(message);
         alert.showAndWait();
     }
+
+    /**
+     * Gets the objects used.
+     * This method returns a string indicating the type of objects used by the controller.
+     *
+     * @return A string representing the objects used.
+     */
+    public void setObjectsUser(String objects) throws InvalidRequestException {
+
+    }
+
+    /**
+     * Fetches and updates data remotely.
+     * This method is called to update the data displayed in the UI.
+     *
+     */
+    public void fetchAndUpdate(String jsonString, String dataType) throws InvalidRequestException {
+
+    }
+
     @FXML
     public void handleSave(){
         // handles the save button when the username is changed
@@ -64,30 +104,10 @@ public class ProfileChangeUsernameController {
      */
     @FXML
     public void initialize() {
+
         addHoverEffect(saveButton);
-        addHoverEffect(backButton);
+        addHoverEffectImage(backButton);
         saveButton.setOnAction(event -> handleSave());
         backButton.setOnAction(event -> handleBack());
-    }
-    /**
-     * Gets the objects used.
-     * This method returns a string indicating the type of objects used by the controller.
-     *
-     * @return A string representing the objects used.
-     */
-    //TODO: @Override
-    private void getObjectsUsed() {
-        //TODO: Return Value
-        //return "user";
-    }
-
-    /**
-     * Fetches and updates data remotely.
-     * This method is called to update the data displayed in the UI.
-     *
-     */
-    //TODO: @Override
-    private void fetchAndUpdate() {
-        //TODO: Fetching of Data
     }
 }

@@ -29,7 +29,7 @@ public class ORBServerTester implements ORBServerCallback, ORBDOperationCallback
 
         }
 
-        program.executor.shutdown();
+        program.executor.shutdownNow();
 
     }
 
