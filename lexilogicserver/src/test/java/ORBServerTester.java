@@ -11,12 +11,12 @@ public class ORBServerTester implements ORBServerCallback, ORBDOperationCallback
     ExecutorService executor = Executors.newCachedThreadPool();
     boolean daemonRunning;
     public void runServer(){
-        ORBServer server = new ORBServer(this, 2018, "localhost");
+        ORBServer server = new ORBServer(this, 2018, "corbaServer");
         executor.submit(server);
     }
 
     public void runDaemon(){
-        ORBDRunner daemon = new ORBDRunner(this, 2018, "localhost");
+        ORBDRunner daemon = new ORBDRunner(this, 2018, "corbaServer");
         executor.submit(daemon);
     }
 
