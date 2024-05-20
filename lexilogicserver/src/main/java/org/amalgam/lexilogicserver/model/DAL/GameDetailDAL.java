@@ -51,8 +51,11 @@ public class GameDetailDAL {
             stmt.setInt(1, playerID);
             try (ResultSet rs = stmt.executeQuery()) {
                 while (rs.next()) {
-                    Player player = PlayerDAL.getPlayerByID(rs.getInt("playerID"));
-                    GameDetail detail =  new GameDetail(player.getUsername(), rs.getInt("lobbyID"), rs.getInt("totalPoints"));
+                    int retrievedID = rs.getInt("playerID");
+                    int lobbyID = rs.getInt("lobbyID");
+                    int totalPoints = rs.getInt("totalPoints");
+                    Player player = PlayerDAL.getPlayerByID(retrievedID);
+                    GameDetail detail =  new GameDetail(player.getUsername(), lobbyID, totalPoints);
                     listOfGameDetail.add(detail);
                 }
             }
