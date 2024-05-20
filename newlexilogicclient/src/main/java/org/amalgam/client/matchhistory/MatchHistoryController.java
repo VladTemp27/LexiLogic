@@ -23,8 +23,6 @@ public class MatchHistoryController{
     @FXML
     private TableView<MatchData> matchTable;
     @FXML
-    private TableColumn<MatchData, String> gameID;
-    @FXML
     private TableColumn<MatchData, String> standing;
     @FXML
     private TableColumn<MatchData, Integer> score;
@@ -163,7 +161,6 @@ public class MatchHistoryController{
      */
     @FXML
     public void populateMatchTable() {
-        gameID.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getGameID()));
         standing.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getStanding()));
         score.setCellValueFactory(data -> new SimpleIntegerProperty(data.getValue().getScore()).asObject());
 
@@ -205,7 +202,7 @@ public class MatchHistoryController{
 
     private ObservableList<MatchData> getMatchHistoryDataList() {
         ObservableList<MatchData> matchHistoryData = FXCollections.observableArrayList();
-        matchHistoryModel.getMatchHistory();
+        System.out.println(matchHistoryModel.getMatchHistory());
         return matchHistoryData;
     }
 }
