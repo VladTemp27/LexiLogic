@@ -163,6 +163,19 @@ public class GameController {
             }
         }, 0, 1000); // Start immediately, then update every second
     }
+    /**
+     * Processes the text input from the lexicon text field.
+     */
+    private void processLexiconInput() {
+        String input = lexiTextfield.getText().trim();
+        if (!input.isEmpty()) {
+            gameModel.verifyWord(input); // Verify the word using GameModel
+            yourLexiLabel.setText(input);
+            lexiTextfield.clear(); // Clear the text field
+        } else {
+            showAlert("Please enter a word.");
+        }
+    }
 
     /**
      * Method for randomizing letters inside the word box
@@ -211,6 +224,10 @@ public class GameController {
 
         // Start timer
         startTimer();
+
+        // handle textfield
+        lexiTextfield.setOnAction(event -> processLexiconInput());
+
     }
 
 }
