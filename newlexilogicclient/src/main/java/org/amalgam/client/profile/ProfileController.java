@@ -4,6 +4,8 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.effect.ColorAdjust;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import org.amalgam.ControllerException.InvalidRequestException;
 import org.amalgam.client.MainController;
@@ -26,6 +28,8 @@ public class ProfileController {
     @FXML
     private Label usernameLabel;
     private MainController mainController;
+    private ProfileModel profileModel;
+
 
     /**
      * Sets the Main Controller.
@@ -41,9 +45,26 @@ public class ProfileController {
      *
      * @param button The button to add hover effect to.
      */
-    private void addHoverEffect(Button button) {
-        button.setOnMouseEntered(e -> button.setStyle("-fx-background-color: derive(#D9E0A2, -10%);"));
-        button.setOnMouseExited(e -> button.setStyle("-fx-background-color: #D9E0A2;"));
+    private void addHoverEffectImage(Button button) {
+        ImageView imageView = (ImageView) button.getGraphic();
+        ColorAdjust colorAdjust = new ColorAdjust();
+
+        button.setOnMouseEntered(e -> {
+            colorAdjust.setBrightness(-0.3); // Decrease brightness to make it darker
+            imageView.setEffect(colorAdjust);
+        });
+
+        button.setOnMouseExited(e -> {
+            colorAdjust.setBrightness(0); // Reset brightness
+            imageView.setEffect(colorAdjust);
+        });
+    }
+
+    private void addHoverEffect(Button button){
+        String originalColor = button.getStyle(); // Store the original color
+
+        button.setOnMouseEntered(e -> button.setStyle("-fx-background-color: derive(" + originalColor + ", -10%);"));
+        button.setOnMouseExited(e -> button.setStyle(originalColor));
     }
 
     /**
@@ -119,16 +140,24 @@ public class ProfileController {
      */
     @FXML
     public void handleLogout(){
-        // insert exception for handling logout (di galing sa gpt to pramis)
-    }
+        try {
+            profileModel.logOut();
+            mainController.loadLoginView();
+        } catch (Exception e) {
+            showAlert("Error during logout: " + e.getMessage());
+        }    }
 
     /**
      * delete the user account when pressed
      */
     @FXML
     public void handleDelete(){
-        // insert exception for handling deletion of user account (di galing sa gpt din hehe)
-    }
+        try {
+            profileModel.accountDeletionRequest();
+            showAlert("Account deletion request sent successfully.");
+        } catch (Exception e) {
+            showAlert("Error during account deletion: " + e.getMessage());
+        }    }
 
     /**
      * Initializes the controller.
@@ -138,12 +167,14 @@ public class ProfileController {
     public void initialize() {
         usernameLabel.setText(LoginController.username);
         addHoverEffect(changePasswordButton);
-        addHoverEffect(editUsernameButton);
-        addHoverEffect(backButton);
+        addHoverEffectImage(editUsernameButton);
+        addHoverEffectImage(backButton);
         addHoverEffect(deleteButton);
         addHoverEffect(logoutButton);
         changePasswordButton.setOnAction(event -> handleChangePassword());
         editUsernameButton.setOnAction(event -> handleEditUsername());
         backButton.setOnAction(event -> handleBack());
+        logoutButton.setOnAction(event -> handleLogout());
+        deleteButton.setOnAction(event -> handleDelete());
     }
 }

@@ -40,5 +40,13 @@
             <Image url="@../../../icons/Axel.png" />
          </image>
       </ImageView>
+      <Button fx:id="backButton" layoutX="11.0" layoutY="14.0" mnemonicParsing="false" prefHeight="56.0" prefWidth="56.0" style="-fx-background-color: transparent;">
+         <graphic>
+            <ImageView fitHeight="38.0" fitWidth="47.0" pickOnBounds="true">
+               <image>
+                  <Image url="@../../../icons/BackButton.png" />
+               </image>
+            </ImageView>
+         </graphic></Button>
    </children>
 </AnchorPane>

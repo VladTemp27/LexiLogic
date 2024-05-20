@@ -9,10 +9,16 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-
 <AnchorPane fx:id="accountDeletionPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="500.0" style="-fx-background-color: #674C33;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.amalgam.lexilogicserver.views.accountdeletion.AccountDeletionController">
    <children>
-      <Button fx:id="backButton" layoutX="20.0" layoutY="33.0" mnemonicParsing="false" prefHeight="34.0" prefWidth="42.0" />
+      <Button fx:id="backButton" layoutX="14.0" layoutY="14.0" mnemonicParsing="false" prefHeight="52.0" prefWidth="55.0" style="-fx-background-color: transparent;">
+         <graphic>
+            <ImageView fitHeight="40.0" fitWidth="49.0" pickOnBounds="true">
+               <image>
+                  <Image url="@../../../icons/BackButton.png" />
+               </image>
+            </ImageView>
+         </graphic></Button>
       <ImageView fitHeight="308.0" fitWidth="392.0" layoutX="84.0" layoutY="56.0" pickOnBounds="true">
          <image>
             <Image url="@../../../icons/YellowBox.png" />
@@ -33,11 +39,6 @@
             <Font name="Brygada 1918 Regular" size="14.0" />
          </font>
       </Button>
-      <ImageView fitHeight="52.0" fitWidth="55.0" layoutX="14.0" layoutY="24.0" pickOnBounds="true">
-         <image>
-            <Image url="@../../../icons/BackButton.png" />
-         </image>
-      </ImageView>
       <ImageView fitHeight="165.0" fitWidth="150.0" layoutX="-6.0" layoutY="239.0" pickOnBounds="true" rotate="-3.0">
          <image>
             <Image url="@../../../icons/Axel.png" />

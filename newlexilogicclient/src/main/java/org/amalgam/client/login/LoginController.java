@@ -98,26 +98,12 @@ public class LoginController {
     }
 
     /**
-     * Shows the signup panel when pressed.
-     */
-    @FXML
-    public void handleSignUp() {
-        if (mainController != null) {
-            mainController.loadSignUpView();
-        } else {
-            System.out.println("MainController is not set.");
-        }
-    }
-
-    /**
      * Initializes the controller.
      * This method sets up the UI components and initializes the data model.
      */
     @FXML
     public void initialize() {
         addHoverEffect(loginButton);
-        addHoverEffect(signUpButton);
-        signUpButton.setOnAction(event -> handleSignUp());
         loginButton.setOnAction(event -> onLogin());
     }
 

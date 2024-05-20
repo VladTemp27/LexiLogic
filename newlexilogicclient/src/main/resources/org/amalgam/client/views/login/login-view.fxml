@@ -43,10 +43,5 @@
                 <Font name="Bowlby One SC Regular" size="20.0" />
             </font>
         </Button>
-      <Button fx:id="signUpButton" layoutX="136.0" layoutY="300.0" mnemonicParsing="false" prefHeight="47.0" prefWidth="124.0" style="-fx-background-color: #D9E0A2;" text="Sign-Up" textFill="#6b4406">
-         <font>
-            <Font name="Bowlby One SC Regular" size="20.0" />
-         </font>
-      </Button>
     </children>
 </AnchorPane>

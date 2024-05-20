@@ -11,25 +11,25 @@ public class ORBServerTester implements ORBServerCallback, ORBDOperationCallback
     ExecutorService executor = Executors.newCachedThreadPool();
     boolean daemonRunning;
     public void runServer(){
-        ORBServer server = new ORBServer(this, 2018, "corbaServer");
+        ORBServer server = new ORBServer(this, 2018, "localhost");
         executor.submit(server);
     }
 
     public void runDaemon(){
-        ORBDRunner daemon = new ORBDRunner(this, 2018, "corbaServer");
+        ORBDRunner daemon = new ORBDRunner(this, 2018, "localhost");
         executor.submit(daemon);
     }
 
     public static void main(String[] args) throws InterruptedException {
         ORBServerTester program = new ORBServerTester();
-        program.runDaemon();
+        //program.runDaemon();
         Thread.sleep(3000);
         program.runServer();
         while(program.daemonRunning){
 
         }
 
-        program.executor.shutdown();
+        program.executor.shutdownNow();
 
     }
 
