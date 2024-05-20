@@ -9,6 +9,7 @@ import javafx.scene.layout.AnchorPane;
 import org.amalgam.ControllerException.InvalidRequestException;
 import org.amalgam.client.MainController;
 
+@Deprecated
 public class VictoryController {
 
     @FXML
