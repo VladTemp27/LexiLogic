@@ -54,7 +54,7 @@ public class GameDetailDAL {
                     int retrievedID = rs.getInt("playerID");
                     int lobbyID = rs.getInt("lobbyID");
                     int totalPoints = rs.getInt("totalPoints");
-                    Player player = PlayerDAL.getPlayerByID(retrievedID);
+                    Player player = PlayerDAL.getPlayerByID(retrievedID); // this might be causing some problem with result set
                     GameDetail detail =  new GameDetail(player.getUsername(), lobbyID, totalPoints);
                     listOfGameDetail.add(detail);
                 }
