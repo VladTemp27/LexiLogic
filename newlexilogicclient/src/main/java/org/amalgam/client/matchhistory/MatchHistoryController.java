@@ -11,6 +11,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import org.amalgam.ControllerException.InvalidRequestException;
 import org.amalgam.client.MainController;
+import org.amalgam.client.login.LoginController;
 
 public class MatchHistoryController{
     @FXML
@@ -31,6 +32,7 @@ public class MatchHistoryController{
     private Button backButton;
 
     private MainController mainController;
+    public MatchHistoryModel matchHistoryModel = new MatchHistoryModel(MainController.orbConnection, LoginController.playerCallback);
 
     /**
      * Sets the Main Controller.
@@ -95,11 +97,11 @@ public class MatchHistoryController{
 
     // TODO: Should be moved into a separated data class
     // For Testing
-    private ObservableList<MatchData> matchDataList = FXCollections.observableArrayList(
-            new MatchData("1", "Win", 100),
-            new MatchData("2", "Loss", 50),
-            new MatchData("3", "Win", 120)
-    );
+//    private ObservableList<MatchData> matchDataList = FXCollections.observableArrayList(
+//            new MatchData("1", "Win", 100),
+//            new MatchData("2", "Loss", 50),
+//            new MatchData("3", "Win", 120)
+//    );
 
     //TODO: This should be moved into an Object for Client Side
     private static class MatchData {
@@ -165,7 +167,7 @@ public class MatchHistoryController{
         standing.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getStanding()));
         score.setCellValueFactory(data -> new SimpleIntegerProperty(data.getValue().getScore()).asObject());
 
-        matchTable.setItems(matchDataList);
+//        matchTable.setItems(matchDataList);
     }
 
     /**
@@ -195,8 +197,15 @@ public class MatchHistoryController{
         addHoverEffect(backButton);
         backButton.setOnAction(event -> handleBack());
         populateMatchTable();
-        populateRank();
-        populateScore();
+        matchTable.setItems(FXCollections.observableArrayList(
+                getMatchHistoryDataList()
+        ));
         matchTable.setStyle("-fx-font-family: 'Brygada 1918';");
+    }
+
+    private ObservableList<MatchData> getMatchHistoryDataList() {
+        ObservableList<MatchData> matchHistoryData = FXCollections.observableArrayList();
+        matchHistoryModel.getMatchHistory();
+        return matchHistoryData;
     }
 }

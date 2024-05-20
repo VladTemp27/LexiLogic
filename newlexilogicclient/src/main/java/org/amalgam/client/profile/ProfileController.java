@@ -9,11 +9,10 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import org.amalgam.ControllerException.InvalidRequestException;
 import org.amalgam.client.MainController;
+import org.amalgam.client.login.LoginController;
 
 public class ProfileController {
-
     // private variables
-
     @FXML
     private AnchorPane profilePane;
     @FXML
@@ -28,8 +27,6 @@ public class ProfileController {
     private Button editUsernameButton;
     @FXML
     private Label usernameLabel;
-    @FXML
-    private Label scoreLabel;
     private MainController mainController;
 
     /**
@@ -158,6 +155,7 @@ public class ProfileController {
      */
     @FXML
     public void initialize() {
+        usernameLabel.setText(LoginController.username);
         addHoverEffect(changePasswordButton);
         addHoverEffectImage(editUsernameButton);
         addHoverEffectImage(backButton);

@@ -1,4 +1,6 @@
 import org.amalgam.ControllerException.InvalidRequestException;
+import org.amalgam.Service.GameServiceModule.GameService;
+import org.amalgam.Service.GameServiceModule.GameServiceHelper;
 import org.amalgam.Service.PlayerServiceModule.PlayerService;
 import org.amalgam.Service.PlayerServiceModule.PlayerServiceHelper;
 import org.amalgam.UIControllers.PlayerCallback;
@@ -18,6 +20,7 @@ import org.omg.PortableServer.POAHelper;
 public class ConnectionTest {
 
     private static PlayerService playerServiceStub;
+    private static GameService gameServiceStub;
 
     public static void main(String[] args)  {
         try{
@@ -27,6 +30,7 @@ public class ConnectionTest {
 
             NamingContextExt namingReference = NamingContextExtHelper.narrow(orb.resolve_initial_references("NameService"));
             playerServiceStub = PlayerServiceHelper.narrow(namingReference.resolve_str("PlayerService"));
+            gameServiceStub = GameServiceHelper.narrow(namingReference.resolve_str("GameService"));
             CallbackImpl callback = new CallbackImpl();
             callback.username("Luis");
 
@@ -34,21 +38,18 @@ public class ConnectionTest {
 
             playerServiceStub.login(callbackReference, "password456");
             System.out.println("SUCCESS");
+
+            System.out.println(gameServiceStub.getLeaderboards());
+            System.out.println(playerServiceStub.getGameHistory("Marven"));
         }catch(Exception e){
             e.printStackTrace();
         }
     }
 
-
-
-
     private static String[] generateArgs(int port, String localhost){
         String[] arguments = new String[4];
         arguments[0] = "-ORBInitialPort";
         arguments[1] = String.valueOf(port);
-
-        System.out.println(String.valueOf(port));
-
         arguments[2] = "-ORBInitialHost";
         arguments[3] = localhost;
         return arguments;

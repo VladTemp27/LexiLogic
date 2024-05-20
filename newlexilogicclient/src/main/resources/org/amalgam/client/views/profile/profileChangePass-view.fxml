@@ -30,11 +30,6 @@
             <Font name="Bowlby One SC Regular" size="24.0" />
          </font>
       </Label>
-      <Label fx:id="scoreLabel" layoutX="253.0" layoutY="86.0" text="20238" textFill="#485613">
-         <font>
-            <Font name="Bowlby One SC Regular" size="20.0" />
-         </font>
-      </Label>
       <TextField fx:id="oldPasswordField" layoutX="189.0" layoutY="151.0" prefHeight="49.0" prefWidth="252.0" promptText="old password" style="-fx-background-color: #B07C3B; -fx-prompt-text-fill: #FFFFFF;">
          <font>
             <Font name="Brygada 1918 Regular" size="18.0" />

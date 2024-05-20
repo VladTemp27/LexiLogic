@@ -3,12 +3,14 @@ package org.amalgam.client.profile;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.effect.ColorAdjust;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import org.amalgam.ControllerException.InvalidRequestException;
 import org.amalgam.client.MainController;
+import org.amalgam.client.login.LoginController;
 
 public class ProfileChangePassController {
 // private variables
@@ -22,8 +24,11 @@ public class ProfileChangePassController {
     private TextField oldPasswordField;
     @FXML
     private TextField newPasswordField;
+    @FXML
+    private Label usernameLabel;
     private MainController mainController;
-
+    public ProfileChangePassModel profileChangePassModel = new ProfileChangePassModel(MainController.orbConnection,
+            LoginController.playerCallback);
     /**
      * Sets the Main Controller.
      *
@@ -94,11 +99,22 @@ public class ProfileChangePassController {
 
     @FXML
     public void handleSave(){
+        String oldPassword = oldPasswordField.getText();
+        if (!oldPassword.equals(LoginController.password)){
+            System.out.println("ERROR");
+        } else {
+            System.out.println("PASSWORD CHANGED");
+        }
         // handles the save button when the username is changed
     }
     @FXML
     public void handleBack(){
         // handle action to go back to profile view when pressed
+        if (mainController != null) {
+            mainController.loadProfileView();
+        } else {
+            System.out.println("MainController is not set.");
+        }
     }
     /**
      * Initializes the controller.
@@ -106,6 +122,7 @@ public class ProfileChangePassController {
      */
     @FXML
     public void initialize() {
+        usernameLabel.setText(LoginController.username);
         addHoverEffect(saveButton);
         addHoverEffectImage(backButton);
         saveButton.setOnAction(event -> handleSave());
