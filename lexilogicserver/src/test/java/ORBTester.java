@@ -15,7 +15,7 @@ public class ORBTester implements ORBServerCallback, ORBDOperationCallback {
 
 	public static void main(String[] args) throws InterruptedException {
 		ORBTester program = new ORBTester();
-		//program.runDaemon();
+		program.runDaemon();
 		Thread.sleep(1000);
 		daemonRunning = true;
 		program.runServer();
@@ -41,7 +41,7 @@ public class ORBTester implements ORBServerCallback, ORBDOperationCallback {
 
 	@Override
 	public void notifyServantsBinded() {
-		System.out.println("Servants binded");
+		System.out.println("Servants bound");
 	}
 
 	@Override

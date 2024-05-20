@@ -22,14 +22,14 @@ public class ORBServerTester implements ORBServerCallback, ORBDOperationCallback
 
     public static void main(String[] args) throws InterruptedException {
         ORBServerTester program = new ORBServerTester();
-        program.runDaemon();
+        //program.runDaemon();
         Thread.sleep(3000);
         program.runServer();
         while(program.daemonRunning){
 
         }
 
-        program.executor.shutdown();
+        program.executor.shutdownNow();
 
     }
 

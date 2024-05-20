@@ -9,11 +9,10 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import org.amalgam.ControllerException.InvalidRequestException;
 import org.amalgam.client.MainController;
+import org.amalgam.client.login.LoginController;
 
 public class ProfileController {
-
     // private variables
-
     @FXML
     private AnchorPane profilePane;
     @FXML
@@ -28,9 +27,9 @@ public class ProfileController {
     private Button editUsernameButton;
     @FXML
     private Label usernameLabel;
-    @FXML
-    private Label scoreLabel;
     private MainController mainController;
+    private ProfileModel profileModel;
+
 
     /**
      * Sets the Main Controller.
@@ -141,16 +140,24 @@ public class ProfileController {
      */
     @FXML
     public void handleLogout(){
-        // insert exception for handling logout (di galing sa gpt to pramis)
-    }
+        try {
+            profileModel.logOut();
+            mainController.loadLoginView();
+        } catch (Exception e) {
+            showAlert("Error during logout: " + e.getMessage());
+        }    }
 
     /**
      * delete the user account when pressed
      */
     @FXML
     public void handleDelete(){
-        // insert exception for handling deletion of user account (di galing sa gpt din hehe)
-    }
+        try {
+            profileModel.accountDeletionRequest();
+            showAlert("Account deletion request sent successfully.");
+        } catch (Exception e) {
+            showAlert("Error during account deletion: " + e.getMessage());
+        }    }
 
     /**
      * Initializes the controller.
@@ -158,6 +165,7 @@ public class ProfileController {
      */
     @FXML
     public void initialize() {
+        usernameLabel.setText(LoginController.username);
         addHoverEffect(changePasswordButton);
         addHoverEffectImage(editUsernameButton);
         addHoverEffectImage(backButton);
@@ -166,5 +174,7 @@ public class ProfileController {
         changePasswordButton.setOnAction(event -> handleChangePassword());
         editUsernameButton.setOnAction(event -> handleEditUsername());
         backButton.setOnAction(event -> handleBack());
+        logoutButton.setOnAction(event -> handleLogout());
+        deleteButton.setOnAction(event -> handleDelete());
     }
 }

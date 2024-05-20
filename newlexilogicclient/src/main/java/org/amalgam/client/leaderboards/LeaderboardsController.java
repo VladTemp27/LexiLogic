@@ -11,6 +11,8 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import org.amalgam.ControllerException.InvalidRequestException;
 import org.amalgam.client.MainController;
+import org.amalgam.client.login.LoginController;
+import org.amalgam.client.login.LoginModel;
 
 public class LeaderboardsController {
     @FXML
@@ -31,6 +33,8 @@ public class LeaderboardsController {
     private Button backButton;
 
     private MainController mainController;
+    public LeaderboardsModel leaderboardsModel = new LeaderboardsModel(MainController.orbConnection, LoginController.playerCallback);
+    // public LeaderboardsModel leaderboardsModel = new LeaderboardsModel(MainController.orbConnection, LoginModel.playerCallback)
 
     /**
      * Sets the Main Controller.
@@ -93,13 +97,32 @@ public class LeaderboardsController {
         alert.showAndWait();
     }
 
+    // TODO: ???
+    private ObservableList<LeaderboardsData> getLeaderboardsDataList() {
+        ObservableList<LeaderboardsData> data = FXCollections.observableArrayList();
+        String leaderboards = leaderboardsModel.getLeaderBoards();
+        System.out.println(leaderboards);
+        String[] leaderboardsArray = leaderboards.split(",");
+        for (int i=1; i<leaderboardsArray.length + 1; i++) {
+            if (i % 3 == 0){
+                if (leaderboardsArray[i-3].contains(LoginController.username)){ // temporary solution
+                    rankLabel.setText(leaderboardsArray[i-1]);
+                    scoreLabel.setText(leaderboardsArray[i-2]);
+                }
+                data.add(new LeaderboardsData(leaderboardsArray[i-1], leaderboardsArray[i-3],
+                        Integer.parseInt(leaderboardsArray[i-2])));
+            }
+        }
+        return data;
+    }
     // TODO: Should be moved into a separated data class
     // For Testing
-    private ObservableList<LeaderboardsData> leaderboardsDataList = FXCollections.observableArrayList(
-            new LeaderboardsData("1", "Georcelle Nuarin", 1200),
-            new LeaderboardsData("2", "Mark Lestat", 1100),
-            new LeaderboardsData("3", "Lenar Domingo", 1000)
-    );
+
+//    public ObservableList<LeaderboardsData> leaderboardsDataList = FXCollections.observableArrayList(
+//            new LeaderboardsData("1", "Georcelle Nuarin", 1200),
+//            new LeaderboardsData("2", "Mark Lestat", 1100),
+//            new LeaderboardsData("3", "Lenar Domingo", 1000)
+//    );
 
     // TODO: This should be moved into an object for client side
     private static class LeaderboardsData {
@@ -166,7 +189,7 @@ public class LeaderboardsController {
             username.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getUsername()));
             score.setCellValueFactory(data -> new SimpleIntegerProperty(data.getValue().getScore()).asObject());
 
-            leaderboardsTable.setItems(leaderboardsDataList);
+//            leaderboardsTable.setItems(leaderboardsDataList);
         }
 
         /**
@@ -175,7 +198,7 @@ public class LeaderboardsController {
         @FXML
         public void populateRank() {
             //TODO: Get the Highest Rank of the Player
-            rankLabel.setText("1"); // For Testing
+            rankLabel.setText("2"); // For Testing
         }
 
         /**
@@ -184,7 +207,7 @@ public class LeaderboardsController {
         @FXML
         public void populateScore() {
             //TODO: Get the Highest Score of the Player
-            scoreLabel.setText("1200");
+            scoreLabel.setText("999");
         }
 
         /**
@@ -196,8 +219,9 @@ public class LeaderboardsController {
             addHoverEffect(backButton);
             backButton.setOnAction(event -> handleBack());
             populateLeaderboardsTable();
-            populateRank();
-            populateScore();
+            leaderboardsTable.setItems(FXCollections.observableArrayList(
+                    getLeaderboardsDataList()
+            ));
             leaderboardsTable.setStyle("-fx-font-family: 'Brygada 1918';");
         }
 
