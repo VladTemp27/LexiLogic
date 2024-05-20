@@ -84,7 +84,7 @@ public class MainController {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/org/amalgam/client/views/login/login-view.fxml"));
             AnchorPane loginPane = fxmlLoader.load();
 
-            InputStream inputStream = getClass().getResourceAsStream("/org/amalgam/icons/Logo.png");
+            InputStream inputStream = getClass().getResourceAsStream("/org/amalgam/icons/newLogo.png");
             if (inputStream != null) {
                 Image image = new Image(inputStream);
                 stage.getIcons().add(image);
@@ -159,7 +159,7 @@ public class MainController {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/org/amalgam/client/views/matchhistory/matchhistory-view.fxml"));
             AnchorPane matchHistoryPane = fxmlLoader.load();
 
-            InputStream inputStream = getClass().getResourceAsStream("/org/amalgam/icons/Logo.png");
+            InputStream inputStream = getClass().getResourceAsStream("/org/amalgam/icons/newLogo.png");
 
             if (inputStream != null) {
                 Image image = new Image(inputStream);
@@ -197,7 +197,7 @@ public class MainController {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/org/amalgam/client/views/profile/profile-view.fxml"));
             AnchorPane profilePane = fxmlLoader.load();
 
-            InputStream inputStream = getClass().getResourceAsStream("/org/amalgam/icons/Logo.png");
+            InputStream inputStream = getClass().getResourceAsStream("/org/amalgam/icons/newLogo.png");
 
             if (inputStream != null) {
                 Image image = new Image(inputStream);
@@ -235,7 +235,7 @@ public class MainController {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/org/amalgam/client/views/profile/profileChangeUsername-view.fxml"));
             AnchorPane changeUsernamePane = fxmlLoader.load();
 
-            InputStream inputStream = getClass().getResourceAsStream("/org/amalgam/icons/Logo.png");
+            InputStream inputStream = getClass().getResourceAsStream("/org/amalgam/icons/newLogo.png");
 
             if (inputStream != null) {
                 Image image = new Image(inputStream);
@@ -273,7 +273,7 @@ public class MainController {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/org/amalgam/client/views/profile/profileChangePass-view.fxml"));
             AnchorPane changepassPane = fxmlLoader.load();
 
-            InputStream inputStream = getClass().getResourceAsStream("/org/amalgam/icons/Logo.png");
+            InputStream inputStream = getClass().getResourceAsStream("/org/amalgam/icons/newLogo.png");
 
             if (inputStream != null) {
                 Image image = new Image(inputStream);
@@ -311,7 +311,7 @@ public class MainController {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/org/amalgam/client/views/mainmenu/mainmenu-view.fxml"));
             AnchorPane mainmenuPane = fxmlLoader.load();
 
-            InputStream inputStream = getClass().getResourceAsStream("/org/amalgam/icons/Logo.png");
+            InputStream inputStream = getClass().getResourceAsStream("/org/amalgam/icons/newLogo.png");
 
             if (inputStream != null) {
                 Image image = new Image(inputStream);
@@ -349,7 +349,7 @@ public class MainController {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/org/amalgam/client/views/game/game-view.fxml"));
             AnchorPane gamePane = fxmlLoader.load();
 
-            InputStream inputStream = getClass().getResourceAsStream("/org/amalgam/icons/Logo.png");
+            InputStream inputStream = getClass().getResourceAsStream("/org/amalgam/icons/newLogo.png");
 
             if (inputStream != null) {
                 Image image = new Image(inputStream);
@@ -386,7 +386,7 @@ public class MainController {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/org/amalgam/client/views/loading/loading-view.fxml"));
             AnchorPane loadingPane = fxmlLoader.load();
 
-            InputStream inputStream = getClass().getResourceAsStream("/org/amalgam/icons/Logo.png");
+            InputStream inputStream = getClass().getResourceAsStream("/org/amalgam/icons/newLogo.png");
 
             if (inputStream != null) {
                 Image image = new Image(inputStream);
@@ -424,7 +424,7 @@ public class MainController {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/org/amalgam/client/views/leaderboards/leaderboards-view.fxml"));
             AnchorPane leaderboardsPane = fxmlLoader.load();
 
-            InputStream inputStream = getClass().getResourceAsStream("/org/amalgam/icons/Logo.png");
+            InputStream inputStream = getClass().getResourceAsStream("/org/amalgam/icons/newLogo.png");
 
             if (inputStream != null) {
                 Image image = new Image(inputStream);
@@ -458,7 +458,7 @@ public class MainController {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/org/amalgam/client/views/howtoplay/howtoplay-view.fxml"));
             AnchorPane howToPlayPane = fxmlLoader.load();
 
-            InputStream inputStream = getClass().getResourceAsStream("/org/amalgam/icons/Logo.png");
+            InputStream inputStream = getClass().getResourceAsStream("/org/amalgam/icons/newLogo.png");
 
             if (inputStream != null) {
                 Image image = new Image(inputStream);
