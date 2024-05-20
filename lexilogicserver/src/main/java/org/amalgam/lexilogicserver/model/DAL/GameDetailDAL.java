@@ -51,13 +51,20 @@ public class GameDetailDAL {
             stmt.setInt(1, playerID);
             try (ResultSet rs = stmt.executeQuery()) {
                 while (rs.next()) {
-                    Player player = PlayerDAL.getPlayerByID(rs.getInt("playerID"));
-                    GameDetail detail =  new GameDetail(player.getUsername(), rs.getInt("lobbyID"), rs.getInt("totalPoints"));
+                    int retrievedID = rs.getInt("playerID");
+                    int lobbyID = rs.getInt("lobbyID");
+                    int totalPoints = rs.getInt("totalPoints");
+                    Player player = PlayerDAL.getPlayerByID(retrievedID); // this might be causing some problem with result set
+                    GameDetail detail =  new GameDetail(player.getUsername(), lobbyID, totalPoints);
                     listOfGameDetail.add(detail);
                 }
             }
-        } catch (SQLException | ClassNotFoundException | InstantiationException | IllegalAccessException e) {
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException e) {
             throw new RuntimeException(e);
+        }catch(SQLException e ){
+            if(!e.getMessage().equals("Operation not allowed after ResultSet closed")){
+                e.printStackTrace();
+            }
         }
         return listOfGameDetail;
     }
