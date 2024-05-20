@@ -56,8 +56,10 @@ public class GameDetailDAL {
                     listOfGameDetail.add(detail);
                 }
             }
-        } catch (SQLException | ClassNotFoundException | InstantiationException | IllegalAccessException e) {
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException e) {
             throw new RuntimeException(e);
+        }catch(SQLException e ){
+            System.out.println("RS Closed");
         }
         return listOfGameDetail;
     }
