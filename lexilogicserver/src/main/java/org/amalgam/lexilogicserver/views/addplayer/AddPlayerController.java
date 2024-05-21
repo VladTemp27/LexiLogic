@@ -25,6 +25,9 @@ public class AddPlayerController {
     @FXML
     private TextField usernameTextfield;
     @FXML
+    private TextField passwordTextfield;
+
+    @FXML
     private Button backButton;
 
     private List<Player> players;
@@ -72,8 +75,10 @@ public class AddPlayerController {
     public void handleAddPlayer(){
         if(serverController != null){
             String username = usernameTextfield.getText();
+            String password = passwordTextfield.getText();
             if (!username.isEmpty()) {
-                // TODO: Connect to microservice for adding player (server)
+
+             AddPlayerModel.process(username,password);
             } else {
                 showAlert("Username cannot be empty.");
             }
