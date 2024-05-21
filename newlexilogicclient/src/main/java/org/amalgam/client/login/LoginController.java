@@ -10,6 +10,7 @@ import org.amalgam.PlayerCallbackImpl;
 import org.amalgam.UIControllers.PlayerCallback;
 import org.amalgam.UIControllers.PlayerCallbackHelper;
 import org.amalgam.Utils.Exceptions.InvalidCredentialsException;
+import org.amalgam.Utils.Exceptions.UserExistenceException;
 import org.amalgam.client.MainController;
 import org.omg.PortableServer.POAPackage.ServantNotActive;
 import org.omg.PortableServer.POAPackage.WrongPolicy;
@@ -100,6 +101,10 @@ public class LoginController {
             return loginModel.login(password);
         } catch (RuntimeException e) {
             if (e.getCause() instanceof InvalidCredentialsException) {
+                showAlert("Invalid username or password");
+                return false;
+            } else if (e.getCause() instanceof UserExistenceException) {
+                showAlert("User does not exist");
                 return false;
             }
             throw e;
