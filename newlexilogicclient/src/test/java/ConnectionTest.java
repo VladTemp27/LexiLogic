@@ -24,23 +24,21 @@ public class ConnectionTest {
 
     public static void main(String[] args)  {
         try{
-            ORB orb = ORB.init(generateArgs(2018, "localhost"), null);
+            ORB orb = ORB.init(generateArgs(2018, "192.168.1.93"), null);
             POA rootPOA = POAHelper.narrow(orb.resolve_initial_references("RootPOA"));
             rootPOA.the_POAManager().activate();
 
             NamingContextExt namingReference = NamingContextExtHelper.narrow(orb.resolve_initial_references("NameService"));
-            playerServiceStub = PlayerServiceHelper.narrow(namingReference.resolve_str("PlayerService"));
-            gameServiceStub = GameServiceHelper.narrow(namingReference.resolve_str("GameService"));
+
             CallbackImpl callback = new CallbackImpl();
-            callback.username("Luis");
+            callback.username("Marven");
 
-            PlayerCallback callbackReference = PlayerCallbackHelper.narrow(rootPOA.servant_to_reference(callback));
+            playerServiceStub = PlayerServiceHelper.narrow(namingReference.resolve_str("PlayerService"));
+            playerServiceStub.login(PlayerCallbackHelper.narrow(rootPOA.servant_to_reference(callback)), "password123");
+            System.out.println("Logged In");
 
-            playerServiceStub.login(callbackReference, "password456");
-            System.out.println("SUCCESS");
-
-            System.out.println(gameServiceStub.getLeaderboards());
-            System.out.println(playerServiceStub.getGameHistory("Marven"));
+            playerServiceStub.logout(callback.username());
+            System.out.println("Logged Out");
         }catch(Exception e){
             e.printStackTrace();
         }
@@ -52,6 +50,7 @@ public class ConnectionTest {
         arguments[1] = String.valueOf(port);
         arguments[2] = "-ORBInitialHost";
         arguments[3] = localhost;
+        System.out.println(localhost);
         return arguments;
     }
 }
