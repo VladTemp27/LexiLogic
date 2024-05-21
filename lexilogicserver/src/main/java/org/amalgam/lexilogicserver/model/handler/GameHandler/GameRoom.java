@@ -3,6 +3,7 @@ package org.amalgam.lexilogicserver.model.handler.GameHandler;
 import org.amalgam.ControllerException.InvalidRequestException;
 import org.amalgam.UIControllers.PlayerCallback;
 import org.amalgam.lexilogicserver.model.DAL.GameDetailDAL;
+import org.amalgam.lexilogicserver.model.DAL.LeaderBoardDAL;
 import org.amalgam.lexilogicserver.model.DAL.LobbyDAL;
 import org.amalgam.lexilogicserver.model.microservices.NTimer;
 import org.amalgam.lexilogicserver.model.microservices.NTimerCallback;
@@ -286,5 +287,17 @@ public class GameRoom implements NTimerCallback {
     @Override
     public void timeIs() {
 
+    }
+
+    public LinkedHashMap<Integer, String> getRounds() {
+        return rounds;
+    }
+
+    public int getCurrentRound() {
+        return currentRound;
+    }
+
+    public int getSecondsRoundDuration() {
+        return secondsRoundDuration;
     }
 }
