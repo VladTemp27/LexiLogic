@@ -37,7 +37,7 @@ public class GameRoom implements NTimerCallback {
         this.playerCallbacks = playerCallbacks;
         currentRound = 1;
         generateWordBox();
-        stagePlayers();
+        //stagePlayers();
 
     }
 
@@ -52,7 +52,7 @@ public class GameRoom implements NTimerCallback {
         roundStart();
     }
 
-    private void stagePlayers() {
+    public void stagePlayers() {
         details = defaultDetails; // resets details to default unready state
         String w;
         if((w = winnerAvailable())!=null){

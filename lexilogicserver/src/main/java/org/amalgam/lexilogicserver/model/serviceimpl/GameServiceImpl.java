@@ -43,6 +43,7 @@ public class GameServiceImpl extends GameServicePOA {
         try {
             matchmakingLock.acquire();
             while (!matchmakingService.isTimerDone()) {
+                System.out.println("Loop started");
                 LinkedList<PlayerGameDetail> players = matchmakingService.checkAndMatchPlayers();
                 if (players != null) {
                     int roomID = rooms.size();
@@ -64,17 +65,19 @@ public class GameServiceImpl extends GameServicePOA {
                         throw new RuntimeException(e);
                     }
                     rooms.add(gameRoom);
-                    return createGameRoomResponse(roomID, players);
+                    gameRoom.stagePlayers();
+//                    return createGameRoomResponse(roomID, players);
                 }
                 Thread.sleep(100);
             }
         } catch (InterruptedException e) {
+            System.out.println("Interrupted Thread");
             Thread.currentThread().interrupt();
         } finally {
             matchmakingLock.release();
         }
 
-        return "{\"status\": \"timeout\", \"message\": \"No match found within 10 seconds.\"}";
+        return "{\"status\": \"timeout\", \"message\": \"No match found within 10 seconds DEBUG MODE.\"}";
     }
 
     private String createGameRoomResponse(int roomID, LinkedList<PlayerGameDetail> players) {
