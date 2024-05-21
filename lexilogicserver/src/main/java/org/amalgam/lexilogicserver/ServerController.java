@@ -1,11 +1,13 @@
 package org.amalgam.lexilogicserver;
 
+import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 import org.amalgam.lexilogicserver.model.microservices.daemonHandler.ORBDException;
 import org.amalgam.lexilogicserver.model.microservices.daemonHandler.ORBDOperationCallback;
 import org.amalgam.lexilogicserver.views.accountdeletion.AccountDeletionController;
@@ -209,6 +211,12 @@ public class ServerController implements ORBDOperationCallback {
             RunORBDController runORBDController = fxmlLoader.getController();
             runORBDController.setServerController(this);
             runORBDController.initialize();
+            stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+                @Override
+                public void handle(WindowEvent event) {
+                    System.exit(0);
+                }
+            });
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -320,6 +328,13 @@ public class ServerController implements ORBDOperationCallback {
             AccountDeletionController accountDeletionController = fxmlLoader.getController();
             accountDeletionController.setServerController(this);
             accountDeletionController.initialize();
+
+            stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+                @Override
+                public void handle(WindowEvent event) {
+                    System.exit(0);
+                }
+            });
 
         } catch (IOException e) {
             e.printStackTrace();

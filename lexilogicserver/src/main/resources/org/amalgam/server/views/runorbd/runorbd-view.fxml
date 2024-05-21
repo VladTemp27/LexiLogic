@@ -8,14 +8,14 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="runORBDPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="500.0" style="-fx-background-color: #674C33;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.amalgam.lexilogicserver.views.runorbd.RunORBDController">
+<AnchorPane fx:id="runORBDPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="500.0" style="-fx-background-color: #674C33;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.amalgam.lexilogicserver.views.runorbd.RunORBDController">
    <children>
       <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="-25.0" layoutY="215.0" pickOnBounds="true" preserveRatio="true" rotate="270.0">
          <image>
             <Image url="@../../../icons/Axel.png" />
          </image>
       </ImageView>
-      <ImageView fitHeight="324.0" fitWidth="397.0" layoutX="53.0" layoutY="38.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fitHeight="324.0" fitWidth="397.0" layoutX="66.0" layoutY="38.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../../../icons/YellowBox.png" />
          </image>
@@ -39,6 +39,15 @@
          <font>
             <Font name="Brygada 1918 Regular" size="30.0" />
          </font>
+      </Button>
+      <Button fx:id="backButton" layoutX="7.0" layoutY="8.0" mnemonicParsing="false" style="-fx-background-color: transparent;">
+         <graphic>
+            <ImageView fitHeight="40.0" fitWidth="49.0" pickOnBounds="true">
+               <image>
+                  <Image url="@../../../icons/BackButton.png" />
+               </image>
+            </ImageView>
+         </graphic>
       </Button>
    </children>
 </AnchorPane>
