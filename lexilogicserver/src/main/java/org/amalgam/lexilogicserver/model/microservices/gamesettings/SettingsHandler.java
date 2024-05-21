@@ -33,4 +33,21 @@ public class SettingsHandler {
         }
         return 0;
     }
+
+    public void setQueueTime(int newQueueTime) {
+        JsonObject rootObject = getObjectFromFile("settings.json");
+
+        JsonArray elementsArray = rootObject.getAsJsonArray("settings");
+
+        JsonObject settingsObject = elementsArray.get(0).getAsJsonObject();
+
+        settingsObject.addProperty("queueTime", String.valueOf(newQueueTime));
+
+        try (FileWriter fileWriter = new FileWriter("settings.json")) {
+            fileWriter.write(rootObject.toString());
+        } catch (IOException e) {
+            throw new RuntimeException("Error writing to settings file", e);
+        }
+    }
+
 }

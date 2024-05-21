@@ -33,7 +33,7 @@ public class PlayerDAL {
         }
         return null;
     }
-    @Deprecated
+
     public static void insertNewPlayer(String username, String password) {
         try (Connection conn = DatabaseUtil.getConnection()) {
             PreparedStatement stmt = conn.prepareStatement("INSERT INTO player (name, password) VALUES (?, ?)");

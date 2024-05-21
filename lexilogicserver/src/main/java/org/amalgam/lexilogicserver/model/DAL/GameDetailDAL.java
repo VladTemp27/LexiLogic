@@ -1,8 +1,10 @@
 package org.amalgam.lexilogicserver.model.DAL;
 
 import org.amalgam.lexilogicserver.model.DatabaseUtil;
+import org.amalgam.lexilogicserver.model.handler.GameHandler.GameRoom;
 import org.amalgam.lexilogicserver.model.utilities.referenceobjects.GameDetail;
 import org.amalgam.lexilogicserver.model.utilities.referenceobjects.Player;
+import org.amalgam.lexilogicserver.model.utilities.referenceobjects.PlayerGameDetail;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -70,5 +72,23 @@ public class GameDetailDAL {
             }
         }
         return listOfGameDetail;
+    }
+
+    public static void insertGameDetailFromPlayerDetail(PlayerGameDetail playerDetail, int lobbyID){
+        try(Connection conn = DatabaseUtil.getConnection()){
+            PreparedStatement statement = conn.prepareStatement("INSERT INTO gamedetails (playerID, lobbyID, " +
+                    "totalPoints) VALUES ((SELECT playerID from player WHERE name = ?), ?, ?)");
+
+            statement.setString(1, playerDetail.getUsername());
+            statement.setInt(2, lobbyID);
+            statement.setInt(3, playerDetail.getPoints());
+
+            int rowsAffected = statement.executeUpdate();
+            if (rowsAffected > 0) {
+                System.out.println("INSERT NEW GAME DETAIL SUCCESS");
+            }
+        }catch(Exception e){
+            e.printStackTrace();
+        }
     }
 }

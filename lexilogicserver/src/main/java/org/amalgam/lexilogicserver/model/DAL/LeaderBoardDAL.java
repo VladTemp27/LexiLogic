@@ -3,6 +3,7 @@ package org.amalgam.lexilogicserver.model.DAL;
 import org.amalgam.lexilogicserver.model.DatabaseUtil;
 import org.amalgam.lexilogicserver.model.utilities.referenceobjects.LeaderBoard;
 import org.amalgam.lexilogicserver.model.utilities.referenceobjects.Player;
+import org.amalgam.lexilogicserver.model.utilities.referenceobjects.PlayerGameDetail;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -24,6 +25,20 @@ public class LeaderBoardDAL {
             }
         } catch (SQLException | ClassNotFoundException | InstantiationException | IllegalAccessException e) {
             throw new RuntimeException(e);
+        }
+    }
+
+    public static void updateLeaderBoard(PlayerGameDetail gameDetail){
+        try(Connection conn = DatabaseUtil.getConnection()){
+            PreparedStatement stmt = conn.prepareStatement("INSERT INTO leaderboards(userID, totalPoints) VALUES((SELECT playerID FROM player WHERE name = ?),?)" +
+                                                                "ON DUPLICATE KEY UPDATE totalPoints = totalPoints + ");
+
+            stmt.setString(1, gameDetail.getUsername());
+            stmt.setInt(2, gameDetail.getPoints());
+            stmt.setInt(3, gameDetail.getPoints());
+
+        }catch(Exception e){
+            e.printStackTrace();
         }
     }
 

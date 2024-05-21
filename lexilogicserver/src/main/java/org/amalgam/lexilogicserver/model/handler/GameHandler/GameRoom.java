@@ -2,6 +2,8 @@ package org.amalgam.lexilogicserver.model.handler.GameHandler;
 
 import org.amalgam.ControllerException.InvalidRequestException;
 import org.amalgam.UIControllers.PlayerCallback;
+import org.amalgam.lexilogicserver.model.DAL.GameDetailDAL;
+import org.amalgam.lexilogicserver.model.DAL.LobbyDAL;
 import org.amalgam.lexilogicserver.model.microservices.NTimer;
 import org.amalgam.lexilogicserver.model.microservices.NTimerCallback;
 import org.amalgam.lexilogicserver.model.microservices.wordbox.Generator;
@@ -59,7 +61,8 @@ public class GameRoom implements NTimerCallback {
             try{
                 String response = GameRoomResponseBuilder.buildWinnerResponse(w); // Use response builder for this, broadcast state game done, + winner(variable w)
                 broadcast(response);
-                //TODO convert this to reference objects and push to database using DAL
+                int lobbyID = LobbyDAL.insertGameRoomAsLobby(this);
+                updatePlayerDataDB(lobbyID);
             }catch(Exception e){
                 e.printStackTrace();
             }
@@ -71,6 +74,19 @@ public class GameRoom implements NTimerCallback {
             broadcast(jsonString);
         }catch(Exception e){
             e.printStackTrace();
+        }
+    }
+
+    public char[][] getCharMatrix (){
+        return wordBox.getWordMatrix();
+    }
+
+    public void updatePlayerDataDB(int lobbyID){
+        List<String> keys = new ArrayList<>(details.keySet());
+        for(String key: keys){
+            PlayerGameDetail detail = details.get(key);
+            GameDetailDAL.insertGameDetailFromPlayerDetail(detail, lobbyID);
+            LeaderBoardDAL.updateLeaderBoard(detail);
         }
     }
 

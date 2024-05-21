@@ -38,6 +38,7 @@ public class PlayerGameDetail {
         return words;
     }
 
+
     public void addWord(String word){
         words.add(word);
     }
@@ -45,8 +46,6 @@ public class PlayerGameDetail {
     public void addDupedWord(String word){
         dupedWords.add(word);
     }
-
-    public LinkedList<String> getDupedWords(){return dupedWords;}
 
     public boolean listOfWordsContains(String word){
         return words.contains(word);

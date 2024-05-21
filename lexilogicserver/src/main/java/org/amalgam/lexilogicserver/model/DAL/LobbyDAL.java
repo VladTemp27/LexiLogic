@@ -1,12 +1,10 @@
 package org.amalgam.lexilogicserver.model.DAL;
 
 import org.amalgam.lexilogicserver.model.DatabaseUtil;
+import org.amalgam.lexilogicserver.model.handler.GameHandler.GameRoom;
 import org.amalgam.lexilogicserver.model.utilities.referenceobjects.Lobby;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -110,5 +108,21 @@ public class LobbyDAL {
             }
         }
         return lobbies;
+    }
+
+    public synchronized static int insertGameRoomAsLobby(GameRoom gameRoom){
+        try(Connection conn = DatabaseUtil.getConnection()){
+            PreparedStatement stmt = conn.prepareStatement("INSERT INTO lobby (winner) VALUE (?)", Statement.RETURN_GENERATED_KEYS);
+            stmt.executeUpdate();
+
+            ResultSet rs = stmt.getGeneratedKeys();
+            if(rs.next()){
+                return rs.getInt(1);
+            }
+
+        } catch (SQLException | ClassNotFoundException | InstantiationException | IllegalAccessException e) {
+            throw new RuntimeException(e);
+        }
+        return -1;
     }
 }
