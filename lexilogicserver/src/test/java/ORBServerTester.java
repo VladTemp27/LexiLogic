@@ -8,28 +8,32 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class ORBServerTester implements ORBServerCallback, ORBDOperationCallback {
-    ExecutorService executor = Executors.newCachedThreadPool();
+    public static ExecutorService executorDaemon = Executors.newSingleThreadExecutor();
+    ExecutorService executorServer = Executors.newSingleThreadExecutor();
     boolean daemonRunning;
     public void runServer(){
         ORBServer server = new ORBServer(this, 2018, "localhost");
-        executor.submit(server);
+        executorServer.submit(server);
     }
 
     public void runDaemon(){
         ORBDRunner daemon = new ORBDRunner(this, 2018, "localhost");
-        executor.submit(daemon);
+        executorDaemon.submit(daemon);
     }
 
     public static void main(String[] args) throws InterruptedException {
         ORBServerTester program = new ORBServerTester();
-        program.runDaemon();
+        //program.runDaemon();
         Thread.sleep(3000);
         program.runServer();
         while(program.daemonRunning){
 
         }
 
-        program.executor.shutdownNow();
+
+
+        program.executorDaemon.shutdownNow();
+        program.executorServer.shutdownNow();
 
     }
 
