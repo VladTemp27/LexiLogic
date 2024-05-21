@@ -42,10 +42,33 @@ public class WordBox {
         }
         // check list of words if it contains given word
         LinkedList<String> wordList = generator.getWordList();
-        if(wordList.contains(word)) {
+        if(wordExists(wordList, word)) {
             return word.length();
         }
         return 0;
+    }
+
+    //This implements binary search algorithm to look if the word is valid and is in the word list
+    private boolean wordExists(LinkedList<String> wordList, String wordToSearch){
+        int max = wordList.size()-1;
+        int min = 0;
+        int mid = 0;
+        String cWord = "";
+        while(min <= max){
+            mid = (min + max)/2;
+            cWord = wordList.get(mid);
+            if(cWord.equals(wordToSearch)){
+                return true;
+            }
+
+            if(wordToSearch.compareTo(cWord)<0){
+                max = mid;
+            }else{
+                min = max;
+            }
+
+        }
+        return false;
     }
 
     //This method gets the characters in a word as well as their number of occurrences and stores them in a
