@@ -62,7 +62,7 @@ public class GameRoom implements NTimerCallback {
                 String response = GameRoomResponseBuilder.buildWinnerResponse(w); // Use response builder for this, broadcast state game done, + winner(variable w)
                 broadcast(response);
                 int lobbyID = LobbyDAL.insertGameRoomAsLobby(this);
-                updatePlayerGameDetailDB(lobbyID);
+                updatePlayerDataDB(lobbyID);
             }catch(Exception e){
                 e.printStackTrace();
             }
@@ -81,11 +81,12 @@ public class GameRoom implements NTimerCallback {
         return wordBox.getWordMatrix();
     }
 
-    public void updatePlayerGameDetailDB(int lobbyID){
+    public void updatePlayerDataDB(int lobbyID){
         List<String> keys = new ArrayList<>(details.keySet());
         for(String key: keys){
             PlayerGameDetail detail = details.get(key);
             GameDetailDAL.insertGameDetailFromPlayerDetail(detail, lobbyID);
+            LeaderBoardDAL.updateLeaderBoard(detail);
         }
     }
 
