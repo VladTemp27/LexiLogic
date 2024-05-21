@@ -9,7 +9,6 @@ import javafx.stage.Stage;
 import org.amalgam.Service.GameServiceModule.GameService;
 import org.amalgam.UIControllers.PlayerCallback;
 import org.amalgam.backend.microservices.serverconnection.ORBConnection;
-import org.amalgam.client.howtoplay.HowToPlayController;
 import org.amalgam.client.leaderboards.LeaderboardsController;
 import org.amalgam.client.leaderboards.LeaderboardsPanel;
 import org.amalgam.client.loading.LoadingController;
@@ -59,6 +58,12 @@ public class MainController {
     public static LeaderboardsController leaderboardsController;
     public static AnchorPane leaderboardsPane;
 
+    static LeaderboardsController leaderboardsController;
+    static AnchorPane leaderboardsPane;
+
+    static GameController gameController;
+    static AnchorPane gamePane;
+
     public static HowToPlayController howToPlayController;
     public static AnchorPane howToPlayPane;
 
@@ -66,7 +71,7 @@ public class MainController {
     public static ORBConnection orbConnection;
 
     public MainController() {
-        orbConnection = new ORBConnection(2018, "192.168.1.15");
+        orbConnection = new ORBConnection(2018, "localhost");
         try {
             orbConnection.start();
         } catch (InvalidName | AdapterInactive e) {
@@ -499,4 +504,5 @@ public class MainController {
     public LoadingController getLoadingController(){return loadingController;}
     public LeaderboardsController getLeaderboardsController(){return leaderboardsController;}
     public HowToPlayController getHowToPlayController(){return howToPlayController;}
+    public GameController getGameController(){return gameController;}
 }
