@@ -10,7 +10,6 @@ import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import org.amalgam.lexilogicserver.model.microservices.daemonHandler.ORBDException;
 import org.amalgam.lexilogicserver.model.microservices.daemonHandler.ORBDOperationCallback;
-import org.amalgam.lexilogicserver.model.microservices.serverHandler.ORBServer;
 import org.amalgam.lexilogicserver.model.microservices.serverHandler.ORBServerCallback;
 import org.amalgam.lexilogicserver.views.accountdeletion.AccountDeletionController;
 import org.amalgam.lexilogicserver.views.addplayer.AddPlayerController;
@@ -391,7 +390,6 @@ public class ServerController implements ORBDOperationCallback,ORBServerCallback
 
     @Override
     public void setProcessObject(Process process) {
-
     }
 
     @Override

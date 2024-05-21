@@ -18,6 +18,8 @@ import org.amalgam.lexilogicserver.views.runorbd.RunORBDController;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import static org.amalgam.lexilogicserver.views.runorbd.RunORBDController.process;
+
 public class ServerMainMenuController {
     //private variables
     @FXML
@@ -109,9 +111,13 @@ public class ServerMainMenuController {
      */
     @FXML
     public void handleRunORBDButton(){
-        if(serverController !=null){
-            serverController.loadRunORBD();
-        }else {
+        if(serverController != null){
+            if (RunORBDController.process.isAlive()) {
+                serverController.loadRunORBDRunningView();
+            } else {
+                serverController.loadRunORBD();
+            }
+        } else {
             System.out.println("Server Controller is not set.");
         }
     }
