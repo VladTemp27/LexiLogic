@@ -45,7 +45,7 @@ public class ServerController implements ORBDOperationCallback,ORBServerCallback
     public static AnchorPane runORBDRunningPane;
 
     public static Future<Integer> ORBExitCode;
-
+    public static boolean isServerRunning = false;
     /**
      * Getters and Setters of Controllers and Panels
      */
@@ -71,6 +71,30 @@ public class ServerController implements ORBDOperationCallback,ORBServerCallback
     public AccountDeletionController getAccountDeletionController(){return accountDeletionController;}
 
     public RunORBDRunningController getRunORBDRunningController(){return runORBDRunningController;}
+
+    /**
+     * Method to start the server
+     */
+    public void startServer() throws Exception {
+        // Initialize and start the server
+        Server server = new Server(); // Create an instance of the Server class
+        server.start(stage);
+        isServerRunning = true; // Set server running status to true
+        System.out.println("Server started");
+    }
+
+    /**
+     * Method to stop the server by closing the main stage
+     */
+    public void stopServer() {
+        if (stage != null) {
+            stage.close();
+            isServerRunning = false; // Set server running status to false
+            System.out.println("Server stopped");
+        } else {
+            System.out.println("Server is not running");
+        }
+    }
     /**
      * Loads and displays the server main menu view.
      */
