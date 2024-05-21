@@ -3,6 +3,7 @@ package org.amalgam.lexilogicserver.model.handler.GameHandler;
 import org.amalgam.ControllerException.InvalidRequestException;
 import org.amalgam.UIControllers.PlayerCallback;
 import org.amalgam.lexilogicserver.model.DAL.GameDetailDAL;
+import org.amalgam.lexilogicserver.model.DAL.LeaderBoardDAL;
 import org.amalgam.lexilogicserver.model.DAL.LobbyDAL;
 import org.amalgam.lexilogicserver.model.microservices.NTimer;
 import org.amalgam.lexilogicserver.model.microservices.NTimerCallback;
@@ -62,7 +63,7 @@ public class GameRoom implements NTimerCallback {
                 String response = GameRoomResponseBuilder.buildWinnerResponse(w); // Use response builder for this, broadcast state game done, + winner(variable w)
                 broadcast(response);
                 int lobbyID = LobbyDAL.insertGameRoomAsLobby(this);
-                updatePlayerGameDetailDB(lobbyID);
+                updatePlayerDataDB(lobbyID);
             }catch(Exception e){
                 e.printStackTrace();
             }
@@ -77,11 +78,12 @@ public class GameRoom implements NTimerCallback {
         }
     }
 
-    public void updatePlayerGameDetailDB(int lobbyID){
+    public void updatePlayerDataDB(int lobbyID){
         List<String> keys = new ArrayList<>(details.keySet());
         for(String key: keys){
             PlayerGameDetail detail = details.get(key);
             GameDetailDAL.insertGameDetailFromPlayerDetail(detail, lobbyID);
+            LeaderBoardDAL.updateLeaderBoard(detail);
         }
     }
 
