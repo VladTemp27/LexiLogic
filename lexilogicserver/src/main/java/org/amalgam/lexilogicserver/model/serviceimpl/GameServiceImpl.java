@@ -9,6 +9,7 @@ import org.amalgam.Utils.Exceptions.*;
 import org.amalgam.Utils.Exceptions.DuplicateWordException;
 import org.amalgam.lexilogicserver.model.DAL.LeaderBoardDAL;
 import org.amalgam.lexilogicserver.model.microservices.Matchmaking.MatchmakingService;
+import org.amalgam.lexilogicserver.model.DAL.LobbyDAL;
 import org.amalgam.lexilogicserver.model.utilities.referenceobjects.LeaderBoard;
 
 import java.io.FileNotFoundException;
@@ -131,7 +132,7 @@ public class GameServiceImpl extends GameServicePOA {
 
     @Override
     public String fetchWinner(int lobbyId) throws LobbyDoesNotExistException, WinnerDoesNotExistException {
-        return "";
+        return LobbyDAL.getWinnerByLobbyID(lobbyId);
     }
 
     @Override
