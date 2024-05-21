@@ -98,7 +98,7 @@ public class GameRoom implements NTimerCallback {
 
     //call this to generate a wordBox, generates a new wordbox for every invocation
     private void generateWordBox() throws FileNotFoundException {
-        wordBox = new WordBox(new Generator(new Reader("file"), true, 6, 6));
+        wordBox = new WordBox(new Generator(new Reader("lexilogicserver/src/main/java/org/amalgam/lexilogicserver/model/microservices/wordbox/words.txt"), false, 4, 5));
     }
 
     public void submitWord(String word, String username){
