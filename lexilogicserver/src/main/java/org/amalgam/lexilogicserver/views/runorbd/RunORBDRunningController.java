@@ -58,6 +58,7 @@ public class RunORBDRunningController {
     public void handleStopORBDButton() {
         if (RunORBDController.process != null) {
             RunORBDController.process.destroyForcibly();
+
             try {
                 RunORBDController.process.waitFor();
             } catch (InterruptedException e) {
