@@ -288,4 +288,16 @@ public class GameRoom implements NTimerCallback {
     public void timeIs() {
 
     }
+
+    public LinkedHashMap<Integer, String> getRounds() {
+        return rounds;
+    }
+
+    public int getCurrentRound() {
+        return currentRound;
+    }
+
+    public int getSecondsRoundDuration() {
+        return secondsRoundDuration;
+    }
 }
