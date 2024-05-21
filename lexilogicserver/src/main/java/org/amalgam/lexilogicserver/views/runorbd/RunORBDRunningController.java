@@ -1,11 +1,14 @@
 package org.amalgam.lexilogicserver.views.runorbd;
 
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.effect.ColorAdjust;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import org.amalgam.lexilogicserver.ServerController;
+
+import java.util.concurrent.TimeUnit;
 
 public class RunORBDRunningController {
     // private variables
@@ -16,7 +19,6 @@ public class RunORBDRunningController {
     @FXML
     private Button backButton;
     private ServerController serverController;
-    private boolean ORBDRunner;
 
     /**
      * Sets the Main Controller.
@@ -54,20 +56,50 @@ public class RunORBDRunningController {
 
     @FXML
     public void handleStopORBDButton() {
-       //TODO: Implement the stopping of the ORBD
-         }
+        if (RunORBDController.process != null) {
+            RunORBDController.process.destroyForcibly();
+            try {
+                RunORBDController.process.waitFor();
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
+            RunORBDController.process = null;
+            showSuccess("ORB Successfully Terminated");
+            if (serverController != null) {
+                serverController.loadRunORBD();
+            } else {
+                System.out.println("ServerController is not set.");
+            }
+        } else {
+            showAlert("No ORB to terminate");
+        }
+    }
+
+    private void showSuccess(String message) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Success!");
+        alert.setContentText(message);
+        alert.showAndWait();
+    }
+
+    private void showAlert(String message) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Error");
+        alert.setContentText(message);
+        alert.showAndWait();
+    }
 
     @FXML
-    public void handleBackButton(){
-        if(serverController !=null){
-            serverController.loadRunORBDRunningView();
-        } else{
+    public void handleBackButton() {
+        if (serverController != null) {
+            serverController.loadServerMainMenu();
+        } else {
             System.out.println("Server controller is not set.");
         }
     }
 
     @FXML
-    public void initialize(){
+    public void initialize() {
         addStopHoverEffect(stopORBDButton);
         addHoverEffectImage(backButton);
         stopORBDButton.setOnAction(event -> handleStopORBDButton());

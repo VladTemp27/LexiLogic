@@ -3,21 +3,26 @@ package org.amalgam.lexilogicserver.views.runorbd;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.Control;
 import javafx.scene.control.TextField;
 import javafx.scene.effect.ColorAdjust;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
+
 import java.net.InetSocketAddress;
 import java.net.Socket;
+import java.net.SocketTimeoutException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 import org.amalgam.lexilogicserver.ServerController;
 import org.amalgam.lexilogicserver.model.microservices.daemonHandler.ORBDException;
 import org.amalgam.lexilogicserver.model.microservices.daemonHandler.ORBDOperationCallback;
 import org.amalgam.lexilogicserver.model.microservices.daemonHandler.ORBDRunner;
+import org.amalgam.lexilogicserver.views.servermainmenu.ServerMainMenuController;
 
-public class RunORBDController implements ORBDOperationCallback{
+public class RunORBDController implements ORBDOperationCallback {
 
     // Private Variables
     @FXML
@@ -31,8 +36,9 @@ public class RunORBDController implements ORBDOperationCallback{
     @FXML
     private Button backButton;
     private ServerController serverController;
+    public static Process process;
 
-    private ExecutorService executorService = Executors.newSingleThreadExecutor();
+    public static ExecutorService executorService = Executors.newSingleThreadExecutor();
 
     /**
      * Sets the Main Controller.
@@ -43,7 +49,7 @@ public class RunORBDController implements ORBDOperationCallback{
         this.serverController = serverController;
     }
 
-     /**
+    /**
      * Adds hover effect to the given button.
      *
      * @param button The button to add hover effect to.
@@ -52,6 +58,7 @@ public class RunORBDController implements ORBDOperationCallback{
         button.setOnMouseEntered(e -> button.setStyle("-fx-background-color: derive(#9CA16F, -10%);"));
         button.setOnMouseExited(e -> button.setStyle("-fx-background-color: #9CA16F;"));
     }
+
     private void addHoverEffectImage(Button button) {
         ImageView imageView = (ImageView) button.getGraphic();
         ColorAdjust colorAdjust = new ColorAdjust();
@@ -72,9 +79,17 @@ public class RunORBDController implements ORBDOperationCallback{
      *
      * @param message
      */
-    private void showAlert(String message){
+    private void showAlert(String message) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Error");
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
+    }
+
+    private void showSuccess(String message) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("");
         alert.setHeaderText(null);
         alert.setContentText(message);
         alert.showAndWait();
@@ -87,16 +102,32 @@ public class RunORBDController implements ORBDOperationCallback{
      * @param port     The port to validate.
      * @return True if hostname and port are valid, false otherwise.
      */
+    @Deprecated
     private boolean isValidHostAndPort(String hostname, int port) { //TODO: Checking of Validity of Host and Port
+        if (hostname == null || hostname.isEmpty() || port < 1 || port > 65535) {
+            showAlert("Invalid Hostname or Port. Please check your input.");
+            return false;
+        }
+
+        Socket socket = new Socket();
+        int timeout = 5000; // 5 seconds timeout for connection
+
         try {
-            // Create a socket with a timeout
-            Socket socket = new Socket();
-            socket.connect(new InetSocketAddress(hostname, port), 2000); // Timeout 2 seconds
+            socket.connect(new InetSocketAddress(hostname, port), timeout);
             socket.close();
             return true; // Connection successful
+        } catch (SocketTimeoutException e) {
+            showAlert("Connection timed out. The host may be down or unreachable.");
         } catch (Exception e) {
-            return false; // Connection failed
+            showAlert("Invalid Hostname or Port. Please check your input.");
+        } finally {
+            try {
+                socket.close();
+            } catch (Exception e) {
+                // Ignore
+            }
         }
+        return false; // Connection failed
     }
 
     /**
@@ -114,31 +145,30 @@ public class RunORBDController implements ORBDOperationCallback{
         }
 
         try {
-            int port = Integer.parseInt(portText);
-
-            // Validate hostname and port
-            if (isValidHostAndPort(hostname, port)) {
-                ServerController.ORBExitCode = executorService.submit(new ORBDRunner(serverController, port,hostname));
-                if (serverController != null) {
-                    serverController.loadRunORBDRunningView();
-                } else {
-                    System.out.println("ServerController is not set.");
-                }
+            int portNo = Integer.parseInt(portText);
+            ServerController.ORBExitCode = executorService.submit(new ORBDRunner(this, portNo, hostname));
+            showSuccess("ORB Daemon successfully run.");
+            if (serverController != null) {
+                serverController.loadRunORBDRunningView();
             } else {
-                showAlert("Invalid hostname or port. Please check your input.");
+                System.out.println("ServerController is not set.");
             }
         } catch (NumberFormatException e) {
             showAlert("Invalid port number. Please enter a valid port number.");
+        } catch (Exception e) {
+            showAlert("Failed to run ORB Daemon: " + e.getMessage());
         }
     }
+
     @FXML
-    public void handleBackButton(){
-        if(serverController !=null){
+    public void handleBackButton() {
+        if (serverController != null) {
             serverController.loadServerMainMenu();
-        }else {
+        } else {
             System.out.println("Server controller is not set.");
         }
     }
+
     /**
      * Initializes the controller.
      * This method sets up the UI components and initializes the data model.
@@ -146,7 +176,7 @@ public class RunORBDController implements ORBDOperationCallback{
     @FXML
     public void initialize() {
         addHoverEffect(runORBDButton);
-        addHoverEffectImage( backButton);
+        addHoverEffectImage(backButton);
         runORBDButton.setOnAction(event -> handleRunORBDButton());
         backButton.setOnAction(event -> handleBackButton());
     }
@@ -154,5 +184,11 @@ public class RunORBDController implements ORBDOperationCallback{
     @Override
     public void notifyOrbExit() throws ORBDException {
 
+    }
+
+    @Override
+    public void setProcessObject(Process process) {
+        System.out.println(process);
+        RunORBDController.process = process;
     }
 }
