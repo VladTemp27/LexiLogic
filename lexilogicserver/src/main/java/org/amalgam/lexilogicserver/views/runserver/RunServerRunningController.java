@@ -17,8 +17,6 @@ public class RunServerRunningController {
     @FXML
     private AnchorPane runServerRunningPane;
     @FXML
-    private Button stopORBDButton;
-    @FXML
     private Button stopServerButton;
     @FXML
     private Button backButton;
@@ -68,15 +66,6 @@ public class RunServerRunningController {
     }
 
     @FXML
-    public void handleStopORBDButton() {
-        if (serverController != null) {
-            serverController.loadRunORBDRunningView();
-        } else {
-            System.out.println("ServerController is not set.");
-        }
-    }
-
-    @FXML
     public void handleStopServer() {
         if (serverController != null) {
             serverController.stopServer();
@@ -96,10 +85,8 @@ public class RunServerRunningController {
 
     @FXML
     public void initialize() {
-        stopORBDButton.setOnAction(event -> handleStopORBDButton());
         stopServerButton.setOnAction(event -> handleStopServer());
         backButton.setOnAction(event -> handleBackButton());
-        addPlayerHoverEffect(stopORBDButton);
         addStopHoverEffect(stopServerButton);
         addHoverEffectImage(backButton);
     }

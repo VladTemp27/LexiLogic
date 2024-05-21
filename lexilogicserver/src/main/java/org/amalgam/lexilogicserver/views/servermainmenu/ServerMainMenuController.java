@@ -121,7 +121,7 @@ public class ServerMainMenuController{
             boolean isServerRunning = isServerRunning();
             boolean isORBDRunning = isORBDRunning();
 
-            if (isServerRunning && isORBDRunning) {
+            if (isORBDRunning) {
                 serverController.loadRunORBDRunningView();
             } else {
                 serverController.loadRunORBD();
@@ -136,7 +136,7 @@ public class ServerMainMenuController{
     }
 
     private boolean isORBDRunning() {
-        return process != null && process.isAlive();
+        return ServerController.isDaemonRunning;
     }
     /**
      * Handles the runServer Button

@@ -10,6 +10,7 @@ import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import org.amalgam.lexilogicserver.model.microservices.daemonHandler.ORBDException;
 import org.amalgam.lexilogicserver.model.microservices.daemonHandler.ORBDOperationCallback;
+import org.amalgam.lexilogicserver.model.microservices.serverHandler.ORBServer;
 import org.amalgam.lexilogicserver.model.microservices.serverHandler.ORBServerCallback;
 import org.amalgam.lexilogicserver.views.accountdeletion.AccountDeletionController;
 import org.amalgam.lexilogicserver.views.addplayer.AddPlayerController;
@@ -19,9 +20,12 @@ import org.amalgam.lexilogicserver.views.runserver.RunServerRunningController;
 import org.amalgam.lexilogicserver.views.servermainmenu.ServerMainMenuController;
 import org.amalgam.lexilogicserver.views.runorbd.RunORBDController;
 import org.amalgam.lexilogicserver.views.runserver.RunServerController;
+import org.omg.CORBA.ORB;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
 public class ServerController implements ORBDOperationCallback,ORBServerCallback {
@@ -45,7 +49,13 @@ public class ServerController implements ORBDOperationCallback,ORBServerCallback
     public static AnchorPane runORBDRunningPane;
 
     public static Future<Integer> ORBExitCode;
+    private ExecutorService serverExecutor = Executors.newSingleThreadExecutor();
+
     public static boolean isServerRunning = false;
+    public static boolean isDaemonRunning = false;
+
+    public static String hostname;
+    public static int port;
     /**
      * Getters and Setters of Controllers and Panels
      */
@@ -75,11 +85,13 @@ public class ServerController implements ORBDOperationCallback,ORBServerCallback
     /**
      * Method to start the server
      */
-    public void startServer() throws Exception {
+    public void startServer() {
         // Initialize and start the server
-        Server server = new Server(); // Create an instance of the Server class
-        server.start(stage);
-        isServerRunning = true; // Set server running status to true
+        serverExecutor.submit(new ORBServer(this,port, hostname));
+        if(!isServerRunning){
+            System.out.println("Server failed");
+            return;
+        }
         System.out.println("Server started");
     }
 
@@ -87,13 +99,9 @@ public class ServerController implements ORBDOperationCallback,ORBServerCallback
      * Method to stop the server by closing the main stage
      */
     public void stopServer() {
-        if (stage != null) {
-            stage.close();
-            isServerRunning = false; // Set server running status to false
-            System.out.println("Server stopped");
-        } else {
-            System.out.println("Server is not running");
-        }
+        serverExecutor.shutdownNow();
+        isServerRunning = false;
+        System.out.println("Server shutdown");
     }
     /**
      * Loads and displays the server main menu view.
@@ -418,12 +426,12 @@ public class ServerController implements ORBDOperationCallback,ORBServerCallback
 
     @Override
     public void notifyServerShutdown() {
-
+        isServerRunning = false;
     }
 
     @Override
     public void notifyServantsBinded() {
-
+        isServerRunning = true;
     }
 }
 
