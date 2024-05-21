@@ -20,9 +20,12 @@ import org.amalgam.lexilogicserver.views.runserver.RunServerRunningController;
 import org.amalgam.lexilogicserver.views.servermainmenu.ServerMainMenuController;
 import org.amalgam.lexilogicserver.views.runorbd.RunORBDController;
 import org.amalgam.lexilogicserver.views.runserver.RunServerController;
+import org.omg.CORBA.ORB;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
 public class ServerController implements ORBDOperationCallback,ORBServerCallback {
@@ -46,7 +49,13 @@ public class ServerController implements ORBDOperationCallback,ORBServerCallback
     public static AnchorPane runORBDRunningPane;
 
     public static Future<Integer> ORBExitCode;
+    private ExecutorService serverExecutor = Executors.newSingleThreadExecutor();
 
+    public static boolean isServerRunning = false;
+    public static boolean isDaemonRunning = false;
+
+    public static String hostname;
+    public static int port;
     /**
      * Getters and Setters of Controllers and Panels
      */
@@ -72,6 +81,28 @@ public class ServerController implements ORBDOperationCallback,ORBServerCallback
     public AccountDeletionController getAccountDeletionController(){return accountDeletionController;}
 
     public RunORBDRunningController getRunORBDRunningController(){return runORBDRunningController;}
+
+    /**
+     * Method to start the server
+     */
+    public void startServer() {
+        // Initialize and start the server
+        serverExecutor.submit(new ORBServer(this,port, hostname));
+        if(!isServerRunning){
+            System.out.println("Server failed");
+            return;
+        }
+        System.out.println("Server started");
+    }
+
+    /**
+     * Method to stop the server by closing the main stage
+     */
+    public void stopServer() {
+        serverExecutor.shutdownNow();
+        isServerRunning = false;
+        System.out.println("Server shutdown");
+    }
     /**
      * Loads and displays the server main menu view.
      */
@@ -391,17 +422,16 @@ public class ServerController implements ORBDOperationCallback,ORBServerCallback
 
     @Override
     public void setProcessObject(Process process) {
-
     }
 
     @Override
     public void notifyServerShutdown() {
-
+        isServerRunning = false;
     }
 
     @Override
     public void notifyServantsBinded() {
-
+        isServerRunning = true;
     }
 }
 

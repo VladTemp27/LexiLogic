@@ -24,7 +24,7 @@ public class ConnectionTest {
 
     public static void main(String[] args)  {
         try{
-            ORB orb = ORB.init(generateArgs(2018, "192.168.1.93"), null);
+            ORB orb = ORB.init(generateArgs(2018, "localhost"), null);
             POA rootPOA = POAHelper.narrow(orb.resolve_initial_references("RootPOA"));
             rootPOA.the_POAManager().activate();
 
@@ -34,6 +34,7 @@ public class ConnectionTest {
             callback.username("Marven");
 
             playerServiceStub = PlayerServiceHelper.narrow(namingReference.resolve_str("PlayerService"));
+            System.out.println("Stub retrieved");
             playerServiceStub.login(PlayerCallbackHelper.narrow(rootPOA.servant_to_reference(callback)), "password123");
             System.out.println("Logged In");
 
