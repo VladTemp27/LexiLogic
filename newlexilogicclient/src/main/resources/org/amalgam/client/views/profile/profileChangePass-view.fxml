@@ -8,7 +8,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="changepassPane" prefHeight="407.0" prefWidth="504.0" style="-fx-background-color: #674C33;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.amalgam.client.profile.ProfileChangePassController">
+<AnchorPane fx:id="changepassPane" prefHeight="407.0" prefWidth="504.0" style="-fx-background-color: #674C33;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.amalgam.client.profile.ProfileChangePassController">
    <children>
       <ImageView fx:id="axelImage" fitHeight="225.0" fitWidth="229.0" layoutX="-28.0" layoutY="182.0" pickOnBounds="true">
          <image>
@@ -45,11 +45,13 @@
             <Font name="Brygada 1918 Regular" size="20.0" />
          </font>
       </Button>
-      <Button fx:id="backButton" layoutX="14.0" layoutY="10.0" mnemonicParsing="false" prefHeight="61.0" prefWidth="71.0" style="-fx-background-color: transparent;" />
-      <ImageView fx:id="backButtonImage" fitHeight="54.0" fitWidth="54.0" layoutX="23.0" layoutY="13.0" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="@../../../icons/BackButton.png" />
-         </image>
-      </ImageView>
+      <Button fx:id="backButton" layoutX="26.0" layoutY="31.0" mnemonicParsing="false" prefHeight="61.0" prefWidth="71.0" style="-fx-background-color: transparent;">
+         <graphic>
+            <ImageView fx:id="backButtonImage" fitHeight="54.0" fitWidth="54.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../../icons/BackButton.png" />
+               </image>
+            </ImageView>
+         </graphic></Button>
    </children>
 </AnchorPane>
