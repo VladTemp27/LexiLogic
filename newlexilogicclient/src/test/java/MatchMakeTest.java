@@ -24,6 +24,11 @@ public class MatchMakeTest implements ControllerInterface{
 
     public static void main(String[] args) throws WrongPolicy, ServantNotActive, MatchCreationFailedException {
         MatchMakeTest program = new MatchMakeTest();
+        program.run(program);
+    }
+
+    public void run (MatchMakeTest program) throws WrongPolicy, ServantNotActive, MatchCreationFailedException {
+
         program.getAllStubs();
 
         System.out.print("Enter username: ");
@@ -31,6 +36,7 @@ public class MatchMakeTest implements ControllerInterface{
 
         program.callback = new CallbackImpl();
         program.callback.username(user);
+        program.callback.setController(this);
 
 
         String response = program.gameService.matchMake(PlayerCallbackHelper.narrow(program.rootPOA.servant_to_reference(program.callback)));
