@@ -7,6 +7,9 @@ import javafx.scene.effect.ColorAdjust;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import org.amalgam.lexilogicserver.ServerController;
+import org.amalgam.lexilogicserver.model.microservices.serverHandler.ORBServer;
+
+import static sun.net.www.protocol.http.AuthCacheValue.Type.Server;
 
 public class RunServerRunningController {
 
@@ -14,7 +17,7 @@ public class RunServerRunningController {
     @FXML
     private AnchorPane runServerRunningPane;
     @FXML
-    private Button addPlayerButton;
+    private Button stopORBDButton;
     @FXML
     private Button stopServerButton;
     @FXML
@@ -63,23 +66,11 @@ public class RunServerRunningController {
             imageView.setEffect(colorAdjust);
         });
     }
-    /**
-     * Shows an alert to a user if there is an error.
-     *
-     * @param message
-     */
-    private void showAlert(String message){
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle("Error");
-        alert.setHeaderText(null);
-        alert.setContentText(message);
-        alert.showAndWait();
-    }
 
     @FXML
-    public void handleAddPlayer() {
+    public void handleStopORBDButton() {
         if (serverController != null) {
-            serverController.loadAddPlayer();
+            serverController.loadRunORBDRunningView();
         } else {
             System.out.println("ServerController is not set.");
         }
@@ -87,8 +78,11 @@ public class RunServerRunningController {
 
     @FXML
     public void handleStopServer() {
-        //TODO: Make the server stop when button is clicked.
-
+        if (serverController != null) {
+            serverController.stopServer();
+        } else {
+            System.out.println("ServerController is not initialized.");
+        }
     }
 
     @FXML
@@ -102,10 +96,10 @@ public class RunServerRunningController {
 
     @FXML
     public void initialize() {
-        addPlayerButton.setOnAction(event -> handleAddPlayer());
+        stopORBDButton.setOnAction(event -> handleStopORBDButton());
         stopServerButton.setOnAction(event -> handleStopServer());
         backButton.setOnAction(event -> handleBackButton());
-        addPlayerHoverEffect(addPlayerButton);
+        addPlayerHoverEffect(stopORBDButton);
         addStopHoverEffect(stopServerButton);
         addHoverEffectImage(backButton);
     }
