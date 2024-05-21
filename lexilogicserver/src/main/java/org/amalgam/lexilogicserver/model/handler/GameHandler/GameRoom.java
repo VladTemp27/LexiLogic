@@ -77,6 +77,10 @@ public class GameRoom implements NTimerCallback {
         }
     }
 
+    public char[][] getCharMatrix (){
+        return wordBox.getWordMatrix();
+    }
+
     public void updatePlayerGameDetailDB(int lobbyID){
         List<String> keys = new ArrayList<>(details.keySet());
         for(String key: keys){
