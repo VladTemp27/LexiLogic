@@ -16,11 +16,20 @@ public class MatchmakingService implements NTimerCallback{
     private final AtomicBoolean timerDone = new AtomicBoolean(false);
     private ExecutorService executorService = Executors.newSingleThreadExecutor();
 
+    public boolean isQueueEmpty(){
+        return queue.isEmpty();
+    }
+
     public void addToQueue(PlayerGameDetail playerGameDetail) {
         queue.add(playerGameDetail);
         if (queue.size() == 1) {
             startTimer();
         }
+    }
+
+    public LinkedList<PlayerGameDetail> getQueue() {
+        LinkedList<PlayerGameDetail> players = new LinkedList<>(queue);
+        return players;
     }
 
     public void startTimer() {
@@ -51,11 +60,7 @@ public class MatchmakingService implements NTimerCallback{
         queueLock.acquire();
         try {
             if (queue.size() >= 2) {
-                LinkedList<PlayerGameDetail> players = new LinkedList<>();
-                for (int i = 0; i < 2; i++) {
-                    players.add(queue.poll());
-                }
-                return players;
+                return getQueue();
             }
         } finally {
             queueLock.release();
@@ -65,6 +70,9 @@ public class MatchmakingService implements NTimerCallback{
 
     public boolean isTimerDone() {
         System.out.println(timerDone.get());
+        if (timerDone.get()){
+            queue.clear();
+        }
         return timerDone.get();
     }
 }
