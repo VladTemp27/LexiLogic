@@ -41,6 +41,39 @@ public class LobbyDAL {
         }
     }
 
+
+    public static String getWinnerByLobbyID(int lobbyID) {
+        Connection connection = null;
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
+
+        try {
+            connection = DatabaseUtil.getConnection();
+            String query = "SELECT winner FROM lobby WHERE lobbyID = ?";
+            statement = connection.prepareStatement(query);
+            statement.setInt(1, lobbyID);
+            resultSet = statement.executeQuery();
+
+            if (resultSet.next()) {
+                String winner = resultSet.getString("winner");
+                return winner;
+            } else {
+                return null;
+            }
+
+        } catch (SQLException | ClassNotFoundException | InstantiationException | IllegalAccessException e) {
+            throw new RuntimeException(e);
+        } finally {
+            try {
+                if (resultSet != null) resultSet.close();
+                if (statement != null) statement.close();
+                if (connection != null) connection.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
     public static List<Lobby > getLobbyByUserID (int playerID){
         List<Lobby> lobbies = new ArrayList<>();
         Connection connection = null;

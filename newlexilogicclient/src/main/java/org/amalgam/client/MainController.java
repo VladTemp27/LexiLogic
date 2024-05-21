@@ -9,6 +9,7 @@ import javafx.stage.Stage;
 import org.amalgam.Service.GameServiceModule.GameService;
 import org.amalgam.UIControllers.PlayerCallback;
 import org.amalgam.backend.microservices.serverconnection.ORBConnection;
+import org.amalgam.client.game.GameController;
 import org.amalgam.client.howtoplay.HowToPlayController;
 import org.amalgam.client.leaderboards.LeaderboardsController;
 import org.amalgam.client.leaderboards.LeaderboardsPanel;
@@ -58,6 +59,9 @@ public class MainController {
 
     public static LeaderboardsController leaderboardsController;
     public static AnchorPane leaderboardsPane;
+
+    public static GameController gameController;
+   public static AnchorPane gamePane;
 
     public static HowToPlayController howToPlayController;
     public static AnchorPane howToPlayPane;
@@ -476,9 +480,9 @@ public class MainController {
             stage.setScene(scene);
             stage.setResizable(false);
             stage.setTitle("Lexi Logic");
-            LeaderboardsController leaderboardsController = fxmlLoader.getController();
-            leaderboardsController.setMainController(this);
-            leaderboardsController.initialize();
+            HowToPlayController howToPlayController = fxmlLoader.getController();
+            howToPlayController.setMainController(this);
+            howToPlayController.initialize();
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -499,4 +503,5 @@ public class MainController {
     public LoadingController getLoadingController(){return loadingController;}
     public LeaderboardsController getLeaderboardsController(){return leaderboardsController;}
     public HowToPlayController getHowToPlayController(){return howToPlayController;}
+    public GameController getGameController(){return gameController;}
 }

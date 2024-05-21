@@ -5,7 +5,7 @@ import org.amalgam.backend.microservices.serverconnection.ORBConnection;
 import org.omg.CosNaming.NamingContextPackage.CannotProceed;
 import org.omg.CosNaming.NamingContextPackage.InvalidName;
 import org.omg.CosNaming.NamingContextPackage.NotFound;
-
+@Deprecated
 public class CreateAccountRequestMicroservice {
 
     public void process (ORBConnection orbConnection, String username, String password)  {

@@ -6,7 +6,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="mainmenuPane" prefHeight="500.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.amalgam.client.mainmenu.MainMenuController">
+<AnchorPane fx:id="mainmenuPane" prefHeight="500.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.amalgam.client.mainmenu.MainMenuController">
    <children>
       <ImageView fx:id="backgroundImage" fitHeight="500.0" fitWidth="800.0" pickOnBounds="true">
          <image>
@@ -45,11 +45,13 @@
             <Image url="@../../../icons/Profile.png" />
          </image>
       </ImageView>
-      <Button fx:id="howToPlayButton" layoutX="15.0" layoutY="392.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="43.0" style="-fx-background-color: FFF8D6;" />
-      <ImageView fitHeight="40.0" fitWidth="35.0" layoutX="19.0" layoutY="395.0" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="@../../../icons/howToPlayButton.png" />
-         </image>
-      </ImageView>
+      <Button fx:id="howToPlayButton" layoutX="15.0" layoutY="392.0" mnemonicParsing="false" prefHeight="43.0" prefWidth="43.0" style="-fx-background-color: FFF8D6;">
+         <graphic>
+            <ImageView fitHeight="33.0" fitWidth="27.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../../icons/howToPlayButton.png" />
+               </image>
+            </ImageView>
+         </graphic></Button>
    </children>
 </AnchorPane>

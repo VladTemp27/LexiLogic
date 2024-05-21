@@ -46,9 +46,8 @@ public class HowToPlayController {
 
     @FXML
     public void handleBack(){
-        // handle action to go back to profile view when pressed
         if (mainController != null) {
-            mainController.loadProfileView();
+            mainController.loadMainMenuView();
         } else {
             System.out.println("MainController is not set.");
         }
