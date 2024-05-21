@@ -108,6 +108,19 @@ public class PlayerDAL {
         }
     }
 
+    public static void deletePlayer(String username){
+        try(Connection conn = DatabaseUtil.getConnection()){
+            PreparedStatement stmt = conn.prepareStatement("DELETE FROM player WHERE name = ?");
+            stmt.setString(1, username);
+            int rowsAffected = stmt.executeUpdate();
+            if (rowsAffected > 0) {
+                System.out.println("DELETE PLAYER SUCCESS");
+            }
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+    }
+
         public static void markAccountForDeletion(String playerName) {
         try (Connection conn = DatabaseUtil.getConnection()) {
             PreparedStatement stmt = conn.prepareStatement("UPDATE player SET forDeletion = 'true' WHERE name = ?");
@@ -134,11 +147,11 @@ public class PlayerDAL {
                     Player cPlayer = new Player(playerID, name, null,null);
                     listOfPlayers.add(cPlayer);
                 }
+                return listOfPlayers;
             }
         }catch (SQLException | ClassNotFoundException | InstantiationException | IllegalAccessException e) {
             throw new RuntimeException(e);
         }
-        return null;
     }
 
 
