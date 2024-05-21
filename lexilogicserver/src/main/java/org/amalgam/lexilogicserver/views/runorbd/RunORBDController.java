@@ -13,9 +13,11 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import org.amalgam.lexilogicserver.ServerController;
+import org.amalgam.lexilogicserver.model.microservices.daemonHandler.ORBDException;
+import org.amalgam.lexilogicserver.model.microservices.daemonHandler.ORBDOperationCallback;
 import org.amalgam.lexilogicserver.model.microservices.daemonHandler.ORBDRunner;
 
-public class RunORBDController {
+public class RunORBDController implements ORBDOperationCallback{
 
     // Private Variables
     @FXML
@@ -116,7 +118,8 @@ public class RunORBDController {
 
             // Validate hostname and port
             if (isValidHostAndPort(hostname, port)) {
-                ServerController.ORBExitCode = executorService.submit(new ORBDRunner(serverController, port, hostname));
+                ORBDRunner daemon = new ORBDRunner(this,  port, hostname);
+                executorService.submit(daemon);
                 if (serverController != null) {
                     serverController.loadRunORBDRunningView();
                 } else {
@@ -148,5 +151,10 @@ public class RunORBDController {
         addHoverEffectImage(backButton);
         backButton.setOnAction(event-> handleBackButton());
         runORBDButton.setOnAction(event -> handleRunORBDButton());
+    }
+
+    @Override
+    public void notifyOrbExit() throws ORBDException {
+
     }
 }
