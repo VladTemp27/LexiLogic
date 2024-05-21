@@ -43,11 +43,9 @@ public class ServerMainMenuController {
         button.setOnMouseExited(e -> button.setStyle("-fx-background-color: #9CA16F;"));
     }
 
-    private void addHoverEffect(Button button){
-        String originalColor = button.getStyle(); // Store the original color
-
-        button.setOnMouseEntered(e -> button.setStyle("-fx-background-color: derive(" + originalColor + ", -10%);"));
-        button.setOnMouseExited(e -> button.setStyle(originalColor));
+    private void addBrownHoverEffect(Button button){
+        button.setOnMouseEntered(e -> button.setStyle("-fx-background-color: derive(#B07C3B, -10%);"));
+        button.setOnMouseExited(e -> button.setStyle("-fx-background-color: #B07C3B;"));
     }
 
     /**
@@ -124,10 +122,10 @@ public class ServerMainMenuController {
      */
     @FXML
     public void initialize() {
-        addHoverEffect(addPlayerButton);
-        addHoverEffect(changeGameButton);
-        addHoverEffect(runORBDButton);
-        addHoverEffect(accountDeletionButton);
+        addBrownHoverEffect(addPlayerButton);
+        addBrownHoverEffect(changeGameButton);
+        addBrownHoverEffect(runORBDButton);
+        addBrownHoverEffect(accountDeletionButton);
         addRunHoverEffect(runServerButton);
         addPlayerButton.setOnAction(event -> handleAddPlayerButton());
         changeGameButton.setOnAction(event -> handleChangeGameButton());
