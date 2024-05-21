@@ -14,7 +14,7 @@ public class CallbackImpl extends PlayerCallbackPOA {
         this.username = newUsername;
     }
 
-    private void setController(ControllerInterface controller){
+    public void setController(ControllerInterface controller){
         this.controller = controller;
     }
 
