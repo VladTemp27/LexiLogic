@@ -11,6 +11,7 @@ public class ORBServerTester implements ORBServerCallback, ORBDOperationCallback
     public static ExecutorService executorDaemon = Executors.newSingleThreadExecutor();
     ExecutorService executorServer = Executors.newSingleThreadExecutor();
     boolean daemonRunning;
+    Process process;
     public void runServer(){
         ORBServer server = new ORBServer(this, 2018, "localhost");
         executorServer.submit(server);
@@ -23,7 +24,7 @@ public class ORBServerTester implements ORBServerCallback, ORBDOperationCallback
 
     public static void main(String[] args) throws InterruptedException {
         ORBServerTester program = new ORBServerTester();
-        //program.runDaemon();
+        program.runDaemon();
         Thread.sleep(3000);
         program.runServer();
         while(program.daemonRunning){
@@ -31,7 +32,7 @@ public class ORBServerTester implements ORBServerCallback, ORBDOperationCallback
         }
 
 
-
+        program.process.destroy();
         program.executorDaemon.shutdownNow();
         program.executorServer.shutdownNow();
 
@@ -41,6 +42,11 @@ public class ORBServerTester implements ORBServerCallback, ORBDOperationCallback
     public void notifyOrbExit() throws ORBDException {
         daemonRunning = false;
         System.out.println("Daemon closed");
+    }
+
+    @Override
+    public void setProcessObject(Process process) {
+        this.process = process;
     }
 
     @Override
