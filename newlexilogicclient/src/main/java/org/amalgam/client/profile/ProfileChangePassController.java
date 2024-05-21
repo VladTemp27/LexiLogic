@@ -59,10 +59,8 @@ public class ProfileChangePassController {
     }
 
     private void addHoverEffect(Button button){
-        String originalColor = button.getStyle(); // Store the original color
-
-        button.setOnMouseEntered(e -> button.setStyle("-fx-background-color: derive(" + originalColor + ", -10%);"));
-        button.setOnMouseExited(e -> button.setStyle(originalColor));
+        button.setOnMouseEntered(e -> button.setStyle("-fx-background-color: derive(#9CA16F, -10%);"));
+        button.setOnMouseExited(e -> button.setStyle("-fx-background-color: #9CA16F;"));
     }
 
     /**

@@ -9,8 +9,6 @@ import javafx.scene.effect.ColorAdjust;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import org.amalgam.lexilogicserver.ServerController;
-import org.amalgam.lexilogicserver.model.utilities.referenceobjects.Player;
-
 public class AccountDeletionController {
     //private variables
     @FXML

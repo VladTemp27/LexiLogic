@@ -20,6 +20,10 @@ public class PlayerGameDetail {
     public PlayerGameDetail() {
     }
 
+    public LinkedList<String> getDupedWords() {
+        return dupedWords;
+    }
+
     public String getUsername() {
         return username;
     }

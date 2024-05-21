@@ -14,15 +14,7 @@ public class ORBTester implements ORBServerCallback, ORBDOperationCallback {
 	static boolean daemonRunning = false;
 
 	public static void main(String[] args) throws InterruptedException {
-		ORBTester program = new ORBTester();
-		program.runDaemon();
-		Thread.sleep(1000);
-		daemonRunning = true;
-		program.runServer();
-		while(daemonRunning){
 
-		}
-		executorService.shutdown();
 	}
 
 	public void runDaemon(){

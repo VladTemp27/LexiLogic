@@ -1,12 +1,15 @@
 package org.amalgam.backend.microservices.objectparser;
 
 import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import org.amalgam.backend.referenceobjects.GameDetail;
 import org.amalgam.backend.referenceobjects.LeaderBoard;
 import org.amalgam.backend.referenceobjects.Lobby;
 import org.amalgam.backend.referenceobjects.Player;
+import org.amalgam.client.leaderboards.LeaderboardsController;
+import org.amalgam.client.login.LoginController;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -96,5 +99,21 @@ public class JsonObjectParser {
             players.add(player);
         }
         return players;
+    }
+
+    public static List<LeaderboardsController.LeaderboardsData> parseLeaderboardsData(String leaderboards) {
+        List<LeaderboardsController.LeaderboardsData> leaderboardsDataList = new ArrayList<>();
+        JsonElement jsonElement = JsonParser.parseString(leaderboards);
+        JsonObject jsonObject = jsonElement.getAsJsonObject();
+        JsonArray jsonArray = jsonObject.getAsJsonArray("leaderboard");
+        for (JsonElement element : jsonArray) {
+            JsonObject object = element.getAsJsonObject();
+            JsonElement username = object.get("username");
+            JsonElement points = object.get("pts");
+            JsonElement rank = object.get("rank");
+            leaderboardsDataList.add(new LeaderboardsController.LeaderboardsData(rank.getAsString(), username.getAsString(),
+                    points.getAsInt()));
+        }
+        return leaderboardsDataList;
     }
 }
