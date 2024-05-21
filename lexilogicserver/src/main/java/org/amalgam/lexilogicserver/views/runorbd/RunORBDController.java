@@ -4,6 +4,8 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import javafx.scene.effect.ColorAdjust;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import java.net.InetSocketAddress;
 import java.net.Socket;
@@ -24,6 +26,8 @@ public class RunORBDController {
     private TextField portField;
     @FXML
     private Button runORBDButton;
+    @FXML
+    private Button backButton;
     private ServerController serverController;
 
     private ExecutorService executorService = Executors.newSingleThreadExecutor();
@@ -45,6 +49,20 @@ public class RunORBDController {
     private void addHoverEffect(Button button) {
         button.setOnMouseEntered(e -> button.setStyle("-fx-background-color: derive(#9CA16F, -10%);"));
         button.setOnMouseExited(e -> button.setStyle("-fx-background-color: #9CA16F;"));
+    }
+    private void addHoverEffectImage(Button button) {
+        ImageView imageView = (ImageView) button.getGraphic();
+        ColorAdjust colorAdjust = new ColorAdjust();
+
+        button.setOnMouseEntered(e -> {
+            colorAdjust.setBrightness(-0.3); // Decrease brightness to make it darker
+            imageView.setEffect(colorAdjust);
+        });
+
+        button.setOnMouseExited(e -> {
+            colorAdjust.setBrightness(0); // Reset brightness
+            imageView.setEffect(colorAdjust);
+        });
     }
 
     /**
@@ -98,9 +116,9 @@ public class RunORBDController {
 
             // Validate hostname and port
             if (isValidHostAndPort(hostname, port)) {
-                ServerController.ORBExitCode = executorService.submit(new ORBDRunner(serverController, port,hostname));
+                ServerController.ORBExitCode = executorService.submit(new ORBDRunner(serverController, port, hostname));
                 if (serverController != null) {
-                    serverController.loadServerMainMenu();
+                    serverController.loadRunORBDRunningView();
                 } else {
                     System.out.println("ServerController is not set.");
                 }
@@ -112,6 +130,14 @@ public class RunORBDController {
         }
     }
 
+    public void handleBackButton(){
+        if(serverController !=null){
+            serverController.loadServerMainMenu();
+        } else {
+            System.out.println("Server controller is not set.");
+        }
+    }
+
     /**
      * Initializes the controller.
      * This method sets up the UI components and initializes the data model.
@@ -119,6 +145,8 @@ public class RunORBDController {
     @FXML
     public void initialize() {
         addHoverEffect(runORBDButton);
+        addHoverEffectImage(backButton);
+        backButton.setOnAction(event-> handleBackButton());
         runORBDButton.setOnAction(event -> handleRunORBDButton());
     }
 }
