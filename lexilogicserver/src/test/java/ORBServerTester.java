@@ -13,27 +13,26 @@ public class ORBServerTester implements ORBServerCallback, ORBDOperationCallback
     boolean daemonRunning;
     Process process;
     public void runServer(){
-        ORBServer server = new ORBServer(this, 2018, "localhost");
+        ORBServer server = new ORBServer(this, 2020, "localhost");
         executorServer.submit(server);
     }
 
     public void runDaemon(){
-        ORBDRunner daemon = new ORBDRunner(this, 2018, "localhost");
+        ORBDRunner daemon = new ORBDRunner(this, 2020, "localhost");
         executorDaemon.submit(daemon);
     }
 
     public static void main(String[] args) throws InterruptedException {
         ORBServerTester program = new ORBServerTester();
-        program.runDaemon();
+//        program.runDaemon();
         Thread.sleep(3000);
         program.runServer();
         while(program.daemonRunning){
 
         }
-
+//        program.process.destroy();
         program.executorDaemon.shutdownNow();
         program.executorServer.shutdownNow();
-
     }
 
     @Override

@@ -43,7 +43,7 @@ public class GameServiceImpl extends GameServicePOA {
             while (true) { // Change loop condition to always true
                 matchPlayers();
                 if (matchmakingService.isTimerDone()) { // Add condition to check if timer is done
-                    return "{\"status\": \"timeout\", \"message\": \"Matchmaking Successful!\"}";
+                    return "{\"status\": \"success\", \"message\": \"Matchmaking Successful!\"}";
                     // Exit loop if timer is done
                 }
                 Thread.sleep(100);

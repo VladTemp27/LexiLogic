@@ -1,5 +1,6 @@
 package org.amalgam.client;
 
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
@@ -61,7 +62,7 @@ public class MainController {
     public static AnchorPane leaderboardsPane;
 
     public static GameController gameController;
-   public static AnchorPane gamePane;
+    public static AnchorPane gamePane;
 
     public static HowToPlayController howToPlayController;
     public static AnchorPane howToPlayPane;
@@ -70,7 +71,7 @@ public class MainController {
     public static ORBConnection orbConnection;
 
     public MainController() {
-        orbConnection = new ORBConnection(2018, "localhost");
+        orbConnection = new ORBConnection(2020, "localhost");
         try {
             orbConnection.start();
         } catch (InvalidName | AdapterInactive e) {
@@ -371,9 +372,9 @@ public class MainController {
             stage.setScene(scene);
             stage.setResizable(false);
             stage.setTitle("Lexi Logic");
-            MainMenuController mainMenuController = fxmlLoader.getController();
-            mainMenuController.setMainController(this);
-            mainMenuController.initialize();
+            GameController gameController = fxmlLoader.getController();
+            gameController.setMainController(this);
+            gameController.initialize();
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -383,12 +384,16 @@ public class MainController {
     Load and display the loading view
      */
     public void loadLoadingView(){
-        try {
-            Font.loadFont(getClass().getResourceAsStream("/org/amalgam/fonts/BowlbyOneSC.ttf"), 20);
+        Platform.runLater(() -> {
+             Font.loadFont(getClass().getResourceAsStream("/org/amalgam/fonts/BowlbyOneSC.ttf"), 20);
             Font.loadFont(getClass().getResourceAsStream("/org/amalgam/fonts/Brygada1918.ttf"), 20);
-
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/org/amalgam/client/views/loading/loading-view.fxml"));
-            AnchorPane loadingPane = fxmlLoader.load();
+             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/org/amalgam/client/views/loading/loading-view.fxml"));
+            AnchorPane loadingPane = null;
+            try {
+                loadingPane = fxmlLoader.load();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
 
             InputStream inputStream = getClass().getResourceAsStream("/org/amalgam/icons/newLogo.png");
 
@@ -410,13 +415,15 @@ public class MainController {
             stage.setTitle("Lexi Logic");
             LoadingController loadingController = fxmlLoader.getController();
             loadingController.setMainController(this);
-            loadingController.initialize();
+            LoginController.playerCallbackImpl.setControllerInterface(loadingController);
 
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+            new Thread(() -> {
+                loadingController.findMatch();;
+            }).start();
+
+        });
+
     }
-
     /**
      * Load and display leaderboards view
      */

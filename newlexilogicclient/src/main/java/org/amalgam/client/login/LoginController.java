@@ -31,6 +31,7 @@ public class LoginController {
     private MainController mainController;
     private LoginModel loginModel = new LoginModel(MainController.orbConnection, null);
     public static PlayerCallback playerCallback;
+    public static PlayerCallbackImpl playerCallbackImpl;
     public static String username;
     public static String password;
 
@@ -86,8 +87,7 @@ public class LoginController {
     }
 
     private boolean loginAuthentication(String username, String password) {
-
-        PlayerCallbackImpl playerCallbackImpl = new PlayerCallbackImpl();
+        playerCallbackImpl = new PlayerCallbackImpl();
         playerCallbackImpl.username(username);
         LoginController.playerCallback = null;
         try {

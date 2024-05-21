@@ -1,5 +1,6 @@
 package org.amalgam.client.game;
 
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
@@ -8,9 +9,13 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import org.amalgam.ControllerException.InvalidRequestException;
+import org.amalgam.ControllerInterface;
 import org.amalgam.backend.microservices.serverconnection.ORBConnection;
 import org.amalgam.client.MainController;
+import org.amalgam.client.login.LoginController;
 
+import java.time.Duration;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -19,10 +24,17 @@ import java.util.TimerTask;
 import java.util.HashMap;
 import java.util.Map;
 
-public class GameController {
+public class GameController{
     // Game private variables
     @FXML
     private AnchorPane gamePane;
+    @FXML
+    private AnchorPane gameOverPanel;
+    @FXML
+    private AnchorPane victoryPanel;
+    // Round Countdown private variables
+    @FXML
+    private AnchorPane roundCountdownPane;
     @FXML
     private Label timeLabel; // for the 30 seconds
     @FXML
@@ -97,34 +109,22 @@ public class GameController {
 
     // Player round wins tracking
     private Map<String, Integer> playerRoundsWon = new HashMap<>();
-
-    // Round Countdown private variables
-    @FXML
-    private AnchorPane roundCountdownPane;
     @FXML
     private Label roundStartingInLabel;
-    @FXML
-    private Label RCtimeLabel;
+     @FXML
+    private Label RCTimeLabel;
     @FXML
     private Label RCroundNumberLabel;
-
-    @FXML
-    private AnchorPane gameOverPanel;
     @FXML
     private Button playAgainButtonGO;
     @FXML
     private Button backButtonGO;
-
-    @FXML
-    private AnchorPane victoryPanel;
     @FXML
     private Button playAgainButtonV;
     @FXML
     private Button backButtonV;
-
     // common private variables
     private GameModel gameModel;
-    private ORBConnection orbConnection;
     private MainController mainController;
 
     /**
@@ -163,56 +163,101 @@ public class GameController {
         alert.showAndWait();
     }
 
-    private void startTimer() {
-        final int[] timeRemaining = {30}; // Make timeRemaining final
-        timeLabel.setText(String.valueOf(timeRemaining[0]));
+    /**
+     * round counter before game to start
+     */
+    private void roundCountdown() {
+        Platform.runLater(() -> {
+            final int[] countdown = {5};
+            RCTimeLabel.setText(String.format("00:0%d", countdown[0]));
+            timer = new Timer();
+            timer.schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    Platform.runLater(() -> {
+                        if (countdown[0] > 0) {
+                            countdown[0]--;
+                            RCTimeLabel.setText(String.format("00:0%d", countdown[0]));
+                            if (countdown[0] == 1) {
+                                RCroundNumberLabel.setText("ROUND " + currentRound);
+                            }
+                            if (countdown[0] == 0) {
+                                roundCountdownPane.setVisible(false);
+                                gamePane.setVisible(true);
+                                roundLabel.setText("ROUND " + currentRound);
+                                startTimer();
+                                timer.cancel();
+                            }
 
-        timer = new Timer();
-        timer.schedule(new TimerTask() {
-            @Override
-            public void run() {
-                timeRemaining[0]--; // Can access final variable
-                timeLabel.setText(String.valueOf(timeRemaining[0]));
-
-                if (timeRemaining[0] == 0) {
-                    // Handle timer ending: start new round
-                    timer.cancel();
-                    checkRoundWinner();
+                        }
+                    });
                 }
-            }
-        }, 0, 1000); // Start immediately, then update every second
+            }, 1000, 1000);
+        });
+    }
+
+    private void startTimer() {
+        Platform.runLater(() -> {
+            final int[] gameTime = {30};
+            timeLabel.setText(String.format("00:%d", gameTime[0]));
+            timer = new Timer();
+            timer.schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    Platform.runLater(() -> {
+                        if (gameTime[0] > 0) {
+                            gameTime[0]--;
+                            timeLabel.setText(String.format("00:%d", gameTime[0]));
+                            if (gameTime[0] == 0) {
+                                System.out.println("ROUND ENDED");
+                                timer.cancel();
+                                checkRoundWinner();
+                            }
+                        }
+                    });
+                }
+            }, 1000, 1000);
+        });
     }
 
     /**
      * Fetch and display the letters in the word box.
      */
     private void fetchAndDisplayLetters(int roomID) {
-        char[][] letters = gameModel.fetchWordBox(roomID);
+        try {
+//            char[][] letters = gameModel.fetchWordBox(roomID);
+            char[][] letters = {
+                    {'A','B','C','D'},
+                    {'E','F','G','H'},
+                    {'I','J','K','L'}
+            };
+            List<Character> consonants = new ArrayList<>();
+            List<Character> vowels = new ArrayList<>();
 
-        List<Character> consonants = new ArrayList<>();
-        List<Character> vowels = new ArrayList<>();
-
-        for (char[] row : letters) {
-            for (char letter : row) {
-                if (isVowel(letter)) {
-                    vowels.add(letter);
-                } else {
-                    consonants.add(letter);
+            for (char[] row : letters) {
+                for (char letter : row) {
+                    if (isVowel(letter)) {
+                        vowels.add(letter);
+                    } else {
+                        consonants.add(letter);
+                    }
                 }
             }
-        }
+            Collections.shuffle(consonants);
+            Collections.shuffle(vowels);
 
-        Collections.shuffle(consonants);
-        Collections.shuffle(vowels);
+            List<Character> selectedLetters = new ArrayList<>();
+            selectedLetters.addAll(vowels.subList(0, Math.min(vowels.size(), 7)));
+            selectedLetters.addAll(consonants.subList(0, Math.min(consonants.size(), 13)));
 
-        List<Character> selectedLetters = new ArrayList<>();
-        selectedLetters.addAll(vowels.subList(0, Math.min(vowels.size(), 7)));
-        selectedLetters.addAll(consonants.subList(0, Math.min(consonants.size(), 13)));
+            Collections.shuffle(selectedLetters);
 
-        Collections.shuffle(selectedLetters);
-
-        for (int i = 0; i < letterLabels.length && i < selectedLetters.size(); i++) {
-            letterLabels[i].setText(String.valueOf(selectedLetters.get(i)));
+            for (int i = 0; i < letterLabels.length && i < selectedLetters.size(); i++) {
+                letterLabels[i].setText(String.valueOf(selectedLetters.get(i)));
+            }
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            System.out.println("fetchAndDisplayLetters");
         }
     }
 
@@ -284,66 +329,41 @@ public class GameController {
         }
     }
 
-    private void showRoundCountdown() {
-        gamePane.setVisible(false);
-        roundCountdownPane.setVisible(true);
-        gameOverPanel.setVisible(false);
-        victoryPanel.setVisible(false);
-    }
-
-    private void showGame() {
-        gamePane.setVisible(true);
-        roundCountdownPane.setVisible(false);
-        gameOverPanel.setVisible(false);
-        victoryPanel.setVisible(false);
-    }
-
-    private void showGameOver() {
-        gamePane.setVisible(true);
-        roundCountdownPane.setVisible(false);
-        gameOverPanel.setVisible(true);
-        victoryPanel.setVisible(false);
-    }
-
-    private void showVictory() {
-        gamePane.setVisible(true);
-        roundCountdownPane.setVisible(false);
-        victoryPanel.setVisible(true);
-        gameOverPanel.setVisible(false);
-    }
-
     /**
      * Initializes the controller.
      * This method sets up the UI components and initializes the data model.
      */
     @FXML
     public void initialize() {
-        // Initialize the game model
-        orbConnection = new ORBConnection(2018, "localhost"); // Initialize ORBConnection or pass it from the main
-        // controller
-        gameModel = new GameModel(orbConnection);
-
-        // Initialize letter labels array
-        letterLabels = new Label[]{firstLetter, secondLetter, thirdLetter, fourthLetter, fifthLetter,
-                sixthLetter, seventhLetter, eightLetter, ninthLetter, tenthLetter,
-                eleventhLetter, twelfthLetter, thirteenthLetter, fourteenthLetter, fifteenthLetter,
-                sixteenthLetter, seventeenthLetter, eighteenthLetter, nineteenthLetter, twentiethLetter};
-
-        // Initialize player round wins
-        playerRoundsWon.put("player1", 0);
-        playerRoundsWon.put("player2", 0);
-        playerRoundsWon.put("player3", 0);
-
-        // Fetch and display letters
-        fetchAndDisplayLetters(1); // Example roomID = 1
-
-        // Start timer
-        startTimer();
-
-        // Add event handler for the lexicon text field to handle 'Enter' key press
-        lexiTextfield.setOnAction(event -> processLexiconInput());
-
-        // Update round label
-        updateRoundLabel();
+        try {
+            gameModel = new GameModel(MainController.orbConnection);
+            gameOverPanel.setVisible(false);
+            victoryPanel.setVisible(false);
+            roundCountdown();
+//
+//            // Initialize letter labels array
+//            letterLabels = new Label[]{firstLetter, secondLetter, thirdLetter, fourthLetter, fifthLetter,
+//                    sixthLetter, seventhLetter, eightLetter, ninthLetter, tenthLetter,
+//                    eleventhLetter, twelfthLetter, thirteenthLetter, fourteenthLetter, fifteenthLetter,
+//                    sixteenthLetter, seventeenthLetter, eighteenthLetter, nineteenthLetter, twentiethLetter};
+//
+//            // Initialize player round wins
+//            playerRoundsWon.put("player1", 0);
+//            playerRoundsWon.put("player2", 0);
+//            playerRoundsWon.put("player3", 0);
+//
+//            // Fetch and display letters
+//            fetchAndDisplayLetters(1); // Example roomID = 1
+//
+//            // Add event handler for the lexicon text field to handle 'Enter' key press
+//            lexiTextfield.setOnAction(event -> processLexiconInput());
+//
+//            // Update round label
+//            updateRoundLabel();
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            System.out.println("initializer error");
+        }
     }
+
 }

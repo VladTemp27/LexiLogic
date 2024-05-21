@@ -14,8 +14,6 @@ public class LoginModel {
     private final ORBConnection orbConnection;
     private final LoginMicroservice loginMicroservice;
     public static PlayerCallback playerCallback;
-
-
     public LoginModel (ORBConnection orbConnection, PlayerCallback playerCallback){
         this.orbConnection = orbConnection;
         this.playerCallback = playerCallback;

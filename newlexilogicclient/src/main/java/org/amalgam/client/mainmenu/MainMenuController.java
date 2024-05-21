@@ -74,7 +74,6 @@ public class MainMenuController {
     /**
      * Fetches and updates data remotely.
      * This method is called to update the data displayed in the UI.
-     *
      */
     public void fetchAndUpdate(String jsonString, String dataType) throws InvalidRequestException {
 
@@ -82,8 +81,9 @@ public class MainMenuController {
 
     @FXML
     public void handlePlay(){
-        // insert main controller statement for opening play panel
+        mainController.loadLoadingView();
     }
+
    @FXML
    public void handleProfile(){
        if (mainController != null) {
