@@ -60,6 +60,7 @@ public class ConnectionTest {
         arguments[1] = String.valueOf(port);
         arguments[2] = "-ORBInitialHost";
         arguments[3] = localhost;
+        System.out.println(localhost);
         return arguments;
     }
 }

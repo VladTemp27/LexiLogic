@@ -46,6 +46,8 @@ public class PlayerGameDetail {
         dupedWords.add(word);
     }
 
+    public LinkedList<String> getDupedWords(){return dupedWords;}
+
     public boolean listOfWordsContains(String word){
         return words.contains(word);
     }
