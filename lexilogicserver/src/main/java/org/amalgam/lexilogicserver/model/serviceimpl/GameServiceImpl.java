@@ -8,8 +8,8 @@ import org.amalgam.UIControllers.PlayerCallback;
 import org.amalgam.Utils.Exceptions.*;
 import org.amalgam.Utils.Exceptions.DuplicateWordException;
 import org.amalgam.lexilogicserver.model.DAL.LeaderBoardDAL;
-import org.amalgam.lexilogicserver.model.DAL.LobbyDAL;
 import org.amalgam.lexilogicserver.model.microservices.Matchmaking.MatchmakingService;
+import org.amalgam.lexilogicserver.model.DAL.LobbyDAL;
 import org.amalgam.lexilogicserver.model.utilities.referenceobjects.LeaderBoard;
 
 import java.io.FileNotFoundException;
@@ -91,7 +91,6 @@ public class GameServiceImpl extends GameServicePOA {
         return new char[0][];
     }
 
-    // TODO: why there is JSON
     @Override
     public String getLeaderboards() throws EmptyLeaderBoardException {
         List<LeaderBoard> leaderboards = LeaderBoardDAL.fetchLeaderBoards();
@@ -100,24 +99,20 @@ public class GameServiceImpl extends GameServicePOA {
             throw new EmptyLeaderBoardException("Leaderboard is empty");
         }
 
-//        JsonObject rootObject = new JsonObject();
-
+        JsonObject rootObject = new JsonObject();
+        rootObject.addProperty("object", "leaderboard");
         JsonArray leaderboardArray = new JsonArray();
         for (LeaderBoard leaderboard : leaderboards) {
-            leaderboardArray.add(leaderboard.getUsername());
-            leaderboardArray.add(leaderboard.getPoints());
-            leaderboardArray.add(leaderboard.getRank());
-//            JsonObject leaderboardObj = new JsonObject();
-//            leaderboardObj.addProperty("username", leaderboard.getUsername());
-//            leaderboardObj.addProperty("pts", leaderboard.getPoints());
-//            leaderboardObj.addProperty("rank", leaderboard.getRank());
-//            leaderboardArray.add(leaderboardObj);
+            JsonObject leaderboardObj = new JsonObject();
+            leaderboardObj.addProperty("username", leaderboard.getUsername());
+            leaderboardObj.addProperty("pts", leaderboard.getPoints());
+            leaderboardObj.addProperty("rank", leaderboard.getRank());
+            leaderboardArray.add(leaderboardObj);
         }
 
-//        rootObject.add("leaderboard", leaderboardArray);
+        rootObject.add("leaderboard", leaderboardArray);
 
-//        return rootObject.toString();
-        return leaderboardArray.toString();
+        return rootObject.toString();
     }
 
 

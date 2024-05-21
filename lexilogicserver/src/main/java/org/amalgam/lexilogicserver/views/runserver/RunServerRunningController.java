@@ -3,6 +3,8 @@ package org.amalgam.lexilogicserver.views.runserver;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.effect.ColorAdjust;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import org.amalgam.lexilogicserver.ServerController;
 
@@ -15,6 +17,8 @@ public class RunServerRunningController {
     private Button addPlayerButton;
     @FXML
     private Button stopServerButton;
+    @FXML
+    private Button backButton;
     private ServerController serverController;
 
     /**
@@ -45,7 +49,20 @@ public class RunServerRunningController {
         button.setOnMouseEntered(e -> button.setStyle("-fx-background-color: derive(#B07C3B, -10%);"));
         button.setOnMouseExited(e -> button.setStyle("-fx-background-color: #B07C3B;"));
     }
+    private void addHoverEffectImage(Button button) {
+        ImageView imageView = (ImageView) button.getGraphic();
+        ColorAdjust colorAdjust = new ColorAdjust();
 
+        button.setOnMouseEntered(e -> {
+            colorAdjust.setBrightness(-0.3); // Decrease brightness to make it darker
+            imageView.setEffect(colorAdjust);
+        });
+
+        button.setOnMouseExited(e -> {
+            colorAdjust.setBrightness(0); // Reset brightness
+            imageView.setEffect(colorAdjust);
+        });
+    }
     /**
      * Shows an alert to a user if there is an error.
      *
@@ -71,13 +88,25 @@ public class RunServerRunningController {
     @FXML
     public void handleStopServer() {
         //TODO: Make the server stop when button is clicked.
+
+    }
+
+    @FXML
+    public void handleBackButton(){
+        if(serverController !=null){
+            serverController.loadServerMainMenu();
+        }else {
+            System.out.println("Server controller is not set.");
+        }
     }
 
     @FXML
     public void initialize() {
         addPlayerButton.setOnAction(event -> handleAddPlayer());
         stopServerButton.setOnAction(event -> handleStopServer());
+        backButton.setOnAction(event -> handleBackButton());
         addPlayerHoverEffect(addPlayerButton);
         addStopHoverEffect(stopServerButton);
+        addHoverEffectImage(backButton);
     }
 }

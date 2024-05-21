@@ -9,8 +9,6 @@ import javafx.scene.effect.ColorAdjust;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import org.amalgam.lexilogicserver.ServerController;
-import org.amalgam.lexilogicserver.model.utilities.referenceobjects.Player;
-
 public class AccountDeletionController {
     //private variables
     @FXML
@@ -54,11 +52,9 @@ public class AccountDeletionController {
         });
     }
 
-    private void addHoverEffect(Button button){
-        String originalColor = button.getStyle(); // Store the original color
-
-        button.setOnMouseEntered(e -> button.setStyle("-fx-background-color: derive(" + originalColor + ", -10%);"));
-        button.setOnMouseExited(e -> button.setStyle(originalColor));
+    private void addHoverEffect(Button button) {
+        button.setOnMouseEntered(e -> button.setStyle("-fx-background-color: derive(#9CA16F, -10%);"));
+        button.setOnMouseExited(e -> button.setStyle("-fx-background-color: #9CA16F;"));
     }
 
     /**
@@ -103,6 +99,11 @@ public class AccountDeletionController {
         addHoverEffectImage(backButton);
         saveButton.setOnAction(event -> handleSaveButton());
         backButton.setOnAction(event -> handleBackButton());
-
+        accountTable.setStyle(
+                "-fx-background-color: transparent; " +
+                        "-fx-table-cell-border-color: transparent; " +
+                        "-fx-text-fill: white;" +
+                        "-fx-font-family: 'Brygada 1918';"
+        );
     }
 }

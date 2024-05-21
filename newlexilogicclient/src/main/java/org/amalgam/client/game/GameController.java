@@ -2,6 +2,7 @@ package org.amalgam.client.game;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
@@ -83,7 +84,7 @@ public class GameController {
     @FXML
     private Label eighteenthLetter;
     @FXML
-    private Label ninteenthLetter;
+    private Label nineteenthLetter;
     @FXML
     private Label twentiethLetter;
     @FXML
@@ -107,7 +108,21 @@ public class GameController {
     @FXML
     private Label RCroundNumberLabel;
 
-    // Common private variables
+    @FXML
+    private AnchorPane gameOverPanel;
+    @FXML
+    private Button playAgainButtonGO;
+    @FXML
+    private Button backButtonGO;
+
+    @FXML
+    private AnchorPane victoryPanel;
+    @FXML
+    private Button playAgainButtonV;
+    @FXML
+    private Button backButtonV;
+
+    // common private variables
     private GameModel gameModel;
     private ORBConnection orbConnection;
     private MainController mainController;
@@ -269,6 +284,34 @@ public class GameController {
         }
     }
 
+    private void showRoundCountdown() {
+        gamePane.setVisible(false);
+        roundCountdownPane.setVisible(true);
+        gameOverPanel.setVisible(false);
+        victoryPanel.setVisible(false);
+    }
+
+    private void showGame() {
+        gamePane.setVisible(true);
+        roundCountdownPane.setVisible(false);
+        gameOverPanel.setVisible(false);
+        victoryPanel.setVisible(false);
+    }
+
+    private void showGameOver() {
+        gamePane.setVisible(true);
+        roundCountdownPane.setVisible(false);
+        gameOverPanel.setVisible(true);
+        victoryPanel.setVisible(false);
+    }
+
+    private void showVictory() {
+        gamePane.setVisible(true);
+        roundCountdownPane.setVisible(false);
+        victoryPanel.setVisible(true);
+        gameOverPanel.setVisible(false);
+    }
+
     /**
      * Initializes the controller.
      * This method sets up the UI components and initializes the data model.
@@ -284,7 +327,7 @@ public class GameController {
         letterLabels = new Label[]{firstLetter, secondLetter, thirdLetter, fourthLetter, fifthLetter,
                 sixthLetter, seventhLetter, eightLetter, ninthLetter, tenthLetter,
                 eleventhLetter, twelfthLetter, thirteenthLetter, fourteenthLetter, fifteenthLetter,
-                sixteenthLetter, seventeenthLetter, eighteenthLetter, ninteenthLetter, twentiethLetter};
+                sixteenthLetter, seventeenthLetter, eighteenthLetter, nineteenthLetter, twentiethLetter};
 
         // Initialize player round wins
         playerRoundsWon.put("player1", 0);

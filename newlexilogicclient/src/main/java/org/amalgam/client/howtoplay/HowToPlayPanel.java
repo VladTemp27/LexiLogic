@@ -1,11 +1,11 @@
-package org.amalgam.client.gameover;
-
+package org.amalgam.client.howtoplay;
 
 import javafx.application.Application;
 import javafx.stage.Stage;
-@Deprecated
-public class GameOverPanel extends Application {
+
+public class HowToPlayPanel extends Application {
     @Override
     public void start(Stage stage) throws Exception {
     }
 }
+

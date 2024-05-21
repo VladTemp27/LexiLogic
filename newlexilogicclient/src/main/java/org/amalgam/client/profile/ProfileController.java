@@ -60,11 +60,19 @@ public class ProfileController {
         });
     }
 
-    private void addHoverEffect(Button button){
-        String originalColor = button.getStyle(); // Store the original color
+    private void addDeleteHoverEffect(Button button){
+        button.setOnMouseEntered(e -> button.setStyle("-fx-background-color: derive(#A94949, -10%);"));
+        button.setOnMouseExited(e -> button.setStyle("-fx-background-color: #A94949;"));
+    }
 
-        button.setOnMouseEntered(e -> button.setStyle("-fx-background-color: derive(" + originalColor + ", -10%);"));
-        button.setOnMouseExited(e -> button.setStyle(originalColor));
+    private void addChangePasswordHoverEffect(Button button){
+        button.setOnMouseEntered(e -> button.setStyle("-fx-background-color: derive(#4b5320, -10%);"));
+        button.setOnMouseExited(e -> button.setStyle("-fx-background-color: #4b5320;"));
+    }
+
+    private void addLogoutHoverEffect(Button button){
+        button.setOnMouseEntered(e -> button.setStyle("-fx-background-color: derive(#9CA16F, -10%);"));
+        button.setOnMouseExited(e -> button.setStyle("-fx-background-color: #9CA16F;"));
     }
 
     /**
@@ -167,11 +175,11 @@ public class ProfileController {
     @FXML
     public void initialize() {
         usernameLabel.setText(LoginController.username);
-        addHoverEffect(changePasswordButton);
+        addChangePasswordHoverEffect(changePasswordButton);
+        addDeleteHoverEffect(deleteButton);
+        addLogoutHoverEffect(logoutButton);
         addHoverEffectImage(editUsernameButton);
         addHoverEffectImage(backButton);
-        addHoverEffect(deleteButton);
-        addHoverEffect(logoutButton);
         changePasswordButton.setOnAction(event -> handleChangePassword());
         editUsernameButton.setOnAction(event -> handleEditUsername());
         backButton.setOnAction(event -> handleBack());

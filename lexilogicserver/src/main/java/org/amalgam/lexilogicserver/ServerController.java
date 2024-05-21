@@ -1,16 +1,21 @@
 package org.amalgam.lexilogicserver;
 
+import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 import org.amalgam.lexilogicserver.model.microservices.daemonHandler.ORBDException;
 import org.amalgam.lexilogicserver.model.microservices.daemonHandler.ORBDOperationCallback;
+import org.amalgam.lexilogicserver.model.microservices.serverHandler.ORBServer;
+import org.amalgam.lexilogicserver.model.microservices.serverHandler.ORBServerCallback;
 import org.amalgam.lexilogicserver.views.accountdeletion.AccountDeletionController;
 import org.amalgam.lexilogicserver.views.addplayer.AddPlayerController;
 import org.amalgam.lexilogicserver.views.changegame.ChangeGameController;
+import org.amalgam.lexilogicserver.views.runorbd.RunORBDRunningController;
 import org.amalgam.lexilogicserver.views.runserver.RunServerRunningController;
 import org.amalgam.lexilogicserver.views.servermainmenu.ServerMainMenuController;
 import org.amalgam.lexilogicserver.views.runorbd.RunORBDController;
@@ -20,9 +25,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.concurrent.Future;
 
-public class ServerController implements ORBDOperationCallback {
+public class ServerController implements ORBDOperationCallback,ORBServerCallback {
     public Stage stage;
-
     public static ServerMainMenuController serverMainMenuController;
     public static AnchorPane serverMainMenuPane;
 
@@ -36,12 +40,12 @@ public class ServerController implements ORBDOperationCallback {
     public static AnchorPane runServerPane;
 
     public static AccountDeletionController accountDeletionController;
-    static AnchorPane accountDeletionPane;
-    
+    public static AnchorPane accountDeletionPane;
+
+    public static RunORBDRunningController runORBDRunningController;
+    public static AnchorPane runORBDRunningPane;
+
     public static Future<Integer> ORBExitCode;
-    
-
-
 
     /**
      * Getters and Setters of Controllers and Panels
@@ -67,6 +71,7 @@ public class ServerController implements ORBDOperationCallback {
     }
     public AccountDeletionController getAccountDeletionController(){return accountDeletionController;}
 
+    public RunORBDRunningController getRunORBDRunningController(){return runORBDRunningController;}
     /**
      * Loads and displays the server main menu view.
      */
@@ -108,6 +113,7 @@ public class ServerController implements ORBDOperationCallback {
      * Loads and displays the run server view.
      */
     public void loadRunServer() {
+//        ORBServer orbServer = new ORBServer(orbServerCallback, )
         try {
             Font.loadFont(getClass().getResourceAsStream("/org/amalgam/fonts/BowlbyOneSC.ttf"), 20);
             Font.loadFont(getClass().getResourceAsStream("/org/amalgam/fonts/Brygada1918.ttf"), 20);
@@ -209,6 +215,12 @@ public class ServerController implements ORBDOperationCallback {
             RunORBDController runORBDController = fxmlLoader.getController();
             runORBDController.setServerController(this);
             runORBDController.initialize();
+            stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+                @Override
+                public void handle(WindowEvent event) {
+                    System.exit(0);
+                }
+            });
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -321,6 +333,47 @@ public class ServerController implements ORBDOperationCallback {
             accountDeletionController.setServerController(this);
             accountDeletionController.initialize();
 
+            stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+                @Override
+                public void handle(WindowEvent event) {
+                    System.exit(0);
+                }
+            });
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void loadRunORBDRunningView(){
+        try {
+            Font.loadFont(getClass().getResourceAsStream("/org/amalgam/fonts/BowlbyOneSC.ttf"), 20);
+            Font.loadFont(getClass().getResourceAsStream("/org/amalgam/fonts/Brygada1918.ttf"), 20);
+
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/org/amalgam/server/views/runorbd/runorbdrunning-view.fxml"));
+            AnchorPane runORBDPane = fxmlLoader.load();
+
+            InputStream inputStream = getClass().getResourceAsStream("/org/amalgam/icons/Logo.png");
+            if (inputStream != null) {
+                Image image = new Image(inputStream);
+                stage.getIcons().add(image);
+            } else {
+                System.err.println("Failed to load image: Logo.png");
+            }
+
+            Scene scene = new Scene(runORBDPane);
+
+            if (stage == null) {
+                throw new IllegalStateException("Stage is not set. Please set the stage before calling the panel.");
+            }
+
+            stage.setScene(scene);
+            stage.setResizable(false);
+            stage.setTitle("Lexi Logic");
+            RunORBDRunningController runORBDRunningController = fxmlLoader.getController();
+            runORBDRunningController.setServerController(this);
+            runORBDRunningController.initialize();
+
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -330,10 +383,25 @@ public class ServerController implements ORBDOperationCallback {
     public void notifyOrbExit() throws ORBDException {
         try {
             //TODO: Prompt with ui that ORB has exited
-            System.out.println("ORB has exited with exit code: " + ORBExitCode.get());
+            System.out.println("ORB has exited with exit code: ");
         }catch(Exception e){
             System.out.println(e.getMessage());
         }
+    }
+
+    @Override
+    public void setProcessObject(Process process) {
+
+    }
+
+    @Override
+    public void notifyServerShutdown() {
+
+    }
+
+    @Override
+    public void notifyServantsBinded() {
+
     }
 }
 

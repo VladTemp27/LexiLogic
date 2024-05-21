@@ -1,24 +1,21 @@
-package org.amalgam.lexilogicserver.views.changegame;
+package org.amalgam.lexilogicserver.views.runorbd;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
-import javafx.scene.control.TextField;
 import javafx.scene.effect.ColorAdjust;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import org.amalgam.lexilogicserver.ServerController;
 
+import java.util.concurrent.TimeUnit;
 
-public class ChangeGameController {
+public class RunORBDRunningController {
+    // private variables
     @FXML
-    private AnchorPane changeGamePane;
+    private AnchorPane runORBDRunningPane;
     @FXML
-    private TextField changeQueueTextfield;
-    @FXML
-    private TextField changeGameTextfield;
-    @FXML
-    private Button saveButton;
+    private Button stopORBDButton;
     @FXML
     private Button backButton;
     private ServerController serverController;
@@ -37,6 +34,11 @@ public class ChangeGameController {
      *
      * @param button The button to add hover effect to.
      */
+    private void addStopHoverEffect(Button button) {
+        button.setOnMouseEntered(e -> button.setStyle("-fx-background-color: derive(#E42323, -10%);"));
+        button.setOnMouseExited(e -> button.setStyle("-fx-background-color: #E42323;"));
+    }
+
     private void addHoverEffectImage(Button button) {
         ImageView imageView = (ImageView) button.getGraphic();
         ColorAdjust colorAdjust = new ColorAdjust();
@@ -52,55 +54,56 @@ public class ChangeGameController {
         });
     }
 
-    private void addHoverEffect(Button button) {
-        button.setOnMouseEntered(e -> button.setStyle("-fx-background-color: derive(#9CA16F, -10%);"));
-        button.setOnMouseExited(e -> button.setStyle("-fx-background-color: #9CA16F;"));
+    @FXML
+    public void handleStopORBDButton() {
+        if (RunORBDController.process != null) {
+            RunORBDController.process.destroyForcibly();
+
+            try {
+                RunORBDController.process.waitFor();
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
+            RunORBDController.process = null;
+            showSuccess("ORB Successfully Terminated");
+            if (serverController != null) {
+                serverController.loadRunORBD();
+            } else {
+                System.out.println("ServerController is not set.");
+            }
+        } else {
+            showAlert("No ORB to terminate");
+        }
     }
 
-    /**
-     * Shows an alert to a user if there is an error.
-     *
-     * @param message
-     */
-    private void showAlert(String message){
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle("Error");
-        alert.setHeaderText(null);
+    private void showSuccess(String message) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Success!");
         alert.setContentText(message);
         alert.showAndWait();
     }
 
-    /**
-     * Handles the save button
-     */
-    @FXML
-    public void handleSaveButton(){
-        if(serverController !=null){
-            serverController.loadChangeGame();//change to saving option once microservice is ready
-        } else {
-            System.out.println("Server controller is not set.");
-        }
+    private void showAlert(String message) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Error");
+        alert.setContentText(message);
+        alert.showAndWait();
     }
-    /**
-     * Handles the back button
-     */
+
     @FXML
-    public void handleBackButton(){
-        if(serverController !=null){
+    public void handleBackButton() {
+        if (serverController != null) {
             serverController.loadServerMainMenu();
         } else {
             System.out.println("Server controller is not set.");
         }
     }
-    /**
-     * Initializes the controller.
-     * This method sets up the UI components and initializes the data model.
-     */
+
     @FXML
     public void initialize() {
-        addHoverEffect(saveButton);
+        addStopHoverEffect(stopORBDButton);
         addHoverEffectImage(backButton);
-        saveButton.setOnAction(event -> handleSaveButton());
+        stopORBDButton.setOnAction(event -> handleStopORBDButton());
         backButton.setOnAction(event -> handleBackButton());
 
     }
