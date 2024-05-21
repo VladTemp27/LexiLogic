@@ -13,11 +13,9 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import org.amalgam.lexilogicserver.ServerController;
-import org.amalgam.lexilogicserver.model.microservices.daemonHandler.ORBDException;
-import org.amalgam.lexilogicserver.model.microservices.daemonHandler.ORBDOperationCallback;
 import org.amalgam.lexilogicserver.model.microservices.daemonHandler.ORBDRunner;
 
-public class RunORBDController implements ORBDOperationCallback{
+public class RunORBDController {
 
     // Private Variables
     @FXML
@@ -118,10 +116,9 @@ public class RunORBDController implements ORBDOperationCallback{
 
             // Validate hostname and port
             if (isValidHostAndPort(hostname, port)) {
-                ORBDRunner daemon = new ORBDRunner(this,  port, hostname);
-                executorService.submit(daemon);
+                ServerController.ORBExitCode = executorService.submit(new ORBDRunner(serverController, port,hostname));
                 if (serverController != null) {
-                    serverController.loadRunORBDRunningView();
+                    serverController.loadServerMainMenu();
                 } else {
                     System.out.println("ServerController is not set.");
                 }
@@ -132,15 +129,14 @@ public class RunORBDController implements ORBDOperationCallback{
             showAlert("Invalid port number. Please enter a valid port number.");
         }
     }
-
+    @FXML
     public void handleBackButton(){
         if(serverController !=null){
             serverController.loadServerMainMenu();
-        } else {
+        }else {
             System.out.println("Server controller is not set.");
         }
     }
-
     /**
      * Initializes the controller.
      * This method sets up the UI components and initializes the data model.
@@ -148,13 +144,8 @@ public class RunORBDController implements ORBDOperationCallback{
     @FXML
     public void initialize() {
         addHoverEffect(runORBDButton);
-        addHoverEffectImage(backButton);
-        backButton.setOnAction(event-> handleBackButton());
+        addHoverEffectImage( backButton);
         runORBDButton.setOnAction(event -> handleRunORBDButton());
-    }
-
-    @Override
-    public void notifyOrbExit() throws ORBDException {
-
+        backButton.setOnAction(event -> handleBackButton());
     }
 }
