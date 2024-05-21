@@ -11,6 +11,7 @@ import org.amalgam.lexilogicserver.model.microservices.daemonHandler.ORBDOperati
 import org.amalgam.lexilogicserver.views.accountdeletion.AccountDeletionController;
 import org.amalgam.lexilogicserver.views.addplayer.AddPlayerController;
 import org.amalgam.lexilogicserver.views.changegame.ChangeGameController;
+import org.amalgam.lexilogicserver.views.runorbd.RunORBDRunningController;
 import org.amalgam.lexilogicserver.views.runserver.RunServerRunningController;
 import org.amalgam.lexilogicserver.views.servermainmenu.ServerMainMenuController;
 import org.amalgam.lexilogicserver.views.runorbd.RunORBDController;
@@ -36,12 +37,12 @@ public class ServerController implements ORBDOperationCallback {
     public static AnchorPane runServerPane;
 
     public static AccountDeletionController accountDeletionController;
-    static AnchorPane accountDeletionPane;
-    
+    public static AnchorPane accountDeletionPane;
+
+    public static RunORBDRunningController runORBDRunningController;
+    public static AnchorPane runORBDRunningPane;
+
     public static Future<Integer> ORBExitCode;
-    
-
-
 
     /**
      * Getters and Setters of Controllers and Panels
@@ -67,6 +68,7 @@ public class ServerController implements ORBDOperationCallback {
     }
     public AccountDeletionController getAccountDeletionController(){return accountDeletionController;}
 
+    public RunORBDRunningController getRunORBDRunningController(){return runORBDRunningController;}
     /**
      * Loads and displays the server main menu view.
      */
@@ -320,6 +322,40 @@ public class ServerController implements ORBDOperationCallback {
             AccountDeletionController accountDeletionController = fxmlLoader.getController();
             accountDeletionController.setServerController(this);
             accountDeletionController.initialize();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void loadRunORBDRunningView(){
+        try {
+            Font.loadFont(getClass().getResourceAsStream("/org/amalgam/fonts/BowlbyOneSC.ttf"), 20);
+            Font.loadFont(getClass().getResourceAsStream("/org/amalgam/fonts/Brygada1918.ttf"), 20);
+
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/org/amalgam/server/views/runorbd/runorbdrunning-view.fxml"));
+            AnchorPane runORBDPane = fxmlLoader.load();
+
+            InputStream inputStream = getClass().getResourceAsStream("/org/amalgam/icons/Logo.png");
+            if (inputStream != null) {
+                Image image = new Image(inputStream);
+                stage.getIcons().add(image);
+            } else {
+                System.err.println("Failed to load image: Logo.png");
+            }
+
+            Scene scene = new Scene(runORBDPane);
+
+            if (stage == null) {
+                throw new IllegalStateException("Stage is not set. Please set the stage before calling the panel.");
+            }
+
+            stage.setScene(scene);
+            stage.setResizable(false);
+            stage.setTitle("Lexi Logic");
+            RunORBDRunningController runORBDRunningController = fxmlLoader.getController();
+            runORBDRunningController.setServerController(this);
+            runORBDRunningController.initialize();
 
         } catch (IOException e) {
             e.printStackTrace();
