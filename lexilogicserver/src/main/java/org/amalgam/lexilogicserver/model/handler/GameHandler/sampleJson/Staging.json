@@ -1,0 +1,26 @@
+{
+  "state": "staging",
+  "countdown": 10,
+  "room_id": 125,
+  "char_matrix": [
+    ["char11", "char12", "char13"],
+    ["char21", "char22", "char23"],
+    ["char31", "char32", "char33"]
+  ],
+  "game_room": {
+    "username1": {
+      "username": "username1",
+      "points": 400,
+      "ready": true,
+      "words": ["word1", "word2"],
+      "duped_words": ["duped_word1", "duped_word2"]
+    },
+    "username2": {
+      "username": "username2",
+      "points": 230,
+      "ready": false,
+      "words": ["word3", "word4"],
+      "duped_words": ["duped_word3", "duped_word4"]
+    }
+  }
+}
