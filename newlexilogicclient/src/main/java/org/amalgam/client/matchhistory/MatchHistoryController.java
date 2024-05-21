@@ -156,26 +156,6 @@ public class MatchHistoryController{
     public void populateMatchTable() {
         standing.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getStanding()));
         score.setCellValueFactory(data -> new SimpleIntegerProperty(data.getValue().getScore()).asObject());
-
-//        matchTable.setItems(matchDataList);
-    }
-
-    /**
-     * Populates the Highest Rank of the Player
-     */
-    @FXML
-    public void populateRank() {
-        //TODO: Get the Highest Rank of the Player
-        rankLabel.setText("1"); // For Testing
-    }
-
-    /**
-     * Populates the Highest Score of the Player
-     */
-    @FXML
-    public void populateScore() {
-        //TODO: Get the Highest Score of the Player
-        scoreLabel.setText("5000");
     }
 
     /**
@@ -188,12 +168,10 @@ public class MatchHistoryController{
         backButton.setOnAction(event -> handleBack());
         List<LeaderboardsController.LeaderboardsData> leaderboardsDataList =
                 JsonObjectParser.parseLeaderboardsData(leaderboardsModel.getLeaderBoards());
-        if (leaderboardsDataList != null) {
-                for (LeaderboardsController.LeaderboardsData lb : leaderboardsDataList) {
-                    if (lb.getUsername().equals(LoginController.username)){
-                        rankLabel.setText(lb.getRank());
-                        scoreLabel.setText(String.valueOf(lb.getScore()));
-                    }
+        for (LeaderboardsController.LeaderboardsData lb : leaderboardsDataList) {
+            if (lb.getUsername().equals(LoginController.username)) {
+                rankLabel.setText(lb.getRank());
+                scoreLabel.setText(String.valueOf(lb.getScore()));
             }
         }
         populateMatchTable();
