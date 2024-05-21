@@ -15,30 +15,39 @@
             <Image url="@../../../icons/Axel.png" />
          </image>
       </ImageView>
-      <ImageView fitHeight="324.0" fitWidth="397.0" layoutX="53.0" layoutY="38.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fitHeight="324.0" fitWidth="397.0" layoutX="91.0" layoutY="38.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../../../icons/YellowBox.png" />
          </image>
       </ImageView>
-      <Label layoutX="92.0" layoutY="67.0" text="Run ORBD Daemon" textFill="#6b4406">
+      <Label layoutX="128.0" layoutY="65.0" text="Run ORBD Daemon" textFill="#6b4406">
          <font>
             <Font name="Bowlby One SC Regular" size="30.0" />
          </font>
       </Label>
-      <TextField fx:id="hostNameField" layoutX="120.0" layoutY="129.0" prefHeight="49.0" prefWidth="261.0" promptText="Host Name" style="-fx-background-color: B07C3B; -fx-prompt-text-fill: #FFFFFF;">
+      <TextField fx:id="hostNameField" layoutX="157.0" layoutY="129.0" prefHeight="49.0" prefWidth="261.0" promptText="Host Name" style="-fx-background-color: B07C3B; -fx-prompt-text-fill: #FFFFFF;">
          <font>
             <Font name="Brygada 1918 Regular" size="20.0" />
          </font>
       </TextField>
-      <TextField fx:id="portField" layoutX="119.0" layoutY="189.0" prefHeight="49.0" prefWidth="261.0" promptText="Port" style="-fx-background-color: #B07C3B; -fx-prompt-text-fill: #FFFFFF;">
+      <TextField fx:id="portField" layoutX="157.0" layoutY="193.0" prefHeight="49.0" prefWidth="261.0" promptText="Port" style="-fx-background-color: #B07C3B; -fx-prompt-text-fill: #FFFFFF;">
          <font>
             <Font name="Brygada 1918 Regular" size="20.0" />
          </font>
       </TextField>
-      <Button fx:id="runORBDButton" layoutX="119.0" layoutY="264.0" mnemonicParsing="false" prefHeight="56.0" prefWidth="261.0" style="-fx-background-color: #9CA16F;" text="Run ORBD" textFill="WHITE">
+      <Button fx:id="runORBDButton" layoutX="157.0" layoutY="268.0" mnemonicParsing="false" prefHeight="56.0" prefWidth="261.0" style="-fx-background-color: #9CA16F;" text="Run ORBD" textFill="WHITE">
          <font>
             <Font name="Brygada 1918 Regular" size="30.0" />
          </font>
+      </Button>
+      <Button fx:id="backButton" layoutX="14.0" layoutY="17.0" mnemonicParsing="false" prefHeight="63.0" prefWidth="74.0" style="-fx-background-color: transparent;">
+         <graphic>
+            <ImageView fitHeight="49.0" fitWidth="53.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../../icons/BackButton.png" />
+               </image>
+            </ImageView>
+         </graphic>
       </Button>
    </children>
 </AnchorPane>
