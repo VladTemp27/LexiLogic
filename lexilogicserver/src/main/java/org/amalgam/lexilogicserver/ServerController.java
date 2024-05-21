@@ -335,5 +335,10 @@ public class ServerController implements ORBDOperationCallback {
             System.out.println(e.getMessage());
         }
     }
+
+    @Override
+    public void setProcessObject(Process process) {
+
+    }
 }
 
