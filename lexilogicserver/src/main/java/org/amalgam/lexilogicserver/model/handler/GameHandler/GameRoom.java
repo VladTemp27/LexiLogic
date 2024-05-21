@@ -2,6 +2,8 @@ package org.amalgam.lexilogicserver.model.handler.GameHandler;
 
 import org.amalgam.ControllerException.InvalidRequestException;
 import org.amalgam.UIControllers.PlayerCallback;
+import org.amalgam.lexilogicserver.model.DAL.GameDetailDAL;
+import org.amalgam.lexilogicserver.model.DAL.LobbyDAL;
 import org.amalgam.lexilogicserver.model.microservices.NTimer;
 import org.amalgam.lexilogicserver.model.microservices.NTimerCallback;
 import org.amalgam.lexilogicserver.model.microservices.wordbox.Generator;
@@ -59,7 +61,8 @@ public class GameRoom implements NTimerCallback {
             try{
                 String response = GameRoomResponseBuilder.buildWinnerResponse(w); // Use response builder for this, broadcast state game done, + winner(variable w)
                 broadcast(response);
-                //TODO convert this to reference objects and push to database using DAL
+                int lobbyID = LobbyDAL.insertGameRoomAsLobby(this);
+                updatePlayerGameDetailDB(lobbyID);
             }catch(Exception e){
                 e.printStackTrace();
             }
@@ -71,6 +74,14 @@ public class GameRoom implements NTimerCallback {
             broadcast(jsonString);
         }catch(Exception e){
             e.printStackTrace();
+        }
+    }
+
+    public void updatePlayerGameDetailDB(int lobbyID){
+        List<String> keys = new ArrayList<>(details.keySet());
+        for(String key: keys){
+            PlayerGameDetail detail = details.get(key);
+            GameDetailDAL.insertGameDetailFromPlayerDetail(detail, lobbyID);
         }
     }
 
@@ -98,10 +109,7 @@ public class GameRoom implements NTimerCallback {
 
     //call this to generate a wordBox, generates a new wordbox for every invocation
     private void generateWordBox() throws FileNotFoundException {
-        wordBox = new WordBox(new Generator(new Reader("lexilogicserver/src/main/resources/words.txt"), false, 6, 6));
-    }
-    public char[][] getCharMatrix (){
-        return wordBox.getWordMatrix();
+        wordBox = new WordBox(new Generator(new Reader("lexilogicserver/src/main/java/org/amalgam/lexilogicserver/model/microservices/wordbox/words.txt"), false, 4, 5));
     }
 
     public void submitWord(String word, String username){
