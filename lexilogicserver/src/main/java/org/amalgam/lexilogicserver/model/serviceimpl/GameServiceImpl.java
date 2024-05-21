@@ -64,7 +64,8 @@ public class GameServiceImpl extends GameServicePOA {
                         throw new RuntimeException(e);
                     }
                     rooms.add(gameRoom);
-                    return createGameRoomResponse(roomID, players);
+                    gameRoom.stagePlayers();
+//                    return createGameRoomResponse(roomID, players);
                 }
                 Thread.sleep(100);
             }
