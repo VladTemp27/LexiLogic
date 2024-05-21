@@ -6,6 +6,7 @@ import java.util.concurrent.*;
 public class ORBDExample implements ORBDOperationCallback {
     private Future<Integer> exitCode;
     private int exit;
+    private Process process;
 
     public static void main(String[] args) {
         ORBDExample program = new ORBDExample();
@@ -26,6 +27,11 @@ public class ORBDExample implements ORBDOperationCallback {
         }catch(Exception e){
             throw new RuntimeException(e.getMessage());
         }
+    }
+
+    @Override
+    public void setProcessObject(Process process) {
+        this.process = process;
     }
 
     public int getExit() {
