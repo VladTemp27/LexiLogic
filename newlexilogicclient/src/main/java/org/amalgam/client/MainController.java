@@ -476,9 +476,9 @@ public class MainController {
             stage.setScene(scene);
             stage.setResizable(false);
             stage.setTitle("Lexi Logic");
-            LeaderboardsController leaderboardsController = fxmlLoader.getController();
-            leaderboardsController.setMainController(this);
-            leaderboardsController.initialize();
+            HowToPlayController howToPlayController = fxmlLoader.getController();
+            howToPlayController.setMainController(this);
+            howToPlayController.initialize();
 
         } catch (IOException e) {
             e.printStackTrace();
