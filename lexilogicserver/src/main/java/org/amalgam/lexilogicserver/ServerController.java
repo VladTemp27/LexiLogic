@@ -10,6 +10,8 @@ import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import org.amalgam.lexilogicserver.model.microservices.daemonHandler.ORBDException;
 import org.amalgam.lexilogicserver.model.microservices.daemonHandler.ORBDOperationCallback;
+import org.amalgam.lexilogicserver.model.microservices.serverHandler.ORBServer;
+import org.amalgam.lexilogicserver.model.microservices.serverHandler.ORBServerCallback;
 import org.amalgam.lexilogicserver.views.accountdeletion.AccountDeletionController;
 import org.amalgam.lexilogicserver.views.addplayer.AddPlayerController;
 import org.amalgam.lexilogicserver.views.changegame.ChangeGameController;
@@ -23,9 +25,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.concurrent.Future;
 
-public class ServerController implements ORBDOperationCallback {
+public class ServerController implements ORBDOperationCallback,ORBServerCallback {
     public Stage stage;
-
     public static ServerMainMenuController serverMainMenuController;
     public static AnchorPane serverMainMenuPane;
 
@@ -112,6 +113,7 @@ public class ServerController implements ORBDOperationCallback {
      * Loads and displays the run server view.
      */
     public void loadRunServer() {
+//        ORBServer orbServer = new ORBServer(orbServerCallback, )
         try {
             Font.loadFont(getClass().getResourceAsStream("/org/amalgam/fonts/BowlbyOneSC.ttf"), 20);
             Font.loadFont(getClass().getResourceAsStream("/org/amalgam/fonts/Brygada1918.ttf"), 20);
@@ -381,10 +383,25 @@ public class ServerController implements ORBDOperationCallback {
     public void notifyOrbExit() throws ORBDException {
         try {
             //TODO: Prompt with ui that ORB has exited
-            System.out.println("ORB has exited with exit code: " + ORBExitCode.get());
+            System.out.println("ORB has exited with exit code: ");
         }catch(Exception e){
             System.out.println(e.getMessage());
         }
+    }
+
+    @Override
+    public void setProcessObject(Process process) {
+
+    }
+
+    @Override
+    public void notifyServerShutdown() {
+
+    }
+
+    @Override
+    public void notifyServantsBinded() {
+
     }
 }
 

@@ -15,7 +15,8 @@
             <Image url="@../../../icons/Axel.png" />
          </image>
       </ImageView>
-      <ImageView fitHeight="324.0" fitWidth="397.0" layoutX="91.0" layoutY="38.0" pickOnBounds="true" preserveRatio="true">
+
+      <ImageView fitHeight="324.0" fitWidth="397.0" layoutX="66.0" layoutY="38.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../../../icons/YellowBox.png" />
          </image>
@@ -40,9 +41,9 @@
             <Font name="Brygada 1918 Regular" size="30.0" />
          </font>
       </Button>
-      <Button fx:id="backButton" layoutX="14.0" layoutY="17.0" mnemonicParsing="false" prefHeight="63.0" prefWidth="74.0" style="-fx-background-color: transparent;">
+      <Button fx:id="backButton" layoutX="7.0" layoutY="8.0" mnemonicParsing="false" style="-fx-background-color: transparent;">
          <graphic>
-            <ImageView fitHeight="49.0" fitWidth="53.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fitHeight="40.0" fitWidth="49.0" pickOnBounds="true">
                <image>
                   <Image url="@../../../icons/BackButton.png" />
                </image>

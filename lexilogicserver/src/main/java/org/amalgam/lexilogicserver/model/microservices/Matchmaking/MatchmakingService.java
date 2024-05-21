@@ -14,6 +14,7 @@ public class MatchmakingService implements NTimerCallback{
     private Thread timerThread;
     private final int MATCHMAKING_TIMEOUT = 10000;
     private final AtomicBoolean timerDone = new AtomicBoolean(false);
+    private ExecutorService executorService = Executors.newSingleThreadExecutor();
 
     public void addToQueue(PlayerGameDetail playerGameDetail) {
         queue.add(playerGameDetail);
@@ -24,9 +25,7 @@ public class MatchmakingService implements NTimerCallback{
 
     public void startTimer() {
         timerDone.set(false);
-        NTimer timer = new NTimer(MATCHMAKING_TIMEOUT / 1000, this);
-        timerThread = new Thread(timer);
-        timerThread.start();
+        executorService.submit(new NTimer(MATCHMAKING_TIMEOUT / 1000, this));
     }
 
     @Override
@@ -65,6 +64,7 @@ public class MatchmakingService implements NTimerCallback{
     }
 
     public boolean isTimerDone() {
+        System.out.println(timerDone.get());
         return timerDone.get();
     }
 }
