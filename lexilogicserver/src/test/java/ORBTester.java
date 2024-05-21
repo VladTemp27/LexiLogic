@@ -26,11 +26,11 @@ public class ORBTester implements ORBServerCallback, ORBDOperationCallback {
 	}
 
 	public void runDaemon(){
-		executorService.submit(new ORBDRunner(this, 2018, "corba.server"));
+		executorService.submit(new ORBDRunner(this, 2018, "localhost"));
 	}
 
 	public void runServer() {
-		executorService.submit(new ORBServer(this, 2018,"corba.server"));
+		executorService.submit(new ORBServer(this, 2018,"localhost"));
 		System.out.println(executorService.isTerminated());
 	}
 
