@@ -34,7 +34,6 @@ public class LeaderboardsController {
 
     private MainController mainController;
     public LeaderboardsModel leaderboardsModel = new LeaderboardsModel(MainController.orbConnection, LoginController.playerCallback);
-    // public LeaderboardsModel leaderboardsModel = new LeaderboardsModel(MainController.orbConnection, LoginModel.playerCallback)
 
     /**
      * Sets the Main Controller.
