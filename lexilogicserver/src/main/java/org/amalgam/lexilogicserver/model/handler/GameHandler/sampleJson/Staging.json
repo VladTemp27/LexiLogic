@@ -1,26 +1,35 @@
 {
   "state": "staging",
-  "countdown": 10,
-  "room_id": 125,
+  "countdown": <countdown>,
+  "room_id": <roomID>,
+  "current_round": <currentRound>,
+  "seconds_round_duration": <secondsRoundDuration>,
+  "round_done": <roundDone>,
   "char_matrix": [
-    ["char11", "char12", "char13"],
-    ["char21", "char22", "char23"],
-    ["char31", "char32", "char33"]
+    ["c", "h>", "a"],
+    ["v", "r", "a"],
+    ["s", "b","o"]
   ],
   "game_room": {
-    "username1": {
-      "username": "username1",
-      "points": 400,
-      "ready": true,
-      "words": ["word1", "word2"],
-      "duped_words": ["duped_word1", "duped_word2"]
+    "<username1>": {
+      "username": "<username1>",
+      "points": <points>,
+      "ready": <ready>,
+      "words": ["<word1>", "<word2>", ...],
+      "duped_words": ["<duped_word1>", "<duped_word2>", ...]
     },
-    "username2": {
-      "username": "username2",
-      "points": 230,
-      "ready": false,
-      "words": ["word3", "word4"],
-      "duped_words": ["duped_word3", "duped_word4"]
+    "<username2>": {
+      "username": "<username2>",
+      "points": <points>,
+      "ready": <ready>,
+      "words": ["<word1>", "<word2>", ...],
+      "duped_words": ["<duped_word1>", "<duped_word2>", ...]
+    },
+    ...
+    "rounds": {
+      "round_<roundNumber1>": "<winner1>",
+      "round_<roundNumber2>": "<winner2>",
+      ...
     }
   }
 }
