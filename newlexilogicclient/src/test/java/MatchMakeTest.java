@@ -32,6 +32,7 @@ public class MatchMakeTest implements ControllerInterface{
         program.callback = new CallbackImpl();
         program.callback.username(user);
 
+        program.callback.setController(program);
 
         String response = program.gameService.matchMake(PlayerCallbackHelper.narrow(program.rootPOA.servant_to_reference(program.callback)));
         System.out.println(response);
