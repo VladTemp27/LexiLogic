@@ -49,4 +49,9 @@ public class ORBTester implements ORBServerCallback, ORBDOperationCallback {
 		System.out.println("Daemon has closed");
 		daemonRunning=false;
 	}
+
+	@Override
+	public void setProcessObject(Process process) {
+
+	}
 }
