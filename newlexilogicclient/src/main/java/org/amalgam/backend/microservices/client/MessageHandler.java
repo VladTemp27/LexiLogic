@@ -1,12 +1,7 @@
+package org.amalgam.backend.microservices.client;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import org.amalgam.UIControllers.PlayerCallback;
-import org.amalgam.lexilogicserver.model.handler.GameHandler.GameRoom;
-import org.amalgam.lexilogicserver.model.utilities.referenceobjects.PlayerGameDetail;
-
-import java.util.LinkedHashMap;
 
 public class MessageHandler {
     public String process (String message){
