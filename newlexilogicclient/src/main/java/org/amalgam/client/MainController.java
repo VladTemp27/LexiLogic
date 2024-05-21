@@ -9,6 +9,8 @@ import javafx.stage.Stage;
 import org.amalgam.Service.GameServiceModule.GameService;
 import org.amalgam.UIControllers.PlayerCallback;
 import org.amalgam.backend.microservices.serverconnection.ORBConnection;
+import org.amalgam.client.game.GameController;
+import org.amalgam.client.howtoplay.HowToPlayController;
 import org.amalgam.client.leaderboards.LeaderboardsController;
 import org.amalgam.client.leaderboards.LeaderboardsPanel;
 import org.amalgam.client.loading.LoadingController;
@@ -58,11 +60,8 @@ public class MainController {
     public static LeaderboardsController leaderboardsController;
     public static AnchorPane leaderboardsPane;
 
-    static LeaderboardsController leaderboardsController;
-    static AnchorPane leaderboardsPane;
-
-    static GameController gameController;
-    static AnchorPane gamePane;
+    public static GameController gameController;
+   public static AnchorPane gamePane;
 
     public static HowToPlayController howToPlayController;
     public static AnchorPane howToPlayPane;
