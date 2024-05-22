@@ -63,8 +63,8 @@ public class ChangeGameController {
      * @param message
      */
     private void showAlert(String message){
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle("Error");
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Game Setting Changed");
         alert.setHeaderText(null);
         alert.setContentText(message);
         alert.showAndWait();
@@ -92,6 +92,20 @@ public class ChangeGameController {
             System.out.println("Server controller is not set.");
         }
     }
+
+    public void handleChangeQueueTime(){
+
+        if (serverController != null){
+            int newQueueTime = Integer.parseInt(changeQueueTextfield.getText());
+            try {
+                ChangeGameModel.changeQueueTime(newQueueTime);
+                showAlert("You have changed the queue time");
+            } catch (Exception e){
+                e.printStackTrace();
+            }
+        }
+    }
+
     /**
      * Initializes the controller.
      * This method sets up the UI components and initializes the data model.
@@ -100,7 +114,7 @@ public class ChangeGameController {
     public void initialize() {
         addHoverEffect(saveButton);
         addHoverEffectImage(backButton);
-        saveButton.setOnAction(event -> handleSaveButton());
+        saveButton.setOnAction(event -> handleChangeQueueTime());
         backButton.setOnAction(event -> handleBackButton());
 
     }

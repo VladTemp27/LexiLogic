@@ -8,8 +8,8 @@ import com.google.gson.JsonParser;
 import java.io.*;
 
 public class SettingsHandler {
-
-    private synchronized JsonObject getObjectFromFile(String path){
+    private static final String filePath = "C:/Users/mlest/IdeaProjects/2024-9342-finalsteam1/lexilogicserver/src/main/java/org/amalgam/lexilogicserver/model/microservices/gamesettings/settings.json";
+    private static synchronized JsonObject getObjectFromFile(String path){
         File settingsFile = new File(path);
         try(BufferedReader bufferedReader = new BufferedReader(new FileReader(settingsFile))) {
             JsonElement jsonElement = JsonParser.parseReader(bufferedReader);
@@ -21,8 +21,8 @@ public class SettingsHandler {
         }
     }
 
-    public int getQueueTime(){
-        JsonObject rootObject = getObjectFromFile("settings.json");
+    public static int getQueueTime(){
+        JsonObject rootObject = getObjectFromFile(filePath);
         JsonArray elementsArray = rootObject.getAsJsonArray("settings");
         for(JsonElement element : elementsArray){
             JsonObject currentObject = element.getAsJsonObject();
@@ -34,8 +34,9 @@ public class SettingsHandler {
         return 0;
     }
 
-    public void setQueueTime(int newQueueTime) {
-        JsonObject rootObject = getObjectFromFile("settings.json");
+    public static void setQueueTime(int newQueueTime) {
+
+        JsonObject rootObject = getObjectFromFile(filePath);
 
         JsonArray elementsArray = rootObject.getAsJsonArray("settings");
 
@@ -43,11 +44,15 @@ public class SettingsHandler {
 
         settingsObject.addProperty("queueTime", String.valueOf(newQueueTime));
 
-        try (FileWriter fileWriter = new FileWriter("settings.json")) {
+        try (FileWriter fileWriter = new FileWriter(filePath)) {
             fileWriter.write(rootObject.toString());
         } catch (IOException e) {
             throw new RuntimeException("Error writing to settings file", e);
         }
     }
 
+    public static void main(String[] args) {
+        int time = getQueueTime();
+        System.out.println(time);
+    }
 }
