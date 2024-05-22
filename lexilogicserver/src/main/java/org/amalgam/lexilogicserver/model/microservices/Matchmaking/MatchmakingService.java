@@ -69,7 +69,6 @@ public class MatchmakingService implements NTimerCallback{
     }
 
     public boolean isTimerDone() {
-        System.out.println(timerDone.get());
         if (timerDone.get()){
             queue.clear();
         }

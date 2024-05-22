@@ -25,11 +25,11 @@ public class GameRoom implements NTimerCallback {
     private int roomID, currentRound, secondsRoundDuration;
     private LinkedHashMap<String,PlayerGameDetail> details, defaultDetails;
     private boolean roundDone;
-    private ExecutorService executor = Executors.newSingleThreadExecutor();
+    private ExecutorService executor = Executors.newCachedThreadPool();
     private WordBox wordBox;
     private LinkedHashMap<Integer, String> rounds = new LinkedHashMap<>();
     private LinkedHashMap<String,PlayerCallback> playerCallbacks = new LinkedHashMap<>();
-    private LinkedHashMap<String, Integer> totalPointsPerPlayer;
+    private LinkedHashMap<String, Integer> totalPointsPerPlayer = new LinkedHashMap<>();
 
 
 
@@ -56,6 +56,7 @@ public class GameRoom implements NTimerCallback {
     }
 
     public void stagePlayers() {
+        System.out.println("Staging, "+currentRound);
         details = defaultDetails; // resets details to default unready state
         String w;
         if((w = winnerAvailable())!=null){
@@ -100,6 +101,7 @@ public class GameRoom implements NTimerCallback {
             System.out.println(e.getMessage());
         }
         executor.submit(new NTimer(secondsRoundDuration, this));
+        System.out.println("New timer submitted with duration "+secondsRoundDuration+"s");
     }
 
     private boolean isAllPlayersReady(){
@@ -265,15 +267,20 @@ public class GameRoom implements NTimerCallback {
 
     public void tallyRoundTotalPoints(){
         List<String> keys = new ArrayList<>(details.keySet());
+        System.out.println(!totalPointsPerPlayer.isEmpty());
         if(!totalPointsPerPlayer.isEmpty()) {
             for (String key : keys) {
+                System.out.println(keys);
                 PlayerGameDetail playerGameDetail = details.get(key);
+                System.out.println(key+" Pts: "+playerGameDetail.getPoints());
                 totalPointsPerPlayer.replace(key, playerGameDetail.getPoints());
             }
+            return;
         }
 
         for(String key : keys){
             PlayerGameDetail playergameDetail = details.get(key);
+            System.out.println(key+" Pts: "+playergameDetail.getPoints());
             totalPointsPerPlayer.put(key, playergameDetail.getPoints());
         }
 
@@ -285,11 +292,15 @@ public class GameRoom implements NTimerCallback {
     //          round has started
     @Override
     public void timerDone() {
+        System.out.println("round done");
         this.roundDone = true;
         String roundWinner = getRoundWinner();
+        System.out.println("Winner: "+roundWinner);
         rounds.put(currentRound, roundWinner);
+        System.out.println("winner saved");
         tallyRoundTotalPoints();
         currentRound++;
+        System.out.println("next round: "+currentRound);
         //Use broadcast with builder
         stagePlayers();
     }

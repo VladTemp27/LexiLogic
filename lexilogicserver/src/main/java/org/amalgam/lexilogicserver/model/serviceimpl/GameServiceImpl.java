@@ -83,7 +83,6 @@ public class GameServiceImpl extends GameServicePOA {
             System.out.println("Creating GameRoom");
             createGameRoom(players);
         } else {
-            System.out.println("Not enough players to create a game room.");
         }
     }
 
@@ -113,7 +112,6 @@ public class GameServiceImpl extends GameServicePOA {
                 rooms.add(gameRoom);
                 System.out.println(gameRoom);
                 gameRoom.stagePlayers();
-                System.out.println(gameRoom);
             }
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
@@ -178,8 +176,9 @@ public class GameServiceImpl extends GameServicePOA {
         return LobbyDAL.getWinnerByLobbyID(lobbyId);
     }
 
+    //TODO test if synchronized makes it buggy
     @Override
-    public synchronized String playerReady(String username, int gameRoomID) {
+    public String playerReady(String username, int gameRoomID) {
         int origIndex = getRoomIndexFromID(gameRoomID);
         GameRoom temp = rooms.get(origIndex);
 
@@ -187,7 +186,7 @@ public class GameServiceImpl extends GameServicePOA {
 
         rooms.remove(origIndex);
         rooms.add(temp);
-        return null;
+        return "";
     }
 
     private int getRoomIndexFromID(int gameRoomID) {
