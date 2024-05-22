@@ -478,15 +478,24 @@ public class GameController{
 //            JsonArray words = currentObject.getAsJsonArray("words");
 //            JsonArray dupedWords = currentObject.getAsJsonArray("dupedWords");
 //            System.out.println(username+","+points+","+ready);
+//
 //         }
          //End
 
         //Round History
-        JsonObject roundHistory = rootObject.getAsJsonObject("rounds");
-        for(String roundKeys : roundHistory.keySet()){
-            String roundWinner = roundKeys + " winner : "+roundHistory.get(roundKeys).getAsString();
-            System.out.println(roundWinner);
-        }
+//        JsonElement roundHistory = rootObject.getAsJsonObject("rounds");
+//        if (roundHistory != null) {
+//            JsonObject round = roundHistory.g
+//            for (String roundKeys : roundHistory.keySet()) {
+//                JsonObject round = roundHistory.getAsJsonObject(roundKeys);
+//                String s = round.get("round_1").getAsString();
+//                System.out.println(s);
+////            String roundWinner = roundKeys + " winner : "+roundHistory.get(roundKeys).getAsString();
+////            System.out.println(roundWinner);
+//            }
+//        } else {
+//            System.out.println("no rounds yet.");
+//        }
         //End
 
     }
