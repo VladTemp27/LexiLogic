@@ -20,7 +20,6 @@ public class PlayerCallbackImpl extends PlayerCallbackPOA{
 
 	@Override
 	public void uiCall(String jsonString) throws InvalidRequestException {
-		System.out.println(controllerInterface);
 		controllerInterface.uiUpdate(jsonString);
 	}
 	public void setControllerInterface(ControllerInterface controllerInterface) {

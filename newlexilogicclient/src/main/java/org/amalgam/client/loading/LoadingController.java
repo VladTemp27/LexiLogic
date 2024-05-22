@@ -75,7 +75,7 @@ public class LoadingController implements ControllerInterface {
     }
 
     public void findMatch() {
-        System.out.println("FIND MATCH");
+        System.out.println("FINDING MATCH...");
         String response = loadingModel.matchMake();
         System.out.println("LOADING RESPONSE " + response);
         JsonElement rootElement = JsonParser.parseString(response);
@@ -93,6 +93,7 @@ public class LoadingController implements ControllerInterface {
             if(statusBody.equals("timeout")){
                 mainController.loadMainMenuView();
             } else {
+                System.out.println("MATCH FOUND...");
                 mainController.loadGameView();
             }
         });
@@ -100,7 +101,6 @@ public class LoadingController implements ControllerInterface {
 
     @Override
     public void uiUpdate(String jsonString) {
-        System.out.println("LOADING "+jsonString);
         mainController.getGameController().updateData(jsonString);
     }
 }

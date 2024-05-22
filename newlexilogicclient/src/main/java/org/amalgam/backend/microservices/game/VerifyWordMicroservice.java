@@ -8,11 +8,11 @@ import org.omg.CosNaming.NamingContextPackage.InvalidName;
 import org.omg.CosNaming.NamingContextPackage.NotFound;
 
 public class VerifyWordMicroservice {
-    public void process(ORBConnection orbConnection, String word){
-//        try {
-////            orbConnection.retrieveGameService().verifyWord(word);
-//        } catch (InvalidWordFormatException | DuplicateWordException | InvalidName | CannotProceed | NotFound e) {
-//            throw new RuntimeException(e);
-//        }
+    public void process(ORBConnection orbConnection, String word, String username, int gameRoomID){
+        try {
+            orbConnection.retrieveGameService().verifyWord(word, username, gameRoomID);
+        } catch (InvalidWordFormatException | DuplicateWordException | InvalidName | CannotProceed | NotFound e) {
+            throw new RuntimeException(e);
+        }
     }
 }

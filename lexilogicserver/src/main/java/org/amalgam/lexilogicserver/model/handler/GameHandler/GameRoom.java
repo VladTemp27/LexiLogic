@@ -129,25 +129,43 @@ public class GameRoom implements NTimerCallback {
     }
 
     public void submitWord(String word, String username){
+        System.out.println("Game room received request of word "+word);
         try {
+            System.out.println("Round status :"+roundDone);
             if (roundDone) {
                 return;
             }
+            System.out.println("Checking word length");
+            System.out.println(word.length()==4);
+            if(word.length()==4){
+                System.out.println("word too short");
+                broadcast(username, GameRoomResponseBuilder.buildInvalidWordResponse());
+            }
+
+            System.out.println("Checking if dupe");
+            System.out.println(checkIfDupe(word));
             if (checkIfDupe(word)) {
+                System.out.println("Duped word");
                 broadcast(username, GameRoomResponseBuilder.buildInvalidWordResponse());
                 return;
             } // should just throw exception of duped word
 
+            System.out.println("Checking if valid word");
+            System.out.println(wordBox.verifyWord(word)==0);
             if (wordBox.verifyWord(word) == 0) {
+                System.out.println("invalid word");
                 broadcast(username, GameRoomResponseBuilder.buildInvalidWordResponse());
                 return;
             } // should just throw exception
 
+            System.out.println("Adding to details");
             PlayerGameDetail gameDetail = details.get(username);
             gameDetail.addWord(word);
             details.replace(username, gameDetail);
 
+            System.out.println("Updating points");
             updatePoints(username);
+            broadcast(GameRoomResponseBuilder.buildGameStartedResponse(this));
         }catch(Exception e){
             e.printStackTrace();
         }

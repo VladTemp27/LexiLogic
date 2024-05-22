@@ -19,8 +19,8 @@ public class GameModel{
     public void submitReadyPlayer(String username, int gameRoomID) {
         playerReadyMicroservice.process(orbConnection, username, gameRoomID);
     }
-    public void verifyWord (String word){
-        verifyWordMicroservice.process(orbConnection,word);
+    public void verifyWord (String word, String username, int gameRoomID){
+        verifyWordMicroservice.process(orbConnection,word, username, gameRoomID);
     }
 
 }

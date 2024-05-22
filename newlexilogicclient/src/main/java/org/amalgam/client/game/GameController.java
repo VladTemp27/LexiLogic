@@ -11,6 +11,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import org.amalgam.ControllerException.InvalidRequestException;
@@ -171,40 +172,42 @@ public class GameController{
      * round counter before game to start
      */
     private void roundCountdown() {
-        System.out.println("SUCCESS t1");
         Task<Void> t1 = new Task<Void>() {
             @Override
             protected Void call() throws Exception {
                 gameModel.submitReadyPlayer(LoginController.username, roomID);
                 return null;
             }
-
             @Override
             protected void succeeded() {
                 try {
-                    Thread.sleep(3000);
+                    Thread.sleep(500);
                 } catch (InterruptedException e) {
                     throw new RuntimeException(e);
                 }
 
-                Platform.runLater(() -> {
-                     try {
-                        int x = 0;
-                        for (String[] fetchLetter : fetchLetters) {
-                            for (String s : fetchLetter) {
-                                letterLabels[x].setText(s);
-                                x++;
+                if(state.equals("invalid_word")){
+                    System.out.println("INVALID WORD");
+                    // TODO:Prompt user invalid word
+                }
+                if(state.equals("staging")){
+                    System.out.println("staging");
+                    Platform.runLater(() -> {
+                         try {
+                            int x = 0;
+                            for (String[] fetchLetter : fetchLetters) {
+                                for (String s : fetchLetter) {
+                                    letterLabels[x].setText(s);
+                                    x++;
+                                }
                             }
+                        } catch (Exception e) {
+                            System.out.println(e.getMessage());
+                            System.out.println("fetchAndDisplayLetters");
                         }
-                    } catch (Exception e) {
-                        System.out.println(e.getMessage());
-                        System.out.println("fetchAndDisplayLetters");
-                    }
-
-                     final int[] countdown = {5};
-                     RCTimeLabel.setText(String.format("00:0%d", countdown[0]));
-                     timer = new Timer();
-
+                         final int[] countdown = {5};
+                         RCTimeLabel.setText(String.format("00:0%d", countdown[0]));
+                         timer = new Timer();
                     timer.schedule(new TimerTask() {
                     @Override
                     public void run() {
@@ -220,33 +223,58 @@ public class GameController{
                                     gamePane.setVisible(true);
                                     roundLabel.setText("ROUND " + currentRound);
                                     timer.cancel();
-                                    final int[] gameTime = {30};
-                                    timeLabel.setText(String.format("00:%d", gameTime[0]));
-                                    timer = new Timer();
-                                    timer.schedule(new TimerTask() {
-                                        @Override
-                                        public void run() {
-                                            Platform.runLater(() -> {
-                                                if (gameTime[0] > 0) {
-                                                    gameTime[0]--;
-                                                    timeLabel.setText(String.format("00:%d", gameTime[0]));
-                                                    if (gameTime[0] == 0) {
-                                                        System.out.println("ROUND ENDED");
-                                                        timer.cancel();
-                                                        roundCountdown();
-                                                    }
-                                                }
-                                            });
-                                        }
-                                    }, 1000, 1000);
+                                    gameStart();
                                 }
                             }
                         });
                     }
                 }, 1000, 1000);
                 });
+        }
+
+        if(state.equals("game_started")){
+            System.out.println("game_started");
+            Platform.runLater(() -> {
+                     try {
+                        int x = 0;
+                        for (String[] fetchLetter : fetchLetters) {
+                            for (String s : fetchLetter) {
+                                letterLabels[x].setText(s);
+                                x++;
+                            }
+                        }
+                    } catch (Exception e) {
+                        System.out.println(e.getMessage());
+                        System.out.println("fetchAndDisplayLetters");
+                    }
 
 
+                     final int[] countdown = {5};
+                     RCTimeLabel.setText(String.format("00:0%d", countdown[0]));
+                     timer = new Timer();
+                    timer.schedule(new TimerTask() {
+                    @Override
+                    public void run() {
+                        Platform.runLater(() -> {
+                            if (countdown[0] > 0) {
+                                countdown[0]--;
+                                RCTimeLabel.setText(String.format("00:0%d", countdown[0]));
+                                if (countdown[0] == 1) {
+                                    RCroundNumberLabel.setText("ROUND " + currentRound);
+                                }
+                                if (countdown[0] == 0) {
+                                    roundCountdownPane.setVisible(false);
+                                    gamePane.setVisible(true);
+                                    roundLabel.setText("ROUND " + currentRound);
+                                    timer.cancel();
+                                    gameStart();
+                                }
+                            }
+                        });
+                    }
+                }, 1000, 1000);
+                });
+        }
             }
             @Override
             protected void failed() {
@@ -262,44 +290,95 @@ public class GameController{
         executorService.submit(t1);
     }
 
-    private void gameStart() {
-
-
-    }
-
     /**
-     * Fetch and display the letters in the word box.
+     * Start the game of the program.
      */
-    private void fetchAndDisplayLetters() {
 
+    private void gameStart() {
+        final int[] gameTime = {30};
+            timeLabel.setText(String.format("00:%d", gameTime[0]));
+            timer = new Timer();
+            timer.schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    Platform.runLater(() -> {
+                        if (gameTime[0] > 0) {
+                            gameTime[0]--;
+                            timeLabel.setText(String.format("00:%d", gameTime[0]));
+                            if (gameTime[0] == 0) {
+                                timer.cancel();
+                                checkRoundWinner();
+                            }
+                        }
+                    });
+                }
+            }, 1000, 1000);
 
+            Platform.runLater(() -> {
+                 lexiTextfield.setOnKeyPressed(event -> {
+                     if (event.getCode() == KeyCode.ENTER) {
+                        String input = lexiTextfield.getText();
+                        System.out.println(input);
+                        yourLexiLabel.setText(input); // Display the input in a label
+                        lexiTextfield.clear(); // Clear the text field
 
+                            if (!input.isEmpty()) {
+                                System.out.println("SUBMITTING WORD...");
+                                Task<Void> task = new Task<Void>() {
+                                    @Override
+                                    protected Void call() throws Exception {
+                                        // Verify the word using GameModel
+                                        gameModel.verifyWord(input, LoginController.username, roomID);
+                                        System.out.println("VERIFY WORD");
+                                        return null;
+                                    }
+
+                                    @Override
+                                    protected void succeeded() {
+                                        super.succeeded();
+                                        System.out.println("SUBMITTED WORD");
+                                    }
+                                };
+
+                            executorService.submit(task);
+                    } else {
+                        showAlert("Please enter a word.");
+                    }
+                     }
+                 });
+            });
+                Task<Void> t2 = new Task<Void>() {
+                            @Override
+                            protected Void call() throws Exception {
+
+                                return null;
+                            }
+                        };
+
+                        executorService.submit(t2);
     }
 
     private void checkRoundWinner() {
         // This method should determine the winner of the round and update the player's score.
         // For this example, let's assume we have a method `determineRoundWinner` that returns the player's username.
+
+        // temp data to be fixed
         String roundWinner = determineRoundWinner();
-        playerRoundsWon.put(roundWinner, playerRoundsWon.getOrDefault(roundWinner, 0) + 1);
+        playerRoundsWon.put(roundWinner, playerRoundsWon.getOrDefault(roundWinner, 0) + 2);
         updateScores();
 
         if (playerRoundsWon.get(roundWinner) >= 3) {
             endGame(roundWinner);
         } else {
-            startNewRound();
+            roundCountdown();
+            roundCountdownPane.setVisible(true);
         }
     }
 
     private String determineRoundWinner() {
         // Dummy implementation for determining the round winner.
         // Replace with actual logic to determine the winner of the round.
-        return "player1"; // Example: returning player1 as the round winner
-    }
-
-    private void startNewRound() {
-        fetchAndDisplayLetters();
-        gameStart();
-        updateRoundLabel();
+        return "Lou"; // Example: returning player1 as the round winner
     }
 
     /**
@@ -322,21 +401,6 @@ public class GameController{
 //        score1Label.setText(String.valueOf(playerRoundsWon.getOrDefault("player1", 0)));
 //        score2Label.setText(String.valueOf(playerRoundsWon.getOrDefault("player2", 0)));
 //        score3Label.setText(String.valueOf(playerRoundsWon.getOrDefault("player3", 0)));
-    }
-
-    /**
-     * Processes the text input from the lexicon text field.
-     */
-    private void processLexiconInput() {
-        String input = lexiTextfield.getText().trim();
-        if (!input.isEmpty()) {
-            // Verify the word using GameModel
-            gameModel.verifyWord(input);
-            yourLexiLabel.setText(input); // Example: Display the input in a label
-            lexiTextfield.clear(); // Clear the text field
-        } else {
-            showAlert("Please enter a word.");
-        }
     }
 
     /**
@@ -372,10 +436,9 @@ public class GameController{
 //            updateRoundLabel();
         } catch (Exception e) {
             System.out.println(e.getMessage());
-            System.out.println("initializer error");
         }
     }
-
+    private String state = "";
     public void updateData(String json){
         System.out.println("GAME "+json);
         JsonElement rootElement = JsonParser.parseString(json);
@@ -383,32 +446,19 @@ public class GameController{
 
         //Checker for state
         //This should be the logic inside updateData
-        String state  = rootObject.get("state").getAsString();
-        if(state.equals("game_done")){
-            String winner = rootObject.get("winner").getAsString();
-        }
-
-        if(state.equals("invalid_word")){
-            // TODO:Prompt user invalid word
-        }
-
-        if(state.equals("staging")){
-            //pass rootObject to a method that parses all the data
-            //TODO:should start countdown
-        }
-
-        if(state.equals("game_started")){
-            //pass rootObject to a method that parses all the data
-            //TODO:remove the round cover
-        }
+        state = rootObject.get("state").getAsString();
+          if(state.equals("game_done")){
+//            String winner = rootObject.get("winner").getAsString();
+              victoryPanel.setVisible(true);
+          }
 
         //End Checker for state
         roomID = rootObject.get("room_id").getAsInt();
-        System.out.println("ROOM "+roomID);
+//        System.out.println("ROOM "+roomID);
 
         //For current round
         currentRound = rootObject.get("current_round").getAsInt();
-        System.out.println("Current Round: "+currentRound);
+//        System.out.println("Current Round: "+currentRound);
         //End
 
         //For character matrix
@@ -432,11 +482,11 @@ public class GameController{
          //End
 
         //Round History
-//        JsonObject roundHistory = rootObject.getAsJsonObject("rounds");
-//        for(String roundKeys : roundHistory.keySet()){
-//            String roundWinner = roundKeys + " winner : "+roundHistory.get(roundKeys).getAsString();
-//            System.out.println(roundWinner);
-//        }
+        JsonObject roundHistory = rootObject.getAsJsonObject("rounds");
+        for(String roundKeys : roundHistory.keySet()){
+            String roundWinner = roundKeys + " winner : "+roundHistory.get(roundKeys).getAsString();
+            System.out.println(roundWinner);
+        }
         //End
 
     }
@@ -445,12 +495,10 @@ public class GameController{
          JsonArray rowArray = cElement.getAsJsonArray();
          int x = 0;
          int y = 0;
-
          for (JsonElement element : rowArray) { //This iterates through the rows
              JsonArray colArray = element.getAsJsonArray();
              for(JsonElement colElement : colArray){ //This iterates through the col inside the rows
                  fetchLetters[x][y]=colElement.getAsString();
-//                 System.out.println(x+","+y);
                  y++;
              }
              y=0;

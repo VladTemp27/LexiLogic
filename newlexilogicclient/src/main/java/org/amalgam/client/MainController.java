@@ -78,7 +78,7 @@ public class MainController {
     public static ORBConnection orbConnection;
 
     public MainController() {
-        orbConnection = new ORBConnection(2020, "localhost");
+        orbConnection = new ORBConnection(2121, "localhost");
         try {
             orbConnection.start();
         } catch (InvalidName | AdapterInactive e) {
