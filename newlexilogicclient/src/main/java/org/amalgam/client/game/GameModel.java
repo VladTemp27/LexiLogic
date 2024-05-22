@@ -6,7 +6,7 @@ import org.amalgam.backend.microservices.game.PlayerReadyMicroservice;
 import org.amalgam.backend.microservices.game.VerifyWordMicroservice;
 import org.amalgam.backend.microservices.serverconnection.ORBConnection;
 
-public class GameModel {
+public class GameModel{
     private final ORBConnection orbConnection;
     private PlayerReadyMicroservice playerReadyMicroservice;
     private VerifyWordMicroservice verifyWordMicroservice;

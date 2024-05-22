@@ -1,5 +1,5 @@
 package org.amalgam;
 
 public interface ControllerInterface {
-    void currentController(String jsonString);
+    void uiUpdate(String jsonString);
 }

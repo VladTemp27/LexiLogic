@@ -19,4 +19,8 @@ public class LoadingModel {
     public void setPlayerCallback(PlayerCallback playerCallback) {
         this.playerCallback = playerCallback;
     }
+
+    public PlayerCallback getPlayerCallback() {
+        return playerCallback;
+    }
 }

@@ -75,8 +75,9 @@ public class LoadingController implements ControllerInterface {
     }
 
     public void findMatch() {
+        System.out.println("FIND MATCH");
         String response = loadingModel.matchMake();
-        System.out.println(response);
+        System.out.println("LOADING RESPONSE " + response);
         JsonElement rootElement = JsonParser.parseString(response);
         JsonObject jsonObject = rootElement.getAsJsonObject();
         statusBody = jsonObject.get("status").getAsString();
@@ -98,7 +99,8 @@ public class LoadingController implements ControllerInterface {
     }
 
     @Override
-    public void currentController(String jsonString) {
+    public void uiUpdate(String jsonString) {
+        System.out.println("LOADING "+jsonString);
         mainController.getGameController().updateData(jsonString);
     }
 }

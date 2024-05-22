@@ -5,6 +5,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import javafx.application.Platform;
+import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
@@ -19,8 +20,14 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.Executor;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class GameController{
+
+    ExecutorService executorService = Executors.newSingleThreadExecutor();
+
     // Game private variables
     public static int currentRound;
     public static int roomID;
@@ -164,80 +171,109 @@ public class GameController{
      * round counter before game to start
      */
     private void roundCountdown() {
-        Platform.runLater(() -> {
-            final int[] countdown = {5};
-            RCTimeLabel.setText(String.format("00:0%d", countdown[0]));
-            timer = new Timer();
-            gameModel.submitReadyPlayer(LoginController.username, roomID);
-            startNewRound();
-            timer.schedule(new TimerTask() {
-                @Override
-                public void run() {
-                    Platform.runLater(() -> {
-                        if (countdown[0] > 0) {
-                            countdown[0]--;
-                            RCTimeLabel.setText(String.format("00:0%d", countdown[0]));
-                            if (countdown[0] == 1) {
-                                RCroundNumberLabel.setText("ROUND " + currentRound);
-                            }
-                            if (countdown[0] == 0) {
-                                roundCountdownPane.setVisible(false);
-                                gamePane.setVisible(true);
-                                roundLabel.setText("ROUND " + currentRound);
-                                startNewRound();
-                                timer.cancel();
-                            }
+        System.out.println("SUCCESS t1");
+        Task<Void> t1 = new Task<Void>() {
+            @Override
+            protected Void call() throws Exception {
+                gameModel.submitReadyPlayer(LoginController.username, roomID);
+                return null;
+            }
 
-                        }
-                    });
+            @Override
+            protected void succeeded() {
+                try {
+                    Thread.sleep(3000);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
                 }
-            }, 1000, 1000);
-        });
+
+                Platform.runLater(() -> {
+                     try {
+                        int x = 0;
+                        for (String[] fetchLetter : fetchLetters) {
+                            for (String s : fetchLetter) {
+                                letterLabels[x].setText(s);
+                                x++;
+                            }
+                        }
+                    } catch (Exception e) {
+                        System.out.println(e.getMessage());
+                        System.out.println("fetchAndDisplayLetters");
+                    }
+
+                     final int[] countdown = {5};
+                     RCTimeLabel.setText(String.format("00:0%d", countdown[0]));
+                     timer = new Timer();
+
+                    timer.schedule(new TimerTask() {
+                    @Override
+                    public void run() {
+                        Platform.runLater(() -> {
+                            if (countdown[0] > 0) {
+                                countdown[0]--;
+                                RCTimeLabel.setText(String.format("00:0%d", countdown[0]));
+                                if (countdown[0] == 1) {
+                                    RCroundNumberLabel.setText("ROUND " + currentRound);
+                                }
+                                if (countdown[0] == 0) {
+                                    roundCountdownPane.setVisible(false);
+                                    gamePane.setVisible(true);
+                                    roundLabel.setText("ROUND " + currentRound);
+                                    timer.cancel();
+                                    final int[] gameTime = {30};
+                                    timeLabel.setText(String.format("00:%d", gameTime[0]));
+                                    timer = new Timer();
+                                    timer.schedule(new TimerTask() {
+                                        @Override
+                                        public void run() {
+                                            Platform.runLater(() -> {
+                                                if (gameTime[0] > 0) {
+                                                    gameTime[0]--;
+                                                    timeLabel.setText(String.format("00:%d", gameTime[0]));
+                                                    if (gameTime[0] == 0) {
+                                                        System.out.println("ROUND ENDED");
+                                                        timer.cancel();
+                                                        roundCountdown();
+                                                    }
+                                                }
+                                            });
+                                        }
+                                    }, 1000, 1000);
+                                }
+                            }
+                        });
+                    }
+                }, 1000, 1000);
+                });
+
+
+            }
+            @Override
+            protected void failed() {
+                System.out.println("FAILED T1");
+            }
+
+            @Override
+            protected void cancelled() {
+                System.out.println("CANCELLED T1");
+            }
+        };
+
+        executorService.submit(t1);
     }
 
-    private void startTimer() {
-        Platform.runLater(() -> {
-            final int[] gameTime = {30};
-            timeLabel.setText(String.format("00:%d", gameTime[0]));
-            timer = new Timer();
-            timer.schedule(new TimerTask() {
-                @Override
-                public void run() {
-                    Platform.runLater(() -> {
-                        if (gameTime[0] > 0) {
-                            gameTime[0]--;
-                            timeLabel.setText(String.format("00:%d", gameTime[0]));
-                            if (gameTime[0] == 0) {
-                                System.out.println("ROUND ENDED");
-                                checkRoundWinner();
-//                                roundCountdownPane.setVisible(true);
-//                                gamePane.setVisible(false);
-//                                roundCountdown();
-                                timer.cancel();
-                            }
-                        }
-                    });
-                }
-            }, 1000, 1000);
-        });
+    private void gameStart() {
+
+
     }
 
     /**
      * Fetch and display the letters in the word box.
      */
     private void fetchAndDisplayLetters() {
-        try {
-            int x = 0;
-            for (int i = 0; i < fetchLetters.length; i++) {
-                for (int j=0; j < fetchLetters[i].length; j++){
-                    letterLabels[x].setText(fetchLetters[i][j]);
-                    x++;
-                }
-            }
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-            System.out.println("fetchAndDisplayLetters");
-        }
+
+
+
     }
 
     private void checkRoundWinner() {
@@ -262,7 +298,7 @@ public class GameController{
 
     private void startNewRound() {
         fetchAndDisplayLetters();
-        startTimer();
+        gameStart();
         updateRoundLabel();
     }
 
@@ -341,7 +377,7 @@ public class GameController{
     }
 
     public void updateData(String json){
-        System.out.println(json);
+        System.out.println("GAME "+json);
         JsonElement rootElement = JsonParser.parseString(json);
         JsonObject rootObject = rootElement.getAsJsonObject();
 
@@ -367,9 +403,13 @@ public class GameController{
         }
 
         //End Checker for state
-
-
         roomID = rootObject.get("room_id").getAsInt();
+        System.out.println("ROOM "+roomID);
+
+        //For current round
+        currentRound = rootObject.get("current_round").getAsInt();
+        System.out.println("Current Round: "+currentRound);
+        //End
 
         //For character matrix
         JsonElement cElement =rootObject.get("char_matrix");
@@ -378,30 +418,25 @@ public class GameController{
          //End
 
          //For Game room
-         JsonObject gameRoomObject = rootObject.getAsJsonObject("game_room");
-         for(String key : gameRoomObject.keySet()){
-            JsonObject currentObject = gameRoomObject.getAsJsonObject(key);
-
-            String username = currentObject.get("username").getAsString();
-            int points = currentObject.get("points").getAsInt();
-            boolean ready = currentObject.get("ready").getAsBoolean();
-            JsonArray words = currentObject.getAsJsonArray("words");
-            JsonArray dupedWords = currentObject.getAsJsonArray("dupedWords");
-            System.out.println(username+","+points+","+ready);
-         }
+//         JsonObject gameRoomObject = rootObject.getAsJsonObject("game_room");
+//         for(String key : gameRoomObject.keySet()){
+//            JsonObject currentObject = gameRoomObject.getAsJsonObject(key);
+//
+//            String username = currentObject.get("username").getAsString();
+//            int points = currentObject.get("points").getAsInt();
+//            boolean ready = currentObject.get("ready").getAsBoolean();
+//            JsonArray words = currentObject.getAsJsonArray("words");
+//            JsonArray dupedWords = currentObject.getAsJsonArray("dupedWords");
+//            System.out.println(username+","+points+","+ready);
+//         }
          //End
 
-         //For current round
-        currentRound = rootObject.get("current_round").getAsInt();
-        System.out.println("Current Round: "+currentRound);
-        //End
-
         //Round History
-        JsonObject roundHistory = rootObject.getAsJsonObject("rounds");
-        for(String roundKeys : roundHistory.keySet()){
-            String roundWinner = roundKeys + " winner : "+roundHistory.get(roundKeys).getAsString();
-            System.out.println(roundWinner);
-        }
+//        JsonObject roundHistory = rootObject.getAsJsonObject("rounds");
+//        for(String roundKeys : roundHistory.keySet()){
+//            String roundWinner = roundKeys + " winner : "+roundHistory.get(roundKeys).getAsString();
+//            System.out.println(roundWinner);
+//        }
         //End
 
     }
@@ -415,7 +450,7 @@ public class GameController{
              JsonArray colArray = element.getAsJsonArray();
              for(JsonElement colElement : colArray){ //This iterates through the col inside the rows
                  fetchLetters[x][y]=colElement.getAsString();
-                 System.out.println(x+","+y);
+//                 System.out.println(x+","+y);
                  y++;
              }
              y=0;

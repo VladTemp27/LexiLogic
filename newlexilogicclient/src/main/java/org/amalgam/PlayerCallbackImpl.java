@@ -1,13 +1,7 @@
 package org.amalgam;
 
 import org.amalgam.ControllerException.InvalidRequestException;
-import org.amalgam.UIControllers.PlayerCallback;
 import org.amalgam.UIControllers.PlayerCallbackPOA;
-import org.amalgam.client.game.GameController;
-import org.omg.CORBA.*;
-import org.omg.CORBA.Object;
-
-import java.io.Serializable;
 
 public class PlayerCallbackImpl extends PlayerCallbackPOA{
 	private String username;
@@ -26,7 +20,8 @@ public class PlayerCallbackImpl extends PlayerCallbackPOA{
 
 	@Override
 	public void uiCall(String jsonString) throws InvalidRequestException {
-		controllerInterface.currentController(jsonString);
+		System.out.println(controllerInterface);
+		controllerInterface.uiUpdate(jsonString);
 	}
 	public void setControllerInterface(ControllerInterface controllerInterface) {
 		this.controllerInterface = controllerInterface;

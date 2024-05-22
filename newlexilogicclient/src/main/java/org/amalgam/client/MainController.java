@@ -1,6 +1,10 @@
 package org.amalgam.client;
 
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import javafx.application.Platform;
+import javafx.concurrent.Task;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
@@ -15,6 +19,7 @@ import org.amalgam.client.howtoplay.HowToPlayController;
 import org.amalgam.client.leaderboards.LeaderboardsController;
 import org.amalgam.client.leaderboards.LeaderboardsPanel;
 import org.amalgam.client.loading.LoadingController;
+import org.amalgam.client.loading.LoadingModel;
 import org.amalgam.client.login.LoginController;
 import org.amalgam.client.mainmenu.MainMenuController;
 import org.amalgam.client.matchhistory.MatchHistoryController;
@@ -27,6 +32,8 @@ import org.omg.PortableServer.POAManagerPackage.AdapterInactive;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class MainController {
     public Stage stage;
@@ -106,47 +113,9 @@ public class MainController {
             stage.setScene(scene);
             stage.setResizable(false);
             stage.setTitle("Lexi Logic");
-            LoginController loginController = fxmlLoader.getController();
+            loginController = fxmlLoader.getController();
             loginController.setMainController(this);
             loginController.initialize();
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    /**
-     * Loads and displays the signup view.
-     */
-    public void loadSignUpView() {
-        try {
-            Font.loadFont(getClass().getResourceAsStream("/org/amalgam/fonts/BowlbyOneSC.ttf"), 20);
-            Font.loadFont(getClass().getResourceAsStream("/org/amalgam/fonts/Brygada1918.ttf"), 20);
-
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/org/amalgam/client/views/signup/signup-view.fxml"));
-            AnchorPane signuppane = fxmlLoader.load();
-
-            InputStream inputStream = getClass().getResourceAsStream("/org/amalgam/icons/Logo.png");
-
-            if (inputStream != null) {
-                Image image = new Image(inputStream);
-                stage.getIcons().add(image);
-            } else {
-                System.err.println("Failed to load image: Logo.png");
-            }
-
-            Scene scene = new Scene(signuppane);
-
-            if (stage == null) {
-                throw new IllegalStateException("Stage is not set. Please set the stage before calling the panel.");
-            }
-
-            stage.setScene(scene);
-            stage.setResizable(false);
-            stage.setTitle("Lexi Logic");
-            SignUpController signUpController = fxmlLoader.getController();
-            signUpController.setMainController(this);
-            signUpController.initialize();
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -182,7 +151,7 @@ public class MainController {
             stage.setScene(scene);
             stage.setResizable(false);
             stage.setTitle("Lexi Logic");
-            MatchHistoryController matchHistoryController = fxmlLoader.getController();
+            matchHistoryController = fxmlLoader.getController();
             matchHistoryController.setMainController(this);
             matchHistoryController.initialize();
 
@@ -220,7 +189,7 @@ public class MainController {
             stage.setScene(scene);
             stage.setResizable(false);
             stage.setTitle("Lexi Logic");
-            ProfileController profileController = fxmlLoader.getController();
+            profileController = fxmlLoader.getController();
             profileController.setMainController(this);
             profileController.initialize();
 
@@ -258,7 +227,7 @@ public class MainController {
             stage.setScene(scene);
             stage.setResizable(false);
             stage.setTitle("Lexi Logic");
-            ProfileChangeUsernameController profileChangeUsernameController = fxmlLoader.getController();
+            profileChangeUsernameController = fxmlLoader.getController();
             profileChangeUsernameController.setMainController(this);
             profileChangeUsernameController.initialize();
 
@@ -296,7 +265,7 @@ public class MainController {
             stage.setScene(scene);
             stage.setResizable(false);
             stage.setTitle("Lexi Logic");
-            ProfileChangePassController profileChangePassController = fxmlLoader.getController();
+            profileChangePassController = fxmlLoader.getController();
             profileChangePassController.setMainController(this);
             profileChangePassController.initialize();
 
@@ -334,7 +303,7 @@ public class MainController {
             stage.setScene(scene);
             stage.setResizable(false);
             stage.setTitle("Lexi Logic");
-            MainMenuController mainMenuController = fxmlLoader.getController();
+            mainMenuController = fxmlLoader.getController();
             mainMenuController.setMainController(this);
             mainMenuController.initialize();
 
@@ -347,7 +316,8 @@ public class MainController {
      * Loads and displays the game view.
      */
     public void loadGameView(){
-        try {
+        Platform.runLater(() -> {
+            try {
             Font.loadFont(getClass().getResourceAsStream("/org/amalgam/fonts/BowlbyOneSC.ttf"), 20);
             Font.loadFont(getClass().getResourceAsStream("/org/amalgam/fonts/Brygada1918.ttf"), 20);
 
@@ -379,15 +349,14 @@ public class MainController {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        });
     }
-    /**
-    Load and display the loading view
-     */
+
     public void loadLoadingView(){
-        Platform.runLater(() -> {
-             Font.loadFont(getClass().getResourceAsStream("/org/amalgam/fonts/BowlbyOneSC.ttf"), 20);
+         Platform.runLater(() -> {
+            Font.loadFont(getClass().getResourceAsStream("/org/amalgam/fonts/BowlbyOneSC.ttf"), 20);
             Font.loadFont(getClass().getResourceAsStream("/org/amalgam/fonts/Brygada1918.ttf"), 20);
-             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/org/amalgam/client/views/loading/loading-view.fxml"));
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/org/amalgam/client/views/loading/loading-view.fxml"));
             AnchorPane loadingPane = null;
             try {
                 loadingPane = fxmlLoader.load();
@@ -413,16 +382,14 @@ public class MainController {
             stage.setScene(scene);
             stage.setResizable(false);
             stage.setTitle("Lexi Logic");
-            LoadingController loadingController = fxmlLoader.getController();
+            loadingController = fxmlLoader.getController();
             loadingController.setMainController(this);
             LoginController.playerCallbackImpl.setControllerInterface(loadingController);
 
             new Thread(() -> {
-                loadingController.findMatch();;
+                loadingController.findMatch();
             }).start();
-
         });
-
     }
     /**
      * Load and display leaderboards view
@@ -453,7 +420,7 @@ public class MainController {
             stage.setScene(scene);
             stage.setResizable(false);
             stage.setTitle("Lexi Logic");
-            LeaderboardsController leaderboardsController = fxmlLoader.getController();
+            leaderboardsController = fxmlLoader.getController();
             leaderboardsController.setMainController(this);
             leaderboardsController.initialize();
 
@@ -487,7 +454,7 @@ public class MainController {
             stage.setScene(scene);
             stage.setResizable(false);
             stage.setTitle("Lexi Logic");
-            HowToPlayController howToPlayController = fxmlLoader.getController();
+            howToPlayController = fxmlLoader.getController();
             howToPlayController.setMainController(this);
             howToPlayController.initialize();
 
@@ -495,11 +462,10 @@ public class MainController {
             e.printStackTrace();
         }
     }
-
+    public void setStage(Stage stage) { this.stage = stage;}
     /**
      * Getters and Setters of Controllers and Panels
      */
-    public void setStage(Stage stage) { this.stage = stage;}
     public LoginController getLoginController() { return loginController; }
     public SignUpController getSignUpController() { return signUpController; }
     public MatchHistoryController getMatchHistoryController() { return matchHistoryController; }

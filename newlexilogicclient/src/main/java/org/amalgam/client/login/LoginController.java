@@ -6,6 +6,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import org.amalgam.ControllerException.InvalidRequestException;
+import org.amalgam.ControllerInterface;
 import org.amalgam.PlayerCallbackImpl;
 import org.amalgam.UIControllers.PlayerCallback;
 import org.amalgam.UIControllers.PlayerCallbackHelper;
@@ -15,7 +16,7 @@ import org.amalgam.client.MainController;
 import org.omg.PortableServer.POAPackage.ServantNotActive;
 import org.omg.PortableServer.POAPackage.WrongPolicy;
 
-public class LoginController {
+public class LoginController implements ControllerInterface {
 
     // Private Variables
     @FXML
@@ -89,6 +90,7 @@ public class LoginController {
     private boolean loginAuthentication(String username, String password) {
         playerCallbackImpl = new PlayerCallbackImpl();
         playerCallbackImpl.username(username);
+        playerCallbackImpl.setControllerInterface(this);
         LoginController.playerCallback = null;
         try {
             playerCallback = PlayerCallbackHelper.narrow(MainController.orbConnection.getPOA().servant_to_reference(playerCallbackImpl));
@@ -138,5 +140,10 @@ public class LoginController {
         } else {
             showAlert("Invalid username or password");
         }
+    }
+
+    @Override
+    public void uiUpdate(String jsonString) {
+        System.out.println("LOGIN "+jsonString);
     }
 }
