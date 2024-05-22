@@ -76,6 +76,7 @@ public class ChangeGameController {
     @FXML
     public void handleSaveButton(){
         if(serverController !=null){
+            handleChangeQueueTime();
             serverController.loadChangeGame();//change to saving option once microservice is ready
         } else {
             System.out.println("Server controller is not set.");
@@ -114,7 +115,7 @@ public class ChangeGameController {
     public void initialize() {
         addHoverEffect(saveButton);
         addHoverEffectImage(backButton);
-        saveButton.setOnAction(event -> handleChangeQueueTime());
+        saveButton.setOnAction(event -> handleSaveButton());
         backButton.setOnAction(event -> handleBackButton());
 
     }
