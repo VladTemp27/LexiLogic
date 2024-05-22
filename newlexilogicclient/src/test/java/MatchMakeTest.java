@@ -25,6 +25,7 @@ public class MatchMakeTest implements ControllerInterface{
     private CallbackImpl callback;
     private int gameRoomID;
     private String currentState = "";
+    private String user;
 
     private static Scanner kInput = new Scanner(System.in);
 
@@ -33,10 +34,10 @@ public class MatchMakeTest implements ControllerInterface{
         program.getAllStubs();
 
         System.out.print("Enter username: ");
-        String user = kInput.nextLine();
+        program.user = kInput.nextLine();
 
         program.callback = new CallbackImpl();
-        program.callback.username(user);
+        program.callback.username(program.user);
 
         program.callback.setController(program);
 
@@ -46,23 +47,27 @@ public class MatchMakeTest implements ControllerInterface{
 
         //TODO: move this to ui call, for the most part majority of the bugs are fixed here im gonna sleep
         // ive been awake for 28 hours right now with 1 month of no actual sleep
-        while(!program.currentState.equals("game_ended")){
-            if(program.currentState.equals("staging")){
-                System.out.println("staging");
-                program.stagingStateHandler();
-                System.out.println(user+" "+program.gameRoomID);
-                program.gameService.playerReady(user, program.gameRoomID);
-                System.out.println("ready sent");
-                program.currentState = "";
-                continue;
-            }
+//        while(!program.currentState.equals("game_ended")){
+//            if(program.currentState.equals("staging")){
+//                System.out.println("staging");
+//                program.stagingStateHandler();
+//                System.out.println(user+" "+program.gameRoomID);
+//                program.gameService.playerReady(user, program.gameRoomID);
+//                System.out.println("ready sent");
+//                program.currentState = "ready sent";
+//                continue;
+//            }
+//
+//            if(program.currentState.equals("game_started")){
+//                program.gameStartedHandler();
+//                System.out.println("round done");
+//                program.currentState = "";
+//                continue;
+//            }
+//
+//        }
 
-            if(program.currentState.equals("game_started")){
-                program.gameStartedHandler();
-                System.out.println("round done");
-                program.currentState = "";
-                continue;
-            }
+        while(!program.currentState.equals("game_ended")){
 
         }
     }
@@ -97,12 +102,33 @@ public class MatchMakeTest implements ControllerInterface{
 
     @Override
     public void testUICall(String jsonString) {
-        System.out.println(jsonString);
+//        System.out.println(jsonString);
+//        JsonElement rootElement = JsonParser.parseString(jsonString);
+//        JsonObject rootObject = rootElement.getAsJsonObject();
+//        gameRoomID = rootObject.get("room_id").getAsInt();
+//        currentState = rootObject.get("state").getAsString();
+//        System.out.println(gameRoomID);
+
         JsonElement rootElement = JsonParser.parseString(jsonString);
         JsonObject rootObject = rootElement.getAsJsonObject();
-        gameRoomID = rootObject.get("room_id").getAsInt();
         currentState = rootObject.get("state").getAsString();
-        System.out.println(gameRoomID);
+
+        if(currentState.equals("staging")){
+            System.out.println("staging");
+            stagingStateHandler();
+            System.out.println(this.user+" "+gameRoomID);
+            gameService.playerReady(user, gameRoomID);
+            System.out.println("ready sent");
+
+            return;
+        }
+
+        if(currentState.equals("game_started")){
+            gameStartedHandler();
+            System.out.println("simulating game");
+            return;
+        }
+
 
     }
 

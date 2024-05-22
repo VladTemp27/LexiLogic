@@ -14,7 +14,7 @@ public class NTimer implements Runnable {
         try {
             Thread.sleep(1000*secondsDuration);
         } catch (InterruptedException e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
         }
         callback.timerDone();
     }

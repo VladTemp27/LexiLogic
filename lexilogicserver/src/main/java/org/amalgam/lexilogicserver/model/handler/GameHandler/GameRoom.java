@@ -23,9 +23,10 @@ import java.util.concurrent.Executors;
 public class GameRoom implements NTimerCallback {
 
     private int roomID, currentRound, secondsRoundDuration;
-    private LinkedHashMap<String,PlayerGameDetail> details, defaultDetails;
+    private LinkedHashMap<String,PlayerGameDetail> details;
+    private final LinkedHashMap<String,PlayerGameDetail> defaultDetails;
     private boolean roundDone;
-    private ExecutorService executor = Executors.newCachedThreadPool();
+    private ExecutorService executor = Executors.newSingleThreadExecutor();
     private WordBox wordBox;
     private LinkedHashMap<Integer, String> rounds = new LinkedHashMap<>();
     private LinkedHashMap<String,PlayerCallback> playerCallbacks = new LinkedHashMap<>();
@@ -48,16 +49,20 @@ public class GameRoom implements NTimerCallback {
         PlayerGameDetail detail = details.get(username);
         detail.setReady(true);
 
+        System.out.println(username +" triggered ready");
         if(!isAllPlayersReady()){
+            System.out.println("Waiting for other players");
             return;
         }
 
+        System.out.println("triggering round start");
         roundStart();
     }
 
     public void stagePlayers() {
         System.out.println("Staging, "+currentRound);
-        details = defaultDetails; // resets details to default unready state
+        details = new LinkedHashMap<>();
+        details = flushWith(defaultDetails); // resets details to default unready state
         String w;
         if((w = winnerAvailable())!=null){
             try{
@@ -93,6 +98,7 @@ public class GameRoom implements NTimerCallback {
     }
 
     private void roundStart(){
+        System.out.println("round start");
         try {
             //Use GameRoomResponseBuilder here to tell clients state is game started + game rooms 😁
             String data = GameRoomResponseBuilder.buildGameStartedResponse(this);
@@ -109,9 +115,11 @@ public class GameRoom implements NTimerCallback {
         for(String key: keys){
             PlayerGameDetail currentPlayer = details.get(key);
             if(!currentPlayer.isReady()){
+                System.out.println("returned false");
                 return false;
             }
         }
+        System.out.println("executed return true;");
         return true;
     }
 
@@ -225,8 +233,11 @@ public class GameRoom implements NTimerCallback {
     private String winnerAvailable(){
         StringBuilder winner = new StringBuilder();
         LinkedHashMap<String, Integer> roundWinners = new LinkedHashMap<>();
-        for(int x = 1; x < rounds.size(); x++){
+        for(int x = 1; x <= rounds.size(); x++){
             String roundWinner = rounds.get(x);
+            if(roundWinner.equals("No Winner")){
+                continue;
+            }
             if(roundWinners.containsKey(roundWinner)){
                 int initialVal = roundWinners.get(roundWinner);
                 roundWinners.replace(roundWinner, initialVal+1);
@@ -250,6 +261,7 @@ public class GameRoom implements NTimerCallback {
         List<String> keys = new ArrayList<>(details.keySet());
         String keyWithMaxValue = null;
         int maxPoints = 0;
+        //Gets highest value
         for(String key : keys){
             if(keyWithMaxValue==null){
                 keyWithMaxValue = key;
@@ -261,6 +273,24 @@ public class GameRoom implements NTimerCallback {
                 keyWithMaxValue = key;
                 maxPoints = details.get(keyWithMaxValue).getPoints();
             }
+        }
+
+        //Finds if another instance of this highest value is available (tie)
+        boolean tie = false;
+        for(String key : keys){
+            if(details.get(key).getPoints()==details.get(keyWithMaxValue).getPoints()){
+                tie = true;
+            }
+        }
+
+        //Guard clause for tie situation
+        if(tie){
+            return "No Winner";
+        }
+
+        //Guard clause for 0 pts
+        if(maxPoints==0){
+            return "No Winner";
         }
         return keyWithMaxValue;
     }
@@ -301,6 +331,11 @@ public class GameRoom implements NTimerCallback {
         tallyRoundTotalPoints();
         currentRound++;
         System.out.println("next round: "+currentRound);
+        try {
+            generateWordBox();
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        }
         //Use broadcast with builder
         stagePlayers();
     }
@@ -320,5 +355,16 @@ public class GameRoom implements NTimerCallback {
 
     public int getSecondsRoundDuration() {
         return secondsRoundDuration;
+    }
+
+    private LinkedHashMap<String, PlayerGameDetail> flushWith(LinkedHashMap<String, PlayerGameDetail> defaultValues){
+        LinkedHashMap<String, PlayerGameDetail> flushedData = new LinkedHashMap<>();
+        List<String> keyList = new ArrayList<>(defaultValues.keySet());
+        for(String key : keyList){
+            PlayerGameDetail clone = new PlayerGameDetail(defaultValues.get(key).getUsername());
+            flushedData.put(key, clone);
+        }
+
+        return flushedData;
     }
 }

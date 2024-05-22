@@ -176,7 +176,7 @@ public class GameServiceImpl extends GameServicePOA {
 
     //TODO test if synchronized makes it buggy
     @Override
-    public String playerReady(String username, int gameRoomID) {
+    public synchronized String playerReady(String username, int gameRoomID) {
         int origIndex = getRoomIndexFromID(gameRoomID);
         GameRoom temp = rooms.get(origIndex);
 
