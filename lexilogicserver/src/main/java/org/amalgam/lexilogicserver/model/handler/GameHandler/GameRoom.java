@@ -230,7 +230,7 @@ public class GameRoom implements NTimerCallback {
     }
 
     //Checker if winner is available returns null if winner is nut available
-    private String winnerAvailable(){
+    public String winnerAvailable(){
         StringBuilder winner = new StringBuilder();
         LinkedHashMap<String, Integer> roundWinners = new LinkedHashMap<>();
         for(int x = 1; x <= rounds.size(); x++){
