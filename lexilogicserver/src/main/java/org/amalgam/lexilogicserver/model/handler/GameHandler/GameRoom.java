@@ -2,6 +2,9 @@ package org.amalgam.lexilogicserver.model.handler.GameHandler;
 
 import org.amalgam.ControllerException.InvalidRequestException;
 import org.amalgam.UIControllers.PlayerCallback;
+import org.amalgam.lexilogicserver.model.DAL.GameDetailDAL;
+import org.amalgam.lexilogicserver.model.DAL.LeaderBoardDAL;
+import org.amalgam.lexilogicserver.model.DAL.LobbyDAL;
 import org.amalgam.lexilogicserver.model.microservices.NTimer;
 import org.amalgam.lexilogicserver.model.microservices.NTimerCallback;
 import org.amalgam.lexilogicserver.model.microservices.wordbox.Generator;
@@ -59,7 +62,8 @@ public class GameRoom implements NTimerCallback {
             try{
                 String response = GameRoomResponseBuilder.buildWinnerResponse(w); // Use response builder for this, broadcast state game done, + winner(variable w)
                 broadcast(response);
-                //TODO convert this to reference objects and push to database using DAL
+                int lobbyID = LobbyDAL.insertGameRoomAsLobby(this);
+                updatePlayerDataDB(lobbyID);
             }catch(Exception e){
                 e.printStackTrace();
             }
@@ -71,6 +75,19 @@ public class GameRoom implements NTimerCallback {
             broadcast(jsonString);
         }catch(Exception e){
             e.printStackTrace();
+        }
+    }
+
+    public char[][] getCharMatrix (){
+        return wordBox.getWordMatrix();
+    }
+
+    public void updatePlayerDataDB(int lobbyID){
+        List<String> keys = new ArrayList<>(details.keySet());
+        for(String key: keys){
+            PlayerGameDetail detail = details.get(key);
+            GameDetailDAL.insertGameDetailFromPlayerDetail(detail, lobbyID);
+            LeaderBoardDAL.updateLeaderBoard(detail);
         }
     }
 
@@ -102,18 +119,28 @@ public class GameRoom implements NTimerCallback {
     }
 
     public void submitWord(String word, String username){
-        if(roundDone){
-            return;
+        try {
+            if (roundDone) {
+                return;
+            }
+            if (checkIfDupe(word)) {
+                broadcast(username, GameRoomResponseBuilder.buildInvalidWordResponse());
+                return;
+            } // should just throw exception of duped word
+
+            if (wordBox.verifyWord(word) == 0) {
+                broadcast(username, GameRoomResponseBuilder.buildInvalidWordResponse());
+                return;
+            } // should just throw exception
+
+            PlayerGameDetail gameDetail = details.get(username);
+            gameDetail.addWord(word);
+            details.replace(username, gameDetail);
+
+            updatePoints(username);
+        }catch(Exception e){
+            e.printStackTrace();
         }
-        if(checkIfDupe(word)) return; // should just throw exception of duped word
-
-        if(wordBox.verifyWord(word)==0)return; // should just throw exception
-
-        PlayerGameDetail gameDetail = details.get(username);
-        gameDetail.addWord(word);
-        details.replace(username, gameDetail);
-
-        updatePoints(username);
     }
 
     private void updatePoints(String username){
@@ -270,5 +297,17 @@ public class GameRoom implements NTimerCallback {
     @Override
     public void timeIs() {
 
+    }
+
+    public LinkedHashMap<Integer, String> getRounds() {
+        return rounds;
+    }
+
+    public int getCurrentRound() {
+        return currentRound;
+    }
+
+    public int getSecondsRoundDuration() {
+        return secondsRoundDuration;
     }
 }

@@ -24,22 +24,31 @@ public class ConnectionTest {
 
     public static void main(String[] args)  {
         try{
-            ORB orb = ORB.init(generateArgs(2018, "localhost"), null);
-            POA rootPOA = POAHelper.narrow(orb.resolve_initial_references("RootPOA"));
-            rootPOA.the_POAManager().activate();
+            ORB orb = ORB.init(generateArgs(2018, "192.168.1.93"), null);
+            org.omg.CORBA.Object objRef =
+            orb.resolve_initial_references("NameService");
+            NamingContextExt ncRef = NamingContextExtHelper.narrow(objRef);
+            String name = "PlayerService";
+            playerServiceStub = PlayerServiceHelper.narrow(ncRef.resolve_str(name));
+            System.out.println(playerServiceStub.getGameHistory("Marven"));
 
-            NamingContextExt namingReference = NamingContextExtHelper.narrow(orb.resolve_initial_references("NameService"));
-
-            CallbackImpl callback = new CallbackImpl();
-            callback.username("Marven");
-
-            playerServiceStub = PlayerServiceHelper.narrow(namingReference.resolve_str("PlayerService"));
-            System.out.println("Stub retrieved");
-            playerServiceStub.login(PlayerCallbackHelper.narrow(rootPOA.servant_to_reference(callback)), "password123");
-            System.out.println("Logged In");
-
-            playerServiceStub.logout(callback.username());
-            System.out.println("Logged Out");
+//            ORB orb = ORB.init(generateArgs(2018, "localhost"), null);
+//            POA rootPOA = POAHelper.narrow(orb.resolve_initial_references("RootPOA"));
+//            rootPOA.the_POAManager().activate();
+//
+//            NamingContextExt namingReference = NamingContextExtHelper.narrow(orb.resolve_initial_references("NameService"));
+//            playerServiceStub = PlayerServiceHelper.narrow(namingReference.resolve_str("PlayerService"));
+//            gameServiceStub = GameServiceHelper.narrow(namingReference.resolve_str("GameService"));
+//            CallbackImpl callback = new CallbackImpl();
+//            callback.username("Luis");
+//
+//            PlayerCallback callbackReference = PlayerCallbackHelper.narrow(rootPOA.servant_to_reference(callback));
+//
+//            playerServiceStub.login(callbackReference, "password456");
+//            System.out.println("SUCCESS");
+//
+//            System.out.println(gameServiceStub.getLeaderboards());
+//            System.out.println(playerServiceStub.getGameHistory("Marven"));
         }catch(Exception e){
             e.printStackTrace();
         }

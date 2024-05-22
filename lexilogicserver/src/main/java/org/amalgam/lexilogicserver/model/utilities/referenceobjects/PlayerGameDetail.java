@@ -38,6 +38,7 @@ public class PlayerGameDetail {
         return words;
     }
 
+
     public void addWord(String word){
         words.add(word);
     }
