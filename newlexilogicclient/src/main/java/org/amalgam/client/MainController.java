@@ -372,7 +372,7 @@ public class MainController {
             stage.setScene(scene);
             stage.setResizable(false);
             stage.setTitle("Lexi Logic");
-            GameController gameController = fxmlLoader.getController();
+            gameController = fxmlLoader.getController();
             gameController.setMainController(this);
             gameController.initialize();
 

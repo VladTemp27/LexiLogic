@@ -16,6 +16,7 @@ import org.amalgam.ControllerException.InvalidRequestException;
 import org.amalgam.ControllerInterface;
 import org.amalgam.client.MainController;
 import javafx.scene.image.ImageView;
+import org.amalgam.client.game.GameController;
 import org.amalgam.client.login.LoginController;
 
 public class LoadingController implements ControllerInterface {
@@ -98,6 +99,6 @@ public class LoadingController implements ControllerInterface {
 
     @Override
     public void currentController(String jsonString) {
-        System.out.println(jsonString);
+        mainController.getGameController().updateData(jsonString);
     }
 }

@@ -92,7 +92,7 @@ public class GameServiceImpl extends GameServicePOA {
      * @param players The list of matched players.
      */
     private void createGameRoom(LinkedList<PlayerGameDetail> players) {
-        int roomID = rooms.size() - 1;
+        int roomID = rooms.size();
         LinkedHashMap<String, PlayerGameDetail> playerDetailsMap = new LinkedHashMap<>();
         LinkedHashMap<String, PlayerCallback> playerCallbacksMap = new LinkedHashMap<>();
 

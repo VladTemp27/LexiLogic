@@ -125,102 +125,102 @@
             <Font name="Bowlby One SC Regular" size="25.0" />
          </font>
       </Button>
-      <Label fx:id="secondLetter" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="79.0" prefWidth="53.0" text=" B" textAlignment="JUSTIFY" textFill="#6b4406" GridPane.columnIndex="1">
+      <Label fx:id="secondLetter" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="79.0" prefWidth="53.0" textAlignment="JUSTIFY" textFill="#6b4406" GridPane.columnIndex="1">
          <font>
             <Font name="Bowlby One SC Regular" size="48.0" />
          </font>
       </Label>
-      <Label fx:id="firstLetter" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="79.0" prefWidth="53.0" text=" A" textAlignment="JUSTIFY" textFill="#6b4406">
+      <Label fx:id="firstLetter" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="79.0" prefWidth="53.0" textAlignment="JUSTIFY" textFill="#6b4406">
          <font>
             <Font name="Bowlby One SC Regular" size="48.0" />
          </font>
       </Label>
-      <Label fx:id="thirdLetter" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="79.0" prefWidth="53.0" text=" C" textAlignment="JUSTIFY" textFill="#6b4406" GridPane.columnIndex="2">
+      <Label fx:id="thirdLetter" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="79.0" prefWidth="53.0" textAlignment="JUSTIFY" textFill="#6b4406" GridPane.columnIndex="2">
          <font>
             <Font name="Bowlby One SC Regular" size="48.0" />
          </font>
       </Label>
-      <Label fx:id="fourthLetter" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="79.0" prefWidth="53.0" text=" B" textAlignment="JUSTIFY" textFill="#6b4406" GridPane.columnIndex="3">
+      <Label fx:id="fourthLetter" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="79.0" prefWidth="53.0"  textAlignment="JUSTIFY" textFill="#6b4406" GridPane.columnIndex="3">
          <font>
             <Font name="Bowlby One SC Regular" size="48.0" />
          </font>
       </Label>
-      <Label fx:id="fifthLetter" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="79.0" prefWidth="53.0" text=" B" textAlignment="JUSTIFY" textFill="#6b4406" GridPane.columnIndex="4">
+      <Label fx:id="fifthLetter" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="79.0" prefWidth="53.0" textAlignment="JUSTIFY" textFill="#6b4406" GridPane.columnIndex="4">
          <font>
             <Font name="Bowlby One SC Regular" size="48.0" />
          </font>
       </Label>
-      <Label fx:id="seventeenthLetter" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="79.0" prefWidth="53.0" text=" B" textAlignment="JUSTIFY" textFill="#6b4406" GridPane.columnIndex="1" GridPane.rowIndex="3">
+      <Label fx:id="seventeenthLetter" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="79.0" prefWidth="53.0" textAlignment="JUSTIFY" textFill="#6b4406" GridPane.columnIndex="1" GridPane.rowIndex="3">
          <font>
             <Font name="Bowlby One SC Regular" size="48.0" />
          </font>
       </Label>
-      <Label fx:id="seventhLetter" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="79.0" prefWidth="53.0" text=" B" textAlignment="JUSTIFY" textFill="#6b4406" GridPane.columnIndex="1" GridPane.rowIndex="1">
+      <Label fx:id="seventhLetter" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="79.0" prefWidth="53.0"  textAlignment="JUSTIFY" textFill="#6b4406" GridPane.columnIndex="1" GridPane.rowIndex="1">
          <font>
             <Font name="Bowlby One SC Regular" size="48.0" />
          </font>
       </Label>
-      <Label fx:id="eightLetter" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="79.0" prefWidth="53.0" text=" B" textAlignment="JUSTIFY" textFill="#6b4406" GridPane.columnIndex="2" GridPane.rowIndex="1">
+      <Label fx:id="eightLetter" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="79.0" prefWidth="53.0"  textAlignment="JUSTIFY" textFill="#6b4406" GridPane.columnIndex="2" GridPane.rowIndex="1">
          <font>
             <Font name="Bowlby One SC Regular" size="48.0" />
          </font>
       </Label>
-      <Label fx:id="ninthLetter" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="79.0" prefWidth="53.0" text=" B" textAlignment="JUSTIFY" textFill="#6b4406" GridPane.columnIndex="3" GridPane.rowIndex="1">
+      <Label fx:id="ninthLetter" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="79.0" prefWidth="53.0" textAlignment="JUSTIFY" textFill="#6b4406" GridPane.columnIndex="3" GridPane.rowIndex="1">
          <font>
             <Font name="Bowlby One SC Regular" size="48.0" />
          </font>
       </Label>
-      <Label fx:id="tenthLetter" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="79.0" prefWidth="53.0" text=" B" textAlignment="JUSTIFY" textFill="#6b4406" GridPane.columnIndex="4" GridPane.rowIndex="1">
+      <Label fx:id="tenthLetter" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="79.0" prefWidth="53.0" textAlignment="JUSTIFY" textFill="#6b4406" GridPane.columnIndex="4" GridPane.rowIndex="1">
          <font>
             <Font name="Bowlby One SC Regular" size="48.0" />
          </font>
       </Label>
-      <Label fx:id="eleventhLetter" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="79.0" prefWidth="53.0" text=" B" textAlignment="JUSTIFY" textFill="#6b4406" GridPane.rowIndex="2">
+      <Label fx:id="eleventhLetter" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="79.0" prefWidth="53.0" textAlignment="JUSTIFY" textFill="#6b4406" GridPane.rowIndex="2">
          <font>
             <Font name="Bowlby One SC Regular" size="48.0" />
          </font>
       </Label>
-      <Label fx:id="twelfthLetter" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="79.0" prefWidth="53.0" text=" B" textAlignment="JUSTIFY" textFill="#6b4406" GridPane.columnIndex="1" GridPane.rowIndex="2">
+      <Label fx:id="twelfthLetter" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="79.0" prefWidth="53.0" textAlignment="JUSTIFY" textFill="#6b4406" GridPane.columnIndex="1" GridPane.rowIndex="2">
          <font>
             <Font name="Bowlby One SC Regular" size="48.0" />
          </font>
       </Label>
-      <Label fx:id="thirteenthLetter" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="79.0" prefWidth="53.0" text=" B" textAlignment="JUSTIFY" textFill="#6b4406" GridPane.columnIndex="2" GridPane.rowIndex="2">
+      <Label fx:id="thirteenthLetter" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="79.0" prefWidth="53.0"  textAlignment="JUSTIFY" textFill="#6b4406" GridPane.columnIndex="2" GridPane.rowIndex="2">
          <font>
             <Font name="Bowlby One SC Regular" size="48.0" />
          </font>
       </Label>
-      <Label fx:id="fourteenthLetter" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="79.0" prefWidth="53.0" text=" B" textAlignment="JUSTIFY" textFill="#6b4406" GridPane.columnIndex="3" GridPane.rowIndex="2">
+      <Label fx:id="fourteenthLetter" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="79.0" prefWidth="53.0" textAlignment="JUSTIFY" textFill="#6b4406" GridPane.columnIndex="3" GridPane.rowIndex="2">
          <font>
             <Font name="Bowlby One SC Regular" size="48.0" />
          </font>
       </Label>
-      <Label fx:id="fifteenthLetter" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="79.0" prefWidth="53.0" text=" B" textAlignment="JUSTIFY" textFill="#6b4406" GridPane.columnIndex="4" GridPane.rowIndex="2">
+      <Label fx:id="fifteenthLetter" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="79.0" prefWidth="53.0" textAlignment="JUSTIFY" textFill="#6b4406" GridPane.columnIndex="4" GridPane.rowIndex="2">
          <font>
             <Font name="Bowlby One SC Regular" size="48.0" />
          </font>
       </Label>
-      <Label fx:id="sixteenthLetter" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="79.0" prefWidth="53.0" text=" B" textAlignment="JUSTIFY" textFill="#6b4406" GridPane.rowIndex="3">
+      <Label fx:id="sixteenthLetter" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="79.0" prefWidth="53.0"  textAlignment="JUSTIFY" textFill="#6b4406" GridPane.rowIndex="3">
          <font>
             <Font name="Bowlby One SC Regular" size="48.0" />
          </font>
       </Label>
-      <Label fx:id="eighteenthLetter" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="79.0" prefWidth="53.0" text=" B" textAlignment="JUSTIFY" textFill="#6b4406" GridPane.columnIndex="2" GridPane.rowIndex="3">
+      <Label fx:id="eighteenthLetter" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="79.0" prefWidth="53.0" textAlignment="JUSTIFY" textFill="#6b4406" GridPane.columnIndex="2" GridPane.rowIndex="3">
          <font>
             <Font name="Bowlby One SC Regular" size="48.0" />
          </font>
       </Label>
-      <Label fx:id="sixthLetter" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="79.0" prefWidth="53.0" text=" B" textAlignment="JUSTIFY" textFill="#6b4406" GridPane.rowIndex="1">
+      <Label fx:id="sixthLetter" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="79.0" prefWidth="53.0"  textAlignment="JUSTIFY" textFill="#6b4406" GridPane.rowIndex="1">
          <font>
             <Font name="Bowlby One SC Regular" size="48.0" />
          </font>
       </Label>
-      <Label fx:id="nineteenthLetter" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="79.0" prefWidth="53.0" text=" B" textAlignment="JUSTIFY" textFill="#6b4406" GridPane.columnIndex="3" GridPane.rowIndex="3">
+      <Label fx:id="nineteenthLetter" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="79.0" prefWidth="53.0" textAlignment="JUSTIFY" textFill="#6b4406" GridPane.columnIndex="3" GridPane.rowIndex="3">
          <font>
             <Font name="Bowlby One SC Regular" size="48.0" />
          </font>
       </Label>
-      <Label fx:id="twentiethLetter" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="79.0" prefWidth="53.0" text=" B" textAlignment="JUSTIFY" textFill="#6b4406" GridPane.columnIndex="4" GridPane.rowIndex="3">
+      <Label fx:id="twentiethLetter" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="79.0" prefWidth="53.0"  textAlignment="JUSTIFY" textFill="#6b4406" GridPane.columnIndex="4" GridPane.rowIndex="3">
          <font>
             <Font name="Bowlby One SC Regular" size="48.0" />
          </font>
@@ -262,7 +262,7 @@
       </font>
    </Label>
     <TextField fx:id="lexiTextfield" layoutX="550.0" layoutY="460.0" prefWidth="200.0" style="-fx-background-color: D9E0A2;" />
-   <Label fx:id="roundsWonNumberLabel" layoutX="210.0" layoutY="157.0" text="1" textFill="#7c814e">
+   <Label fx:id="roundsWonNumberLabel" layoutX="210.0" layoutY="157.0" text="0" textFill="#7c814e">
       <font>
          <Font name="Bowlby One SC Regular" size="48.0" />
       </font>
