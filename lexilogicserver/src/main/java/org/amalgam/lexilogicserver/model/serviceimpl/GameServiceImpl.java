@@ -38,14 +38,17 @@ public class GameServiceImpl extends GameServicePOA {
      */
     public String matchMake(PlayerCallback playerCallback) {
         addPlayerToQueue(playerCallback);
+        boolean isMatchFound = false;
 
         try {
             matchmakingLock.acquire();
-            while (true) { // Change loop condition to always true
-                matchPlayers();
-                if (matchmakingService.isTimerDone()) { // Add condition to check if timer is done
+            while (true) {
+                if (matchPlayers() && matchmakingService.isTimerDone()) {
+                    isMatchFound = true;
                     return "{\"status\": \"success\", \"message\": \"Matchmaking Successful!\"}";
-                    // Exit loop if timer is done
+                }
+                if (matchmakingService.isTimerDone()) {
+                    break;
                 }
                 Thread.sleep(100);
             }
@@ -55,6 +58,11 @@ public class GameServiceImpl extends GameServicePOA {
         } finally {
             matchmakingLock.release();
         }
+
+        if (!isMatchFound) {
+            return "{\"status\": \"failed\", \"message\": \"Matchmaking Unsuccessful!\"}";
+        }
+
         return "{\"status\": \"timeout\", \"message\": \"Timer Done\"}";
     }
 
@@ -72,7 +80,7 @@ public class GameServiceImpl extends GameServicePOA {
     /**
      * Matches players and creates a game room if enough players are found.
      */
-    private void matchPlayers() {
+    private boolean matchPlayers() {
         LinkedList<PlayerGameDetail> players = null;
         try {
             players = matchmakingService.checkAndMatchPlayers();
@@ -82,7 +90,9 @@ public class GameServiceImpl extends GameServicePOA {
         if (players != null && players.size() >= 2 && matchmakingService.isTimerDone()) { // Check if enough players are matched
             System.out.println("Creating GameRoom");
             createGameRoom(players);
+            return true;
         } else {
+            return false;
         }
     }
 
@@ -107,7 +117,7 @@ public class GameServiceImpl extends GameServicePOA {
         try {
             GameRoom gameRoom = new GameRoom(roomID, playerDetailsMap, playerCallbacksMap, SettingsHandler.getGameTime());
             System.out.println("GameRoom Created");
-            createGameRoomResponse(roomID,players);
+            createGameRoomResponse(roomID, players);
             if (matchmakingService.isTimerDone()) {
                 rooms.add(gameRoom);
                 System.out.println(gameRoom);
