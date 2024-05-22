@@ -63,7 +63,7 @@ public class ChangeGameController {
      *
      * @param message
      */
-    private void showAlert(String message){
+    private void showAlert(String message) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Game Setting Changed");
         alert.setHeaderText(null);
@@ -75,34 +75,44 @@ public class ChangeGameController {
      * Handles the save button
      */
     @FXML
-    public void handleSaveButton(){
-        if(serverController !=null){
+    public void handleSaveButton() {
+        if (serverController != null) {
+            handleChangeQueueTime();
             serverController.loadChangeGame();//change to saving option once microservice is ready
         } else {
             System.out.println("Server controller is not set.");
         }
     }
+
     /**
      * Handles the back button
      */
     @FXML
-    public void handleBackButton(){
-        if(serverController !=null){
+    public void handleBackButton() {
+        if (serverController != null) {
             serverController.loadServerMainMenu();
         } else {
             System.out.println("Server controller is not set.");
         }
     }
 
-    public void handleChangeQueueTime(){
-        if (serverController != null){
+    public void handleChangeQueueTime() {
+        if (serverController != null) {
             int newQueueTime = Integer.parseInt(changeQueueTextfield.getText());
             int newGameTime = Integer.parseInt(changeGameTextfield.getText());
             try {
-                ChangeGameModel.changeQueueTime(newQueueTime);
-                ChangeGameModel.changeGameTime(newGameTime);
-                showAlert("You have changed the queue time");
-            } catch (Exception e){
+                if (!(null == changeQueueTextfield.getText()) && changeGameTextfield.getText() == null) {
+                    ChangeGameModel.changeQueueTime(newQueueTime);
+                    showAlert("You have changed the queue time");
+                } else if (!(null == changeGameTextfield.getText()) && changeQueueTextfield.getText() == null) {
+                    ChangeGameModel.changeGameTime(newGameTime);
+                    showAlert("You have changed the game time");
+                }else if (!(null == changeGameTextfield.getText()) && !(null == changeQueueTextfield.getText())){
+                    ChangeGameModel.changeGameTime(newGameTime);
+                    ChangeGameModel.changeQueueTime(newQueueTime);
+                    showAlert("You have changed the queue and game time");
+                }
+            } catch(Exception e){
                 e.printStackTrace();
             }
         }
@@ -116,7 +126,7 @@ public class ChangeGameController {
     public void initialize() {
         addHoverEffect(saveButton);
         addHoverEffectImage(backButton);
-        saveButton.setOnAction(event -> handleChangeQueueTime());
+        saveButton.setOnAction(event -> handleSaveButton());
         backButton.setOnAction(event -> handleBackButton());
 
     }

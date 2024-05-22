@@ -8,7 +8,7 @@ import com.google.gson.JsonParser;
 import java.io.*;
 
 public class SettingsHandler {
-    private static final String filePath = "C:/Users/mlest/IdeaProjects/2024-9342-finalsteam1/lexilogicserver/src/main/java/org/amalgam/lexilogicserver/model/microservices/gamesettings/settings.json";
+    private static final String filePath = "lexilogicserver/src/main/java/org/amalgam/lexilogicserver/model/microservices/gamesettings/settings.json";
     private static synchronized JsonObject getObjectFromFile(String path){
         File settingsFile = new File(path);
         try(BufferedReader bufferedReader = new BufferedReader(new FileReader(settingsFile))) {
@@ -68,9 +68,9 @@ public class SettingsHandler {
 
         JsonArray elementsArray = rootObject.getAsJsonArray("settings");
 
-        JsonObject settingsObject = elementsArray.get(1).getAsJsonObject();
+        JsonObject settingsObject = elementsArray.get(0).getAsJsonObject();
 
-        settingsObject.addProperty("queueTime", String.valueOf(gameTime));
+        settingsObject.addProperty("gameTime", String.valueOf(gameTime));
 
         try (FileWriter fileWriter = new FileWriter(filePath)) {
             fileWriter.write(rootObject.toString());
