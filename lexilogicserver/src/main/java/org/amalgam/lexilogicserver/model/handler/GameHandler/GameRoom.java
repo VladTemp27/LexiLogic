@@ -119,18 +119,28 @@ public class GameRoom implements NTimerCallback {
     }
 
     public void submitWord(String word, String username){
-        if(roundDone){
-            return;
+        try {
+            if (roundDone) {
+                return;
+            }
+            if (checkIfDupe(word)) {
+                broadcast(username, GameRoomResponseBuilder.buildInvalidWordResponse());
+                return;
+            } // should just throw exception of duped word
+
+            if (wordBox.verifyWord(word) == 0) {
+                broadcast(username, GameRoomResponseBuilder.buildInvalidWordResponse());
+                return;
+            } // should just throw exception
+
+            PlayerGameDetail gameDetail = details.get(username);
+            gameDetail.addWord(word);
+            details.replace(username, gameDetail);
+
+            updatePoints(username);
+        }catch(Exception e){
+            e.printStackTrace();
         }
-        if(checkIfDupe(word)) return; // should just throw exception of duped word
-
-        if(wordBox.verifyWord(word)==0)return; // should just throw exception
-
-        PlayerGameDetail gameDetail = details.get(username);
-        gameDetail.addWord(word);
-        details.replace(username, gameDetail);
-
-        updatePoints(username);
     }
 
     private void updatePoints(String username){
