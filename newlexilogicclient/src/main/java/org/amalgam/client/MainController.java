@@ -1,5 +1,6 @@
 package org.amalgam.client;
 
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
@@ -9,6 +10,8 @@ import javafx.stage.Stage;
 import org.amalgam.Service.GameServiceModule.GameService;
 import org.amalgam.UIControllers.PlayerCallback;
 import org.amalgam.backend.microservices.serverconnection.ORBConnection;
+import org.amalgam.client.game.GameController;
+import org.amalgam.client.howtoplay.HowToPlayController;
 import org.amalgam.client.leaderboards.LeaderboardsController;
 import org.amalgam.client.leaderboards.LeaderboardsPanel;
 import org.amalgam.client.loading.LoadingController;
@@ -31,36 +34,44 @@ public class MainController {
     /**
      * Controller and Panel Variables
      */
-    static LoginController loginController;
-    static AnchorPane loginPanel;
+    public static LoginController loginController;
+    public static AnchorPane loginPanel;
 
-    static SignUpController signUpController;
-    static AnchorPane signUpPanel;
+    public static SignUpController signUpController;
+    public static AnchorPane signUpPanel;
 
-    static MatchHistoryController matchHistoryController;
-    static AnchorPane matchHistoryPanel;
+    public static MatchHistoryController matchHistoryController;
+    public static AnchorPane matchHistoryPanel;
 
-    static ProfileController profileController;
-    static AnchorPane profilePane;
+    public static ProfileController profileController;
+    public static AnchorPane profilePane;
 
-    static MainMenuController mainMenuController;
-    static AnchorPane mainMenuPane;
+    public static MainMenuController mainMenuController;
+    public static AnchorPane mainMenuPane;
 
-    static ProfileChangeUsernameController profileChangeUsernameController;
-    static AnchorPane changeUsernamePane;
+    public static ProfileChangeUsernameController profileChangeUsernameController;
+    public static AnchorPane changeUsernamePane;
 
-    static ProfileChangePassController profileChangePassController;
-    static AnchorPane changePassPane;
+    public static ProfileChangePassController profileChangePassController;
+    public static AnchorPane changePassPane;
 
-    static LoadingController loadingController;
-    static AnchorPane loadingPane;
+    public static LoadingController loadingController;
+    public static AnchorPane loadingPane;
 
-    static LeaderboardsController leaderboardsController;
-    static AnchorPane leaderboardsPane;
+    public static LeaderboardsController leaderboardsController;
+    public static AnchorPane leaderboardsPane;
+
+    public static GameController gameController;
+    public static AnchorPane gamePane;
+
+    public static HowToPlayController howToPlayController;
+    public static AnchorPane howToPlayPane;
+
+
     public static ORBConnection orbConnection;
 
     public MainController() {
-        orbConnection = new ORBConnection(2018, "localhost");
+        orbConnection = new ORBConnection(2020, "localhost");
         try {
             orbConnection.start();
         } catch (InvalidName | AdapterInactive e) {
@@ -78,7 +89,7 @@ public class MainController {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/org/amalgam/client/views/login/login-view.fxml"));
             AnchorPane loginPane = fxmlLoader.load();
 
-            InputStream inputStream = getClass().getResourceAsStream("/org/amalgam/icons/Logo.png");
+            InputStream inputStream = getClass().getResourceAsStream("/org/amalgam/icons/newLogo.png");
             if (inputStream != null) {
                 Image image = new Image(inputStream);
                 stage.getIcons().add(image);
@@ -153,7 +164,7 @@ public class MainController {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/org/amalgam/client/views/matchhistory/matchhistory-view.fxml"));
             AnchorPane matchHistoryPane = fxmlLoader.load();
 
-            InputStream inputStream = getClass().getResourceAsStream("/org/amalgam/icons/Logo.png");
+            InputStream inputStream = getClass().getResourceAsStream("/org/amalgam/icons/newLogo.png");
 
             if (inputStream != null) {
                 Image image = new Image(inputStream);
@@ -191,7 +202,7 @@ public class MainController {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/org/amalgam/client/views/profile/profile-view.fxml"));
             AnchorPane profilePane = fxmlLoader.load();
 
-            InputStream inputStream = getClass().getResourceAsStream("/org/amalgam/icons/Logo.png");
+            InputStream inputStream = getClass().getResourceAsStream("/org/amalgam/icons/newLogo.png");
 
             if (inputStream != null) {
                 Image image = new Image(inputStream);
@@ -229,7 +240,7 @@ public class MainController {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/org/amalgam/client/views/profile/profileChangeUsername-view.fxml"));
             AnchorPane changeUsernamePane = fxmlLoader.load();
 
-            InputStream inputStream = getClass().getResourceAsStream("/org/amalgam/icons/Logo.png");
+            InputStream inputStream = getClass().getResourceAsStream("/org/amalgam/icons/newLogo.png");
 
             if (inputStream != null) {
                 Image image = new Image(inputStream);
@@ -267,7 +278,7 @@ public class MainController {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/org/amalgam/client/views/profile/profileChangePass-view.fxml"));
             AnchorPane changepassPane = fxmlLoader.load();
 
-            InputStream inputStream = getClass().getResourceAsStream("/org/amalgam/icons/Logo.png");
+            InputStream inputStream = getClass().getResourceAsStream("/org/amalgam/icons/newLogo.png");
 
             if (inputStream != null) {
                 Image image = new Image(inputStream);
@@ -305,7 +316,7 @@ public class MainController {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/org/amalgam/client/views/mainmenu/mainmenu-view.fxml"));
             AnchorPane mainmenuPane = fxmlLoader.load();
 
-            InputStream inputStream = getClass().getResourceAsStream("/org/amalgam/icons/Logo.png");
+            InputStream inputStream = getClass().getResourceAsStream("/org/amalgam/icons/newLogo.png");
 
             if (inputStream != null) {
                 Image image = new Image(inputStream);
@@ -343,7 +354,7 @@ public class MainController {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/org/amalgam/client/views/game/game-view.fxml"));
             AnchorPane gamePane = fxmlLoader.load();
 
-            InputStream inputStream = getClass().getResourceAsStream("/org/amalgam/icons/Logo.png");
+            InputStream inputStream = getClass().getResourceAsStream("/org/amalgam/icons/newLogo.png");
 
             if (inputStream != null) {
                 Image image = new Image(inputStream);
@@ -361,9 +372,9 @@ public class MainController {
             stage.setScene(scene);
             stage.setResizable(false);
             stage.setTitle("Lexi Logic");
-            MainMenuController mainMenuController = fxmlLoader.getController();
-            mainMenuController.setMainController(this);
-            mainMenuController.initialize();
+            gameController = fxmlLoader.getController();
+            gameController.setMainController(this);
+            gameController.initialize();
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -373,14 +384,18 @@ public class MainController {
     Load and display the loading view
      */
     public void loadLoadingView(){
-        try {
-            Font.loadFont(getClass().getResourceAsStream("/org/amalgam/fonts/BowlbyOneSC.ttf"), 20);
+        Platform.runLater(() -> {
+             Font.loadFont(getClass().getResourceAsStream("/org/amalgam/fonts/BowlbyOneSC.ttf"), 20);
             Font.loadFont(getClass().getResourceAsStream("/org/amalgam/fonts/Brygada1918.ttf"), 20);
+             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/org/amalgam/client/views/loading/loading-view.fxml"));
+            AnchorPane loadingPane = null;
+            try {
+                loadingPane = fxmlLoader.load();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
 
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/org/amalgam/client/views/loading/loading-view.fxml"));
-            AnchorPane loadingPane = fxmlLoader.load();
-
-            InputStream inputStream = getClass().getResourceAsStream("/org/amalgam/icons/Logo.png");
+            InputStream inputStream = getClass().getResourceAsStream("/org/amalgam/icons/newLogo.png");
 
             if (inputStream != null) {
                 Image image = new Image(inputStream);
@@ -400,13 +415,15 @@ public class MainController {
             stage.setTitle("Lexi Logic");
             LoadingController loadingController = fxmlLoader.getController();
             loadingController.setMainController(this);
-            loadingController.initialize();
+            LoginController.playerCallbackImpl.setControllerInterface(loadingController);
 
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+            new Thread(() -> {
+                loadingController.findMatch();;
+            }).start();
+
+        });
+
     }
-
     /**
      * Load and display leaderboards view
      */
@@ -418,7 +435,7 @@ public class MainController {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/org/amalgam/client/views/leaderboards/leaderboards-view.fxml"));
             AnchorPane leaderboardsPane = fxmlLoader.load();
 
-            InputStream inputStream = getClass().getResourceAsStream("/org/amalgam/icons/Logo.png");
+            InputStream inputStream = getClass().getResourceAsStream("/org/amalgam/icons/newLogo.png");
 
             if (inputStream != null) {
                 Image image = new Image(inputStream);
@@ -444,6 +461,40 @@ public class MainController {
             e.printStackTrace();
         }
     }
+    public void loadHowToPlayView(){
+        try {
+            Font.loadFont(getClass().getResourceAsStream("/org/amalgam/fonts/BowlbyOneSC.ttf"), 20);
+            Font.loadFont(getClass().getResourceAsStream("/org/amalgam/fonts/Brygada1918.ttf"), 20);
+
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/org/amalgam/client/views/howtoplay/howtoplay-view.fxml"));
+            AnchorPane howToPlayPane = fxmlLoader.load();
+
+            InputStream inputStream = getClass().getResourceAsStream("/org/amalgam/icons/newLogo.png");
+
+            if (inputStream != null) {
+                Image image = new Image(inputStream);
+                stage.getIcons().add(image);
+            } else {
+                System.err.println("Failed to load image: Logo.png");
+            }
+
+            Scene scene = new Scene(howToPlayPane);
+
+            if (stage == null) {
+                throw new IllegalStateException("Stage is not set. Please set the stage before calling the panel.");
+            }
+
+            stage.setScene(scene);
+            stage.setResizable(false);
+            stage.setTitle("Lexi Logic");
+            HowToPlayController howToPlayController = fxmlLoader.getController();
+            howToPlayController.setMainController(this);
+            howToPlayController.initialize();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     /**
      * Getters and Setters of Controllers and Panels
@@ -458,4 +509,6 @@ public class MainController {
     public MainMenuController getMainMenuController(){return mainMenuController;}
     public LoadingController getLoadingController(){return loadingController;}
     public LeaderboardsController getLeaderboardsController(){return leaderboardsController;}
+    public HowToPlayController getHowToPlayController(){return howToPlayController;}
+    public GameController getGameController(){return gameController;}
 }

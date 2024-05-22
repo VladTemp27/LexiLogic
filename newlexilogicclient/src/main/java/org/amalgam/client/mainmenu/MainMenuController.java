@@ -1,11 +1,15 @@
 package org.amalgam.client.mainmenu;
 
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.layout.AnchorPane;
 import org.amalgam.ControllerException.InvalidRequestException;
 import org.amalgam.client.MainController;
+
+import java.util.Optional;
 
 public class MainMenuController {
     //private variables
@@ -21,6 +25,8 @@ public class MainMenuController {
     private Button exitButton;
     @FXML
     private Button profileButton;
+    @FXML
+    private Button howToPlayButton;
     private MainController mainController;
 
     /**
@@ -68,7 +74,6 @@ public class MainMenuController {
     /**
      * Fetches and updates data remotely.
      * This method is called to update the data displayed in the UI.
-     *
      */
     public void fetchAndUpdate(String jsonString, String dataType) throws InvalidRequestException {
 
@@ -76,8 +81,9 @@ public class MainMenuController {
 
     @FXML
     public void handlePlay(){
-        // insert main controller statement for opening play panel
+        mainController.loadLoadingView();
     }
+
    @FXML
    public void handleProfile(){
        if (mainController != null) {
@@ -90,7 +96,6 @@ public class MainMenuController {
    public void handleLeaderboards(){
         // handle to load leaderboards view
        mainController.loadLeaderboardsView();
-       System.out.println("Leaderboard panel");
    }
    @FXML
    public void handleHistory(){
@@ -102,8 +107,26 @@ public class MainMenuController {
    }
    @FXML
    public void handleExit(){
-        // insert exception for exiting application
-   }
+       Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+       alert.setTitle("Exit Confirmation");
+       alert.setHeaderText(null);
+       alert.setContentText("Are you sure you want to exit the application?");
+
+       Optional<ButtonType> result = alert.showAndWait();
+       if (result.isPresent() && result.get() == ButtonType.OK) {
+           // Exit the application
+           Platform.exit();
+       }
+    }
+
+    @FXML
+    public void handleHowToPlay(){
+        if (mainController != null){
+            mainController.loadHowToPlayView();
+        }else {
+            System.out.println("Main controller is not set.");
+        }
+    }
     /**
      * Initializes the controller.
      * This method sets up the UI components and initializes the data model.
@@ -115,10 +138,12 @@ public class MainMenuController {
         addHoverEffect(historyButton);
         addHoverEffect(exitButton);
         addHoverEffect(playButton);
+        addHoverEffect(howToPlayButton);
         playButton.setOnAction(event -> handlePlay());
         profileButton.setOnAction(event -> handleProfile());
         leaderboardsButton.setOnAction(event -> handleLeaderboards());
         historyButton.setOnAction(event -> handleHistory());
         exitButton.setOnAction(event -> handleExit());
+        howToPlayButton.setOnAction(event -> handleHowToPlay());
     }
 }

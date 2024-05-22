@@ -3,12 +3,14 @@ package org.amalgam.client.profile;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.effect.ColorAdjust;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import org.amalgam.ControllerException.InvalidRequestException;
 import org.amalgam.client.MainController;
+import org.amalgam.client.login.LoginController;
 
 public class ProfileChangeUsernameController {
     // private variables
@@ -20,7 +22,11 @@ public class ProfileChangeUsernameController {
     private TextField newUsernameField;
     @FXML
     private Button saveButton;
+    @FXML
+    private Label usernameLabel;
     private MainController mainController;
+    public ProfileChangeUsernameModel profileChangeUsernameModel = new ProfileChangeUsernameModel(MainController.orbConnection
+    , LoginController.playerCallback);
 
     /**
      * Sets the Main Controller.
@@ -93,10 +99,12 @@ public class ProfileChangeUsernameController {
     @FXML
     public void handleSave(){
         // handles the save button when the username is changed
+        profileChangeUsernameModel.changeUsername(newUsernameField.getText());
     }
     @FXML
     public void handleBack(){
         // handle action to go back to profile view when pressed
+        mainController.loadProfileView();
     }
     /**
      * Initializes the controller.
@@ -104,7 +112,7 @@ public class ProfileChangeUsernameController {
      */
     @FXML
     public void initialize() {
-
+        usernameLabel.setText(LoginController.username);
         addHoverEffect(saveButton);
         addHoverEffectImage(backButton);
         saveButton.setOnAction(event -> handleSave());

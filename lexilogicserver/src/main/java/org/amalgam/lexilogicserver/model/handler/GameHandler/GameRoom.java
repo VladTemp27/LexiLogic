@@ -2,6 +2,9 @@ package org.amalgam.lexilogicserver.model.handler.GameHandler;
 
 import org.amalgam.ControllerException.InvalidRequestException;
 import org.amalgam.UIControllers.PlayerCallback;
+import org.amalgam.lexilogicserver.model.DAL.GameDetailDAL;
+import org.amalgam.lexilogicserver.model.DAL.LeaderBoardDAL;
+import org.amalgam.lexilogicserver.model.DAL.LobbyDAL;
 import org.amalgam.lexilogicserver.model.microservices.NTimer;
 import org.amalgam.lexilogicserver.model.microservices.NTimerCallback;
 import org.amalgam.lexilogicserver.model.microservices.wordbox.Generator;
@@ -37,7 +40,7 @@ public class GameRoom implements NTimerCallback {
         this.playerCallbacks = playerCallbacks;
         currentRound = 1;
         generateWordBox();
-        stagePlayers();
+        //stagePlayers();
 
     }
 
@@ -52,21 +55,22 @@ public class GameRoom implements NTimerCallback {
         roundStart();
     }
 
-    private void stagePlayers() {
+    public void stagePlayers() {
         details = defaultDetails; // resets details to default unready state
         String w;
         if((w = winnerAvailable())!=null){
             try{
-                String response = ""; // Use response builder for this, broadcast state game done, + winner(variable w)
+                String response = GameRoomResponseBuilder.buildWinnerResponse(w); // Use response builder for this, broadcast state game done, + winner(variable w)
                 broadcast(response);
-                //TODO convert this to reference objects and push to database using DAL
+                int lobbyID = LobbyDAL.insertGameRoomAsLobby(this);
+                updatePlayerDataDB(lobbyID);
             }catch(Exception e){
                 e.printStackTrace();
             }
         }
         roundDone = false;
         //give initial gameroom object + state = staging(countdown 5 secs then send request ready)
-        String jsonString = ""; //Use response builder here
+        String jsonString = GameRoomResponseBuilder.buildStagePlayersResponse(this,5); //Use response builder here
         try {
             broadcast(jsonString);
         }catch(Exception e){
@@ -74,11 +78,23 @@ public class GameRoom implements NTimerCallback {
         }
     }
 
+    public char[][] getCharMatrix (){
+        return wordBox.getWordMatrix();
+    }
+
+    public void updatePlayerDataDB(int lobbyID){
+        List<String> keys = new ArrayList<>(details.keySet());
+        for(String key: keys){
+            PlayerGameDetail detail = details.get(key);
+            GameDetailDAL.insertGameDetailFromPlayerDetail(detail, lobbyID);
+            LeaderBoardDAL.updateLeaderBoard(detail);
+        }
+    }
+
     private void roundStart(){
         try {
             //Use GameRoomResponseBuilder here to tell clients state is game started + game rooms 😁
-            String data = "";
-
+            String data = GameRoomResponseBuilder.buildGameStartedResponse(this);
             broadcast(data);
         }catch(InvalidRequestException e){
             System.out.println(e.getMessage());
@@ -99,22 +115,32 @@ public class GameRoom implements NTimerCallback {
 
     //call this to generate a wordBox, generates a new wordbox for every invocation
     private void generateWordBox() throws FileNotFoundException {
-        wordBox = new WordBox(new Generator(new Reader("file"), true, 6, 6));
+        wordBox = new WordBox(new Generator(new Reader("lexilogicserver/src/main/java/org/amalgam/lexilogicserver/model/microservices/wordbox/words.txt"), false, 4, 5));
     }
 
     public void submitWord(String word, String username){
-        if(roundDone){
-            return;
+        try {
+            if (roundDone) {
+                return;
+            }
+            if (checkIfDupe(word)) {
+                broadcast(username, GameRoomResponseBuilder.buildInvalidWordResponse());
+                return;
+            } // should just throw exception of duped word
+
+            if (wordBox.verifyWord(word) == 0) {
+                broadcast(username, GameRoomResponseBuilder.buildInvalidWordResponse());
+                return;
+            } // should just throw exception
+
+            PlayerGameDetail gameDetail = details.get(username);
+            gameDetail.addWord(word);
+            details.replace(username, gameDetail);
+
+            updatePoints(username);
+        }catch(Exception e){
+            e.printStackTrace();
         }
-        if(checkIfDupe(word)) return; // should just throw exception of duped word
-
-        if(wordBox.verifyWord(word)==0)return; // should just throw exception
-
-        PlayerGameDetail gameDetail = details.get(username);
-        gameDetail.addWord(word);
-        details.replace(username, gameDetail);
-
-        updatePoints(username);
     }
 
     private void updatePoints(String username){
@@ -271,5 +297,17 @@ public class GameRoom implements NTimerCallback {
     @Override
     public void timeIs() {
 
+    }
+
+    public LinkedHashMap<Integer, String> getRounds() {
+        return rounds;
+    }
+
+    public int getCurrentRound() {
+        return currentRound;
+    }
+
+    public int getSecondsRoundDuration() {
+        return secondsRoundDuration;
     }
 }

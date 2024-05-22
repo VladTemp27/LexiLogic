@@ -20,6 +20,10 @@ public class PlayerGameDetail {
     public PlayerGameDetail() {
     }
 
+    public LinkedList<String> getDupedWords() {
+        return dupedWords;
+    }
+
     public String getUsername() {
         return username;
     }
@@ -33,6 +37,7 @@ public class PlayerGameDetail {
     public LinkedList<String> getWords() {
         return words;
     }
+
 
     public void addWord(String word){
         words.add(word);

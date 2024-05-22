@@ -25,6 +25,9 @@ public class AddPlayerController {
     @FXML
     private TextField usernameTextfield;
     @FXML
+    private TextField passwordTextfield;
+
+    @FXML
     private Button backButton;
 
     private List<Player> players;
@@ -55,11 +58,9 @@ public class AddPlayerController {
         });
     }
 
-    private void addHoverEffect(Button button){
-        String originalColor = button.getStyle(); // Store the original color
-
-        button.setOnMouseEntered(e -> button.setStyle("-fx-background-color: derive(" + originalColor + ", -10%);"));
-        button.setOnMouseExited(e -> button.setStyle(originalColor));
+    private void addHoverEffect(Button button) {
+        button.setOnMouseEntered(e -> button.setStyle("-fx-background-color: derive(#9CA16F, -10%);"));
+        button.setOnMouseExited(e -> button.setStyle("-fx-background-color: #9CA16F;"));
     }
 
     private void showAlert(String message){
@@ -74,8 +75,10 @@ public class AddPlayerController {
     public void handleAddPlayer(){
         if(serverController != null){
             String username = usernameTextfield.getText();
+            String password = passwordTextfield.getText();
             if (!username.isEmpty()) {
-                // TODO: Connect to microservice for adding player (server)
+
+             AddPlayerModel.process(username,password);
             } else {
                 showAlert("Username cannot be empty.");
             }

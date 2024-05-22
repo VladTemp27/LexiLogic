@@ -9,10 +9,11 @@ import org.amalgam.ControllerException.InvalidRequestException;
 import org.amalgam.PlayerCallbackImpl;
 import org.amalgam.UIControllers.PlayerCallback;
 import org.amalgam.UIControllers.PlayerCallbackHelper;
+import org.amalgam.Utils.Exceptions.InvalidCredentialsException;
+import org.amalgam.Utils.Exceptions.UserExistenceException;
 import org.amalgam.client.MainController;
 import org.omg.PortableServer.POAPackage.ServantNotActive;
 import org.omg.PortableServer.POAPackage.WrongPolicy;
-import sun.security.tools.keytool.Main;
 
 public class LoginController {
 
@@ -30,6 +31,7 @@ public class LoginController {
     private MainController mainController;
     private LoginModel loginModel = new LoginModel(MainController.orbConnection, null);
     public static PlayerCallback playerCallback;
+    public static PlayerCallbackImpl playerCallbackImpl;
     public static String username;
     public static String password;
 
@@ -72,7 +74,7 @@ public class LoginController {
      * @return A string representing the objects used.
      */
     public void setObjectsUser(String objects) throws InvalidRequestException {
-
+        // Method implementation needed
     }
 
     /**
@@ -81,11 +83,11 @@ public class LoginController {
      *
      */
     public void fetchAndUpdate(String jsonString, String dataType) throws InvalidRequestException {
-
+        // Method implementation needed
     }
 
     private boolean loginAuthentication(String username, String password) {
-        PlayerCallbackImpl playerCallbackImpl = new PlayerCallbackImpl();
+        playerCallbackImpl = new PlayerCallbackImpl();
         playerCallbackImpl.username(username);
         LoginController.playerCallback = null;
         try {
@@ -94,7 +96,19 @@ public class LoginController {
             throw new RuntimeException(e);
         }
         loginModel.setPlayerCallback(playerCallback);
-        return loginModel.login(password);
+
+        try {
+            return loginModel.login(password);
+        } catch (RuntimeException e) {
+            if (e.getCause() instanceof InvalidCredentialsException) {
+                showAlert("Invalid username or password");
+                return false;
+            } else if (e.getCause() instanceof UserExistenceException) {
+                showAlert("User does not exist");
+                return false;
+            }
+            throw e;
+        }
     }
 
     /**

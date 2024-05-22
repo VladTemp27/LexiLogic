@@ -34,7 +34,7 @@ CREATE TABLE IF NOT EXISTS `gamedetails` (
   `totalPoints` int DEFAULT NULL,
   PRIMARY KEY (`playerID`,`lobbyID`),
   KEY `lobbyID` (`lobbyID`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `gamedetails`
@@ -57,7 +57,7 @@ CREATE TABLE IF NOT EXISTS `leaderboards` (
   `totalPoints` int DEFAULT NULL,
   PRIMARY KEY (`leaderBoardID`),
   KEY `userID` (`userID`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `leaderboards`
@@ -79,7 +79,7 @@ CREATE TABLE IF NOT EXISTS `lobby` (
   `createdBy` varchar(255) DEFAULT NULL,
   `winner` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`lobbyID`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `lobby`
@@ -103,7 +103,7 @@ CREATE TABLE IF NOT EXISTS `player` (
   `lastLogin` date DEFAULT NULL,
   `forDeletion` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`playerID`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `player`

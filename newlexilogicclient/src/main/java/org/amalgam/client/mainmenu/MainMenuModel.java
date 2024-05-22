@@ -16,7 +16,7 @@ public class MainMenuModel {
         matchMakeMicroservice = new MatchMakeMicroservice();
     }
 
-    public String matchMake(){
-        return matchMakeMicroservice.process(orbConnection, playerCallback);
-    }
+//    public String matchMake(){
+//        return matchMakeMicroservice.process(orbConnection, playerCallback);
+//    }
 }

@@ -23,7 +23,7 @@ public class PlayerServiceImpl extends PlayerServicePOA {
     LinkedList<PlayerCallback> playerSessions = new LinkedList<>();
 
     @Override
-    public void login(PlayerCallback player_callback, String pasword) throws AlreadyLoggedInException, InvalidCredentialsException, UserExistenceException {
+    public void login(PlayerCallback player_callback, String password) throws AlreadyLoggedInException, InvalidCredentialsException, UserExistenceException {
         for(PlayerCallback callback : playerSessions){
             if(callback.username().equals(player_callback.username())){
                 throw new AlreadyLoggedInException("User "+player_callback.username()+" is already logged in");
@@ -33,14 +33,12 @@ public class PlayerServiceImpl extends PlayerServicePOA {
         if(playerFromServer==null){
             throw new UserExistenceException("User does not exist");
         }
-        if(playerFromServer.getPassword().equals(pasword)){
+        if(playerFromServer.getUsername().equals(player_callback.username()) && playerFromServer.getPassword().equals(password)){
             playerSessions.add(player_callback);
 
         }else{
             throw new InvalidCredentialsException("Invalid credentials");
         }
-
-
     }
 
     @Override
@@ -81,23 +79,24 @@ public class PlayerServiceImpl extends PlayerServicePOA {
     @Override
     public String getGameHistory(String username) throws GameHistoryUnavailableException, InGameException {
         LinkedList<GameDetail> details = GameDetailDAL.getGameDetailByPID(PlayerDAL.getPlayerByUsername(username).getUserID());
-        LinkedList<Lobby> lobbies = new LinkedList<Lobby>();
         Gson gson = new Gson();
-        for(GameDetail detail : details){
-            lobbies.add(LobbyDAL.getLobbyByID(detail.getLobbyID()));
+        JsonObject rootObject = new JsonObject();;
+        rootObject.addProperty("object", "lobby");
+        JsonArray lobbyArray = new JsonArray();
+        for (GameDetail detail : details) {
+            Lobby lobby = LobbyDAL.getLobbyByID(detail.getLobbyID());
+            if (lobby != null) {
+                JsonObject info = new JsonObject();
+                info.addProperty("lobbyID", String.valueOf(lobby.getLobbyID()));
+                info.addProperty("username", detail.getUsername());
+                info.addProperty("score", detail.getTotalPoints());
+                info.addProperty("createdBy", lobby.getCreatedBy());
+                info.addProperty("winner", lobby.getWinner());
+                lobbyArray.add(info);
+            }
         }
 
-        JsonObject rootObject = new JsonObject();
-        rootObject.addProperty("object","lobby");
-        JsonArray lobbyArray = new JsonArray();
-        for(Lobby lobby : lobbies){
-            JsonObject info = new JsonObject();
-            info.addProperty("lobbyID",String.valueOf(lobby.getLobbyID()));
-            info.addProperty("createdBy",lobby.getCreatedBy());
-            info.addProperty("winner",lobby.getWinner());
-            lobbyArray.add(info);
-        }
-        rootObject.add("lobby",lobbyArray);
+        rootObject.add("lobby", lobbyArray);
         return gson.toJson(rootObject);
     }
 }

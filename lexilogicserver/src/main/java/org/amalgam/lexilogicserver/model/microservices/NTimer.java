@@ -11,7 +11,11 @@ public class NTimer implements Runnable {
 
     @Override
     public void run() {
-        //Timer for  secondsDuration
+        try {
+            Thread.sleep(1000*secondsDuration);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
         callback.timerDone();
     }
 }
