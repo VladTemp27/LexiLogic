@@ -8,6 +8,7 @@ import javafx.scene.effect.ColorAdjust;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import org.amalgam.lexilogicserver.ServerController;
+import org.amalgam.lexilogicserver.model.microservices.gamesettings.SettingsHandler;
 
 
 public class ChangeGameController {
@@ -94,11 +95,12 @@ public class ChangeGameController {
     }
 
     public void handleChangeQueueTime(){
-
         if (serverController != null){
             int newQueueTime = Integer.parseInt(changeQueueTextfield.getText());
+            int newGameTime = Integer.parseInt(changeGameTextfield.getText());
             try {
                 ChangeGameModel.changeQueueTime(newQueueTime);
+                ChangeGameModel.changeGameTime(newGameTime);
                 showAlert("You have changed the queue time");
             } catch (Exception e){
                 e.printStackTrace();

@@ -34,7 +34,7 @@
             <Font name="Bowlby One SC Regular" size="35.0" />
          </font>
       </Label>
-      <Button fx:id="stopServerButton" layoutX="169.0" layoutY="221.0" mnemonicParsing="false" prefHeight="47.0" prefWidth="246.0" style="-fx-background-color: #E42323;" text="Stop ORBDaemon" textFill="WHITE">
+      <Button fx:id="stopServerButton" layoutX="169.0" layoutY="221.0" mnemonicParsing="false" prefHeight="47.0" prefWidth="246.0" style="-fx-background-color: #E42323;" text="Stop Server" textFill="WHITE">
          <font>
             <Font name="Brygada 1918 Regular" size="25.0" />
          </font>

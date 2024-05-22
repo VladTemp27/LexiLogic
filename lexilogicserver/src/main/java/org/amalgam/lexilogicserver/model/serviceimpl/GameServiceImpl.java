@@ -10,6 +10,7 @@ import org.amalgam.Utils.Exceptions.DuplicateWordException;
 import org.amalgam.lexilogicserver.model.DAL.LeaderBoardDAL;
 import org.amalgam.lexilogicserver.model.microservices.Matchmaking.MatchmakingService;
 import org.amalgam.lexilogicserver.model.DAL.LobbyDAL;
+import org.amalgam.lexilogicserver.model.microservices.gamesettings.SettingsHandler;
 import org.amalgam.lexilogicserver.model.utilities.referenceobjects.LeaderBoard;
 
 import java.io.FileNotFoundException;
@@ -105,8 +106,9 @@ public class GameServiceImpl extends GameServicePOA {
         }
 
         try {
-            GameRoom gameRoom = new GameRoom(roomID, playerDetailsMap, playerCallbacksMap, 10);
+            GameRoom gameRoom = new GameRoom(roomID, playerDetailsMap, playerCallbacksMap, SettingsHandler.getGameTime());
             System.out.println("GameRoom Created");
+            createGameRoomResponse(roomID,players);
             if (matchmakingService.isTimerDone()) {
                 rooms.add(gameRoom);
                 System.out.println(gameRoom);

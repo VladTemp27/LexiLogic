@@ -50,6 +50,34 @@ public class SettingsHandler {
             throw new RuntimeException("Error writing to settings file", e);
         }
     }
+    public static int getGameTime(){
+        JsonObject rootObject = getObjectFromFile(filePath);
+        JsonArray elementsArray = rootObject.getAsJsonArray("settings");
+        for(JsonElement element : elementsArray){
+            JsonObject currentObject = element.getAsJsonObject();
+            String gameTime;
+            if((gameTime = currentObject.get("gameTime").getAsString()) != null){
+                return Integer.parseInt(gameTime);
+            }
+        }
+        return 0;
+    }
+
+    public static void setGameTime(int gameTime){
+        JsonObject rootObject = getObjectFromFile(filePath);
+
+        JsonArray elementsArray = rootObject.getAsJsonArray("settings");
+
+        JsonObject settingsObject = elementsArray.get(1).getAsJsonObject();
+
+        settingsObject.addProperty("queueTime", String.valueOf(gameTime));
+
+        try (FileWriter fileWriter = new FileWriter(filePath)) {
+            fileWriter.write(rootObject.toString());
+        } catch (IOException e) {
+            throw new RuntimeException("Error writing to settings file", e);
+        }
+    }
 
     public static void main(String[] args) {
         int time = getQueueTime();

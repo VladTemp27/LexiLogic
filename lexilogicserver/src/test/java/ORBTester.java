@@ -12,6 +12,7 @@ import java.util.concurrent.Executors;
 public class ORBTester implements ORBServerCallback, ORBDOperationCallback {
 	static ExecutorService executorService = Executors.newCachedThreadPool();
 	static boolean daemonRunning = false;
+	Process process;
 
 	public static void main(String[] args) throws InterruptedException {
 
@@ -46,4 +47,9 @@ public class ORBTester implements ORBServerCallback, ORBDOperationCallback {
 	public void setProcessObject(Process process) {
 
 	}
+
+//	@Override
+//	public void setProcessObject(Process process) {
+//		this.process = process;
+//	}
 }

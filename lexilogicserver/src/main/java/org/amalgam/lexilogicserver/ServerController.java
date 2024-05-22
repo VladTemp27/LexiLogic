@@ -3,6 +3,7 @@ package org.amalgam.lexilogicserver;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Font;
@@ -10,6 +11,7 @@ import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import org.amalgam.lexilogicserver.model.microservices.daemonHandler.ORBDException;
 import org.amalgam.lexilogicserver.model.microservices.daemonHandler.ORBDOperationCallback;
+import org.amalgam.lexilogicserver.model.microservices.daemonHandler.ORBDRunner;
 import org.amalgam.lexilogicserver.model.microservices.serverHandler.ORBServer;
 import org.amalgam.lexilogicserver.model.microservices.serverHandler.ORBServerCallback;
 import org.amalgam.lexilogicserver.views.accountdeletion.AccountDeletionController;
@@ -24,9 +26,7 @@ import org.omg.CORBA.ORB;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
+import java.util.concurrent.*;
 
 public class ServerController implements ORBDOperationCallback,ORBServerCallback {
     public Stage stage;
@@ -49,8 +49,9 @@ public class ServerController implements ORBDOperationCallback,ORBServerCallback
     public static AnchorPane runORBDRunningPane;
 
     public static Future<Integer> ORBExitCode;
-    private ExecutorService serverExecutor = Executors.newSingleThreadExecutor();
-
+    public static Process process;
+    public static ExecutorService serverExecutor;
+    public static Semaphore semaphore = new Semaphore(1);
     public static boolean isServerRunning = false;
     public static boolean isDaemonRunning = false;
 
@@ -87,22 +88,44 @@ public class ServerController implements ORBDOperationCallback,ORBServerCallback
      */
     public void startServer() {
         // Initialize and start the server
-        serverExecutor.submit(new ORBServer(this,port, hostname));
-        if(!isServerRunning){
-            System.out.println("Server failed");
-            return;
+        try {
+            semaphore.acquire(); // Acquire semaphore before starting the server
+            serverExecutor = Executors.newSingleThreadExecutor();
+            serverExecutor.submit(new ORBServer(this, port, hostname));
+            if (!isServerRunning) {
+                // Reinitialize the executor if it is shut down
+                if (serverExecutor.isShutdown() || serverExecutor.isTerminated()) {
+                    serverExecutor = Executors.newSingleThreadExecutor();
+                }
+
+                serverExecutor.submit(new ORBServer(this, port, hostname));
+                isServerRunning = true;
+                // Check if the server is running after attempting to start it
+                showSuccess("Server started");
+            }
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            showAlert("Failed to acquire semaphore for starting server");
+        } finally {
+            semaphore.release(); // Release semaphore after starting the server
         }
-        System.out.println("Server started");
+    }
+    private void showAlert(String message) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Error");
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
     }
 
-    /**
-     * Method to stop the server by closing the main stage
-     */
-    public void stopServer() {
-        serverExecutor.shutdownNow();
-        isServerRunning = false;
-        System.out.println("Server shutdown");
+    private void showSuccess(String message) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Success");
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
     }
+
     /**
      * Loads and displays the server main menu view.
      */

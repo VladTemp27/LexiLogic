@@ -61,7 +61,7 @@ public class RunORBDRunningController {
     public void handleStopORBDButton() {
         if(ServerController.isServerRunning){
             //Prompt user to close server first
-            System.out.println("Close server first");
+            showAlert("Shutdown Server First");
             return;
         }
 

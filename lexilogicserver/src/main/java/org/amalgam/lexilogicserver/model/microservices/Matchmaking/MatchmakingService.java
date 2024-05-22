@@ -2,6 +2,7 @@ package org.amalgam.lexilogicserver.model.microservices.Matchmaking;
 
 import org.amalgam.lexilogicserver.model.microservices.NTimer;
 import org.amalgam.lexilogicserver.model.microservices.NTimerCallback;
+import org.amalgam.lexilogicserver.model.microservices.gamesettings.SettingsHandler;
 import org.amalgam.lexilogicserver.model.utilities.referenceobjects.PlayerGameDetail;
 
 import java.util.*;
@@ -12,7 +13,6 @@ public class MatchmakingService implements NTimerCallback{
     private final ConcurrentLinkedQueue<PlayerGameDetail> queue = new ConcurrentLinkedQueue<>();
     private final Semaphore queueLock = new Semaphore(1);
     private Thread timerThread;
-    private final int MATCHMAKING_TIMEOUT = 10000;
     private final AtomicBoolean timerDone = new AtomicBoolean(false);
     private ExecutorService executorService = Executors.newSingleThreadExecutor();
 
@@ -34,7 +34,7 @@ public class MatchmakingService implements NTimerCallback{
 
     public void startTimer() {
         timerDone.set(false);
-        executorService.submit(new NTimer(MATCHMAKING_TIMEOUT / 1000, this));
+        executorService.submit(new NTimer(SettingsHandler.getQueueTime(), this));
     }
 
     @Override

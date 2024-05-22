@@ -77,6 +77,13 @@ public class ServerMainMenuController{
         alert.setContentText(message);
         alert.showAndWait();
     }
+    private void showSuccess(String message){
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Success!");
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
+    }
 
     /**
      * Handles the add player button
@@ -121,7 +128,7 @@ public class ServerMainMenuController{
             boolean isServerRunning = isServerRunning();
             boolean isORBDRunning = isORBDRunning();
 
-            if (isORBDRunning) {
+            if (isORBDRunning || isServerRunning) {
                 serverController.loadRunORBDRunningView();
             } else {
                 serverController.loadRunORBD();
@@ -145,11 +152,18 @@ public class ServerMainMenuController{
     public void handleRunServerButton(){
         if (serverController != null) {
             try {
-                serverController.startServer();
-                System.out.println("Lexi Logic's Server is running");
-                serverController.loadRunServerRunning();
+                if(!ServerController.isServerRunning && ServerController.isDaemonRunning){
+                    serverController.startServer();
+                    serverController.loadRunServerRunning();
+                }else if (ServerController.isDaemonRunning){
+                    showSuccess("Server Already Running");
+                    serverController.loadRunServerRunning();
+                } else {
+                    showAlert("Run Daemon First");
+                }
             } catch (Exception e) {
-                System.out.println("Error starting server: " + e.getMessage());
+                e.printStackTrace();
+                System.out.println("Error starting server: ");
             }
         } else {
             System.out.println("Server Controller is not set.");

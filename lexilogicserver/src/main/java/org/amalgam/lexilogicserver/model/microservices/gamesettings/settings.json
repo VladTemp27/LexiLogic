@@ -1,5 +1,6 @@
 {
   "settings":[{
-    "queueTime": "10"
+    "queueTime": "10",
+    "gameTime": "30"
   }]
 }

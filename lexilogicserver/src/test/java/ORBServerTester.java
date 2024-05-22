@@ -27,12 +27,13 @@ public class ORBServerTester implements ORBServerCallback, ORBDOperationCallback
 //        program.runDaemon();
         Thread.sleep(3000);
         program.runServer();
+        program.runDaemon();
         while(program.daemonRunning){
 
         }
 //        program.process.destroy();
-        program.executorDaemon.shutdownNow();
-        program.executorServer.shutdownNow();
+//        program.executorDaemon.shutdownNow();
+//        program.executorServer.shutdownNow();
     }
 
     @Override

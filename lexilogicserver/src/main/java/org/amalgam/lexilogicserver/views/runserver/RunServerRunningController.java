@@ -9,6 +9,10 @@ import javafx.scene.layout.AnchorPane;
 import org.amalgam.lexilogicserver.ServerController;
 import org.amalgam.lexilogicserver.model.microservices.serverHandler.ORBServer;
 
+import java.util.concurrent.TimeUnit;
+
+import static org.amalgam.lexilogicserver.ServerController.isDaemonRunning;
+import static org.amalgam.lexilogicserver.ServerController.isServerRunning;
 import static sun.net.www.protocol.http.AuthCacheValue.Type.Server;
 
 public class RunServerRunningController {
@@ -64,14 +68,57 @@ public class RunServerRunningController {
             imageView.setEffect(colorAdjust);
         });
     }
+    /**
+     * Method to stop the server by closing the main stage
+     */
+    public void stopServer() {
+        try {
+            ServerController.semaphore.acquire(); // Acquire semaphore before stopping the server
+            if (ServerController.serverExecutor != null && !ServerController.serverExecutor.isShutdown()) {
+                ServerController.serverExecutor.shutdownNow();
+                try {
+                    if (!ServerController.serverExecutor.awaitTermination(5, TimeUnit.SECONDS)) {
+                        ServerController.serverExecutor.shutdownNow();
+                    }
+                } catch (InterruptedException ie) {
+                    ServerController.serverExecutor.shutdownNow();
+                    Thread.currentThread().interrupt();
+                }
+            }
+            isServerRunning = false;
 
+            if (isServerRunning) {
+                showAlert("Server failed to shutdown");
+            } else if (isDaemonRunning) {
+                showSuccess("Server shutdown");
+                serverController.loadServerMainMenu();
+            }
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            showAlert("Failed to acquire semaphore for stopping server");
+        } finally {
+            ServerController.semaphore.release(); // Release semaphore after stopping the server
+        }
+    }
+
+    private void showAlert(String message) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Error");
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
+    }
+
+    private void showSuccess(String message) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Success");
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
+    }
     @FXML
     public void handleStopServer() {
-        if (serverController != null) {
-            serverController.stopServer();
-        } else {
-            System.out.println("ServerController is not initialized.");
-        }
+            stopServer();
     }
 
     @FXML
