@@ -57,7 +57,7 @@ public class Reader {
         LinkedList<String> retrieved = new LinkedList<>();
         String word;
 
-        if((word = bReader.readLine()) != null){
+        while((word = bReader.readLine()) != null){
             if (!(retrieved.contains(word))){
                 retrieved.add(word);
             }

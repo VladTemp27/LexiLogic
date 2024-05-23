@@ -365,12 +365,7 @@
                 <Font name="Bowlby One SC Regular" size="70.0" />
             </font>
         </Label>
-        <Button fx:id="playAgainButtonGO" layoutX="355.0" layoutY="314.0" mnemonicParsing="false" style="-fx-background-color: #9CA16F;" text="PLAY AGAIN" textFill="WHITE">
-            <font>
-                <Font name="Brygada 1918 Regular" size="30.0" />
-            </font>
-        </Button>
-        <Button fx:id="backButtonGO" layoutX="228.0" layoutY="307.0" mnemonicParsing="false" style="-fx-background-color: transparent;">
+        <Button fx:id="backbtnDefeeat" layoutX="228.0" layoutY="307.0" mnemonicParsing="false" style="-fx-background-color: transparent;">
             <graphic>
                 <ImageView fitHeight="64.0" fitWidth="63.0" pickOnBounds="true" preserveRatio="true">
                     <image>
@@ -397,7 +392,7 @@
             <Font name="Brygada 1918 Regular" size="30.0" />
          </font>
       </Button>
-      <Button fx:id="backButtonV" layoutX="228.0" layoutY="307.0" mnemonicParsing="false" style="-fx-background-color: transparent;">
+      <Button fx:id="backbtnVictory" layoutX="228.0" layoutY="307.0" mnemonicParsing="false" style="-fx-background-color: transparent;">
          <graphic>
             <ImageView fitHeight="64.0" fitWidth="63.0" pickOnBounds="true" preserveRatio="true">
                <image>

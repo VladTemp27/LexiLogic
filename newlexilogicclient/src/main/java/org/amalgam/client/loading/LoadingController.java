@@ -74,7 +74,7 @@ public class LoadingController implements ControllerInterface {
         animateLog(); // animation for the loading log
     }
 
-    public void findMatch() {
+    public void findMatch()  {
         System.out.println("FINDING MATCH...");
         String response = loadingModel.matchMake();
         System.out.println("LOADING RESPONSE " + response);
@@ -101,6 +101,7 @@ public class LoadingController implements ControllerInterface {
 
     @Override
     public void uiUpdate(String jsonString) {
+        System.out.println("LOADING data"+ jsonString);
         mainController.getGameController().updateData(jsonString);
     }
 }

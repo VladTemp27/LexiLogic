@@ -77,7 +77,9 @@ public class GameRoom implements NTimerCallback {
         roundDone = false;
         //give initial gameroom object + state = staging(countdown 5 secs then send request ready)
         String jsonString = GameRoomResponseBuilder.buildStagePlayersResponse(this,5); //Use response builder here
+        System.out.println(jsonString);
         try {
+            Thread.sleep(400);
             broadcast(jsonString);
         }catch(Exception e){
             e.printStackTrace();

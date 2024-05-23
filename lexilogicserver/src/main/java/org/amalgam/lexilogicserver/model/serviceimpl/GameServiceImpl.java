@@ -153,7 +153,7 @@ public class GameServiceImpl extends GameServicePOA {
 
 
     @Override
-    public void verifyWord(String word, String username, int gameRoomID) throws InvalidWordFormatException, DuplicateWordException {
+    public synchronized void verifyWord(String word, String username, int gameRoomID) throws InvalidWordFormatException, DuplicateWordException {
         int tempIndex = getRoomIndexFromID(gameRoomID);
         System.out.println(username+" submitted word: "+word);
 //        GameRoom temp = rooms.get(tempIndex);
@@ -162,7 +162,7 @@ public class GameServiceImpl extends GameServicePOA {
 //
 //        rooms.remove(tempIndex);
 //        rooms.add(temp);
-        rooms.get(tempIndex).submitWord(word, username);
+       rooms.get(tempIndex).submitWord(word, username);
     }
 
     @Deprecated

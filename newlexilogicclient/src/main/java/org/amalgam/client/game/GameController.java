@@ -19,7 +19,6 @@ import org.amalgam.client.MainController;
 import org.amalgam.client.login.LoginController;
 
 import java.util.*;
-import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -121,15 +120,18 @@ public class GameController{
     @FXML
     private Button playAgainButtonGO;
     @FXML
-    private Button backButtonGO;
+    private Button backbtnDefeeat;
     @FXML
     private Button playAgainButtonV;
     @FXML
-    private Button backButtonV;
+    private Button backbtnVictory;
     // common private variables
     private GameModel gameModel;
     private MainController mainController;
     public static String[][] fetchLetters = new String[4][5];
+    private int roundWon;
+    private String roundWinner;
+
     /**
      * Sets the Main Controller.
      *
@@ -158,12 +160,18 @@ public class GameController{
         // Implementation needed
     }
 
+    public void backButton() {
+
+    }
+
     private void showAlert(String message) {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
+        Platform.runLater(() -> {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Error");
         alert.setHeaderText(null);
         alert.setContentText(message);
         alert.showAndWait();
+        });
     }
 
     /**
@@ -184,13 +192,7 @@ public class GameController{
                     throw new RuntimeException(e);
                 }
 
-                if(state.equals("invalid_word")){
-                    System.out.println("INVALID WORD");
-                    // TODO:Prompt user invalid word
-                }
-                if(state.equals("staging")){
-                    System.out.println("staging");
-                    Platform.runLater(() -> {
+                Platform.runLater(() -> {
                          try {
                             int x = 0;
                             for (String[] fetchLetter : fetchLetters) {
@@ -228,51 +230,6 @@ public class GameController{
                     }
                 }, 1000, 1000);
                 });
-        }
-
-        if(state.equals("game_started")){
-            System.out.println("game_started");
-            Platform.runLater(() -> {
-                     try {
-                        int x = 0;
-                        for (String[] fetchLetter : fetchLetters) {
-                            for (String s : fetchLetter) {
-                                letterLabels[x].setText(s);
-                                x++;
-                            }
-                        }
-                    } catch (Exception e) {
-                        System.out.println(e.getMessage());
-                        System.out.println("fetchAndDisplayLetters");
-                    }
-
-
-                     final int[] countdown = {5};
-                     RCTimeLabel.setText(String.format("00:0%d", countdown[0]));
-                     timer = new Timer();
-                    timer.schedule(new TimerTask() {
-                    @Override
-                    public void run() {
-                        Platform.runLater(() -> {
-                            if (countdown[0] > 0) {
-                                countdown[0]--;
-                                RCTimeLabel.setText(String.format("00:0%d", countdown[0]));
-                                if (countdown[0] == 1) {
-                                    RCroundNumberLabel.setText("ROUND " + currentRound);
-                                }
-                                if (countdown[0] == 0) {
-                                    roundCountdownPane.setVisible(false);
-                                    gamePane.setVisible(true);
-                                    roundLabel.setText("ROUND " + currentRound);
-                                    timer.cancel();
-                                    gameStart();
-                                }
-                            }
-                        });
-                    }
-                }, 1000, 1000);
-                });
-        }
             }
             @Override
             protected void failed() {
@@ -361,22 +318,16 @@ public class GameController{
         // For this example, let's assume we have a method `determineRoundWinner` that returns the player's username.
 
         // temp data to be fixed
-        String roundWinner = determineRoundWinner();
+//        String roundWinner = determineRoundWinner();
         playerRoundsWon.put(roundWinner, playerRoundsWon.getOrDefault(roundWinner, 0) + 2);
         updateScores();
-
-        if (playerRoundsWon.get(roundWinner) >= 3) {
-            endGame(roundWinner);
-        } else {
+//
+//        if (playerRoundsWon.get(roundWinner) >= 3) {
+//            endGame(roundWinner);
+//        } else {
             roundCountdown();
             roundCountdownPane.setVisible(true);
-        }
-    }
-
-    private String determineRoundWinner() {
-        // Dummy implementation for determining the round winner.
-        // Replace with actual logic to determine the winner of the round.
-        return "Lou"; // Example: returning player1 as the round winner
+//        }
     }
 
     /**
@@ -395,7 +346,7 @@ public class GameController{
 
     private void updateScores() {
         // Update the scores in the UI
-        roundsWonNumberLabel.setText(String.valueOf(0));
+        roundsWonNumberLabel.setText(String.valueOf(roundWon));
 //        score1Label.setText(String.valueOf(playerRoundsWon.getOrDefault("player1", 0)));
 //        score2Label.setText(String.valueOf(playerRoundsWon.getOrDefault("player2", 0)));
 //        score3Label.setText(String.valueOf(playerRoundsWon.getOrDefault("player3", 0)));
@@ -418,6 +369,9 @@ public class GameController{
                     sixthLetter, seventhLetter, eightLetter, ninthLetter, tenthLetter,
                     eleventhLetter, twelfthLetter, thirteenthLetter, fourteenthLetter, fifteenthLetter,
                     sixteenthLetter, seventeenthLetter, eighteenthLetter, nineteenthLetter, twentiethLetter};
+
+            backbtnVictory.setOnAction(event -> victoryPanelBackButton());
+            backbtnDefeeat.setOnAction(event -> defeatPanelBackButton());
 //
 //            // Initialize player round wins
 //            playerRoundsWon.put("player1", 0);
@@ -436,6 +390,16 @@ public class GameController{
             System.out.println(e.getMessage());
         }
     }
+    @FXML
+    private void defeatPanelBackButton() {
+        mainController.loadGameView();
+    }
+
+    @FXML
+    private void victoryPanelBackButton() {
+        mainController.loadGameView();
+    }
+
     private String state = "";
     public void updateData(String json){
         System.out.println("GAME "+json);
@@ -445,13 +409,31 @@ public class GameController{
         //Checker for state
         //This should be the logic inside updateData
         state = rootObject.get("state").getAsString();
+        if (state.equals("game_started")) {
+            gameStart();
+        }
+
+        if (state.equals(""))
+
           if(state.equals("game_done")){
-//            String winner = rootObject.get("winner").getAsString();
-              victoryPanel.setVisible(true);
+              Platform.runLater(() -> {
+                  String winner = rootObject.get("winner").getAsString();
+            if (Objects.equals(LoginController.username, winner)){
+                victoryPanel.setVisible(true);
+            } else {
+                gameOverPanel.setVisible(true);
+            }
+
+              });           }
+
+          if (state.equals("invalid_word")) {
+              showAlert("INVALID WORD");
           }
 
         //End Checker for state
-        roomID = rootObject.get("room_id").getAsInt();
+        if (rootObject.get("room_id") != null) {
+            roomID = rootObject.get("room_id").getAsInt();
+        }
 //        System.out.println("ROOM "+roomID);
 
         //For current round
@@ -481,36 +463,35 @@ public class GameController{
          //End
 
         //Round History
-//        JsonElement roundHistory = rootObject.getAsJsonObject("rounds");
-//        if (roundHistory != null) {
-//            JsonObject round = roundHistory.g
-//            for (String roundKeys : roundHistory.keySet()) {
-//                JsonObject round = roundHistory.getAsJsonObject(roundKeys);
-//                String s = round.get("round_1").getAsString();
-//                System.out.println(s);
-////            String roundWinner = roundKeys + " winner : "+roundHistory.get(roundKeys).getAsString();
-////            System.out.println(roundWinner);
+//        Collection<String> values = parseRounds(json).values();
+        parseRounds(json);
+//        for (String winner : values) {
+//            if (winner.equals(LoginController.username)){
+//                roundWinner = winner;
 //            }
-//        } else {
-//            System.out.println("no rounds yet.");
 //        }
         //End
 
+        getPoints(rootObject);
+
     }
 
-    private LinkedHashMap<String, String> parseRounds(JsonObject gameRoomJsonObject){
-        LinkedHashMap<String, String> rounds = new LinkedHashMap<>();
-        JsonObject roundsObject = gameRoomJsonObject.getAsJsonObject("rounds");
+    private LinkedHashMap<String, String> parseRounds(String json){
+        try {
+            JsonElement rootElement = JsonParser.parseString(json);
+            JsonObject rootObject = rootElement.getAsJsonObject();
+            LinkedHashMap<String, String> rounds = new LinkedHashMap<>();
+            JsonObject roundsObject = rootObject.getAsJsonObject("rounds");
 
-        JsonArray array = roundsObject.getAsJsonArray();
+            JsonArray array = roundsObject.getAsJsonArray();
 
-
-        int index = 0; // Start index at 0 for array indexing
-        for (JsonElement element : array) {
-            String roundKey = "round_" + (index++); // Use index and increment within the loop
-            String winner = element.getAsString();
-            rounds.put(roundKey, winner);
-        }
+            System.out.println("PARSING ROUNDS");
+            int index = 0; // Start index at 0 for array indexing
+            for (JsonElement element : array) {
+                String roundKey = "round_" + (index++); // Use index and increment within the loop
+                String winner = element.getAsString();
+                rounds.put(roundKey, winner);
+            }
 
 //        for(String key: roundsObject.keySet()){
 //            String winner = roundsObject.get(key).getAsString();
@@ -518,23 +499,33 @@ public class GameController{
 //        }
 
 
-        return rounds;
+            return rounds;
+        } catch (Exception e){
+            System.out.println(e.getMessage());
+            e.getCause();
+        }
+        return null;
     }
 
     public LinkedHashMap<String, Integer> getPoints(JsonObject rootObject){
-        LinkedHashMap<String, Integer> pointsList = new LinkedHashMap<>();
+        try {
+            LinkedHashMap<String, Integer> pointsList = new LinkedHashMap<>();
 
-        JsonObject jsonObject = rootObject.getAsJsonObject("gameRoom");
+            JsonObject jsonObject = rootObject.getAsJsonObject("gameRoom");
 
-        for(String key : jsonObject.keySet()){
-            JsonObject userObject = jsonObject.getAsJsonObject(key);
+            for (String key : jsonObject.keySet()) {
+                JsonObject userObject = jsonObject.getAsJsonObject(key);
 
-            int points = userObject.get("points").getAsInt();
+                int points = userObject.get("points").getAsInt();
 
-            pointsList.put(key, points );
-            System.out.println(key+":"+points);
+                pointsList.put(key, points);
+                System.out.println(key + ":" + points);
+            }
+            return pointsList;
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        return pointsList;
+        return null;
     }
 
     private static void wordBoxMatrix(JsonElement cElement) {
