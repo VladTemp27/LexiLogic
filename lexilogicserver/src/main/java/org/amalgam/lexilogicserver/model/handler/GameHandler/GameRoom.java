@@ -296,6 +296,9 @@ public class GameRoom implements NTimerCallback {
         //Finds if another instance of this highest value is available (tie)
         boolean tie = false;
         for(String key : keys){
+            if(key.equals(keyWithMaxValue)){
+                continue;
+            }
             if(details.get(key).getPoints()==details.get(keyWithMaxValue).getPoints()){
                 tie = true;
             }
