@@ -17,10 +17,8 @@ import javafx.scene.layout.GridPane;
 import org.amalgam.ControllerException.InvalidRequestException;
 import org.amalgam.client.MainController;
 import org.amalgam.client.login.LoginController;
-import java.util.Timer;
-import java.util.TimerTask;
-import java.util.HashMap;
-import java.util.Map;
+
+import java.util.*;
 import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -498,6 +496,19 @@ public class GameController{
 //        }
         //End
 
+    }
+
+    private LinkedHashMap<String, String> parseRounds(JsonObject gameRoomJsonObject){
+        LinkedHashMap<String, String> rounds = new LinkedHashMap<>();
+        JsonObject roundsObject = gameRoomJsonObject.getAsJsonObject("rounds");
+
+        for(String key: roundsObject.keySet()){
+            String winner = roundsObject.get(key).getAsString();
+            rounds.put(key, winner);
+        }
+
+
+        return rounds;
     }
 
     private static void wordBoxMatrix(JsonElement cElement) {
