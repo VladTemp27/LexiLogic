@@ -502,13 +502,37 @@ public class GameController{
         LinkedHashMap<String, String> rounds = new LinkedHashMap<>();
         JsonObject roundsObject = gameRoomJsonObject.getAsJsonObject("rounds");
 
-        for(String key: roundsObject.keySet()){
-            String winner = roundsObject.get(key).getAsString();
-            rounds.put(key, winner);
+        JsonArray array = roundsObject.getAsJsonArray();
+
+
+        int index = 0; // Start index at 0 for array indexing
+        for (JsonElement element : array) {
+            String roundKey = "round_" + (index++); // Use index and increment within the loop
+            String winner = element.getAsString();
+            rounds.put(roundKey, winner);
         }
+
+//        for(String key: roundsObject.keySet()){
+//            String winner = roundsObject.get(key).getAsString();
+//            rounds.put(key, winner);
+//        }
 
 
         return rounds;
+    }
+
+    private LinkedHashMap<String, Integer> getPoints(JsonObject rootObject){
+        LinkedHashMap<String, Integer> pointsList = new LinkedHashMap<>();
+
+        JsonObject roomObject = rootObject.getAsJsonObject("game_room");
+
+        for(String key : roomObject.keySet()){
+            JsonObject playerObject = roomObject.getAsJsonObject(key);
+            int points = playerObject.get("points").getAsInt();
+            pointsList.put(key, points);
+        }
+
+        return pointsList;
     }
 
     private static void wordBoxMatrix(JsonElement cElement) {
