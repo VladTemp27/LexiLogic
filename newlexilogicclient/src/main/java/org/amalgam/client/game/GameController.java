@@ -521,17 +521,19 @@ public class GameController{
         return rounds;
     }
 
-    private LinkedHashMap<String, Integer> getPoints(JsonObject rootObject){
+    public LinkedHashMap<String, Integer> getPoints(JsonObject rootObject){
         LinkedHashMap<String, Integer> pointsList = new LinkedHashMap<>();
 
-        JsonObject roomObject = rootObject.getAsJsonObject("game_room");
+        JsonObject jsonObject = rootObject.getAsJsonObject("gameRoom");
 
-        for(String key : roomObject.keySet()){
-            JsonObject playerObject = roomObject.getAsJsonObject(key);
-            int points = playerObject.get("points").getAsInt();
-            pointsList.put(key, points);
+        for(String key : jsonObject.keySet()){
+            JsonObject userObject = jsonObject.getAsJsonObject(key);
+
+            int points = userObject.get("points").getAsInt();
+
+            pointsList.put(key, points );
+            System.out.println(key+":"+points);
         }
-
         return pointsList;
     }
 
