@@ -93,7 +93,6 @@ public class PlayerServiceImpl extends PlayerServicePOA {
                 info.addProperty("lobbyID", String.valueOf(lobby.getLobbyID()));
                 info.addProperty("username", detail.getUsername());
                 info.addProperty("score", detail.getTotalPoints());
-                info.addProperty("createdBy", lobby.getCreatedBy());
                 info.addProperty("winner", lobby.getWinner());
                 lobbyArray.add(info);
             }

@@ -17,9 +17,6 @@ public class PlayerGameDetail {
         dupedWords = new LinkedList<>();
     }
 
-    public PlayerGameDetail() {
-    }
-
     public LinkedList<String> getDupedWords() {
         return dupedWords;
     }
