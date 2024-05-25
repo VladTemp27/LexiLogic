@@ -6,7 +6,7 @@ import org.omg.CosNaming.NamingContextPackage.CannotProceed;
 import org.omg.CosNaming.NamingContextPackage.InvalidName;
 import org.omg.CosNaming.NamingContextPackage.NotFound;
 
-public class AccountDeletionRequestMicroservice {
+public class AccountDeletionRequest {
 
     public void process (ORBConnection orbConnection, String username){
         try {

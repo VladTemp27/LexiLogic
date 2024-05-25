@@ -1,20 +1,19 @@
 package org.amalgam.client.loading;
 
 import org.amalgam.UIControllers.PlayerCallback;
-import org.amalgam.backend.microservices.game.MatchMakeMicroservice;
 import org.amalgam.backend.microservices.serverconnection.ORBConnection;
 
 public class LoadingModel {
     private final ORBConnection orbConnection;
-    private final MatchMakeMicroservice matchMakeMicroservice;
+    private final org.amalgam.backend.microservices.game.MatchMake matchMake;
     public PlayerCallback playerCallback;
     public LoadingModel (ORBConnection orbConnection, PlayerCallback playerCallback){
         this.orbConnection = orbConnection;
         this.playerCallback = playerCallback;
-        this.matchMakeMicroservice = new MatchMakeMicroservice();
+        this.matchMake = new org.amalgam.backend.microservices.game.MatchMake();
     }
     public String matchMake(){
-        return matchMakeMicroservice.process(orbConnection, playerCallback);
+        return matchMake.process(orbConnection, playerCallback);
     }
     public void setPlayerCallback(PlayerCallback playerCallback) {
         this.playerCallback = playerCallback;

@@ -1,9 +1,5 @@
 package org.amalgam.client.leaderboards;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -13,12 +9,11 @@ import javafx.scene.control.*;
 import javafx.scene.effect.ColorAdjust;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
-import org.amalgam.ControllerException.InvalidRequestException;
 import org.amalgam.backend.microservices.objectparser.JsonObjectParser;
+import org.amalgam.backend.referenceobjects.Leaderboard;
 import org.amalgam.client.MainController;
 import org.amalgam.client.UIPathResolver;
 import org.amalgam.client.login.LoginController;
-import org.amalgam.client.login.LoginModel;
 
 import java.util.List;
 
@@ -30,13 +25,13 @@ public class LeaderboardsController {
     @FXML
     private Label rankLabel;
     @FXML
-    private TableView<LeaderboardsData> leaderboardsTable;
+    private TableView<Leaderboard> leaderboardsTable;
     @FXML
-    private TableColumn<LeaderboardsData, String> rank;
+    private TableColumn<Leaderboard, String> rank;
     @FXML
-    private TableColumn<LeaderboardsData, String> username;
+    private TableColumn<Leaderboard, String> username;
     @FXML
-    private TableColumn<LeaderboardsData, Integer> score;
+    private TableColumn<Leaderboard, Integer> score;
     @FXML
     private Button backButton;
 
@@ -108,25 +103,6 @@ public class LeaderboardsController {
     }
 
     /**
-     * Gets the objects used.
-     * This method returns a string indicating the type of objects used by the controller.
-     *
-     * @return A string representing the objects used.
-     */
-    public void setObjectsUser(String objects) throws InvalidRequestException {
-
-    }
-
-    /**
-     * Fetches and updates data remotely.
-     * This method is called to update the data displayed in the UI.
-     *
-     */
-    public void fetchAndUpdate(String jsonString, String dataType) throws InvalidRequestException {
-
-    }
-
-    /**
      * Shows an alert to a user if there is an error.
      *
      * @param message
@@ -152,9 +128,9 @@ public class LeaderboardsController {
      */
     @FXML
     public void populateLeaderboardsTable() {
-        rank.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getRank()));
-        username.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getUsername()));
-        score.setCellValueFactory(data -> new SimpleIntegerProperty(data.getValue().getScore()).asObject());
+        leaderboardsTable.setItems(FXCollections.observableArrayList(
+                fetchLeaderboards()
+        ));
     }
     /**
      * Initializes the controller
@@ -164,25 +140,28 @@ public class LeaderboardsController {
     public void initialize() {
         addHoverEffect(backButton);
         backButton.setOnAction(event -> handleBack());
+        initComponents();
         populateLeaderboardsTable();
-        leaderboardsTable.setItems(FXCollections.observableArrayList(
-                getLeaderboardsDataList()
-        ));
         leaderboardsTable.setStyle("-fx-font-family: 'Brygada 1918';");
     }
-    private ObservableList<LeaderboardsData> getLeaderboardsDataList() {
-        ObservableList<LeaderboardsData> data = FXCollections.observableArrayList();
+
+    private void initComponents() {
+        rank.setCellValueFactory(data -> new SimpleStringProperty(String.valueOf(data.getValue().getPlayerRank())));
+        username.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getUsername()));
+        score.setCellValueFactory(data -> new SimpleIntegerProperty(data.getValue().getPoints()).asObject());
+    }
+
+    private ObservableList<Leaderboard> fetchLeaderboards() {
+        ObservableList<Leaderboard> data = FXCollections.observableArrayList();
         String leaderboards = leaderboardsModel.getLeaderBoards();
-        List<LeaderboardsData> leaderboardsDataList = JsonObjectParser.parseLeaderboardsData(leaderboards);
-        if (leaderboardsDataList != null) {
-                for (LeaderboardsData lb : leaderboardsDataList) {
-                    data.add(lb);
-                    if (lb.getUsername().equals(LoginController.username)){
-                        rankLabel.setText(lb.rank);
-                        scoreLabel.setText(String.valueOf(lb.getScore()));
-                    }
+        List<Leaderboard> leaderboardList = JsonObjectParser.parseLeaderBoards(leaderboards);
+        for (Leaderboard lb : leaderboardList) {
+            data.add(lb);
+            if (lb.getUsername().equals(LoginController.username)) {  // rank board
+                rankLabel.setText(String.valueOf(lb.getPlayerRank()));
+                scoreLabel.setText(String.valueOf(lb.getPoints()));
             }
         }
-       return data;
+        return data;
     }
 }

@@ -7,7 +7,7 @@ import org.omg.CosNaming.NamingContextPackage.CannotProceed;
 import org.omg.CosNaming.NamingContextPackage.InvalidName;
 import org.omg.CosNaming.NamingContextPackage.NotFound;
 
-public class FetchWordBoxMicroservice {
+public class FetchWordBox {
 
     public char [][] process (ORBConnection orbConnection, int roomID){
         try {

@@ -6,9 +6,7 @@ import org.omg.CosNaming.NamingContextPackage.CannotProceed;
 import org.omg.CosNaming.NamingContextPackage.InvalidName;
 import org.omg.CosNaming.NamingContextPackage.NotFound;
 
-public class ChangePasswordRequestMicroservice {
-
-
+public class ChangePasswordRequest {
     public void process (ORBConnection orbConnection,String username, String newPassword){
         try {
             orbConnection.retrievePlayerRequestStub().changePassword(username,newPassword);

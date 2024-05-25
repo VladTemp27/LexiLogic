@@ -7,7 +7,7 @@ import org.omg.CosNaming.NamingContextPackage.CannotProceed;
 import org.omg.CosNaming.NamingContextPackage.InvalidName;
 import org.omg.CosNaming.NamingContextPackage.NotFound;
 
-public class GetGameHistoryMicroservice {
+public class GetGameHistoryRequest {
 
     public String process (ORBConnection orbConnection, String username){
         try {

@@ -1,26 +1,24 @@
 package org.amalgam.client.game;
 
-import org.amalgam.backend.microservices.game.FetchWinnerMicroservice;
-import org.amalgam.backend.microservices.game.FetchWordBoxMicroservice;
-import org.amalgam.backend.microservices.game.PlayerReadyMicroservice;
-import org.amalgam.backend.microservices.game.VerifyWordMicroservice;
+import org.amalgam.backend.microservices.game.PlayerReady;
+import org.amalgam.backend.microservices.game.VerifyWord;
 import org.amalgam.backend.microservices.serverconnection.ORBConnection;
 
 public class GameModel{
     private final ORBConnection orbConnection;
-    private PlayerReadyMicroservice playerReadyMicroservice;
-    private VerifyWordMicroservice verifyWordMicroservice;
+    private final PlayerReady playerReady;
+    private final VerifyWord verifyWord;
     public GameModel (ORBConnection orbConnection) {
         this.orbConnection = orbConnection;
-        playerReadyMicroservice = new PlayerReadyMicroservice();
-        verifyWordMicroservice = new VerifyWordMicroservice();
+        playerReady = new PlayerReady();
+        verifyWord = new VerifyWord();
     }
 
     public void submitReadyPlayer(String username, int gameRoomID) {
-        playerReadyMicroservice.process(orbConnection, username, gameRoomID);
+        playerReady.process(orbConnection, username, gameRoomID);
     }
-    public void verifyWord (String word, String username, int gameRoomID){
-        verifyWordMicroservice.process(orbConnection,word, username, gameRoomID);
+    public void verifyWord(String word, String username, int gameRoomID){
+        verifyWord.process(orbConnection,word, username, gameRoomID);
     }
 
 }

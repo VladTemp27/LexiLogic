@@ -5,7 +5,6 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
-import org.amalgam.ControllerException.InvalidRequestException;
 import org.amalgam.PlayerCallbackImpl;
 import org.amalgam.UIControllers.PlayerCallback;
 import org.amalgam.UIControllers.PlayerCallbackHelper;

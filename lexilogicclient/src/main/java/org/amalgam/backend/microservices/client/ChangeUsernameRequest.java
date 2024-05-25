@@ -6,7 +6,7 @@ import org.omg.CosNaming.NamingContextPackage.CannotProceed;
 import org.omg.CosNaming.NamingContextPackage.InvalidName;
 import org.omg.CosNaming.NamingContextPackage.NotFound;
 
-public class ChangeUsernameRequestMicroservice {
+public class ChangeUsernameRequest {
     public void process (ORBConnection orbConnection, String username, String newUsername){
         try {
             orbConnection.retrievePlayerRequestStub().changeUsername(username,newUsername);

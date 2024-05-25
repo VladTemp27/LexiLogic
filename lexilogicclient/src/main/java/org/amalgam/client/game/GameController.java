@@ -14,7 +14,6 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
-import org.amalgam.ControllerException.InvalidRequestException;
 import org.amalgam.client.MainController;
 import org.amalgam.client.loading.LoadingController;
 import org.amalgam.client.login.LoginController;
@@ -270,15 +269,6 @@ public class GameController{
                      }
                  });
             });
-//                Task<Void> t2 = new Task<Void>() {
-//                            @Override
-//                            protected Void call() throws Exception {
-//
-//                                return null;
-//                            }
-//                        };
-//
-//                        executorService.submit(t2);
     }
 
     private void checkRoundWinner() {

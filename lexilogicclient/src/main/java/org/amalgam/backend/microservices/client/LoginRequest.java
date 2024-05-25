@@ -9,12 +9,9 @@ import org.omg.CosNaming.NamingContextPackage.CannotProceed;
 import org.omg.CosNaming.NamingContextPackage.InvalidName;
 import org.omg.CosNaming.NamingContextPackage.NotFound;
 
-public class LoginMicroservice {
-
-
+public class LoginRequest {
     public boolean process (ORBConnection orbConnection, PlayerCallback playerCallback, String password) throws AlreadyLoggedInException, InvalidCredentialsException, InvalidName, CannotProceed, NotFound, UserExistenceException {
         orbConnection.retrievePlayerRequestStub().login(playerCallback, password);
         return true;
     }
-
 }

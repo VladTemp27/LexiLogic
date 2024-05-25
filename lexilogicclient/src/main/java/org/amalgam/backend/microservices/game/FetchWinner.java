@@ -7,7 +7,7 @@ import org.omg.CosNaming.NamingContextPackage.CannotProceed;
 import org.omg.CosNaming.NamingContextPackage.InvalidName;
 import org.omg.CosNaming.NamingContextPackage.NotFound;
 
-public class FetchWinnerMicroservice {
+public class FetchWinner {
 
     public String process (ORBConnection orbConnection, int lobbyID){
         try {

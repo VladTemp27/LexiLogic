@@ -1,17 +1,16 @@
 package org.amalgam.backend.referenceobjects;
 
-public class LeaderBoard {
+public class Leaderboard {
     private int leaderBoardID;
+    private int playerRank;
     private String username;
     private int points;
 
-    private int playerRank;
+    public Leaderboard() {}
 
-    public LeaderBoard() {
-    }
-
-    public LeaderBoard(int leaderBoardID, String username, int points) {
+    public Leaderboard(int leaderBoardID, int playerRank, String username, int points) {
         this.leaderBoardID = leaderBoardID;
+        this.playerRank = playerRank;
         this.username = username;
         this.points = points;
     }
