@@ -22,6 +22,7 @@ import java.util.LinkedList;
 public class PlayerServiceImpl extends PlayerServicePOA {
     LinkedList<PlayerCallback> playerSessions = new LinkedList<>();
 
+    //TODO: Bug where invalid credentials is accepted as a session is stored
     @Override
     public synchronized void login(PlayerCallback player_callback, String password) throws AlreadyLoggedInException, InvalidCredentialsException, UserExistenceException {
         for(PlayerCallback callback : playerSessions){

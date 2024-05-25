@@ -7,13 +7,12 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="lexilogicserver" />
-        <module name="newlexilogicclient" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="backend" target="1.8" />
       <module name="clientbackend" target="1.8" />
-      <module name="lexilogicclient" target="9" />
+      <module name="newlexilogicclient" target="1.8" />
     </bytecodeTargetLevel>
   </component>
 </project>

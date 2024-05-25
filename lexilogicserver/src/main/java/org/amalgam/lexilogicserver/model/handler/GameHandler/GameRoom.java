@@ -34,6 +34,10 @@ public class GameRoom implements NTimerCallback {
 
 
 
+    //TODO: Clean code, to be more readable and maintainable
+    //      Proper encapsulation should be enforced
+    //      Categorize methods and refactor accordingly
+    //      Enforce concurrency on hashmaps, these data seem to be accessed via memory
     public GameRoom(int roomID, LinkedHashMap<String,PlayerGameDetail> details,LinkedHashMap<String,PlayerCallback> playerCallbacks ,int secondsRoundDuration) throws FileNotFoundException {
         this.roomID = roomID;
         this.defaultDetails = details;
