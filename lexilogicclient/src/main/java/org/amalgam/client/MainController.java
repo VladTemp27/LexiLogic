@@ -93,7 +93,6 @@ public class MainController {
                 String s1 = arr_str1[4];
                 String s2 = cs_arr_str[4];
                 if (s1.equals(s2)) {
-                    System.out.println(fxmlLoader.getController().toString());
                     primaryStage.setScene(scene);
                     primaryStage.show(); // show the window
                     primaryStage.setResizable(false);
@@ -103,8 +102,6 @@ public class MainController {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-
-        System.out.println(fxmlLoader.getController().toString());
 
 //        ArrayList<Object> objects = new ArrayList<>();
 //        objects.add(loginController);

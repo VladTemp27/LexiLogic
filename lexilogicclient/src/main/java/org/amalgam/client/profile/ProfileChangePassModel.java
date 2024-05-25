@@ -1,18 +1,18 @@
 package org.amalgam.client.profile;
 
 import org.amalgam.UIControllers.PlayerCallback;
-import org.amalgam.backend.microservices.client.ChangePasswordRequestMicroservice;
+import org.amalgam.backend.microservices.client.ChangePasswordRequest;
 import org.amalgam.backend.microservices.serverconnection.ORBConnection;
 
 public class ProfileChangePassModel {
     private final ORBConnection orbConnection;
     private final PlayerCallback playerCallback;
-    private final ChangePasswordRequestMicroservice changePasswordRequest;
+    private final ChangePasswordRequest changePasswordRequest;
 
     public ProfileChangePassModel (ORBConnection orbConnection, PlayerCallback playerCallback){
         this.orbConnection = orbConnection;
         this.playerCallback = playerCallback;
-        this.changePasswordRequest = new ChangePasswordRequestMicroservice();
+        this.changePasswordRequest = new ChangePasswordRequest();
     }
 
     public void changePassword (String password) {

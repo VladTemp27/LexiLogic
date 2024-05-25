@@ -27,16 +27,16 @@ public class GameController{
     public static int currentRound;
     public static int roomID;
     @FXML
-    private AnchorPane gamePane;
+    private static AnchorPane gamePane;
     @FXML
-    private AnchorPane gameOverPanel;
+    private static AnchorPane gameOverPanel;
     @FXML
-    private AnchorPane victoryPanel;
+    private static AnchorPane victoryPanel;
     // Round Countdown private variables
     @FXML
-    private AnchorPane roundCountdownPane;
+    private static AnchorPane roundCountdownPane;
     @FXML
-    private Label timeLabel; // for the 30 seconds
+    private static Label timeLabel; // for the 30 seconds
     @FXML
     private Label timeLeftLabel;
     @FXML
@@ -44,7 +44,7 @@ public class GameController{
     @FXML
     private Label roundsWonNumberLabel; // if how many rounds won label
     @FXML
-    private Label roundLabel;
+    private static Label roundLabel;
     @FXML
     private Label player1Label;
     @FXML
@@ -100,19 +100,19 @@ public class GameController{
     @FXML
     private Label twentiethLetter;
     @FXML
-    private TextField lexiTextfield;
+    private static TextField lexiTextfield;
     @FXML
-    private Label yourLexiLabel;
-    private Label[] letterLabels; // Array to hold letter labels
-    private Timer timer;
+    private static Label yourLexiLabel;
+    private static Label[] letterLabels; // Array to hold letter labels
+    private static Timer timer;
     // Player round wins tracking
-    private Map<String, Integer> playerRoundsWon = new HashMap<>();
+    private static Map<String, Integer> playerRoundsWon = new HashMap<>();
     @FXML
     private Label roundStartingInLabel;
     @FXML
-    private Label RCTimeLabel;
+    private static Label RCTimeLabel;
     @FXML
-    private Label RCroundNumberLabel;
+    private static Label RCroundNumberLabel;
     @FXML
     private Button playAgainButtonGO;
     @FXML
@@ -122,16 +122,16 @@ public class GameController{
     @FXML
     private Button backbtnVictory;
     // common private variables
-    private GameModel gameModel;
+    private static GameModel gameModel;
     public static String[][] fetchLetters = new String[4][5];
     private int roundWon;
-    private String roundWinner;
+    private static String roundWinner;
 
     public void backButton() {
 
     }
 
-    private void showAlert(String message) {
+    private static void showAlert(String message) {
         Platform.runLater(() -> {
             Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Error");
@@ -144,7 +144,7 @@ public class GameController{
     /**
      * round counter before game to start
      */
-    private void roundCountdown() {
+    private static void roundCountdown() {
         Task<Void> t1 = new Task<Void>() {
             @Override
             protected Void call() throws Exception {
@@ -158,7 +158,6 @@ public class GameController{
                 } catch (InterruptedException e) {
                     throw new RuntimeException(e);
                 }
-
                 Platform.runLater(() -> {
                          try {
                             int x = 0;
@@ -175,7 +174,7 @@ public class GameController{
                          final int[] countdown = {5};
                          RCTimeLabel.setText(String.format("00:0%d", countdown[0]));
                          timer = new Timer();
-                    timer.schedule(new TimerTask() {
+                         timer.schedule(new TimerTask() {
                     @Override
                     public void run() {
                         Platform.runLater(() -> {
@@ -190,7 +189,6 @@ public class GameController{
                                     gamePane.setVisible(true);
                                     roundLabel.setText("ROUND " + currentRound);
                                     timer.cancel();
-                                    gameStart();
                                 }
                             }
                         });
@@ -216,7 +214,7 @@ public class GameController{
      * Start the game of the program.
      */
 
-    private void gameStart() {
+    private static void gameStart() {
         final int[] gameTime = {30};
             timeLabel.setText(String.format("00:%d", gameTime[0]));
             timer = new Timer();
@@ -271,14 +269,14 @@ public class GameController{
             });
     }
 
-    private void checkRoundWinner() {
+    private static void checkRoundWinner() {
         // This method should determine the winner of the round and update the player's score.
         // For this example, let's assume we have a method `determineRoundWinner` that returns the player's username.
 
         // temp data to be fixed
 //        String roundWinner = determineRoundWinner();
-        playerRoundsWon.put(roundWinner, playerRoundsWon.getOrDefault(roundWinner, 0) + 2);
-        updateScores();
+//        playerRoundsWon.put(roundWinner, playerRoundsWon.getOrDefault(roundWinner, 0) + 2);
+//        updateScores();
 //
 //        if (playerRoundsWon.get(roundWinner) >= 3) {
 //            endGame(roundWinner);
@@ -302,13 +300,13 @@ public class GameController{
         roundLabel.setText("Round: " + currentRound);
     }
 
-    private void updateScores() {
-        // Update the scores in the UI
-        roundsWonNumberLabel.setText(String.valueOf(roundWon));
-//        score1Label.setText(String.valueOf(playerRoundsWon.getOrDefault("player1", 0)));
-//        score2Label.setText(String.valueOf(playerRoundsWon.getOrDefault("player2", 0)));
-//        score3Label.setText(String.valueOf(playerRoundsWon.getOrDefault("player3", 0)));
-    }
+//    private static void updateScores() {
+//        // Update the scores in the UI
+//        roundsWonNumberLabel.setText(String.valueOf(roundWon));
+////        score1Label.setText(String.valueOf(playerRoundsWon.getOrDefault("player1", 0)));
+////        score2Label.setText(String.valueOf(playerRoundsWon.getOrDefault("player2", 0)));
+////        score3Label.setText(String.valueOf(playerRoundsWon.getOrDefault("player3", 0)));
+//    }
 
     /**
      * Initializes the controller.
@@ -318,9 +316,8 @@ public class GameController{
     public void initialize() {
         try {
             gameModel = new GameModel(MainController.orbConnection);
-            gameOverPanel.setVisible(false);
             victoryPanel.setVisible(false);
-            roundCountdown();
+            gameOverPanel.setVisible(false);
 
             // Initialize letter labels array
             letterLabels = new Label[]{firstLetter, secondLetter, thirdLetter, fourthLetter, fifthLetter,
@@ -356,41 +353,38 @@ public class GameController{
     private void victoryPanelBackButton() {
     }
 
-    private String state = "";
-    public void updateData(String json){
+    public static void updateData(String json){
         System.out.println("GAME "+json);
         JsonElement rootElement = JsonParser.parseString(json);
         JsonObject rootObject = rootElement.getAsJsonObject();
 
         //Checker for state
-        //This should be the logic inside updateData
-        state = rootObject.get("state").getAsString();
+        String state = rootObject.get("state").getAsString();
+        if (state.equals("staging")) {
+            roundCountdown();
+        }
         if (state.equals("game_started")) {
             gameStart();
         }
 
-        if (state.equals(""))
+        if(state.equals("game_done")){
+          Platform.runLater(() -> {
+              String winner = rootObject.get("winner").getAsString();
+              if (Objects.equals(LoginController.username, winner)){
+                    victoryPanel.setVisible(true);
+              } else {
+                    gameOverPanel.setVisible(true);
+              }
+          });
+        }
 
-          if(state.equals("game_done")){
-              Platform.runLater(() -> {
-                  String winner = rootObject.get("winner").getAsString();
-            if (Objects.equals(LoginController.username, winner)){
-                victoryPanel.setVisible(true);
-            } else {
-                gameOverPanel.setVisible(true);
-            }
-
-              });           }
-
-          if (state.equals("invalid_word")) {
+        if (state.equals("invalid_word")) {
               showAlert("INVALID WORD");
-          }
+        }
 
-        //End Checker for state
         if (rootObject.get("room_id") != null) {
             roomID = rootObject.get("room_id").getAsInt();
         }
-//        System.out.println("ROOM "+roomID);
 
         //For current round
         currentRound = rootObject.get("current_round").getAsInt();
@@ -420,7 +414,7 @@ public class GameController{
 
         //Round History
 //        Collection<String> values = parseRounds(json).values();
-        parseRounds(json);
+//        parseRounds(json);
 //        for (String winner : values) {
 //            if (winner.equals(LoginController.username)){
 //                roundWinner = winner;
@@ -428,11 +422,11 @@ public class GameController{
 //        }
         //End
 
-        getPoints(rootObject);
+//        getPoints(rootObject);
 
     }
 
-    private LinkedHashMap<String, String> parseRounds(String json){
+    private static LinkedHashMap<String, String> parseRounds(String json){
         try {
             JsonElement rootElement = JsonParser.parseString(json);
             JsonObject rootObject = rootElement.getAsJsonObject();
@@ -449,12 +443,6 @@ public class GameController{
                 rounds.put(roundKey, winner);
             }
 
-//        for(String key: roundsObject.keySet()){
-//            String winner = roundsObject.get(key).getAsString();
-//            rounds.put(key, winner);
-//        }
-
-
             return rounds;
         } catch (Exception e){
             System.out.println(e.getMessage());
@@ -463,7 +451,7 @@ public class GameController{
         return null;
     }
 
-    public LinkedHashMap<String, Integer> getPoints(JsonObject rootObject){
+    public static LinkedHashMap<String, Integer> getPoints(JsonObject rootObject){
         try {
             LinkedHashMap<String, Integer> pointsList = new LinkedHashMap<>();
 
@@ -498,5 +486,4 @@ public class GameController{
              x++;
          }
     }
-
 }

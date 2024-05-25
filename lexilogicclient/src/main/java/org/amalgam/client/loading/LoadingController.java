@@ -9,6 +9,7 @@ import javafx.animation.TranslateTransition;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.transform.Rotate;
 import javafx.util.Duration;
@@ -16,6 +17,7 @@ import org.amalgam.UpdateDispatcher;
 import org.amalgam.client.MainController;
 import javafx.scene.image.ImageView;
 import org.amalgam.client.UIPathResolver;
+import org.amalgam.client.game.GameController;
 import org.amalgam.client.login.LoginController;
 
 import java.util.concurrent.ExecutorService;
@@ -97,5 +99,9 @@ public class LoadingController implements UpdateDispatcher {
     @Override
     public void update(String jsonString) {
         System.out.println("LOADING data"+ jsonString);
+        Platform.runLater(() -> {
+            MainController.changeScreen(UIPathResolver.game_path);
+        });
+        GameController.updateData(jsonString);
     }
 }

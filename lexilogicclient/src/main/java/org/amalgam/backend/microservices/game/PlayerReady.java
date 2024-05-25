@@ -2,7 +2,7 @@ package org.amalgam.backend.microservices.game;
 
 import org.amalgam.backend.microservices.serverconnection.ORBConnection;
 
-public class PlayerReadyMicroservice {
+public class PlayerReady {
 
     public void process(ORBConnection orbConnection, String username, int gameRoomID) {
         try {

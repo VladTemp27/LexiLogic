@@ -7,7 +7,7 @@ import org.omg.CosNaming.NamingContextPackage.CannotProceed;
 import org.omg.CosNaming.NamingContextPackage.InvalidName;
 import org.omg.CosNaming.NamingContextPackage.NotFound;
 
-public class MatchMakeMicroservice {
+public class MatchMake {
 
     public String process (ORBConnection orbConnection, PlayerCallback playerCallback){
         try {

@@ -12,6 +12,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import org.amalgam.ControllerException.InvalidRequestException;
 import org.amalgam.backend.microservices.objectparser.JsonObjectParser;
+import org.amalgam.backend.referenceobjects.Leaderboard;
 import org.amalgam.client.MainController;
 import org.amalgam.client.UIPathResolver;
 import org.amalgam.client.leaderboards.LeaderboardsController;
@@ -163,19 +164,23 @@ public class MatchHistoryController{
     public void initialize() {
         addHoverEffect(backButton);
         backButton.setOnAction(event -> handleBack());
-        List<LeaderboardsController.LeaderboardsData> leaderboardsDataList =
-                JsonObjectParser.parseLeaderboardsData(leaderboardsModel.getLeaderBoards());
-        for (LeaderboardsController.LeaderboardsData lb : leaderboardsDataList) {
-            if (lb.getUsername().equals(LoginController.username)) {
-                rankLabel.setText(lb.getRank());
-                scoreLabel.setText(String.valueOf(lb.getScore()));
-            }
-        }
+        populateRankBoard();
         populateMatchTable();
         matchTable.setItems(FXCollections.observableArrayList(
                 getMatchHistoryDataList()
         ));
         matchTable.setStyle("-fx-font-family: 'Brygada 1918';");
+    }
+
+    private void populateRankBoard() {
+        String leaderboards = leaderboardsModel.getLeaderBoards();
+        List<Leaderboard> leaderboardList = JsonObjectParser.parseLeaderBoards(leaderboards);
+        for (Leaderboard lb : leaderboardList) {
+            if (lb.getUsername().equals(LoginController.username)) {  // rank board
+                rankLabel.setText(String.valueOf(lb.getPlayerRank()));
+                scoreLabel.setText(String.valueOf(lb.getPoints()));
+            }
+        }
     }
 
     private ObservableList<MatchData> getMatchHistoryDataList() {

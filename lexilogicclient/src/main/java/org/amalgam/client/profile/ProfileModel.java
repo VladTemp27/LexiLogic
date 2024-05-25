@@ -1,21 +1,21 @@
 package org.amalgam.client.profile;
 
 import org.amalgam.UIControllers.PlayerCallback;
-import org.amalgam.backend.microservices.client.AccountDeletionRequestMicroservice;
-import org.amalgam.backend.microservices.client.LogOutMicroservice;
+import org.amalgam.backend.microservices.client.AccountDeletionRequest;
+import org.amalgam.backend.microservices.client.LogoutRequest;
 import org.amalgam.backend.microservices.serverconnection.ORBConnection;
 
 public class ProfileModel {
 
     ORBConnection orbConnection;
     PlayerCallback playerCallback;
-    private AccountDeletionRequestMicroservice accountDeletionRequestMicroservice;
-    private LogOutMicroservice logOutMicroservice;
+    private AccountDeletionRequest accountDeletionRequestMicroservice;
+    private LogoutRequest logOutMicroservice;
     public ProfileModel(ORBConnection orbConnection, PlayerCallback playerCallback){
         this.orbConnection = orbConnection;
         this.playerCallback = playerCallback;
-        accountDeletionRequestMicroservice = new AccountDeletionRequestMicroservice();
-        logOutMicroservice = new LogOutMicroservice();
+        accountDeletionRequestMicroservice = new AccountDeletionRequest();
+        logOutMicroservice = new LogoutRequest();
     }
 
     public void accountDeletionRequest (){
