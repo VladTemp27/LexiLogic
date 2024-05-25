@@ -2,12 +2,14 @@ package org.amalgam.lexilogicserver.model.handler.GameHandler;
 
 import org.amalgam.ControllerException.InvalidRequestException;
 import org.amalgam.UIControllers.PlayerCallback;
+import org.amalgam.lexilogicserver.model.DAL.GameDetailDAL;
+import org.amalgam.lexilogicserver.model.DAL.LeaderBoardDAL;
+import org.amalgam.lexilogicserver.model.DAL.LobbyDAL;
 import org.amalgam.lexilogicserver.model.microservices.NTimer;
 import org.amalgam.lexilogicserver.model.microservices.NTimerCallback;
 import org.amalgam.lexilogicserver.model.microservices.wordbox.Generator;
 import org.amalgam.lexilogicserver.model.microservices.wordbox.Reader;
 import org.amalgam.lexilogicserver.model.microservices.wordbox.WordBox;
-import org.amalgam.lexilogicserver.model.utilities.referenceobjects.GameDetail;
 import org.amalgam.lexilogicserver.model.utilities.referenceobjects.PlayerGameDetail;
 
 import java.io.FileNotFoundException;
@@ -21,13 +23,14 @@ import java.util.concurrent.Executors;
 public class GameRoom implements NTimerCallback {
 
     private int roomID, currentRound, secondsRoundDuration;
-    private LinkedHashMap<String,PlayerGameDetail> details, defaultDetails;
+    private LinkedHashMap<String,PlayerGameDetail> details;
+    private final LinkedHashMap<String,PlayerGameDetail> defaultDetails;
     private boolean roundDone;
     private ExecutorService executor = Executors.newSingleThreadExecutor();
     private WordBox wordBox;
     private LinkedHashMap<Integer, String> rounds = new LinkedHashMap<>();
     private LinkedHashMap<String,PlayerCallback> playerCallbacks = new LinkedHashMap<>();
-    private LinkedHashMap<String, Integer> totalPointsPerPlayer;
+    private LinkedHashMap<String, Integer> totalPointsPerPlayer = new LinkedHashMap<>();
 
 
 
@@ -38,7 +41,7 @@ public class GameRoom implements NTimerCallback {
         this.playerCallbacks = playerCallbacks;
         currentRound = 1;
         generateWordBox();
-        stagePlayers();
+        //stagePlayers();
 
     }
 
@@ -46,45 +49,67 @@ public class GameRoom implements NTimerCallback {
         PlayerGameDetail detail = details.get(username);
         detail.setReady(true);
 
+        System.out.println(username +" triggered ready");
         if(!isAllPlayersReady()){
+            System.out.println("Waiting for other players");
             return;
         }
 
+        System.out.println("triggering round start");
         roundStart();
     }
 
-    private void stagePlayers() {
-        details = defaultDetails; // resets details to default unready state
+    public void stagePlayers() {
+        System.out.println("Staging, "+currentRound);
+        details = new LinkedHashMap<>();
+        details = flushWith(defaultDetails); // resets details to default unready state
         String w;
         if((w = winnerAvailable())!=null){
             try{
-                String response = ""; // Use response builder for this, broadcast state game done, + winner(variable w)
+                String response = GameRoomResponseBuilder.buildWinnerResponse(w); // Use response builder for this, broadcast state game done, + winner(variable w)
                 broadcast(response);
-                //TODO convert this to reference objects and push to database using DAL
+                int lobbyID = LobbyDAL.insertGameRoomAsLobby(this);
+                updatePlayerDataDB(lobbyID);
             }catch(Exception e){
                 e.printStackTrace();
             }
         }
         roundDone = false;
         //give initial gameroom object + state = staging(countdown 5 secs then send request ready)
-        String jsonString = ""; //Use response builder here
+        String jsonString = GameRoomResponseBuilder.buildStagePlayersResponse(this,5); //Use response builder here
+        System.out.println(jsonString);
         try {
+            Thread.sleep(400);
             broadcast(jsonString);
         }catch(Exception e){
             e.printStackTrace();
         }
     }
 
+    public char[][] getCharMatrix (){
+        return wordBox.getWordMatrix();
+    }
+
+    public void updatePlayerDataDB(int lobbyID){
+        List<String> keys = new ArrayList<>(details.keySet());
+        for(String key: keys){
+            PlayerGameDetail detail = details.get(key);
+            GameDetailDAL.insertGameDetailFromPlayerDetail(detail, lobbyID);
+            LeaderBoardDAL.updateLeaderBoard(detail);
+        }
+    }
+
     private void roundStart(){
+        System.out.println("round start");
         try {
             //Use GameRoomResponseBuilder here to tell clients state is game started + game rooms 😁
-            String data = "";
-
+            String data = GameRoomResponseBuilder.buildGameStartedResponse(this);
             broadcast(data);
         }catch(InvalidRequestException e){
             System.out.println(e.getMessage());
         }
         executor.submit(new NTimer(secondsRoundDuration, this));
+        System.out.println("New timer submitted with duration "+secondsRoundDuration+"s");
     }
 
     private boolean isAllPlayersReady(){
@@ -92,30 +117,60 @@ public class GameRoom implements NTimerCallback {
         for(String key: keys){
             PlayerGameDetail currentPlayer = details.get(key);
             if(!currentPlayer.isReady()){
+                System.out.println("returned false");
                 return false;
             }
         }
+        System.out.println("executed return true;");
         return true;
     }
 
     //call this to generate a wordBox, generates a new wordbox for every invocation
     private void generateWordBox() throws FileNotFoundException {
-        wordBox = new WordBox(new Generator(new Reader("file"), true, 6, 6));
+        wordBox = new WordBox(new Generator(new Reader("lexilogicserver/src/main/java/org/amalgam/lexilogicserver/model/microservices/wordbox/words.txt"), false, 4, 5));
     }
 
     public void submitWord(String word, String username){
-        if(roundDone){
-            return;
+        System.out.println("Game room received request of word "+word);
+        try {
+            System.out.println("Round status :"+roundDone);
+            if (roundDone) {
+                return;
+            }
+            System.out.println("Checking word length");
+            System.out.println(word.length()==4);
+            if(word.length()==4){
+                System.out.println("word too short");
+                broadcast(username, GameRoomResponseBuilder.buildInvalidWordResponse());
+            }
+
+            System.out.println("Checking if dupe");
+            System.out.println(checkIfDupe(word));
+            if (checkIfDupe(word)) {
+                System.out.println("Duped word");
+                broadcast(username, GameRoomResponseBuilder.buildInvalidWordResponse());
+                return;
+            } // should just throw exception of duped word
+
+            System.out.println("Checking if valid word");
+            System.out.println(wordBox.verifyWord(word)==0);
+            if (wordBox.verifyWord(word) == 0) {
+                System.out.println("invalid word");
+                broadcast(username, GameRoomResponseBuilder.buildInvalidWordResponse());
+                return;
+            } // should just throw exception
+
+            System.out.println("Adding to details");
+            PlayerGameDetail gameDetail = details.get(username);
+            gameDetail.addWord(word);
+            details.replace(username, gameDetail);
+
+            System.out.println("Updating points");
+            updatePoints(username);
+            broadcast(GameRoomResponseBuilder.buildGameStartedResponse(this));
+        }catch(Exception e){
+            e.printStackTrace();
         }
-        if(checkIfDupe(word)) return; // should just throw exception of duped word
-
-        if(wordBox.verifyWord(word)==0)return; // should just throw exception
-
-        PlayerGameDetail gameDetail = details.get(username);
-        gameDetail.addWord(word);
-        details.replace(username, gameDetail);
-
-        updatePoints(username);
     }
 
     private void updatePoints(String username){
@@ -198,8 +253,11 @@ public class GameRoom implements NTimerCallback {
     private String winnerAvailable(){
         StringBuilder winner = new StringBuilder();
         LinkedHashMap<String, Integer> roundWinners = new LinkedHashMap<>();
-        for(int x = 1; x < rounds.size(); x++){
+        for(int x = 1; x <= rounds.size(); x++){
             String roundWinner = rounds.get(x);
+            if(roundWinner.equals("No Winner")){
+                continue;
+            }
             if(roundWinners.containsKey(roundWinner)){
                 int initialVal = roundWinners.get(roundWinner);
                 roundWinners.replace(roundWinner, initialVal+1);
@@ -223,6 +281,7 @@ public class GameRoom implements NTimerCallback {
         List<String> keys = new ArrayList<>(details.keySet());
         String keyWithMaxValue = null;
         int maxPoints = 0;
+        //Gets highest value
         for(String key : keys){
             if(keyWithMaxValue==null){
                 keyWithMaxValue = key;
@@ -235,20 +294,46 @@ public class GameRoom implements NTimerCallback {
                 maxPoints = details.get(keyWithMaxValue).getPoints();
             }
         }
+
+        //Finds if another instance of this highest value is available (tie)
+        boolean tie = false;
+        for(String key : keys){
+            if(key.equals(keyWithMaxValue)){
+                continue;
+            }
+            if(details.get(key).getPoints()==details.get(keyWithMaxValue).getPoints()){
+                tie = true;
+            }
+        }
+
+        //Guard clause for tie situation
+        if(tie){
+            return "No Winner";
+        }
+
+        //Guard clause for 0 pts
+        if(maxPoints==0){
+            return "No Winner";
+        }
         return keyWithMaxValue;
     }
 
     public void tallyRoundTotalPoints(){
         List<String> keys = new ArrayList<>(details.keySet());
+        System.out.println(!totalPointsPerPlayer.isEmpty());
         if(!totalPointsPerPlayer.isEmpty()) {
             for (String key : keys) {
+                System.out.println(keys);
                 PlayerGameDetail playerGameDetail = details.get(key);
+                System.out.println(key+" Pts: "+playerGameDetail.getPoints());
                 totalPointsPerPlayer.replace(key, playerGameDetail.getPoints());
             }
+            return;
         }
 
         for(String key : keys){
             PlayerGameDetail playergameDetail = details.get(key);
+            System.out.println(key+" Pts: "+playergameDetail.getPoints());
             totalPointsPerPlayer.put(key, playergameDetail.getPoints());
         }
 
@@ -260,11 +345,20 @@ public class GameRoom implements NTimerCallback {
     //          round has started
     @Override
     public void timerDone() {
+        System.out.println("ROUND DONE"+currentRound);
         this.roundDone = true;
         String roundWinner = getRoundWinner();
+        System.out.println("Winner: "+roundWinner);
         rounds.put(currentRound, roundWinner);
+        System.out.println("winner saved");
         tallyRoundTotalPoints();
         currentRound++;
+        System.out.println("next round: "+currentRound);
+        try {
+            generateWordBox();
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        }
         //Use broadcast with builder
         stagePlayers();
     }
@@ -272,5 +366,28 @@ public class GameRoom implements NTimerCallback {
     @Override
     public void timeIs() {
 
+    }
+
+    public LinkedHashMap<Integer, String> getRounds() {
+        return rounds;
+    }
+
+    public int getCurrentRound() {
+        return currentRound;
+    }
+
+    public int getSecondsRoundDuration() {
+        return secondsRoundDuration;
+    }
+
+    private LinkedHashMap<String, PlayerGameDetail> flushWith(LinkedHashMap<String, PlayerGameDetail> defaultValues){
+        LinkedHashMap<String, PlayerGameDetail> flushedData = new LinkedHashMap<>();
+        List<String> keyList = new ArrayList<>(defaultValues.keySet());
+        for(String key : keyList){
+            PlayerGameDetail clone = new PlayerGameDetail(defaultValues.get(key).getUsername());
+            flushedData.put(key, clone);
+        }
+
+        return flushedData;
     }
 }

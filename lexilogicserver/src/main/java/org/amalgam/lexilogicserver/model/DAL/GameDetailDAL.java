@@ -1,8 +1,10 @@
 package org.amalgam.lexilogicserver.model.DAL;
 
 import org.amalgam.lexilogicserver.model.DatabaseUtil;
+import org.amalgam.lexilogicserver.model.handler.GameHandler.GameRoom;
 import org.amalgam.lexilogicserver.model.utilities.referenceobjects.GameDetail;
 import org.amalgam.lexilogicserver.model.utilities.referenceobjects.Player;
+import org.amalgam.lexilogicserver.model.utilities.referenceobjects.PlayerGameDetail;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -47,18 +49,46 @@ public class GameDetailDAL {
     public static LinkedList<GameDetail> getGameDetailByPID(int playerID) {
         LinkedList<GameDetail> listOfGameDetail = new LinkedList<>();
         try (Connection conn = DatabaseUtil.getConnection()) {
-            PreparedStatement stmt = conn.prepareStatement("SELECT * FROM gamedetails WHERE playerID = ?");
+            String query = "SELECT gd.playerID, gd.lobbyID, gd.totalPoints, p.name " +
+                           "FROM gamedetails gd "+
+                           "JOIN player p USING(playerID) "+
+                           "WHERE playerID = ?";
+            PreparedStatement stmt = conn.prepareStatement(query);
             stmt.setInt(1, playerID);
             try (ResultSet rs = stmt.executeQuery()) {
                 while (rs.next()) {
-                    Player player = PlayerDAL.getPlayerByID(rs.getInt("playerID"));
-                    GameDetail detail =  new GameDetail(player.getUsername(), rs.getInt("lobbyID"), rs.getInt("totalPoints"));
+                    String username = rs.getString("name");
+                    int lobbyID = rs.getInt("lobbyID");
+                    int totalPoints = rs.getInt("totalPoints");
+                    GameDetail detail =  new GameDetail(username, lobbyID, totalPoints);
                     listOfGameDetail.add(detail);
                 }
             }
-        } catch (SQLException | ClassNotFoundException | InstantiationException | IllegalAccessException e) {
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException e) {
             throw new RuntimeException(e);
+        }catch(SQLException e ){
+            if(!e.getMessage().equals("Operation not allowed after ResultSet closed")){
+                e.printStackTrace();
+            }
         }
         return listOfGameDetail;
+    }
+
+    public static void insertGameDetailFromPlayerDetail(PlayerGameDetail playerDetail, int lobbyID){
+        try(Connection conn = DatabaseUtil.getConnection()){
+            PreparedStatement statement = conn.prepareStatement("INSERT INTO gamedetails (playerID, lobbyID, " +
+                    "totalPoints) VALUES ((SELECT playerID from player WHERE name = ?), ?, ?)");
+
+            statement.setString(1, playerDetail.getUsername());
+            statement.setInt(2, lobbyID);
+            statement.setInt(3, playerDetail.getPoints());
+
+            int rowsAffected = statement.executeUpdate();
+            if (rowsAffected > 0) {
+                System.out.println("INSERT NEW GAME DETAIL SUCCESS");
+            }
+        }catch(Exception e){
+            e.printStackTrace();
+        }
     }
 }

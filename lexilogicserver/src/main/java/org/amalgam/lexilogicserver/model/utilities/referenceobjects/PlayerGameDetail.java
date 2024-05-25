@@ -17,7 +17,8 @@ public class PlayerGameDetail {
         dupedWords = new LinkedList<>();
     }
 
-    public PlayerGameDetail() {
+    public LinkedList<String> getDupedWords() {
+        return dupedWords;
     }
 
     public String getUsername() {
@@ -33,6 +34,7 @@ public class PlayerGameDetail {
     public LinkedList<String> getWords() {
         return words;
     }
+
 
     public void addWord(String word){
         words.add(word);

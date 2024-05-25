@@ -1,0 +1,35 @@
+{
+  "state": "staging",
+  "countdown": <countdown>,
+  "room_id": <roomID>,
+  "current_round": <currentRound>,
+  "seconds_round_duration": <secondsRoundDuration>,
+  "round_done": <roundDone>,
+  "char_matrix": [
+    ["c", "h>", "a"],
+    ["v", "r", "a"],
+    ["s", "b","o"]
+  ],
+  "game_room": {
+    "<username1>": {
+      "username": "<username1>",
+      "points": <points>,
+      "ready": <ready>,
+      "words": ["<word1>", "<word2>", ...],
+      "duped_words": ["<duped_word1>", "<duped_word2>", ...]
+    },
+    "<username2>": {
+      "username": "<username2>",
+      "points": <points>,
+      "ready": <ready>,
+      "words": ["<word1>", "<word2>", ...],
+      "duped_words": ["<duped_word1>", "<duped_word2>", ...]
+    },
+    ...
+    "rounds": {
+      "round_<roundNumber1>": "<winner1>",
+      "round_<roundNumber2>": "<winner2>",
+      ...
+    }
+  }
+}

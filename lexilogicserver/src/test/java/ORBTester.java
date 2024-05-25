@@ -14,23 +14,15 @@ public class ORBTester implements ORBServerCallback, ORBDOperationCallback {
 	static boolean daemonRunning = false;
 
 	public static void main(String[] args) throws InterruptedException {
-		ORBTester program = new ORBTester();
-		program.runDaemon();
-		Thread.sleep(1000);
-		daemonRunning = true;
-		program.runServer();
-		while(daemonRunning){
 
-		}
-		executorService.shutdown();
 	}
 
 	public void runDaemon(){
-		executorService.submit(new ORBDRunner(this, 2018, "corba.server"));
+		executorService.submit(new ORBDRunner(this, 2018, "localhost"));
 	}
 
 	public void runServer() {
-		executorService.submit(new ORBServer(this, 2018,"corba.server"));
+		executorService.submit(new ORBServer(this, 2018,"localhost"));
 		System.out.println(executorService.isTerminated());
 	}
 
@@ -48,5 +40,10 @@ public class ORBTester implements ORBServerCallback, ORBDOperationCallback {
 	public void notifyOrbExit() throws ORBDException {
 		System.out.println("Daemon has closed");
 		daemonRunning=false;
+	}
+
+	@Override
+	public void setProcessObject(Process process) {
+
 	}
 }

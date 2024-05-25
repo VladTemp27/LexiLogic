@@ -2,18 +2,15 @@ package org.amalgam.lexilogicserver.model.utilities.referenceobjects;
 
 public class Lobby {
     private int lobbyID;
-    private String createdBy;
     private String winner;
 
-    public Lobby(int lobbyID, String createdBy, String winner) {
+    public Lobby(int lobbyID, String winner) {
         this.lobbyID = lobbyID;
-        this.createdBy = createdBy;
         this.winner = winner;
     }
 
     public Lobby() {
         this.lobbyID = 0;
-        this.createdBy = null;
         this.winner = null;
     }
 
@@ -23,14 +20,6 @@ public class Lobby {
 
     public void setLobbyID(int lobbyID) {
         this.lobbyID = lobbyID;
-    }
-
-    public String getCreatedBy() {
-        return createdBy;
-    }
-
-    public void setCreatedBy(String createdBy) {
-        this.createdBy = createdBy;
     }
 
     public String getWinner() {

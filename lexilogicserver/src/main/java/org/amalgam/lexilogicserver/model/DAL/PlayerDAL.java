@@ -1,13 +1,12 @@
 package org.amalgam.lexilogicserver.model.DAL;
 
+import com.mysql.cj.PreparedQuery;
 import org.amalgam.lexilogicserver.model.DatabaseUtil;
 import org.amalgam.lexilogicserver.model.utilities.referenceobjects.Player;
 
 import javax.xml.crypto.Data;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
+import java.util.LinkedList;
 
 public class PlayerDAL {
 
@@ -95,6 +94,7 @@ public class PlayerDAL {
         }
     }
 
+    @Deprecated
     public void deletePlayer(int playerID) {
         try (Connection conn = DatabaseUtil.getConnection()) {
             PreparedStatement stmt = conn.prepareStatement("DELETE FROM player WHERE playerID = ?");
@@ -105,6 +105,19 @@ public class PlayerDAL {
             }
         } catch (SQLException | ClassNotFoundException | InstantiationException | IllegalAccessException e) {
             throw new RuntimeException(e);
+        }
+    }
+
+    public static void deletePlayer(String username){
+        try(Connection conn = DatabaseUtil.getConnection()){
+            PreparedStatement stmt = conn.prepareStatement("DELETE FROM player WHERE name = ?");
+            stmt.setString(1, username);
+            int rowsAffected = stmt.executeUpdate();
+            if (rowsAffected > 0) {
+                System.out.println("DELETE PLAYER SUCCESS");
+            }
+        }catch(Exception e){
+            e.printStackTrace();
         }
     }
 
@@ -119,6 +132,24 @@ public class PlayerDAL {
                 throw new RuntimeException("Failed to mark account for deletion.");
             }
         } catch (SQLException | ClassNotFoundException | InstantiationException | IllegalAccessException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static LinkedList<Player> retrieveForDeletion(){
+        LinkedList<Player> listOfPlayers = new LinkedList<>();
+        try(Connection conn = DatabaseUtil.getConnection()){
+            PreparedStatement stmt = conn.prepareStatement("SELECT playerID, name FROM player WHERE forDeletion = 1");
+            try(ResultSet rs = stmt.executeQuery()){
+                while(rs.next()){
+                    int playerID = rs.getInt("playerID");
+                    String name = rs.getString("name");
+                    Player cPlayer = new Player(playerID, name, null,null);
+                    listOfPlayers.add(cPlayer);
+                }
+                return listOfPlayers;
+            }
+        }catch (SQLException | ClassNotFoundException | InstantiationException | IllegalAccessException e) {
             throw new RuntimeException(e);
         }
     }

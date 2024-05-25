@@ -35,6 +35,7 @@ public class ORBDRunner implements Callable<Integer> {
 
         // Start the process
         Process process = builder.start();
+        callback.setProcessObject(process);
 
         // Read output
         BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));

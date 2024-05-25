@@ -1,10 +1,22 @@
 package org.amalgam.lexilogicserver.views.servermainmenu;
 
+import com.sun.org.apache.xpath.internal.operations.Or;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.effect.ColorAdjust;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
+import org.amalgam.lexilogicserver.Server;
 import org.amalgam.lexilogicserver.ServerController;
+import org.amalgam.lexilogicserver.model.microservices.daemonHandler.ORBDException;
+import org.amalgam.lexilogicserver.model.microservices.daemonHandler.ORBDOperationCallback;
+import org.amalgam.lexilogicserver.model.microservices.daemonHandler.ORBDRunner;
+import org.amalgam.lexilogicserver.model.microservices.serverHandler.ORBServer;
+import org.amalgam.lexilogicserver.views.runorbd.RunORBDController;
+
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class ServerMainMenuController {
     //private variables
@@ -41,12 +53,7 @@ public class ServerMainMenuController {
         button.setOnMouseExited(e -> button.setStyle("-fx-background-color: #9CA16F;"));
     }
 
-        /**
-     * Adds hover effect to the given button.
-     *
-     * @param button The button to add hover effect to.
-     */
-    private void addHoverEffect(Button button) {
+    private void addHoverEffect(Button button){
         button.setOnMouseEntered(e -> button.setStyle("-fx-background-color: derive(#B07C3B, -10%);"));
         button.setOnMouseExited(e -> button.setStyle("-fx-background-color: #B07C3B;"));
     }
@@ -113,6 +120,7 @@ public class ServerMainMenuController {
      */
     @FXML
     public void handleRunServerButton(){
+//        ServerController.ORBExitCode = executorServer.submit(new ORBServer(serverController, ))
         if(serverController !=null){
             serverController.loadRunServer();
         }else {
