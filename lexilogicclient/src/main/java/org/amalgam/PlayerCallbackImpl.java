@@ -19,6 +19,7 @@ public class PlayerCallbackImpl extends PlayerCallbackPOA{
 
 	@Override
 	public void uiCall(String jsonString) throws InvalidRequestException {
+		System.out.println(username + " " + jsonString);
 		updateDispatcher.update(jsonString);
 	}
 	public void setControllerInterface(UpdateDispatcher updateDispatcher) {
