@@ -431,50 +431,51 @@ public class GameController implements UpdateDispatcher {
 //        }
         //End
 
-//        getPoints(rootObject);
-
+        fetchPoints(rootObject);
+        parseRounds(rootObject);
     }
 
-    private static LinkedHashMap<String, String> parseRounds(String json){
+    private void parseRounds(JsonObject rootObject){ // TODO: fix parsing rounds of json object; roundsObject is null
         try {
-            JsonElement rootElement = JsonParser.parseString(json);
-            JsonObject rootObject = rootElement.getAsJsonObject();
             LinkedHashMap<String, String> rounds = new LinkedHashMap<>();
             JsonObject roundsObject = rootObject.getAsJsonObject("rounds");
-
-            JsonArray array = roundsObject.getAsJsonArray();
-
-            System.out.println("PARSING ROUNDS");
-            int index = 0; // Start index at 0 for array indexing
-            for (JsonElement element : array) {
-                String roundKey = "round_" + (index++); // Use index and increment within the loop
-                String winner = element.getAsString();
-                rounds.put(roundKey, winner);
+            JsonArray roundsArray = roundsObject.getAsJsonArray();
+            if (roundsArray != null) {
+                System.out.println("PARSING ROUNDS");
+                int index = 0; // Start index at 0 for roundsArray indexing
+                for (JsonElement element : roundsArray) {
+                    String roundKey = "round_" + (index++); // Use index and increment within the loop
+                    String winner = element.getAsString();
+                    rounds.put(roundKey, winner);
+                }
+                roundWinner(rounds);
             }
-
-            return rounds;
+            else {
+                System.out.println("roundsArray is null");
+            }
         } catch (Exception e){
-            System.out.println(e.getMessage());
-            e.getCause();
+            throw new RuntimeException(e);
         }
-        return null;
     }
 
-    public static LinkedHashMap<String, Integer> getPoints(JsonObject rootObject){
+    // TODO: fix parsing points of json; points object is null
+    public LinkedHashMap<String, Integer> fetchPoints(JsonObject rootObject){
         try {
             LinkedHashMap<String, Integer> pointsList = new LinkedHashMap<>();
+            JsonObject pointsObject = rootObject.getAsJsonObject("gameRoom");
+            if (pointsObject != null) {
+                for (String key : pointsObject.keySet()) {
+                    JsonObject userObject = pointsObject.getAsJsonObject(key);
 
-            JsonObject jsonObject = rootObject.getAsJsonObject("gameRoom");
+                    int points = userObject.get("points").getAsInt();
 
-            for (String key : jsonObject.keySet()) {
-                JsonObject userObject = jsonObject.getAsJsonObject(key);
-
-                int points = userObject.get("points").getAsInt();
-
-                pointsList.put(key, points);
-                System.out.println(key + ":" + points);
+                    pointsList.put(key, points);
+                    System.out.println(key + ":" + points);
+                }
+                updateScores(pointsList);
+            } else {
+                System.out.println("pointsObject is null");
             }
-            return pointsList;
         } catch (Exception e) {
             e.printStackTrace();
         }
