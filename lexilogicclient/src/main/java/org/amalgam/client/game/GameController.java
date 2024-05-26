@@ -14,6 +14,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
+import org.amalgam.UpdateDispatcher;
 import org.amalgam.client.MainController;
 import org.amalgam.client.loading.LoadingController;
 import org.amalgam.client.login.LoginController;
@@ -22,7 +23,7 @@ import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-public class GameController{
+public class GameController implements UpdateDispatcher {
     // Game private variables
     public static int currentRound;
     public static int roomID;
@@ -316,8 +317,8 @@ public class GameController{
     public void initialize() {
         try {
             gameModel = new GameModel(MainController.orbConnection);
-            victoryPanel.setVisible(false);
-            gameOverPanel.setVisible(false);
+
+            LoginController.playerCallbackImpl.setControllerInterface(this); // initialize the interface of the callback of a player
 
             // Initialize letter labels array
             letterLabels = new Label[]{firstLetter, secondLetter, thirdLetter, fourthLetter, fifthLetter,
@@ -353,7 +354,7 @@ public class GameController{
     private void victoryPanelBackButton() {
     }
 
-    public static void updateData(String json){
+    private void updateData(String json){
         System.out.println("GAME "+json);
         JsonElement rootElement = JsonParser.parseString(json);
         JsonObject rootObject = rootElement.getAsJsonObject();
@@ -370,6 +371,7 @@ public class GameController{
         if(state.equals("game_done")){
           Platform.runLater(() -> {
               String winner = rootObject.get("winner").getAsString();
+              System.out.println(winner);
               if (Objects.equals(LoginController.username, winner)){
                     victoryPanel.setVisible(true);
               } else {
@@ -388,7 +390,6 @@ public class GameController{
 
         //For current round
         currentRound = rootObject.get("current_round").getAsInt();
-//        System.out.println("Current Round: "+currentRound);
         //End
 
         //For character matrix
@@ -485,5 +486,10 @@ public class GameController{
              y=0;
              x++;
          }
+    }
+
+    @Override
+    public void update(String jsonString) {
+        updateData(jsonString);
     }
 }

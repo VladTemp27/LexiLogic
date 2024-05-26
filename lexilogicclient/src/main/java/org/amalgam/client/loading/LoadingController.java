@@ -23,7 +23,7 @@ import org.amalgam.client.login.LoginController;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-public class LoadingController implements UpdateDispatcher {
+public class LoadingController {
     // Private Variables
     public static ExecutorService executorService = Executors.newSingleThreadExecutor();
     private String statusBody = "";
@@ -50,10 +50,6 @@ public class LoadingController implements UpdateDispatcher {
     public void initialize() {
         animateLog(); // animation for the loading log
 
-        /**
-         * initialize the interface of the callback of a player
-         */
-        LoginController.playerCallbackImpl.setControllerInterface(this);
 
         Task<Void> t1 = new Task<Void>() {
             @Override
@@ -65,6 +61,7 @@ public class LoadingController implements UpdateDispatcher {
             @Override
             protected void succeeded() {
                 super.succeeded();
+                System.out.println("SUCCESS");
                 Platform.runLater(() -> {
                     checkMatch();
                 });
@@ -85,23 +82,11 @@ public class LoadingController implements UpdateDispatcher {
     }
 
     public void checkMatch() {
-        if (statusBody.isEmpty()) {
-        return;
-        }
         if(statusBody.equals("timeout")){
             MainController.changeScreen(UIPathResolver.main_menu_path);
         } else {
             System.out.println("MATCH FOUND...");
             MainController.changeScreen(UIPathResolver.game_path);
         }
-    }
-
-    @Override
-    public void update(String jsonString) {
-        System.out.println("LOADING data"+ jsonString);
-        Platform.runLater(() -> {
-            MainController.changeScreen(UIPathResolver.game_path);
-        });
-        GameController.updateData(jsonString);
     }
 }
