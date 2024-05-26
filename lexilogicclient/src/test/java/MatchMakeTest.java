@@ -7,6 +7,8 @@ import org.amalgam.Service.GameServiceModule.GameServiceHelper;
 import org.amalgam.Service.PlayerServiceModule.PlayerService;
 import org.amalgam.Service.PlayerServiceModule.PlayerServiceHelper;
 import org.amalgam.UIControllers.PlayerCallbackHelper;
+import org.amalgam.Utils.Exceptions.DuplicateWordException;
+import org.amalgam.Utils.Exceptions.InvalidWordFormatException;
 import org.amalgam.Utils.Exceptions.MatchCreationFailedException;
 import org.omg.CORBA.ORB;
 import org.omg.CosNaming.NamingContextExt;
@@ -26,10 +28,11 @@ public class MatchMakeTest implements ControllerInterface{
     private int gameRoomID;
     private String currentState = "";
     private String user;
+    private boolean gameValid = true;
 
     private static Scanner kInput = new Scanner(System.in);
 
-    public static void main(String[] args) throws WrongPolicy, ServantNotActive, MatchCreationFailedException {
+    public static void main(String[] args) throws WrongPolicy, ServantNotActive, MatchCreationFailedException, DuplicateWordException, InvalidWordFormatException {
         MatchMakeTest program = new MatchMakeTest();
         program.getAllStubs();
 
@@ -43,6 +46,14 @@ public class MatchMakeTest implements ControllerInterface{
 
         String response = program.gameService.matchMake(PlayerCallbackHelper.narrow(program.rootPOA.servant_to_reference(program.callback)));
         System.out.println(response);
+
+        while(program.gameValid){
+            String word = "";
+            word = kInput.nextLine();
+            program.gameService.verifyWord(word, program.user, program.gameRoomID);
+        }
+
+
 
 
         //TODO: move this to ui call, for the most part majority of the bugs are fixed here im gonna sleep
@@ -102,6 +113,7 @@ public class MatchMakeTest implements ControllerInterface{
 
     @Override
     public void testUICall(String jsonString) {
+        System.out.println(jsonString);
 //        System.out.println(jsonString);
 //        JsonElement rootElement = JsonParser.parseString(jsonString);
 //        JsonObject rootObject = rootElement.getAsJsonObject();
@@ -112,13 +124,14 @@ public class MatchMakeTest implements ControllerInterface{
         JsonElement rootElement = JsonParser.parseString(jsonString);
         JsonObject rootObject = rootElement.getAsJsonObject();
         currentState = rootObject.get("state").getAsString();
+        gameRoomID = rootObject.get("room_id").getAsInt();
 
         if(currentState.equals("staging")){
             System.out.println("staging");
-            stagingStateHandler();
+            //stagingStateHandler();
+            System.out.println("sending read...");
             System.out.println(this.user+" "+gameRoomID);
             gameService.playerReady(user, gameRoomID);
-            System.out.println("ready sent");
 
             return;
         }
@@ -127,6 +140,10 @@ public class MatchMakeTest implements ControllerInterface{
             gameStartedHandler();
             System.out.println("simulating game");
             return;
+        }
+
+        if(currentState.equals("invalid_word")){
+            System.out.println("Invalid Word");
         }
 
 
