@@ -2,7 +2,6 @@ package org.amalgam.lexilogicserver.model.microservices.wordbox;
 
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
-import java.util.Objects;
 
 public class WordBox {
     private Generator generator;
@@ -34,15 +33,27 @@ public class WordBox {
      * @return          Returns an int value, which would be the points from the word
      */
     public int verifyWord(String word){
+        System.out.println("Verifying from word list");
         LinkedHashMap<Character, Integer> charactersInWord = getCharsFromWord(word);
+        printOccurences(charactersInWord);
         for(Character character : charactersInWord.keySet()){
+
+            if(boxChars.get(character)==null){
+                return 0;
+            }
+
+            System.out.println("Checking character: "+character);
+            System.out.println(character+" count: "+charactersInWord.get(character));
+            System.out.println(boxChars.get(character));
+            System.out.println(!(charactersInWord.get(character)<boxChars.get(character)));
             if(!(charactersInWord.get(character)<=boxChars.get(character))){
                 return 0;
             }
         }
         // check list of words if it contains given word
+        System.out.println("CHECKING IF WORD LIST CONTAINS GIVEN WORD");
         LinkedList<String> wordList = generator.getWordList();
-        if(wordExists(wordList, word)) {
+        if(wordList.contains(word)) {
             return word.length();
         }
         return 0;
@@ -92,6 +103,14 @@ public class WordBox {
                 addCharOccurrence(currentCharacter, this.boxChars);
             }
         }
+        //printOccurences(this.boxChars);
+    }
+
+    private void printOccurences(LinkedHashMap<Character, Integer> occurenceList){
+        System.out.println("CHARACTER OCCURRENCES");
+        for(Character character : occurenceList.keySet()){
+            System.out.println(character+": "+occurenceList.get(character));
+        }
     }
 
     //This method adds a character as a Key to a Hashmap with the value being the number of occurrences this character
@@ -99,8 +118,10 @@ public class WordBox {
     private void addCharOccurrence(char character, LinkedHashMap<Character, Integer> hashMapOfOccurences){
         Integer count = null;
         count = hashMapOfOccurences.get(character);
+        System.out.println("count: "+count);
         if(count != null){
             count++;
+            System.out.println(character+" : "+count);
             hashMapOfOccurences.replace(character, count);
         }else{
             hashMapOfOccurences.put(character, 1);

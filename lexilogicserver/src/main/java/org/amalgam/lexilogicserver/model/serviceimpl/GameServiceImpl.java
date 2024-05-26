@@ -2,7 +2,6 @@ package org.amalgam.lexilogicserver.model.serviceimpl;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonPrimitive;
 import org.amalgam.Service.GameServiceModule.GameServicePOA;
 import org.amalgam.UIControllers.PlayerCallback;
 import org.amalgam.Utils.Exceptions.*;
@@ -10,16 +9,13 @@ import org.amalgam.Utils.Exceptions.DuplicateWordException;
 import org.amalgam.lexilogicserver.model.DAL.LeaderBoardDAL;
 import org.amalgam.lexilogicserver.model.microservices.Matchmaking.MatchmakingService;
 import org.amalgam.lexilogicserver.model.DAL.LobbyDAL;
-import org.amalgam.lexilogicserver.model.microservices.gamesettings.SettingsHandler;
 import org.amalgam.lexilogicserver.model.utilities.referenceobjects.LeaderBoard;
-
 import java.io.FileNotFoundException;
 
 import org.amalgam.lexilogicserver.model.utilities.referenceobjects.PlayerGameDetail;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.Semaphore;
 
 import org.amalgam.lexilogicserver.model.handler.GameHandler.GameRoom;
@@ -38,19 +34,16 @@ public class GameServiceImpl extends GameServicePOA {
      */
     public String matchMake(PlayerCallback playerCallback) {
         addPlayerToQueue(playerCallback);
-        boolean isMatchFound = false;
-
         try {
             matchmakingLock.acquire();
             while (true) {
-                if (matchPlayers() && matchmakingService.isTimerDone()) {
-                    isMatchFound = true;
+                new Thread(this::matchPlayers).start(); // execute the method to a new non-daemon thread
+                // Add condition to check if timer is done
+                if (matchmakingService.isTimerDone()) { // main thread check the if condition
+                    System.out.println("{\"status\": \"success\", \"message\": \"Matchmaking Successful!\"}");
                     return "{\"status\": \"success\", \"message\": \"Matchmaking Successful!\"}";
+                    // Exit loop if timer is done
                 }
-                if (matchmakingService.isTimerDone()) {
-                    break;
-                }
-                Thread.sleep(100);
             }
         } catch (InterruptedException e) {
             System.out.println("Interrupted Thread");
@@ -58,11 +51,6 @@ public class GameServiceImpl extends GameServicePOA {
         } finally {
             matchmakingLock.release();
         }
-
-        if (!isMatchFound) {
-            return "{\"status\": \"failed\", \"message\": \"Matchmaking Unsuccessful!\"}";
-        }
-
         return "{\"status\": \"timeout\", \"message\": \"Timer Done\"}";
     }
 
@@ -80,19 +68,19 @@ public class GameServiceImpl extends GameServicePOA {
     /**
      * Matches players and creates a game room if enough players are found.
      */
-    private boolean matchPlayers() {
+    private void matchPlayers() {
         LinkedList<PlayerGameDetail> players = null;
         try {
             players = matchmakingService.checkAndMatchPlayers();
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
-        if (players != null && players.size() >= 2 && matchmakingService.isTimerDone()) { // Check if enough players are matched
-            System.out.println("Creating GameRoom");
-            createGameRoom(players);
-            return true;
-        } else {
-            return false;
+        if (matchmakingService.isTimerDone()) { // Check if enough players are matched
+            if (players != null && players.size() >= 2) {
+                System.out.println("Players are at least 2");
+                System.out.println("Creating game room");
+                createGameRoom(players);
+            }
         }
     }
 
@@ -115,9 +103,8 @@ public class GameServiceImpl extends GameServicePOA {
         }
 
         try {
-            GameRoom gameRoom = new GameRoom(roomID, playerDetailsMap, playerCallbacksMap, SettingsHandler.getGameTime());
+            GameRoom gameRoom = new GameRoom(roomID, playerDetailsMap, playerCallbacksMap, 30);
             System.out.println("GameRoom Created");
-            createGameRoomResponse(roomID, players);
             if (matchmakingService.isTimerDone()) {
                 rooms.add(gameRoom);
                 System.out.println(gameRoom);
@@ -167,12 +154,14 @@ public class GameServiceImpl extends GameServicePOA {
     @Override
     public synchronized void verifyWord(String word, String username, int gameRoomID) throws InvalidWordFormatException, DuplicateWordException {
         int tempIndex = getRoomIndexFromID(gameRoomID);
-        GameRoom temp = rooms.get(tempIndex);
-
-        temp.submitWord(word, username);
-
-        rooms.remove(tempIndex);
-        rooms.add(temp);
+        System.out.println(username+" submitted word: "+word);
+//        GameRoom temp = rooms.get(tempIndex);
+//
+//        temp.submitWord(word, username);
+//
+//        rooms.remove(tempIndex);
+//        rooms.add(temp);
+       rooms.get(tempIndex).submitWord(word, username);
     }
 
     @Deprecated
@@ -188,7 +177,7 @@ public class GameServiceImpl extends GameServicePOA {
 
     //TODO test if synchronized makes it buggy
     @Override
-    public String playerReady(String username, int gameRoomID) {
+    public synchronized String playerReady(String username, int gameRoomID) {
         int origIndex = getRoomIndexFromID(gameRoomID);
         GameRoom temp = rooms.get(origIndex);
 

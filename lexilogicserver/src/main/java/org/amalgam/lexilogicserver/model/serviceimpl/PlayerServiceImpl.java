@@ -23,13 +23,15 @@ public class PlayerServiceImpl extends PlayerServicePOA {
     LinkedList<PlayerCallback> playerSessions = new LinkedList<>();
 
     @Override
-    public void login(PlayerCallback player_callback, String password) throws AlreadyLoggedInException, InvalidCredentialsException, UserExistenceException {
+    public synchronized void login(PlayerCallback player_callback, String password) throws AlreadyLoggedInException, InvalidCredentialsException, UserExistenceException {
         for(PlayerCallback callback : playerSessions){
             if(callback.username().equals(player_callback.username())){
                 throw new AlreadyLoggedInException("User "+player_callback.username()+" is already logged in");
             }
         }
-        Player playerFromServer = PlayerDAL.getPlayerByUsername(player_callback.username());
+        playerSessions.add(player_callback);
+        int index = playerSessions.indexOf(player_callback);
+        Player playerFromServer = PlayerDAL.getPlayerByUsername(playerSessions.get(index).username());
         if(playerFromServer==null){
             throw new UserExistenceException("User does not exist");
         }
@@ -40,6 +42,7 @@ public class PlayerServiceImpl extends PlayerServicePOA {
             throw new InvalidCredentialsException("Invalid credentials");
         }
     }
+
 
     @Override
     public void logout(String username) throws NotLoggedInException {
@@ -90,7 +93,6 @@ public class PlayerServiceImpl extends PlayerServicePOA {
                 info.addProperty("lobbyID", String.valueOf(lobby.getLobbyID()));
                 info.addProperty("username", detail.getUsername());
                 info.addProperty("score", detail.getTotalPoints());
-                info.addProperty("createdBy", lobby.getCreatedBy());
                 info.addProperty("winner", lobby.getWinner());
                 lobbyArray.add(info);
             }
