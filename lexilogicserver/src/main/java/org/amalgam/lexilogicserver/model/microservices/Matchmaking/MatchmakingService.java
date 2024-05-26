@@ -11,7 +11,6 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public class MatchmakingService implements NTimerCallback{
     private final ConcurrentLinkedQueue<PlayerGameDetail> queue = new ConcurrentLinkedQueue<>();
     private final Semaphore queueLock = new Semaphore(1);
-    private Thread timerThread;
     private final int MATCHMAKING_TIMEOUT = 10000;
     private final AtomicBoolean timerDone = new AtomicBoolean(false);
     private ExecutorService executorService = Executors.newSingleThreadExecutor();
@@ -28,8 +27,7 @@ public class MatchmakingService implements NTimerCallback{
     }
 
     public LinkedList<PlayerGameDetail> getQueue() {
-        LinkedList<PlayerGameDetail> players = new LinkedList<>(queue);
-        return players;
+        return new LinkedList<>(queue);
     }
 
     public void startTimer() {
@@ -53,8 +51,7 @@ public class MatchmakingService implements NTimerCallback{
     }
 
     @Override
-    public void timeIs() {
-    }
+    public void timeIs() {}
 
     public LinkedList<PlayerGameDetail> checkAndMatchPlayers() throws InterruptedException {
         queueLock.acquire();

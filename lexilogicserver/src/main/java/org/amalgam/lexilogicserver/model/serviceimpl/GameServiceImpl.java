@@ -2,7 +2,6 @@ package org.amalgam.lexilogicserver.model.serviceimpl;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonPrimitive;
 import org.amalgam.Service.GameServiceModule.GameServicePOA;
 import org.amalgam.UIControllers.PlayerCallback;
 import org.amalgam.Utils.Exceptions.*;
@@ -11,14 +10,12 @@ import org.amalgam.lexilogicserver.model.DAL.LeaderBoardDAL;
 import org.amalgam.lexilogicserver.model.microservices.Matchmaking.MatchmakingService;
 import org.amalgam.lexilogicserver.model.DAL.LobbyDAL;
 import org.amalgam.lexilogicserver.model.utilities.referenceobjects.LeaderBoard;
-
 import java.io.FileNotFoundException;
 
 import org.amalgam.lexilogicserver.model.utilities.referenceobjects.PlayerGameDetail;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.Semaphore;
 
 import org.amalgam.lexilogicserver.model.handler.GameHandler.GameRoom;
@@ -37,12 +34,12 @@ public class GameServiceImpl extends GameServicePOA {
      */
     public String matchMake(PlayerCallback playerCallback) {
         addPlayerToQueue(playerCallback);
-
         try {
             matchmakingLock.acquire();
-            while (true) { // Change loop condition to always true
-                matchPlayers();
-                if (matchmakingService.isTimerDone()) { // Add condition to check if timer is done
+            while (true) {
+                new Thread(this::matchPlayers).start(); // execute the method to a new non-daemon thread
+                // Add condition to check if timer is done
+                if (matchmakingService.isTimerDone()) { // main thread check the if condition
                     System.out.println("{\"status\": \"success\", \"message\": \"Matchmaking Successful!\"}");
                     return "{\"status\": \"success\", \"message\": \"Matchmaking Successful!\"}";
                     // Exit loop if timer is done
@@ -78,10 +75,12 @@ public class GameServiceImpl extends GameServicePOA {
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
-        if (players != null && players.size() >= 2 && matchmakingService.isTimerDone()) { // Check if enough players are matched
-            System.out.println("Creating GameRoom");
-            createGameRoom(players);
-        } else {
+        if (matchmakingService.isTimerDone()) { // Check if enough players are matched
+            if (players != null && players.size() >= 2) {
+                System.out.println("Players are at least 2");
+                System.out.println("Creating game room");
+                createGameRoom(players);
+            }
         }
     }
 
