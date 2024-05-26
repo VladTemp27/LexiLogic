@@ -20,24 +20,22 @@ import org.amalgam.client.loading.LoadingController;
 import org.amalgam.client.login.LoginController;
 
 import java.util.*;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 public class GameController implements UpdateDispatcher {
     // Game private variables
-    public static int currentRound;
-    public static int roomID;
+    public int currentRound;
+    public int roomID;
     @FXML
-    private static AnchorPane gamePane;
+    private AnchorPane gamePane;
     @FXML
-    private static AnchorPane gameOverPanel;
+    private  AnchorPane gameOverPanel;
     @FXML
-    private static AnchorPane victoryPanel;
+    private AnchorPane victoryPanel;
     // Round Countdown private variables
     @FXML
-    private static AnchorPane roundCountdownPane;
+    private AnchorPane roundCountdownPane;
     @FXML
-    private static Label timeLabel; // for the 30 seconds
+    private Label timeLabel; // for the 30 seconds
     @FXML
     private Label timeLeftLabel;
     @FXML
@@ -45,7 +43,7 @@ public class GameController implements UpdateDispatcher {
     @FXML
     private Label roundsWonNumberLabel; // if how many rounds won label
     @FXML
-    private static Label roundLabel;
+    private Label roundLabel;
     @FXML
     private Label player1Label;
     @FXML
@@ -101,19 +99,17 @@ public class GameController implements UpdateDispatcher {
     @FXML
     private Label twentiethLetter;
     @FXML
-    private static TextField lexiTextfield;
+    private TextField lexiTextfield;
     @FXML
-    private static Label yourLexiLabel;
-    private static Label[] letterLabels; // Array to hold letter labels
-    private static Timer timer;
-    // Player round wins tracking
-    private static Map<String, Integer> playerRoundsWon = new HashMap<>();
+    private Label yourLexiLabel;
+    private Label[] letterLabels; // Array to hold letter labels
+    private Timer timer;
     @FXML
     private Label roundStartingInLabel;
     @FXML
-    private static Label RCTimeLabel;
+    private Label RCTimeLabel;
     @FXML
-    private static Label RCroundNumberLabel;
+    private Label RCroundNumberLabel;
     @FXML
     private Button playAgainButtonGO;
     @FXML
@@ -122,101 +118,83 @@ public class GameController implements UpdateDispatcher {
     private Button playAgainButtonV;
     @FXML
     private Button backbtnVictory;
-    // common private variables
     private static GameModel gameModel;
-    public static String[][] fetchLetters = new String[4][5];
-    private int roundWon;
-    private static String roundWinner;
-
-    public void backButton() {
-
-    }
+    private int roundWon = 0;
+    public String[][] fetchLetters = new String[4][5];
 
     private static void showAlert(String message) {
         Platform.runLater(() -> {
             Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle("Error");
-        alert.setHeaderText(null);
-        alert.setContentText(message);
-        alert.showAndWait();
+            alert.setTitle("Error");
+            alert.setHeaderText(null);
+            alert.setContentText(message);
+            alert.showAndWait();
         });
     }
 
     /**
      * round counter before game to start
      */
-    private static void roundCountdown() {
-        Task<Void> t1 = new Task<Void>() {
-            @Override
-            protected Void call() throws Exception {
-                gameModel.submitReadyPlayer(LoginController.username, roomID);
-                return null;
-            }
-            @Override
-            protected void succeeded() {
-                try {
-                    Thread.sleep(500);
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
-                }
-                Platform.runLater(() -> {
-                         try {
-                            int x = 0;
-                            for (String[] fetchLetter : fetchLetters) {
-                                for (String s : fetchLetter) {
-                                    letterLabels[x].setText(s);
-                                    x++;
-                                }
+    private void roundCountdown() {
+        final int[] countdown = {5};
+        Platform.runLater(() -> {
+            RCTimeLabel.setText(String.format("00:0%d", countdown[0]));
+            timer = new Timer();
+            timer.schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    Platform.runLater(() -> {
+                        if (countdown[0] > 0) {
+                            countdown[0]--;
+                            RCTimeLabel.setText(String.format("00:0%d", countdown[0]));
+                            if (countdown[0] == 1) {
+                                RCroundNumberLabel.setText("ROUND " + currentRound);
                             }
-                        } catch (Exception e) {
-                            System.out.println(e.getMessage());
-                            System.out.println("fetchAndDisplayLetters");
+                            if (countdown[0] == 0) {
+                                roundCountdownPane.setVisible(false);
+                                gamePane.setVisible(true);
+                                roundLabel.setText("ROUND " + currentRound);
+                                timer.cancel();
+
+                                Task<Void> t1 = new Task<Void>() {
+                                    @Override
+                                    protected Void call() throws Exception {
+                                        gameModel.submitReadyPlayer(LoginController.username, roomID);
+                                        return null;
+                                    }
+
+                                    @Override
+                                    protected void succeeded() {
+                                        super.succeeded();
+                                        try {
+                                            Thread.sleep(500);
+                                        } catch (InterruptedException e) {
+                                            throw new RuntimeException(e);
+                                        }
+                                        System.out.println("SUCCESS");
+                                    }
+                                };
+                                LoadingController.executorService.submit(t1);
+                            }
+
                         }
-                         final int[] countdown = {5};
-                         RCTimeLabel.setText(String.format("00:0%d", countdown[0]));
-                         timer = new Timer();
-                         timer.schedule(new TimerTask() {
-                    @Override
-                    public void run() {
-                        Platform.runLater(() -> {
-                            if (countdown[0] > 0) {
-                                countdown[0]--;
-                                RCTimeLabel.setText(String.format("00:0%d", countdown[0]));
-                                if (countdown[0] == 1) {
-                                    RCroundNumberLabel.setText("ROUND " + currentRound);
-                                }
-                                if (countdown[0] == 0) {
-                                    roundCountdownPane.setVisible(false);
-                                    gamePane.setVisible(true);
-                                    roundLabel.setText("ROUND " + currentRound);
-                                    timer.cancel();
-                                }
-                            }
-                        });
-                    }
-                }, 1000, 1000);
-                });
-            }
-            @Override
-            protected void failed() {
-                System.out.println("FAILED T1");
-            }
+                    });
+                }
+            }, 1000, 1000);
+        });
 
-            @Override
-            protected void cancelled() {
-                System.out.println("CANCELLED T1");
-            }
-        };
-
-        LoadingController.executorService.submit(t1);
     }
 
     /**
      * Start the game of the program.
      */
 
-    private static void gameStart() {
+    private void gameStart() {
+        Platform.runLater(this::initComponents);
+
         final int[] gameTime = {30};
+        Platform.runLater(() -> {
+            populateWordMatrix();
             timeLabel.setText(String.format("00:%d", gameTime[0]));
             timer = new Timer();
             timer.schedule(new TimerTask() {
@@ -227,64 +205,54 @@ public class GameController implements UpdateDispatcher {
                             gameTime[0]--;
                             timeLabel.setText(String.format("00:%d", gameTime[0]));
                             if (gameTime[0] == 0) {
+                                roundCountdownPane.setVisible(true);
                                 timer.cancel();
-                                checkRoundWinner();
                             }
                         }
                     });
                 }
             }, 1000, 1000);
+        });
 
-            Platform.runLater(() -> {
-                 lexiTextfield.setOnKeyPressed(event -> {
-                     if (event.getCode() == KeyCode.ENTER) {
-                        String input = lexiTextfield.getText();
-                        System.out.println(input);
-                        yourLexiLabel.setText(input); // Display the input in a label
-                        lexiTextfield.clear(); // Clear the text field
-
-                            if (!input.isEmpty()) {
-                                System.out.println("SUBMITTING WORD...");
-                                Task<Void> task = new Task<Void>() {
-                                    @Override
-                                    protected Void call() throws Exception {
-                                        // Verify the word using GameModel
-                                        gameModel.verifyWord(input, LoginController.username, roomID);
-                                        System.out.println("VERIFY WORD");
-                                        return null;
-                                    }
-
-                                    @Override
-                                    protected void succeeded() {
-                                        super.succeeded();
-                                        System.out.println("SUBMITTED WORD");
-                                    }
-                                };
-
-                            LoadingController.executorService.submit(task);
-                    } else {
-                        showAlert("Please enter a word.");
-                    }
-                     }
-                 });
-            });
     }
 
-    private static void checkRoundWinner() {
-        // This method should determine the winner of the round and update the player's score.
-        // For this example, let's assume we have a method `determineRoundWinner` that returns the player's username.
+    private void populateWordMatrix() {
+        try {
+            int x = 0;
+            for (String[] fetchLetter : fetchLetters) {
+                for (String s : fetchLetter) {
+                    letterLabels[x].setText(s);
+                    x++;
+                }
+            }
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            System.out.println("fetchAndDisplayLetters");
+        }
+    }
 
-        // temp data to be fixed
-//        String roundWinner = determineRoundWinner();
-//        playerRoundsWon.put(roundWinner, playerRoundsWon.getOrDefault(roundWinner, 0) + 2);
-//        updateScores();
-//
-//        if (playerRoundsWon.get(roundWinner) >= 3) {
-//            endGame(roundWinner);
-//        } else {
-            roundCountdown();
-            roundCountdownPane.setVisible(true);
-//        }
+    private void roundWinner(LinkedHashMap<String, String> username_rounds) {
+        for (String username : username_rounds.keySet()) {
+            if (username.equals(LoginController.username)) {
+                if (username_rounds.get(username).equals("Winner")) {
+                    roundsWonNumberLabel.setText(String.valueOf(roundWon++));
+                }
+            }
+        }
+    }
+
+    private void updateScores(LinkedHashMap<String, Integer> username_points) {
+        for (String username_1 : username_points.keySet()) {
+            int pts_1 = username_points.get(username_1);
+            for (String username_2 : username_points.keySet()) {
+                int pts_2 = username_points.get(username_2);
+
+                if (pts_1 > pts_2) {
+
+                }
+            }
+
+        }
     }
 
     /**
@@ -317,6 +285,8 @@ public class GameController implements UpdateDispatcher {
     public void initialize() {
         try {
             gameModel = new GameModel(MainController.orbConnection);
+            victoryPanel.setVisible(false);
+            gameOverPanel.setVisible(false);
 
             LoginController.playerCallbackImpl.setControllerInterface(this); // initialize the interface of the callback of a player
 
@@ -328,6 +298,8 @@ public class GameController implements UpdateDispatcher {
 
             backbtnVictory.setOnAction(event -> victoryPanelBackButton());
             backbtnDefeeat.setOnAction(event -> defeatPanelBackButton());
+
+//            initComponents();
 //
 //            // Initialize player round wins
 //            playerRoundsWon.put("player1", 0);
@@ -346,6 +318,42 @@ public class GameController implements UpdateDispatcher {
             System.out.println(e.getMessage());
         }
     }
+
+    private void initComponents() {
+        lexiTextfield.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.ENTER) {
+                String input = lexiTextfield.getText();
+                System.out.println(input);
+                yourLexiLabel.setText(input); // Display the input in a label
+                lexiTextfield.clear(); // Clear the text field
+
+                if (!input.isEmpty()) {
+                    System.out.println("SUBMITTING WORD...");
+                    Task<Void> task = new Task<Void>() {
+                        @Override
+                        protected Void call() throws Exception {
+                            // Verify the word using GameModel
+                            gameModel.verifyWord(input, LoginController.username, roomID);
+                            System.out.println("VERIFY WORD");
+                            return null;
+                        }
+
+                        @Override
+                        protected void succeeded() {
+                            super.succeeded();
+                            System.out.println("SUBMITTED WORD");
+                        }
+                    };
+
+                    LoadingController.executorService.submit(task);
+                } else {
+                    showAlert("Please enter a word.");
+                }
+            }
+        });
+    }
+
+
     @FXML
     private void defeatPanelBackButton() {
     }
@@ -355,7 +363,7 @@ public class GameController implements UpdateDispatcher {
     }
 
     private void updateData(String json){
-        System.out.println("GAME "+json);
+//        System.out.println("GAME "+json);
         JsonElement rootElement = JsonParser.parseString(json);
         JsonObject rootObject = rootElement.getAsJsonObject();
 
@@ -364,6 +372,7 @@ public class GameController implements UpdateDispatcher {
         if (state.equals("staging")) {
             roundCountdown();
         }
+
         if (state.equals("game_started")) {
             gameStart();
         }
@@ -395,8 +404,7 @@ public class GameController implements UpdateDispatcher {
         //For character matrix
         JsonElement cElement =rootObject.get("char_matrix");
         wordBoxMatrix(cElement);
-
-         //End
+        //End
 
          //For Game room
 //         JsonObject gameRoomObject = rootObject.getAsJsonObject("game_room");
@@ -473,7 +481,7 @@ public class GameController implements UpdateDispatcher {
         return null;
     }
 
-    private static void wordBoxMatrix(JsonElement cElement) {
+    private void wordBoxMatrix(JsonElement cElement) {
          JsonArray rowArray = cElement.getAsJsonArray();
          int x = 0;
          int y = 0;

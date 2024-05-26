@@ -32,8 +32,6 @@ public class GameRoom implements NTimerCallback {
     private LinkedHashMap<String,PlayerCallback> playerCallbacks = new LinkedHashMap<>();
     private LinkedHashMap<String, Integer> totalPointsPerPlayer = new LinkedHashMap<>();
 
-
-
     public GameRoom(int roomID, LinkedHashMap<String,PlayerGameDetail> details,LinkedHashMap<String,PlayerCallback> playerCallbacks ,int secondsRoundDuration) throws FileNotFoundException {
         this.roomID = roomID;
         this.defaultDetails = details;
@@ -42,7 +40,6 @@ public class GameRoom implements NTimerCallback {
         currentRound = 1;
         generateWordBox();
         //stagePlayers();
-
     }
 
     public void setPlayerReady(String username){
@@ -77,7 +74,6 @@ public class GameRoom implements NTimerCallback {
         roundDone = false;
         //give initial gameroom object + state = staging(countdown 5 secs then send request ready)
         String jsonString = GameRoomResponseBuilder.buildStagePlayersResponse(this,5); //Use response builder here
-        System.out.println(jsonString);
         try {
             Thread.sleep(400);
             broadcast(jsonString);
@@ -195,6 +191,7 @@ public class GameRoom implements NTimerCallback {
         for(String key: keys){
             PlayerCallback callback = playerCallbacks.get(key);
             callback.uiCall(jsonString);
+            System.out.println(callback.username() + " " + jsonString);
         }
     }
 

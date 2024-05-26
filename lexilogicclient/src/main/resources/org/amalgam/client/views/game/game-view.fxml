@@ -262,7 +262,7 @@
       </font>
    </Label>
     <TextField fx:id="lexiTextfield" layoutX="550.0" layoutY="460.0" prefWidth="200.0" style="-fx-background-color: D9E0A2;" />
-   <Label fx:id="roundsWonNumberLabel" layoutX="210.0" layoutY="157.0" text="0" textFill="#7c814e">
+   <Label fx:id="roundsWonNumberLabel" layoutX="210.0" layoutY="157.0" textFill="#7c814e">
       <font>
          <Font name="Bowlby One SC Regular" size="48.0" />
       </font>
