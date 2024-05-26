@@ -30,9 +30,7 @@ public class PlayerServiceImpl extends PlayerServicePOA {
                 throw new AlreadyLoggedInException("User "+player_callback.username()+" is already logged in");
             }
         }
-        playerSessions.add(player_callback);
-        int index = playerSessions.indexOf(player_callback);
-        Player playerFromServer = PlayerDAL.getPlayerByUsername(playerSessions.get(index).username());
+        Player playerFromServer = PlayerDAL.getPlayerByUsername(player_callback.username());
         if(playerFromServer==null){
             throw new UserExistenceException("User does not exist");
         }
