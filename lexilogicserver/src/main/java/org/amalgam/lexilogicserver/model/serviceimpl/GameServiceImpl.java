@@ -210,11 +210,5 @@ public class GameServiceImpl extends GameServicePOA {
         }
         return -1;
     }
-
-    @Override
-    public void matchMakeResponse(String response) {
-        if(response.equals("valid")){
-            roomValid = true;
-        }
-    }
 }
+
