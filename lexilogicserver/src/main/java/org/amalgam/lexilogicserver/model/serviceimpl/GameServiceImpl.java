@@ -41,25 +41,26 @@ public class GameServiceImpl extends GameServicePOA {
         try {
             matchmakingLock.acquire();
             while (true) { // Change loop condition to always true
+//                matchPlayers();
                 new Thread(this::matchPlayers).start(); // execute the method to a new non-daemon thread
                 if (matchmakingService.isTimerDone()) { // Add condition to check if timer is done
                     System.out.println("Matchmake Timer done");
-                    break;
-//                    if(roomValid) return "{\"status\": \"success\", \"message\": \"Matchmaking Successful!\"}";
+                    return "{\"status\": \"success\", \"message\": \"Matchmaking Successful!\"}";
+                    //                    if(roomValid) return "{\"status\": \"success\", \"message\": \"Matchmaking Successful!\"}";
 //
 //                    return "{\"status\": \"timeout\", \"message\": \"Timer Done\"}";
                 }
-                Thread.sleep(100);
+//                Thread.sleep(100);
             }
         } catch (InterruptedException e) {
             System.out.println("Interrupted Thread");
             Thread.currentThread().interrupt();
         } finally {
             matchmakingLock.release();
-            if(roomValid){
-                return "{\"status\": \"success\", \"message\": \"Matchmaking Successful!\"}";
-            }
-            roomValid = false;
+//            if(roomValid){
+//                return "{\"status\": \"success\", \"message\": \"Matchmaking Successful!\"}";
+//            }
+//            roomValid = false;
         }
         return "{\"status\": \"timeout\", \"message\": \"Timer Done\"}";
     }
@@ -85,11 +86,12 @@ public class GameServiceImpl extends GameServicePOA {
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
-        if (players != null && players.size() >= 2 && matchmakingService.isTimerDone()) { // Check if enough players are matched
-            System.out.println("Creating GameRoom");
-            createGameRoom(players);
-            roomValid = true;
-        } else {
+        if (matchmakingService.isTimerDone()) { // Check if enough players are matched
+            if (players != null && players.size() >= 2) {
+                System.out.println("Players are at least 2");
+                System.out.println("Creating game room");
+                createGameRoom(players);
+            }
         }
     }
 

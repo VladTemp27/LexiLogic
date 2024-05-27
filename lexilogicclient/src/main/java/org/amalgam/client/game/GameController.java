@@ -231,12 +231,18 @@ public class GameController implements UpdateDispatcher {
         }
     }
 
-    private void roundWinner(LinkedHashMap<String, String> username_rounds) {
-        for (String username : username_rounds.keySet()) {
-            if (username.equals(LoginController.username)) {
-                if (username_rounds.get(username).equals("Winner")) {
+    private void roundWinner(LinkedHashMap<String, String> rounds_username_winner) {
+        System.out.println("ROUND WINNER");
+        for (String round : rounds_username_winner.keySet()) {
+            String winner = rounds_username_winner.get(round);
+            if (winner.equals(LoginController.username)) {
+                System.out.println(true);
+                System.out.println(winner + " " + roundWon++);
+                Platform.runLater(() -> {
                     roundsWonNumberLabel.setText(String.valueOf(roundWon++));
-                }
+                });
+            } else {
+                System.out.println(LoginController.username + " " + winner);
             }
         }
     }
@@ -287,7 +293,7 @@ public class GameController implements UpdateDispatcher {
             gameModel = new GameModel(MainController.orbConnection);
             victoryPanel.setVisible(false);
             gameOverPanel.setVisible(false);
-
+            roundsWonNumberLabel.setText("0");
             LoginController.playerCallbackImpl.setControllerInterface(this); // initialize the interface of the callback of a player
 
             // Initialize letter labels array
@@ -369,8 +375,25 @@ public class GameController implements UpdateDispatcher {
 
         //Checker for state
         String state = rootObject.get("state").getAsString();
-        if (state.equals("staging")) {
+        if (state.equals("staging")) { // components of game is initialized before game begins
             roundCountdown();
+
+            //For current round
+            currentRound = rootObject.get("current_round").getAsInt();
+            //End
+
+            if (rootObject.get("room_id") != null) {
+                roomID = rootObject.get("room_id").getAsInt();
+            }
+
+            //For character matrix
+            wordBoxMatrix(rootObject);
+            //End
+
+            JsonObject gameRoomObject = rootObject.getAsJsonObject("game_room");
+
+            fetchPoints(gameRoomObject);
+            parseRounds(gameRoomObject);
         }
 
         if (state.equals("game_started")) {
@@ -393,21 +416,7 @@ public class GameController implements UpdateDispatcher {
               showAlert("INVALID WORD");
         }
 
-        if (rootObject.get("room_id") != null) {
-            roomID = rootObject.get("room_id").getAsInt();
-        }
-
-        //For current round
-        currentRound = rootObject.get("current_round").getAsInt();
-        //End
-
-        //For character matrix
-        JsonElement cElement =rootObject.get("char_matrix");
-        wordBoxMatrix(cElement);
-        //End
-
          //For Game room
-//         JsonObject gameRoomObject = rootObject.getAsJsonObject("game_room");
 //         for(String key : gameRoomObject.keySet()){
 //            JsonObject currentObject = gameRoomObject.getAsJsonObject(key);
 //
@@ -431,28 +440,21 @@ public class GameController implements UpdateDispatcher {
 //        }
         //End
 
-        fetchPoints(rootObject);
-        parseRounds(rootObject);
     }
 
-    private void parseRounds(JsonObject rootObject){ // TODO: fix parsing rounds of json object; roundsObject is null
+    public void parseRounds(JsonObject gameRoomObject){
+        if (currentRound == 1) return;
         try {
             LinkedHashMap<String, String> rounds = new LinkedHashMap<>();
-            JsonObject roundsObject = rootObject.getAsJsonObject("rounds");
-            JsonArray roundsArray = roundsObject.getAsJsonArray();
-            if (roundsArray != null) {
-                System.out.println("PARSING ROUNDS");
-                int index = 0; // Start index at 0 for roundsArray indexing
-                for (JsonElement element : roundsArray) {
-                    String roundKey = "round_" + (index++); // Use index and increment within the loop
-                    String winner = element.getAsString();
-                    rounds.put(roundKey, winner);
-                }
-                roundWinner(rounds);
+            JsonObject roundsObject = gameRoomObject.getAsJsonObject("rounds");
+            System.out.println("PARSING ROUNDS");
+            for (int i=1; i<currentRound; i++){ // TODO: fix parsing rounds of json object;
+                String roundKey = "round_" + i;
+                String winner = roundsObject.get(roundKey).getAsString();
+                System.out.println(roundKey + " " + winner);
+                rounds.put(roundKey, winner);
             }
-            else {
-                System.out.println("roundsArray is null");
-            }
+            roundWinner(rounds);
         } catch (Exception e){
             throw new RuntimeException(e);
         }
@@ -482,19 +484,20 @@ public class GameController implements UpdateDispatcher {
         return null;
     }
 
-    private void wordBoxMatrix(JsonElement cElement) {
-         JsonArray rowArray = cElement.getAsJsonArray();
-         int x = 0;
-         int y = 0;
-         for (JsonElement element : rowArray) { //This iterates through the rows
-             JsonArray colArray = element.getAsJsonArray();
+    private void wordBoxMatrix(JsonObject rootObject) {
+        JsonElement wordBoxElement = rootObject.get("char_matrix");
+        JsonArray rowArray = wordBoxElement.getAsJsonArray();
+        int x = 0;
+        int y = 0;
+        for (JsonElement element : rowArray) { //This iterates through the rows
+         JsonArray colArray = element.getAsJsonArray();
              for(JsonElement colElement : colArray){ //This iterates through the col inside the rows
                  fetchLetters[x][y]=colElement.getAsString();
                  y++;
              }
-             y=0;
-             x++;
-         }
+         y=0;
+         x++;
+        }
     }
 
     @Override
