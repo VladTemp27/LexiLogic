@@ -13,8 +13,10 @@ public class MatchmakingService implements NTimerCallback{
     private final Semaphore queueLock = new Semaphore(1);
     private Thread timerThread;
     private final int MATCHMAKING_TIMEOUT = 10000;
-    private final AtomicBoolean timerDone = new AtomicBoolean(false);
+    private final AtomicBoolean timerDoneValue = new AtomicBoolean(false);
     private ExecutorService executorService = Executors.newSingleThreadExecutor();
+
+    private final AtomicBoolean roomValidity = new AtomicBoolean(false);
 
     public boolean isQueueEmpty(){
         return queue.isEmpty();
@@ -33,15 +35,20 @@ public class MatchmakingService implements NTimerCallback{
     }
 
     public void startTimer() {
-        timerDone.set(false);
+        timerDoneValue.set(false);
+        roomValidity.set(true);
         executorService.submit(new NTimer(MATCHMAKING_TIMEOUT / 1000, this));
     }
 
     @Override
     public void timerDone() {
-        timerDone.set(true);
+        timerDoneValue.set(true);
         try {
             queueLock.acquire();
+            if(queue.size() >= 2){
+                roomValidity.set(true);
+                return;
+            }
             if (queue.size() == 1) {
                 queue.clear();
             }
@@ -69,9 +76,18 @@ public class MatchmakingService implements NTimerCallback{
     }
 
     public boolean isTimerDone() {
-        if (timerDone.get()){
+        return timerDoneValue.get();
+    }
+
+    public boolean isRoomValid(){
+        return roomValidity.get();
+    }
+
+    public boolean clearQueue(){
+        if(timerDoneValue.get()){
             queue.clear();
+            return queue.isEmpty();
         }
-        return timerDone.get();
+        return false;
     }
 }
