@@ -16,12 +16,14 @@ import java.io.FileNotFoundException;
 
 import org.amalgam.lexilogicserver.model.utilities.referenceobjects.PlayerGameDetail;
 
+import java.security.InvalidParameterException;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.Semaphore;
 
 import org.amalgam.lexilogicserver.model.handler.GameHandler.GameRoom;
+import org.omg.CORBA.DynAnyPackage.Invalid;
 
 public class GameServiceImpl extends GameServicePOA {
     private final MatchmakingService matchmakingService = new MatchmakingService();
@@ -48,7 +50,12 @@ public class GameServiceImpl extends GameServicePOA {
                 }
                 Thread.sleep(100);
             }
-        } catch (InterruptedException e) {
+        }catch(InvalidParameterException e){
+            if(e.getMessage().equals("Not enough players")){
+                return "{\"status\": \"timeout\", \"message\": \"Timer Done\"}";
+            }
+        }
+        catch (InterruptedException e) {
             System.out.println("Interrupted Thread");
             Thread.currentThread().interrupt();
         } finally {
@@ -71,7 +78,7 @@ public class GameServiceImpl extends GameServicePOA {
     /**
      * Matches players and creates a game room if enough players are found.
      */
-    private void matchPlayers() {
+    private void matchPlayers() throws InvalidParameterException {
         LinkedList<PlayerGameDetail> players = null;
         try {
             players = matchmakingService.checkAndMatchPlayers();
@@ -82,6 +89,7 @@ public class GameServiceImpl extends GameServicePOA {
             System.out.println("Creating GameRoom");
             createGameRoom(players);
         } else {
+            throw new InvalidParameterException("Not enough players");
         }
     }
 
