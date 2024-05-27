@@ -31,6 +31,8 @@ public class GameServiceImpl extends GameServicePOA {
     private final List<GameRoom> rooms = new LinkedList<>();
     private final Semaphore matchmakingLock = new Semaphore(1);
 
+    private boolean roomValid = false;
+
     /**
      * Matches players for a game. Waits up to 10 seconds for another player to join.
      *
@@ -45,21 +47,23 @@ public class GameServiceImpl extends GameServicePOA {
             while (true) { // Change loop condition to always true
                 matchPlayers();
                 if (matchmakingService.isTimerDone()) { // Add condition to check if timer is done
-                    return "{\"status\": \"success\", \"message\": \"Matchmaking Successful!\"}";
-                    // Exit loop if timer is done
+                    System.out.println("Matchmake Timer done");
+                    break;
+//                    if(roomValid) return "{\"status\": \"success\", \"message\": \"Matchmaking Successful!\"}";
+//
+//                    return "{\"status\": \"timeout\", \"message\": \"Timer Done\"}";
                 }
                 Thread.sleep(100);
             }
-        }catch(InvalidParameterException e){
-            if(e.getMessage().equals("Not enough players")){
-                return "{\"status\": \"timeout\", \"message\": \"Timer Done\"}";
-            }
-        }
-        catch (InterruptedException e) {
+        } catch (InterruptedException e) {
             System.out.println("Interrupted Thread");
             Thread.currentThread().interrupt();
         } finally {
             matchmakingLock.release();
+            if(roomValid){
+                return "{\"status\": \"success\", \"message\": \"Matchmaking Successful!\"}";
+            }
+            roomValid = false;
         }
         return "{\"status\": \"timeout\", \"message\": \"Timer Done\"}";
     }
@@ -78,7 +82,7 @@ public class GameServiceImpl extends GameServicePOA {
     /**
      * Matches players and creates a game room if enough players are found.
      */
-    private void matchPlayers() throws InvalidParameterException {
+    private void matchPlayers(){
         LinkedList<PlayerGameDetail> players = null;
         try {
             players = matchmakingService.checkAndMatchPlayers();
@@ -88,8 +92,8 @@ public class GameServiceImpl extends GameServicePOA {
         if (players != null && players.size() >= 2 && matchmakingService.isTimerDone()) { // Check if enough players are matched
             System.out.println("Creating GameRoom");
             createGameRoom(players);
+            roomValid = true;
         } else {
-            throw new InvalidParameterException("Not enough players");
         }
     }
 
