@@ -2,7 +2,6 @@ package org.amalgam.lexilogicserver.model.serviceimpl;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonPrimitive;
 import org.amalgam.Service.GameServiceModule.GameServicePOA;
 import org.amalgam.UIControllers.PlayerCallback;
 import org.amalgam.Utils.Exceptions.*;
@@ -16,14 +15,11 @@ import java.io.FileNotFoundException;
 
 import org.amalgam.lexilogicserver.model.utilities.referenceobjects.PlayerGameDetail;
 
-import java.security.InvalidParameterException;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.Semaphore;
 
 import org.amalgam.lexilogicserver.model.handler.GameHandler.GameRoom;
-import org.omg.CORBA.DynAnyPackage.Invalid;
 
 public class GameServiceImpl extends GameServicePOA {
     private final MatchmakingService matchmakingService = new MatchmakingService();
@@ -45,13 +41,13 @@ public class GameServiceImpl extends GameServicePOA {
         try {
             matchmakingLock.acquire();
             while (true) { // Change loop condition to always true
-                matchPlayers();
+                //matchPlayers();
                 if (matchmakingService.isTimerDone()) { // Add condition to check if timer is done
                     System.out.println("Matchmake Timer done");
-                    break;
-//                    if(roomValid) return "{\"status\": \"success\", \"message\": \"Matchmaking Successful!\"}";
-//
-//                    return "{\"status\": \"timeout\", \"message\": \"Timer Done\"}";
+                    if(matchmakingService.isRoomValid()){
+                        return "{\"status\": \"success\", \"message\": \"Matchmaking Successful!\"}";
+                    }
+                    return "{\"status\": \"timeout\", \"message\": \"Timer Done\"}";
                 }
                 Thread.sleep(100);
             }
@@ -59,10 +55,15 @@ public class GameServiceImpl extends GameServicePOA {
             System.out.println("Interrupted Thread");
             Thread.currentThread().interrupt();
         } finally {
-            matchmakingLock.release();
-            if(roomValid){
-                return "{\"status\": \"success\", \"message\": \"Matchmaking Successful!\"}";
+            if(matchmakingService.isRoomValid()){
+                try {
+                    createGameRoom(this.matchmakingService.checkAndMatchPlayers());
+                    this.matchmakingService.clearQueue();
+                }catch(Exception e){
+                    e.printStackTrace();
+                }
             }
+            matchmakingLock.release();
             roomValid = false;
         }
         return "{\"status\": \"timeout\", \"message\": \"Timer Done\"}";
@@ -208,5 +209,12 @@ public class GameServiceImpl extends GameServicePOA {
             }
         }
         return -1;
+    }
+
+    @Override
+    public void matchMakeResponse(String response) {
+        if(response.equals("valid")){
+            roomValid = true;
+        }
     }
 }
