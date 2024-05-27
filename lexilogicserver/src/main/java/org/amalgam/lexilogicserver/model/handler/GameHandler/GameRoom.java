@@ -23,14 +23,19 @@ import java.util.concurrent.Executors;
 public class GameRoom implements NTimerCallback {
 
     private int roomID, currentRound, secondsRoundDuration;
-    private LinkedHashMap<String,PlayerGameDetail> details;
-    private final LinkedHashMap<String,PlayerGameDetail> defaultDetails;
     private boolean roundDone;
-    private ExecutorService executor = Executors.newSingleThreadExecutor();
+
     private WordBox wordBox;
+
+    private LinkedHashMap<String,PlayerGameDetail> details;
     private LinkedHashMap<Integer, String> rounds = new LinkedHashMap<>();
     private LinkedHashMap<String,PlayerCallback> playerCallbacks = new LinkedHashMap<>();
     private LinkedHashMap<String, Integer> totalPointsPerPlayer = new LinkedHashMap<>();
+
+    private final LinkedHashMap<String,PlayerGameDetail> defaultDetails;
+
+    private ExecutorService executor = Executors.newSingleThreadExecutor();
+
 
     public GameRoom(int roomID, LinkedHashMap<String,PlayerGameDetail> details,LinkedHashMap<String,PlayerCallback> playerCallbacks ,int secondsRoundDuration) throws FileNotFoundException {
         this.roomID = roomID;
@@ -42,6 +47,8 @@ public class GameRoom implements NTimerCallback {
         //stagePlayers();
     }
 
+    //This method is invoked to mark the players in the room as ready
+    // TODO: explore if concurrently accessing hashmaps would pose a problem
     public void setPlayerReady(String username){
         PlayerGameDetail detail = details.get(username);
         detail.setReady(true);
@@ -56,6 +63,7 @@ public class GameRoom implements NTimerCallback {
         roundStart();
     }
 
+    //This method is invoked to set player states into a staging. This method is the basis for the round countdown
     public void stagePlayers() {
         System.out.println("Staging, "+currentRound);
         details = new LinkedHashMap<>();
@@ -74,6 +82,7 @@ public class GameRoom implements NTimerCallback {
         roundDone = false;
         //give initial gameroom object + state = staging(countdown 5 secs then send request ready)
         String jsonString = GameRoomResponseBuilder.buildStagePlayersResponse(this,5); //Use response builder here
+        System.out.println(jsonString);
         try {
             Thread.sleep(400);
             broadcast(jsonString);
@@ -82,11 +91,12 @@ public class GameRoom implements NTimerCallback {
         }
     }
 
+    //Getter for the charMatrix of the Room
     public char[][] getCharMatrix (){
         return wordBox.getWordMatrix();
     }
 
-    public void updatePlayerDataDB(int lobbyID){
+    private void updatePlayerDataDB(int lobbyID){
         List<String> keys = new ArrayList<>(details.keySet());
         for(String key: keys){
             PlayerGameDetail detail = details.get(key);
@@ -108,6 +118,7 @@ public class GameRoom implements NTimerCallback {
         System.out.println("New timer submitted with duration "+secondsRoundDuration+"s");
     }
 
+    //Checks if all players are ready
     private boolean isAllPlayersReady(){
         List<String> keys = new ArrayList<>(details.keySet());
         for(String key: keys){
@@ -126,6 +137,7 @@ public class GameRoom implements NTimerCallback {
         wordBox = new WordBox(new Generator(new Reader("lexilogicserver/src/main/java/org/amalgam/lexilogicserver/model/microservices/wordbox/words.txt"), false, 4, 5));
     }
 
+    //Method to be invoked once words are submitted via the game service request
     public void submitWord(String word, String username){
         System.out.println("Game room received request of word "+word);
         try {
@@ -169,6 +181,29 @@ public class GameRoom implements NTimerCallback {
         }
     }
 
+
+    //Triggered by NTimer callback to notify parent class that timer is done, this is used to keep track of time elapsed
+    // This method handles game flow once a round has finished
+    @Override
+    public void timerDone() {
+        System.out.println("ROUND DONE"+currentRound);
+        this.roundDone = true;
+        String roundWinner = getRoundWinner();
+        System.out.println("Winner: "+roundWinner);
+        rounds.put(currentRound, roundWinner);
+        System.out.println("winner saved");
+        tallyRoundTotalPoints();
+        currentRound++;
+        System.out.println("next round: "+currentRound);
+        try {
+            generateWordBox();
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+        //Use broadcast with builder
+        stagePlayers();
+    }
+
     private void updatePoints(String username){
 
         PlayerGameDetail detail = details.get(username);
@@ -186,7 +221,7 @@ public class GameRoom implements NTimerCallback {
         return pts;
     }
 
-    public void broadcast(String jsonString) throws InvalidRequestException {
+    private void broadcast(String jsonString) throws InvalidRequestException {
         List<String> keys = new ArrayList<>(playerCallbacks.keySet());
         for(String key: keys){
             PlayerCallback callback = playerCallbacks.get(key);
@@ -196,7 +231,7 @@ public class GameRoom implements NTimerCallback {
     }
 
     //Method overload
-    public void broadcast(String username, String jsonString) throws InvalidRequestException{
+    private void broadcast(String username, String jsonString) throws InvalidRequestException{
         List<String> keys = new ArrayList<>(playerCallbacks.keySet());
         for(String key: keys){
             if(!key.equals(username)){
@@ -315,7 +350,7 @@ public class GameRoom implements NTimerCallback {
         return keyWithMaxValue;
     }
 
-    public void tallyRoundTotalPoints(){
+    private void tallyRoundTotalPoints(){
         List<String> keys = new ArrayList<>(details.keySet());
         System.out.println(!totalPointsPerPlayer.isEmpty());
         if(!totalPointsPerPlayer.isEmpty()) {
@@ -338,28 +373,6 @@ public class GameRoom implements NTimerCallback {
 
 
 
-    // TODO: should check if winner is available then tell players in game room winner has been decided and a new
-    //          round has started
-    @Override
-    public void timerDone() {
-        System.out.println("ROUND DONE"+currentRound);
-        this.roundDone = true;
-        String roundWinner = getRoundWinner();
-        System.out.println("Winner: "+roundWinner);
-        rounds.put(currentRound, roundWinner);
-        System.out.println("winner saved");
-        tallyRoundTotalPoints();
-        currentRound++;
-        System.out.println("next round: "+currentRound);
-        try {
-            generateWordBox();
-        } catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
-        }
-        //Use broadcast with builder
-        stagePlayers();
-    }
-
     @Override
     public void timeIs() {
 
@@ -377,6 +390,7 @@ public class GameRoom implements NTimerCallback {
         return secondsRoundDuration;
     }
 
+    //This method flushes the existing LinkedHashMap with new Objects to avoid overflow of data into existing memory
     private LinkedHashMap<String, PlayerGameDetail> flushWith(LinkedHashMap<String, PlayerGameDetail> defaultValues){
         LinkedHashMap<String, PlayerGameDetail> flushedData = new LinkedHashMap<>();
         List<String> keyList = new ArrayList<>(defaultValues.keySet());

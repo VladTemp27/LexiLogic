@@ -14,17 +14,21 @@ import java.io.FileNotFoundException;
 
 import org.amalgam.lexilogicserver.model.utilities.referenceobjects.PlayerGameDetail;
 
+import java.security.InvalidParameterException;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Semaphore;
 
 import org.amalgam.lexilogicserver.model.handler.GameHandler.GameRoom;
+import org.omg.CORBA.DynAnyPackage.Invalid;
 
 public class GameServiceImpl extends GameServicePOA {
     private final MatchmakingService matchmakingService = new MatchmakingService();
     private final ConcurrentHashMap<String, PlayerCallback> playerCallbackMap = new ConcurrentHashMap<>();
     private final List<GameRoom> rooms = new LinkedList<>();
     private final Semaphore matchmakingLock = new Semaphore(1);
+
+    private boolean roomValid = false;
 
     /**
      * Matches players for a game. Waits up to 10 seconds for another player to join.
@@ -36,20 +40,26 @@ public class GameServiceImpl extends GameServicePOA {
         addPlayerToQueue(playerCallback);
         try {
             matchmakingLock.acquire();
-            while (true) {
+            while (true) { // Change loop condition to always true
                 new Thread(this::matchPlayers).start(); // execute the method to a new non-daemon thread
-                // Add condition to check if timer is done
-                if (matchmakingService.isTimerDone()) { // main thread check the if condition
-                    System.out.println("{\"status\": \"success\", \"message\": \"Matchmaking Successful!\"}");
-                    return "{\"status\": \"success\", \"message\": \"Matchmaking Successful!\"}";
-                    // Exit loop if timer is done
+                if (matchmakingService.isTimerDone()) { // Add condition to check if timer is done
+                    System.out.println("Matchmake Timer done");
+                    break;
+//                    if(roomValid) return "{\"status\": \"success\", \"message\": \"Matchmaking Successful!\"}";
+//
+//                    return "{\"status\": \"timeout\", \"message\": \"Timer Done\"}";
                 }
+                Thread.sleep(100);
             }
         } catch (InterruptedException e) {
             System.out.println("Interrupted Thread");
             Thread.currentThread().interrupt();
         } finally {
             matchmakingLock.release();
+            if(roomValid){
+                return "{\"status\": \"success\", \"message\": \"Matchmaking Successful!\"}";
+            }
+            roomValid = false;
         }
         return "{\"status\": \"timeout\", \"message\": \"Timer Done\"}";
     }
@@ -68,19 +78,18 @@ public class GameServiceImpl extends GameServicePOA {
     /**
      * Matches players and creates a game room if enough players are found.
      */
-    private void matchPlayers() {
+    private void matchPlayers(){
         LinkedList<PlayerGameDetail> players = null;
         try {
             players = matchmakingService.checkAndMatchPlayers();
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
-        if (matchmakingService.isTimerDone()) { // Check if enough players are matched
-            if (players != null && players.size() >= 2) {
-                System.out.println("Players are at least 2");
-                System.out.println("Creating game room");
-                createGameRoom(players);
-            }
+        if (players != null && players.size() >= 2 && matchmakingService.isTimerDone()) { // Check if enough players are matched
+            System.out.println("Creating GameRoom");
+            createGameRoom(players);
+            roomValid = true;
+        } else {
         }
     }
 
