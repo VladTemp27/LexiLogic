@@ -21,28 +21,23 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class GameRoom implements NTimerCallback {
-
-    private int roomID, currentRound, secondsRoundDuration;
+    private int roomID, currentRound, secondsRoundDuration, capacity;
     private boolean roundDone;
-
     private WordBox wordBox;
-
     private LinkedHashMap<String,PlayerGameDetail> details;
     private LinkedHashMap<Integer, String> rounds = new LinkedHashMap<>();
     private LinkedHashMap<String,PlayerCallback> playerCallbacks = new LinkedHashMap<>();
     private LinkedHashMap<String, Integer> totalPointsPerPlayer = new LinkedHashMap<>();
-
     private final LinkedHashMap<String,PlayerGameDetail> defaultDetails;
-
     private ExecutorService executor = Executors.newSingleThreadExecutor();
 
-
-    public GameRoom(int roomID, LinkedHashMap<String,PlayerGameDetail> details,LinkedHashMap<String,PlayerCallback> playerCallbacks ,int secondsRoundDuration) throws FileNotFoundException {
+    public GameRoom(int roomID, LinkedHashMap<String,PlayerGameDetail> details, LinkedHashMap<String,PlayerCallback> playerCallbacks , int secondsRoundDuration, int capacity) throws FileNotFoundException {
         this.roomID = roomID;
         this.defaultDetails = details;
         this.secondsRoundDuration = secondsRoundDuration;
         this.playerCallbacks = playerCallbacks;
         currentRound = 1;
+        this.capacity = capacity;
         generateWordBox();
         //stagePlayers();
     }
@@ -181,7 +176,6 @@ public class GameRoom implements NTimerCallback {
         }
     }
 
-
     //Triggered by NTimer callback to notify parent class that timer is done, this is used to keep track of time elapsed
     // This method handles game flow once a round has finished
     @Override
@@ -281,7 +275,7 @@ public class GameRoom implements NTimerCallback {
         return roundDone;
     }
 
-    //Checker if winner is available returns null if winner is nut available
+    //Checker if winner is available returns null if winner is not available
     private String winnerAvailable(){
         StringBuilder winner = new StringBuilder();
         LinkedHashMap<String, Integer> roundWinners = new LinkedHashMap<>();
@@ -301,7 +295,7 @@ public class GameRoom implements NTimerCallback {
         if (roundWinners.containsValue(3)) {
             roundWinners.forEach((key, value) -> {
                 if (value == 3) {
-                    winner.append(value);
+                    winner.append(key);
                 }
             });
             return winner.toString();
@@ -390,6 +384,7 @@ public class GameRoom implements NTimerCallback {
         return secondsRoundDuration;
     }
 
+
     //This method flushes the existing LinkedHashMap with new Objects to avoid overflow of data into existing memory
     private LinkedHashMap<String, PlayerGameDetail> flushWith(LinkedHashMap<String, PlayerGameDetail> defaultValues){
         LinkedHashMap<String, PlayerGameDetail> flushedData = new LinkedHashMap<>();
@@ -400,5 +395,9 @@ public class GameRoom implements NTimerCallback {
         }
 
         return flushedData;
+    }
+
+    public int getCapacity() {
+        return capacity;
     }
 }

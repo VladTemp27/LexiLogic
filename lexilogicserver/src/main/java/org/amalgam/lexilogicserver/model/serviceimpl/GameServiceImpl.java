@@ -27,7 +27,6 @@ public class GameServiceImpl extends GameServicePOA {
     private final ConcurrentHashMap<String, PlayerCallback> playerCallbackMap = new ConcurrentHashMap<>();
     private final List<GameRoom> rooms = new LinkedList<>();
     private final Semaphore matchmakingLock = new Semaphore(1);
-
     private boolean roomValid = false;
 
     /**
@@ -114,7 +113,7 @@ public class GameServiceImpl extends GameServicePOA {
         }
 
         try {
-            GameRoom gameRoom = new GameRoom(roomID, playerDetailsMap, playerCallbacksMap, 30);
+            GameRoom gameRoom = new GameRoom(roomID, playerDetailsMap, playerCallbacksMap, 30, players.size());
             System.out.println("GameRoom Created");
             if (matchmakingService.isTimerDone()) {
                 rooms.add(gameRoom);
