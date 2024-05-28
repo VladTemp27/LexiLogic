@@ -236,17 +236,52 @@ public class GameController implements UpdateDispatcher {
 
     // TODO: fix update of score; display "total score for the entire game"(sigma level) | "total score per round"(easy)
     private void updateScores(LinkedHashMap<String, Integer> username_points) {
-        for (String username_1 : username_points.keySet()) {
-            int pts_1 = username_points.get(username_1);
-            for (String username_2 : username_points.keySet()) {
-                int pts_2 = username_points.get(username_2);
+        Map<String, Integer> topNPlayer = username_points.entrySet().stream()
+                .sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
+                .limit(3)
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new));
 
-                if (pts_1 > pts_2) {
-
-                }
-            }
-
+        LinkedHashMap<String, Integer> username_totalPoints = new LinkedHashMap<>();
+        int x = 0;
+        for (String username : topNPlayer.keySet()){
+            int pts = topNPlayer.get(username);
+//            int finalX = x;
+//            Platform.runLater(() -> {
+//                arr_playerName_label[finalX].setText(username);
+//                arr_playerScore_label[finalX].setText(String.valueOf(pts));
+//            });
+//            x++;
         }
+//        for (Map.Entry<String, Integer> entry : username_totalPoints.entrySet()) {
+//            int pts = entry.getValue();
+//            String username = entry.getKey();
+//            for (String user : topNPlayer.keySet()) {
+//                int totalPts=0;
+//                if (username.equals(user)) {
+//                    totalPts += pts;
+//                    continue;
+//                }
+//                int finalX = 0;
+//                int finalTotalPts = totalPts;
+//                Platform.runLater(() -> {
+//                    arr_playerName_label[finalX].setText(username);
+//                    arr_playerScore_label[finalX].setText(String.valueOf(finalTotalPts));
+//                });
+//            }
+//        }
+//        List<Map.Entry<String, Integer>> list = new ArrayList<>(username_points.entrySet());
+//        list.sort(Map.Entry.comparingByValue());
+//
+//        Map<String, Integer> result = new LinkedHashMap<>();
+//        for (Map.Entry<String, Integer> entry : list) {
+//            result.put(entry.getKey(), entry.getValue());
+//        }
+//
+//        for (String username: result.keySet()){
+//            System.out.println(username);
+//            int pts = result.get(username);
+//            System.out.println(username + " " + pts);
+//        }
     }
 
     /**
@@ -274,6 +309,14 @@ public class GameController implements UpdateDispatcher {
                     sixthLetter, seventhLetter, eightLetter, ninthLetter, tenthLetter,
                     eleventhLetter, twelfthLetter, thirteenthLetter, fourteenthLetter, fifteenthLetter,
                     sixteenthLetter, seventeenthLetter, eighteenthLetter, nineteenthLetter, twentiethLetter};
+
+            arr_playerName_label = new Label[]{player1Label, player2Label, player3Label};
+
+            player1ScoreLabel.setText("0");
+            player2ScoreLabel.setText("0");
+            player3ScoreLabel.setText("0");
+
+            arr_playerScore_label = new Label[]{player1ScoreLabel, player2ScoreLabel, player3ScoreLabel};
 
             backbtnVictory.setOnAction(event -> victoryPanelBackButton());
             backbtnDefeeat.setOnAction(event -> defeatPanelBackButton());
@@ -370,6 +413,8 @@ public class GameController implements UpdateDispatcher {
         }
 
         if (state.equals("game_started")) {
+            int capacity = rootObject.get("capacity").getAsInt();
+            fetchPoints(gameRoomObject, capacity);
             gameStart();
         }
 
@@ -430,28 +475,22 @@ public class GameController implements UpdateDispatcher {
         }
     }
 
-    // TODO: fix parsing points of json; points object is null
-    public LinkedHashMap<String, Integer> fetchPoints(JsonObject rootObject){
+    public void fetchPoints(JsonObject gameRoomObject, int capacity){
         try {
             LinkedHashMap<String, Integer> pointsList = new LinkedHashMap<>();
-            JsonObject pointsObject = rootObject.getAsJsonObject("gameRoom");
-            if (pointsObject != null) {
-                for (String key : pointsObject.keySet()) {
-                    JsonObject userObject = pointsObject.getAsJsonObject(key);
-
-                    int points = userObject.get("points").getAsInt();
-
-                    pointsList.put(key, points);
-                    System.out.println(key + ":" + points);
-                }
-                updateScores(pointsList);
-            } else {
-                System.out.println("pointsObject is null");
+            System.out.println("PARSING POINTS");
+            for (int i=0; i<capacity; i++){
+                String key = "player_" + i;
+                JsonObject playerObject = gameRoomObject.getAsJsonObject(key);
+                String player_name = playerObject.get("username").getAsString();
+                int player_pts = playerObject.get("points").getAsInt();
+                System.out.println(player_name + " " + player_pts);
+                pointsList.put(player_name, player_pts);
             }
+            updateScores(pointsList);
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return null;
     }
 
     private void wordBoxMatrix(JsonObject rootObject) {
