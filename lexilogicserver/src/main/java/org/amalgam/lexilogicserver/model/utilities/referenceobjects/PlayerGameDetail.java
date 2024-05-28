@@ -1,7 +1,4 @@
 package org.amalgam.lexilogicserver.model.utilities.referenceobjects;
-
-import org.amalgam.lexilogicserver.model.microservices.wordbox.WordBox;
-
 import java.util.LinkedList;
 
 public class PlayerGameDetail {
@@ -34,7 +31,6 @@ public class PlayerGameDetail {
     public LinkedList<String> getWords() {
         return words;
     }
-
 
     public void addWord(String word){
         words.add(word);

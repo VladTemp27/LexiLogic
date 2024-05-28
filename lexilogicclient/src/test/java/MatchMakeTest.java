@@ -27,7 +27,7 @@ public class MatchMakeTest implements ControllerInterface{
     private CallbackImpl callback;
     private int gameRoomID;
     private String currentState = "";
-    private String user;
+    private static String user;
     private boolean gameValid = true;
 
     private static Scanner kInput = new Scanner(System.in);
@@ -54,30 +54,27 @@ public class MatchMakeTest implements ControllerInterface{
             program.gameService.verifyWord(word, program.user, program.gameRoomID);
         }
 
-
-
-
         //TODO: move this to ui call, for the most part majority of the bugs are fixed here im gonna sleep
         // ive been awake for 28 hours right now with 1 month of no actual sleep
-//        while(!program.currentState.equals("game_ended")){
-//            if(program.currentState.equals("staging")){
-//                System.out.println("staging");
-//                program.stagingStateHandler();
-//                System.out.println(user+" "+program.gameRoomID);
-//                program.gameService.playerReady(user, program.gameRoomID);
-//                System.out.println("ready sent");
-//                program.currentState = "ready sent";
-//                continue;
-//            }
-//
-//            if(program.currentState.equals("game_started")){
-//                program.gameStartedHandler();
-//                System.out.println("round done");
-//                program.currentState = "";
-//                continue;
-//            }
-//
-//        }
+        while(!program.currentState.equals("game_ended")){
+            if(program.currentState.equals("staging")){
+                System.out.println("staging");
+                program.stagingStateHandler();
+                System.out.println(user+" "+program.gameRoomID);
+                program.gameService.playerReady(user, program.gameRoomID);
+                System.out.println("ready sent");
+                program.currentState = "ready sent";
+                continue;
+            }
+
+            if(program.currentState.equals("game_started")){
+                program.gameStartedHandler();
+                System.out.println("round done");
+                program.currentState = "";
+                continue;
+            }
+
+        }
 
         while(!program.currentState.equals("game_ended")){
 
@@ -86,7 +83,7 @@ public class MatchMakeTest implements ControllerInterface{
 
     public void getAllStubs(){
         try {
-            ORB orb = ORB.init(generateArguments(2018, "localhost"), null);
+            ORB orb = ORB.init(generateArguments(2121, "corbaserver"), null);
             rootPOA = POAHelper.narrow(orb.resolve_initial_references("RootPOA"));
             rootPOA.the_POAManager().activate();
 
