@@ -282,32 +282,32 @@
          <Font name="Bowlby One SC Regular" size="22.0" />
       </font>
    </Label>
-    <Label fx:id="player1Label" layoutX="40.0" layoutY="333.0" text="player 1">
+    <Label fx:id="player1Label" layoutX="40.0" layoutY="333.0">
         <font>
             <Font name="Brygada 1918 Regular" size="24.0" />
         </font>
     </Label>
-   <Label fx:id="player2Label" layoutX="40.0" layoutY="375.0" text="player 2">
+   <Label fx:id="player2Label" layoutX="40.0" layoutY="375.0">
       <font>
          <Font name="Brygada 1918 Regular" size="24.0" />
       </font>
    </Label>
-   <Label fx:id="player3Label" layoutX="40.0" layoutY="419.0" text="player 3">
+   <Label fx:id="player3Label" layoutX="40.0" layoutY="419.0">
       <font>
          <Font name="Brygada 1918 Regular" size="24.0" />
       </font>
    </Label>
-   <Label fx:id="score1Label" layoutX="193.0" layoutY="321.0" text="1293" textFill="#d9e0a2">
+   <Label fx:id="player1ScoreLabel" layoutX="193.0" layoutY="321.0" textFill="#d9e0a2">
       <font>
          <Font name="Bowlby One SC Regular" size="24.0" />
       </font>
    </Label>
-   <Label fx:id="score2Label" layoutX="193.0" layoutY="369.0" text="1093" textFill="#d9e0a2">
+   <Label fx:id="player2ScoreLabel" layoutX="193.0" layoutY="369.0" textFill="#d9e0a2">
       <font>
          <Font name="Bowlby One SC Regular" size="24.0" />
       </font>
    </Label>
-   <Label fx:id="score3Label" layoutX="193.0" layoutY="413.0" text="987" textFill="#d9e0a2">
+   <Label fx:id="player3ScoreLabel" layoutX="193.0" layoutY="413.0" textFill="#d9e0a2">
       <font>
          <Font name="Bowlby One SC Regular" size="24.0" />
       </font>

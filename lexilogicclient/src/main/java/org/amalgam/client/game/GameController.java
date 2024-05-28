@@ -20,11 +20,9 @@ import org.amalgam.client.loading.LoadingController;
 import org.amalgam.client.login.LoginController;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class GameController implements UpdateDispatcher {
-    // Game private variables
-    public int currentRound;
-    public int roomID;
     @FXML
     private AnchorPane gamePane;
     @FXML
@@ -51,11 +49,11 @@ public class GameController implements UpdateDispatcher {
     @FXML
     private Label player3Label;
     @FXML
-    private Label score1Label;
+    private Label player1ScoreLabel;
     @FXML
-    private Label score2Label;
+    private Label player2ScoreLabel;
     @FXML
-    private Label score3Label;
+    private Label player3ScoreLabel;
     @FXML
     private GridPane wordBoxGridPane;
     @FXML
@@ -102,7 +100,6 @@ public class GameController implements UpdateDispatcher {
     private TextField lexiTextfield;
     @FXML
     private Label yourLexiLabel;
-    private Label[] letterLabels; // Array to hold letter labels
     private Timer timer;
     @FXML
     private Label roundStartingInLabel;
@@ -118,9 +115,15 @@ public class GameController implements UpdateDispatcher {
     private Button playAgainButtonV;
     @FXML
     private Button backbtnVictory;
+    private Label[] arr_letter_label; // Array to hold letter labels
+    private Label[] arr_playerName_label;
+    private Label[] arr_playerScore_label;
     private static GameModel gameModel;
-    private int roundWon = 0;
+    private int totalRoundWon = 0;
+    private int totalPts=0;
     public String[][] fetchLetters = new String[4][5];
+    private int currentRound;
+    private int roomID;
 
     private static void showAlert(String message) {
         Platform.runLater(() -> {
@@ -221,7 +224,7 @@ public class GameController implements UpdateDispatcher {
             int x = 0;
             for (String[] fetchLetter : fetchLetters) {
                 for (String s : fetchLetter) {
-                    letterLabels[x].setText(s);
+                    arr_letter_label[x].setText(s);
                     x++;
                 }
             }
@@ -231,22 +234,7 @@ public class GameController implements UpdateDispatcher {
         }
     }
 
-    private void roundWinner(LinkedHashMap<String, String> rounds_username_winner) {
-        System.out.println("ROUND WINNER");
-        for (String round : rounds_username_winner.keySet()) {
-            String winner = rounds_username_winner.get(round);
-            if (winner.equals(LoginController.username)) {
-                System.out.println(true);
-                System.out.println(winner + " " + roundWon++);
-                Platform.runLater(() -> {
-                    roundsWonNumberLabel.setText(String.valueOf(roundWon++));
-                });
-            } else {
-                System.out.println(LoginController.username + " " + winner);
-            }
-        }
-    }
-
+    // TODO: fix update of score; display "total score for the entire game"(sigma level) | "total score per round"(easy)
     private void updateScores(LinkedHashMap<String, Integer> username_points) {
         for (String username_1 : username_points.keySet()) {
             int pts_1 = username_points.get(username_1);
@@ -269,21 +257,6 @@ public class GameController implements UpdateDispatcher {
     }
 
     /**
-     * Updates the round label to display the current round number.
-     */
-    private void updateRoundLabel() {
-        roundLabel.setText("Round: " + currentRound);
-    }
-
-//    private static void updateScores() {
-//        // Update the scores in the UI
-//        roundsWonNumberLabel.setText(String.valueOf(roundWon));
-////        score1Label.setText(String.valueOf(playerRoundsWon.getOrDefault("player1", 0)));
-////        score2Label.setText(String.valueOf(playerRoundsWon.getOrDefault("player2", 0)));
-////        score3Label.setText(String.valueOf(playerRoundsWon.getOrDefault("player3", 0)));
-//    }
-
-    /**
      * Initializes the controller.
      * This method sets up the UI components and initializes the data model.
      */
@@ -297,7 +270,7 @@ public class GameController implements UpdateDispatcher {
             LoginController.playerCallbackImpl.setControllerInterface(this); // initialize the interface of the callback of a player
 
             // Initialize letter labels array
-            letterLabels = new Label[]{firstLetter, secondLetter, thirdLetter, fourthLetter, fifthLetter,
+            arr_letter_label = new Label[]{firstLetter, secondLetter, thirdLetter, fourthLetter, fifthLetter,
                     sixthLetter, seventhLetter, eightLetter, ninthLetter, tenthLetter,
                     eleventhLetter, twelfthLetter, thirteenthLetter, fourteenthLetter, fifteenthLetter,
                     sixteenthLetter, seventeenthLetter, eighteenthLetter, nineteenthLetter, twentiethLetter};
@@ -375,10 +348,11 @@ public class GameController implements UpdateDispatcher {
 
         //Checker for state
         String state = rootObject.get("state").getAsString();
+        JsonObject gameRoomObject = rootObject.getAsJsonObject("game_room");
         if (state.equals("staging")) { // components of game is initialized before game begins
-            roundCountdown();
-
             //For current round
+            System.out.println("STAGING");
+
             currentRound = rootObject.get("current_round").getAsInt();
             //End
 
@@ -390,10 +364,9 @@ public class GameController implements UpdateDispatcher {
             wordBoxMatrix(rootObject);
             //End
 
-            JsonObject gameRoomObject = rootObject.getAsJsonObject("game_room");
-
-            fetchPoints(gameRoomObject);
             parseRounds(gameRoomObject);
+
+            roundCountdown();
         }
 
         if (state.equals("game_started")) {
@@ -429,32 +402,29 @@ public class GameController implements UpdateDispatcher {
 //
 //         }
          //End
-
-        //Round History
-//        Collection<String> values = parseRounds(json).values();
-//        parseRounds(json);
-//        for (String winner : values) {
-//            if (winner.equals(LoginController.username)){
-//                roundWinner = winner;
-//            }
-//        }
-        //End
-
     }
 
     public void parseRounds(JsonObject gameRoomObject){
-        if (currentRound == 1) return;
+        int previousRound = currentRound - 1;
+        if (previousRound == 0) return;
         try {
-            LinkedHashMap<String, String> rounds = new LinkedHashMap<>();
             JsonObject roundsObject = gameRoomObject.getAsJsonObject("rounds");
             System.out.println("PARSING ROUNDS");
-            for (int i=1; i<currentRound; i++){ // TODO: fix parsing rounds of json object;
-                String roundKey = "round_" + i;
-                String winner = roundsObject.get(roundKey).getAsString();
-                System.out.println(roundKey + " " + winner);
-                rounds.put(roundKey, winner);
+            String roundKey = "round_" + previousRound;
+            String winner = roundsObject.get(roundKey).getAsString();
+            System.out.println(roundKey + " " + winner);
+
+            System.out.println("ROUND WINNER");
+            if (winner.equals(LoginController.username)) { // winner for a round
+                int roundWon = 1;
+                totalRoundWon += roundWon;
+                System.out.println(winner + " " + (totalRoundWon));
+                Platform.runLater(() -> {
+                    roundsWonNumberLabel.setText(String.valueOf(totalRoundWon));
+                });
+            } else {
+                System.out.println(LoginController.username + " " + winner);
             }
-            roundWinner(rounds);
         } catch (Exception e){
             throw new RuntimeException(e);
         }
