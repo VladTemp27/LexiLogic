@@ -15,6 +15,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import org.amalgam.UpdateDispatcher;
+import org.amalgam.backend.microservices.objectparser.JsonObjectParser;
 import org.amalgam.client.MainController;
 import org.amalgam.client.UIPathResolver;
 import org.amalgam.client.loading.LoadingController;
@@ -124,6 +125,7 @@ public class GameController implements UpdateDispatcher {
     public String[][] fetchLetters = new String[4][5];
     private int currentRound;
     private int roomID;
+    public static int gameRoomID;
 
     private static void showAlert(String message) {
         Platform.runLater(() -> {
@@ -193,7 +195,7 @@ public class GameController implements UpdateDispatcher {
      */
 
     private void gameStart() {
-        Platform.runLater(this::initComponents);
+        Platform.runLater(this::initGameComponents);
 
         final int[] gameTime = {30};
         Platform.runLater(() -> {
@@ -279,46 +281,37 @@ public class GameController implements UpdateDispatcher {
     @FXML
     public void initialize() {
         try {
-            gameModel = new GameModel(MainController.orbConnection);
-            victoryPanel.setVisible(false);
-            gameOverPanel.setVisible(false);
-            roundsWonNumberLabel.setText("0");
+            initComponents();
             LoginController.playerCallbackImpl.setControllerInterface(this); // initialize the interface of the callback of a player
-
-            // Initialize letter labels array
-            arr_letter_label = new Label[]{firstLetter, secondLetter, thirdLetter, fourthLetter, fifthLetter,
-                    sixthLetter, seventhLetter, eightLetter, ninthLetter, tenthLetter,
-                    eleventhLetter, twelfthLetter, thirteenthLetter, fourteenthLetter, fifteenthLetter,
-                    sixteenthLetter, seventeenthLetter, eighteenthLetter, nineteenthLetter, twentiethLetter};
-
-            arr_playerName_label = new Label[]{player1Label, player2Label, player3Label};
-
-            arr_playerScore_label = new Label[]{player1ScoreLabel, player2ScoreLabel, player3ScoreLabel};
-
-            backbtnVictory.setOnAction(event -> victoryPanelBackButton());
-            backbtnDefeeat.setOnAction(event -> defeatPanelBackButton());
-
-//            initComponents();
-//
-//            // Initialize player round wins
-//            playerRoundsWon.put("player1", 0);
-//            playerRoundsWon.put("player2", 0);
-//            playerRoundsWon.put("player3", 0);
-//
-//            // Fetch and display letters
-//            fetchAndDisplayLetters(1); // Example roomID = 1
-//
-//            // Add event handler for the lexicon text field to handle 'Enter' key press
-//            lexiTextfield.setOnAction(event -> processLexiconInput());
-//
-//            // Update round label
-//            updateRoundLabel();
+            String response = LoadingController.response;
+            gameRoomID = Integer.parseInt(Objects.requireNonNull(JsonObjectParser.parseMatchMaking(response, "gameRoomID")));
+            gameModel = new GameModel(MainController.orbConnection);
+            gameModel.submitReadyHandshake(LoginController.username, gameRoomID);
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
     }
 
     private void initComponents() {
+        victoryPanel.setVisible(false);
+        gameOverPanel.setVisible(false);
+        roundsWonNumberLabel.setText("0");
+
+        // Initialize letter labels array
+        arr_letter_label = new Label[]{firstLetter, secondLetter, thirdLetter, fourthLetter, fifthLetter,
+                sixthLetter, seventhLetter, eightLetter, ninthLetter, tenthLetter,
+                eleventhLetter, twelfthLetter, thirteenthLetter, fourteenthLetter, fifteenthLetter,
+                sixteenthLetter, seventeenthLetter, eighteenthLetter, nineteenthLetter, twentiethLetter};
+
+        arr_playerName_label = new Label[]{player1Label, player2Label, player3Label};
+
+        arr_playerScore_label = new Label[]{player1ScoreLabel, player2ScoreLabel, player3ScoreLabel};
+
+        backbtnVictory.setOnAction(event -> victoryPanelBackButton());
+        backbtnDefeeat.setOnAction(event -> defeatPanelBackButton());
+    }
+
+    private void initGameComponents() {
         lexiTextfield.setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.ENTER) {
                 String input = lexiTextfield.getText();
@@ -369,13 +362,16 @@ public class GameController implements UpdateDispatcher {
 
         //Checker for state
         String state = rootObject.get("state").getAsString();
+
+        if (rootObject.get("room_id") != null) {
+            roomID = rootObject.get("room_id").getAsInt();
+        }
+
         JsonObject gameRoomObject = rootObject.getAsJsonObject("game_room");
         if (state.equals("staging")) { // components of game is initialized before game begins
             currentRound = rootObject.get("current_round").getAsInt();
 
-            if (rootObject.get("room_id") != null) {
-                roomID = rootObject.get("room_id").getAsInt();
-            }
+
 
             wordBoxMatrix(rootObject);
 
