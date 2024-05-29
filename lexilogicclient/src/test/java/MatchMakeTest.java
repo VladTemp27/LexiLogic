@@ -53,7 +53,7 @@ public class MatchMakeTest implements ControllerInterface {
 
         //Performs a handshake via gameService with the corresponding gameroom using the id from the response of
         // matchmake. This is important, it is needed to start communications between game room and client without
-        // this players would not be staged.
+        // this, players would not be staged.
         System.out.println("Sending handshake");
         program.gameService.readyHandshake(program.user, program.getIDFromResponse(response));
 
