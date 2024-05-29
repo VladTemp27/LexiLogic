@@ -35,55 +35,36 @@ public class MatchMakeTest implements ControllerInterface {
         MatchMakeTest program = new MatchMakeTest();
         program.getAllStubs();
 
+        //Prompts user for mock username
         System.out.print("Enter username: ");
         program.user = kInput.nextLine();
 
+        //Creates a new playercallback
         program.callback = new CallbackImpl();
         program.callback.username(program.user);
 
+        //Sets this as the controller
         program.callback.setController(program);
 
+        //Sends matchmake request from server and waits for a response
         String response = program.gameService.matchMake(PlayerCallbackHelper.narrow(program.rootPOA.servant_to_reference(program.callback)));
         System.out.println("SERVER RESPONSE:");
         System.out.println(response);
 
-
+        //Performs a handshake via gameService with the corresponding gameroom using the id from the response of
+        // matchmake. This is important, it is needed to start communications between game room and client without
+        // this players would not be staged.
+        System.out.println("Sending handshake");
         program.gameService.readyHandshake(program.user, program.getIDFromResponse(response));
 
-        while(program.gameValid){
+
+        //Game logic below
+        while(!program.currentState.equals("game_ended")){
             String word = "";
             word = kInput.nextLine();
             program.gameService.verifyWord(word, program.user, program.gameRoomID);
         }
 
-
-
-
-        //TODO: move this to ui call, for the most part majority of the bugs are fixed here im gonna sleep
-        // ive been awake for 28 hours right now with 1 month of no actual sleep
-//        while(!program.currentState.equals("game_ended")){
-//            if(program.currentState.equals("staging")){
-//                System.out.println("staging");
-//                program.stagingStateHandler();
-//                System.out.println(user+" "+program.gameRoomID);
-//                program.gameService.playerReady(user, program.gameRoomID);
-//                System.out.println("ready sent");
-//                program.currentState = "ready sent";
-//                continue;
-//            }
-//
-//            if(program.currentState.equals("game_started")){
-//                program.gameStartedHandler();
-//                System.out.println("round done");
-//                program.currentState = "";
-//                continue;
-//            }
-//
-//        }
-
-        while(!program.currentState.equals("game_ended")){
-
-        }
     }
 
     public void getAllStubs(){

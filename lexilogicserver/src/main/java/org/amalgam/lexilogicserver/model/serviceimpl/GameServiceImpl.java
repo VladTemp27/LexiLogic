@@ -44,22 +44,25 @@ public class GameServiceImpl extends GameServicePOA {
         addPlayerToQueue(playerCallback);
         System.out.println(playerCallback.username()+" entered matchmake");
         try {
-            matchmakingLock.acquire();
+            matchmakingLock.acquire(); // Locks the following code below, to prevent deadlock
             while (true) { // Change loop condition to always true
                 //matchPlayers();
-                if (matchmakingService.isTimerDone()) { // Add condition to check if timer is done
+                if (matchmakingService.isTimerDone()) { //condition to check if timer is done
                     System.out.println("Matchmake Timer done");
-                    if(matchmakingService.isRoomValid()){
-                        createGameRoom(this.matchmakingService.checkAndMatchPlayers());
+                    if(matchmakingService.isRoomValid()){   // Checks if room is valid using atomic boolean
+                        createGameRoom(this.matchmakingService.checkAndMatchPlayers()); // Creates a room but does
+                        // not stage
                     }
-                    break;
+                    break;  // Break out of the loop
                 }
                 Thread.sleep(100);
             }
-            matchmakingLock.release();
-            if(matchmakingService.isRoomValid()){
+            matchmakingLock.release(); // Releases the locked code so other clients can execute it
+            if(matchmakingService.isRoomValid()){   // if room is valid sends response to user
                 try {
-                    System.out.println("Sending response to "+playerCallback.username());
+                    // this returns success status as well as gameRoomID
+                    // parse gameRoomID in client side to specify where to make the handshake call the readyHandshake
+                    // request
                     return "{\"status\": \"success\", \"message\": \"Matchmaking Successful!\",\"gameRoomID\":"+roomID.get()+"}";
                 }catch(Exception e){
                     e.printStackTrace();
@@ -74,12 +77,17 @@ public class GameServiceImpl extends GameServicePOA {
             this.matchmakingService.clearQueue();
             this.playerCallbackMap.clear();
             this.roomCreationAllowed.set(true);
-//            matchmakingLock.release();
         }
+        //returns if matchmake has failed
         return "{\"status\": \"timeout\", \"message\": \"Timer Done\"}";
     }
 
 
+    /**
+     * Method to invoke when to handshake with the object of Game Room
+     * @param username      username of the user (String)
+     * @param gameroomID    id of the corresponding game room (int) this is given at the response body of matchmake
+     */
     @Override
     public void readyHandshake(String username, int gameroomID) {
         System.out.printf(username+" Triggered Ready Response");
