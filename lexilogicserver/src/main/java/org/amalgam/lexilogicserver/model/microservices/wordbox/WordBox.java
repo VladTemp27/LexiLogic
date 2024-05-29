@@ -41,10 +41,6 @@ public class WordBox {
             if(boxChars.get(character)==null){
                 return 0;
             }
-
-            System.out.println("Checking character: "+character);
-            System.out.println(character+" count: "+charactersInWord.get(character));
-            System.out.println(boxChars.get(character));
             System.out.println(!(charactersInWord.get(character)<boxChars.get(character)));
             if(!(charactersInWord.get(character)<=boxChars.get(character))){
                 return 0;
@@ -118,10 +114,8 @@ public class WordBox {
     private void addCharOccurrence(char character, LinkedHashMap<Character, Integer> hashMapOfOccurences){
         Integer count = null;
         count = hashMapOfOccurences.get(character);
-        System.out.println("count: "+count);
         if(count != null){
             count++;
-            System.out.println(character+" : "+count);
             hashMapOfOccurences.replace(character, count);
         }else{
             hashMapOfOccurences.put(character, 1);
