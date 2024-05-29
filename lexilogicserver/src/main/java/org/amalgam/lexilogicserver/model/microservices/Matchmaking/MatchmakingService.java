@@ -36,7 +36,7 @@ public class MatchmakingService implements NTimerCallback{
 
     public void startTimer() {
         timerDoneValue.set(false);
-        roomValidity.set(true);
+        roomValidity.set(false);
         executorService.submit(new NTimer(MATCHMAKING_TIMEOUT / 1000, this));
     }
 
@@ -45,6 +45,8 @@ public class MatchmakingService implements NTimerCallback{
         timerDoneValue.set(true);
         try {
             queueLock.acquire();
+            System.out.println("ROOM SIZE: "+queue.size());
+            System.out.println("ROOM VALID: "+(queue.size() >= 2));
             if(queue.size() >= 2){
                 roomValidity.set(true);
                 return;
@@ -80,6 +82,7 @@ public class MatchmakingService implements NTimerCallback{
     }
 
     public boolean isRoomValid(){
+        System.out.println("Returning room validity: "+roomValidity.get());
         return roomValidity.get();
     }
 
