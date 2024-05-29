@@ -1,7 +1,6 @@
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.sun.org.apache.xalan.internal.xsltc.runtime.InternalRuntimeError;
 import org.amalgam.Service.GameServiceModule.GameService;
 import org.amalgam.Service.GameServiceModule.GameServiceHelper;
 import org.amalgam.Service.PlayerServiceModule.PlayerService;
@@ -20,7 +19,7 @@ import org.omg.PortableServer.POAPackage.WrongPolicy;
 
 import java.util.Scanner;
 
-public class MatchMakeTest implements ControllerInterface{
+public class MatchMakeTest implements ControllerInterface {
     private PlayerService playerService;
     private GameService gameService;
     private POA rootPOA;
@@ -47,6 +46,9 @@ public class MatchMakeTest implements ControllerInterface{
         String response = program.gameService.matchMake(PlayerCallbackHelper.narrow(program.rootPOA.servant_to_reference(program.callback)));
         System.out.println("SERVER RESPONSE:");
         System.out.println(response);
+
+
+        program.gameService.readyHandshake(program.user, program.getIDFromResponse(response));
 
         while(program.gameValid){
             String word = "";
@@ -167,4 +169,9 @@ public class MatchMakeTest implements ControllerInterface{
     }
 
 
+    private int getIDFromResponse(String response){
+        JsonElement rootElement = JsonParser.parseString(response);
+        JsonObject rootObject = rootElement.getAsJsonObject();
+        return rootObject.get("gameRoomID").getAsInt();
+    }
 }
