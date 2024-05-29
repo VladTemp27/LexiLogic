@@ -234,41 +234,22 @@ public class GameController implements UpdateDispatcher {
         }
     }
 
-    // TODO: fix update of score; display "total score for the entire game"(sigma level) | "total score per round"(easy)
-    private void updateScores(LinkedHashMap<String, Integer> username_points) {
-        Map<String, Integer> topNPlayer = username_points.entrySet().stream()
+    private void updateScores(LinkedHashMap<String, Integer> username_points_per_round) {
+        Map<String, Integer> topNPlayer = username_points_per_round.entrySet().stream()
                 .sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
                 .limit(3)
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new));
 
-        LinkedHashMap<String, Integer> username_totalPoints = new LinkedHashMap<>();
         int x = 0;
         for (String username : topNPlayer.keySet()){
             int pts = topNPlayer.get(username);
-//            int finalX = x;
-//            Platform.runLater(() -> {
-//                arr_playerName_label[finalX].setText(username);
-//                arr_playerScore_label[finalX].setText(String.valueOf(pts));
-//            });
-//            x++;
+            int finalX = x;
+            Platform.runLater(() -> {
+                arr_playerName_label[finalX].setText(username);
+                arr_playerScore_label[finalX].setText(String.valueOf(pts));
+            });
+            x++;
         }
-//        for (Map.Entry<String, Integer> entry : username_totalPoints.entrySet()) {
-//            int pts = entry.getValue();
-//            String username = entry.getKey();
-//            for (String user : topNPlayer.keySet()) {
-//                int totalPts=0;
-//                if (username.equals(user)) {
-//                    totalPts += pts;
-//                    continue;
-//                }
-//                int finalX = 0;
-//                int finalTotalPts = totalPts;
-//                Platform.runLater(() -> {
-//                    arr_playerName_label[finalX].setText(username);
-//                    arr_playerScore_label[finalX].setText(String.valueOf(finalTotalPts));
-//                });
-//            }
-//        }
 //        List<Map.Entry<String, Integer>> list = new ArrayList<>(username_points.entrySet());
 //        list.sort(Map.Entry.comparingByValue());
 //
@@ -311,10 +292,6 @@ public class GameController implements UpdateDispatcher {
                     sixteenthLetter, seventeenthLetter, eighteenthLetter, nineteenthLetter, twentiethLetter};
 
             arr_playerName_label = new Label[]{player1Label, player2Label, player3Label};
-
-            player1ScoreLabel.setText("0");
-            player2ScoreLabel.setText("0");
-            player3ScoreLabel.setText("0");
 
             arr_playerScore_label = new Label[]{player1ScoreLabel, player2ScoreLabel, player3ScoreLabel};
 
