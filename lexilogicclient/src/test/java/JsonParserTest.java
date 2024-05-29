@@ -1,7 +1,8 @@
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import org.amalgam.backend.microservices.objectparser.JsonObjectParser;
 import org.amalgam.client.game.GameController;
-import org.amalgam.client.login.LoginController;
+import org.amalgam.client.loading.LoadingController;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -31,13 +32,20 @@ public class JsonParserTest {
             "\"m\"]],\"game_room\":{\"player_0\":{\"username\":\"test1\",\"points\":15,\"ready\":true,\"words\":[]," +
             "\"duped_words\":[]},\"player_1\":{\"username\":\"test2\",\"points\":69,\"ready\":true,\"words\":[]," +
             "\"duped_words\":[]},\"rounds\":{\"round_1\":\"No Winner\"}}}\n";
+    String json_matchMake_test_1 = "{\"status\": \"success\", \"message\": \"Matchmaking Successful!\",\"gameRoomID\":0}\n";
 
 
     @Test
-    public void testParseJson() {
+    public void testParseGameJson() {
 //        LoginController.username = "Lou";
         GameController obj = new GameController();
         obj.update(json_gameStarted_test_1);
+    }
+
+    @Test
+    public void testParseMatchMakeJson() {
+        String s = JsonObjectParser.parseMatchMaking(json_matchMake_test_1, "gameRoomID");
+        System.out.println(s);
     }
 
     @Test
