@@ -28,9 +28,12 @@ public class GameServiceImpl extends GameServicePOA {
     private final List<GameRoom> rooms = new LinkedList<>();
     private final Semaphore matchmakingLock = new Semaphore(1);
 
-    private AtomicInteger roomID = new AtomicInteger(-1);
+    private final AtomicInteger roomID = new AtomicInteger(-1);
 
-   private AtomicBoolean roomCreationAllowed = new AtomicBoolean(true);
+   private final AtomicBoolean roomCreationAllowed = new AtomicBoolean(true);
+   private final AtomicBoolean roomCreated = new AtomicBoolean(false);
+
+   private final ConcurrentHashMap<String, AtomicBoolean> sentResponse = new ConcurrentHashMap<>();
 
 
     /**
@@ -41,6 +44,8 @@ public class GameServiceImpl extends GameServicePOA {
      */
     public String matchMake(PlayerCallback playerCallback) {
         addPlayerToQueue(playerCallback);
+        sentResponse.put(playerCallback.username(), new AtomicBoolean(false));  // Tracks users that have received a response
+
         System.out.println(playerCallback.username()+" entered matchmake");
         try {
             matchmakingLock.acquire(); // Locks the following code below, to prevent deadlock
@@ -54,14 +59,21 @@ public class GameServiceImpl extends GameServicePOA {
                     }
                     break;  // Break out of the loop
                 }
-//                Thread.sleep(100);
+                //Thread.sleep(100); //!keep this shall we revert to not using roomCreated variable and sentResponse!
             }
             matchmakingLock.release(); // Releases the locked code so other clients can execute it
+            do{
+                if(!matchmakingService.isRoomValid()) return "{\"status\": \"timeout\", \"message\": \"Timer Done\"}";
+            }while(!roomCreated.get());
             if(matchmakingService.isRoomValid()){   // if room is valid sends response to user
                 try {
                     // this returns success status as well as gameRoomID
                     // parse gameRoomID in client side to specify where to make the handshake call the readyHandshake
                     // request
+                    System.out.println("RETURNGING GAME ROOM: "+roomID.get());
+
+                    sentResponse.replace(playerCallback.username(), new AtomicBoolean(true));// marks the use to have
+                    // been responded to
                     return "{\"status\": \"success\", \"message\": \"Matchmaking Successful!\",\"gameRoomID\":"+roomID.get()+"}";
                 }catch(Exception e){
                     e.printStackTrace();
@@ -73,12 +85,31 @@ public class GameServiceImpl extends GameServicePOA {
         } finally {
             System.out.println("Executing finally block for user "+playerCallback.username());
             System.out.println("Clearing maps and services");
+            do {
+                if(!matchmakingService.isRoomValid()) {
+                    System.out.println("Invalid ROOM");
+                    break;
+                } //if room was invalid ignore loop
+            }while(!allReceivedResponse()); // Loops if all players haven't gotten a response yet
             this.matchmakingService.clearQueue();
             this.playerCallbackMap.clear();
             this.roomCreationAllowed.set(true);
+            this.roomCreated.set(false);
+            sentResponse.clear();
         }
         //returns if matchmake has failed
         return "{\"status\": \"timeout\", \"message\": \"Timer Done\"}";
+    }
+
+    //Method checks if all players in the matchmake have received a response
+    private boolean allReceivedResponse(){
+        for(String key : sentResponse.keySet()){
+            AtomicBoolean value = sentResponse.get(key);
+            if(!value.get()){
+                return false;
+            }
+        }
+        return true;
     }
 
 
@@ -159,6 +190,7 @@ public class GameServiceImpl extends GameServicePOA {
             if (matchmakingService.isTimerDone()) {
                 rooms.add(gameRoom);
                 System.out.println(gameRoom);
+                roomCreated.set(true);
                 //System.out.println("SENDING GAME ROOM DETAILS");
                 //gameRoom.stagePlayers();
             }
