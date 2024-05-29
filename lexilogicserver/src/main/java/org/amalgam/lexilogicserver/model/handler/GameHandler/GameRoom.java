@@ -90,17 +90,6 @@ public class GameRoom implements NTimerCallback {
         System.out.println("Staging, "+currentRound);
         details = new LinkedHashMap<>();
         details = flushWith(defaultDetails); // resets details to default unready state
-        String w;
-        if((w = winnerAvailable())!=null){
-            try{
-                String response = GameRoomResponseBuilder.buildWinnerResponse(w); // Use response builder for this, broadcast state game done, + winner(variable w)
-                broadcast(response);
-                int lobbyID = LobbyDAL.insertGameRoomAsLobby(this);
-                updatePlayerDataDB(lobbyID);
-            }catch(Exception e){
-                e.printStackTrace();
-            }
-        }
         roundDone = false;
         //give initial gameroom object + state = staging(countdown 5 secs then send request ready)
         String jsonString = GameRoomResponseBuilder.buildStagePlayersResponse(this,5); //Use response builder here
@@ -223,6 +212,19 @@ public class GameRoom implements NTimerCallback {
             throw new RuntimeException(e);
         }
         //Use broadcast with builder
+        String w;
+        if((w = winnerAvailable())!=null){
+            System.out.println("----ROOM:"+this.roomID+" GAME ENDED WINNER:"+w+"----");
+            try{
+                String response = GameRoomResponseBuilder.buildWinnerResponse(w); // Use response builder for this, broadcast state game done, + winner(variable w)
+                broadcast(response);
+                int lobbyID = LobbyDAL.insertGameRoomAsLobby(this);
+                updatePlayerDataDB(lobbyID);
+                return;
+            }catch(Exception e){
+                e.printStackTrace();
+            }
+        }
         stagePlayers();
     }
 
