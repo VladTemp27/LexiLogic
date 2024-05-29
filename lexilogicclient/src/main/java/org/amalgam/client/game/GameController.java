@@ -193,23 +193,20 @@ public class GameController implements UpdateDispatcher {
     /**
      * Start the game of the program.
      */
-
     private void gameStart() {
-        Platform.runLater(this::initGameComponents);
-
-        final int[] gameTime = {30};
+        final int[] finalGameTime = {30};
         Platform.runLater(() -> {
             populateWordMatrix();
-            timeLabel.setText(String.format("00:%d", gameTime[0]));
             timer = new Timer();
             timer.schedule(new TimerTask() {
                 @Override
                 public void run() {
                     Platform.runLater(() -> {
-                        if (gameTime[0] > 0) {
-                            gameTime[0]--;
-                            timeLabel.setText(String.format("00:%d", gameTime[0]));
-                            if (gameTime[0] == 0) {
+                        timeLabel.setText(String.format("00:%d", finalGameTime[0]));
+                        if (finalGameTime[0] > 0) {
+                            finalGameTime[0]--;
+                            timeLabel.setText(String.format("00:%d", finalGameTime[0]));
+                            if (finalGameTime[0] == 0) {
                                 roundCountdownPane.setVisible(true);
                                 timer.cancel();
                             }
@@ -268,13 +265,6 @@ public class GameController implements UpdateDispatcher {
     }
 
     /**
-     * Ends the game and shows the winner.
-     */
-    private void endGame(String winner) {
-        showAlert("Game Over! Winner: " + winner);
-    }
-
-    /**
      * Initializes the controller.
      * This method sets up the UI components and initializes the data model.
      */
@@ -282,11 +272,12 @@ public class GameController implements UpdateDispatcher {
     public void initialize() {
         try {
             initComponents();
+            Platform.runLater(this::initGameComponents);
             LoginController.playerCallbackImpl.setControllerInterface(this); // initialize the interface of the callback of a player
             String response = LoadingController.response;
             gameRoomID = Integer.parseInt(Objects.requireNonNull(JsonObjectParser.parseMatchMaking(response, "gameRoomID")));
             gameModel = new GameModel(MainController.orbConnection);
-            Thread.sleep(1000);
+            Thread.sleep(100);
             gameModel.submitReadyHandshake(LoginController.username, gameRoomID);
         } catch (Exception e) {
             System.out.println(e.getMessage());
@@ -355,7 +346,7 @@ public class GameController implements UpdateDispatcher {
     private void victoryPanelBackButton() {
         MainController.changeScreen(UIPathResolver.main_menu_path);
     }
-
+    int x = 0; // reverse guard clause
     private void updateData(String json){
 //        System.out.println("GAME "+json);
         JsonElement rootElement = JsonParser.parseString(json);
@@ -371,20 +362,16 @@ public class GameController implements UpdateDispatcher {
         JsonObject gameRoomObject = rootObject.getAsJsonObject("game_room");
         if (state.equals("staging")) { // components of game is initialized before game begins
             currentRound = rootObject.get("current_round").getAsInt();
-
-
-
+            x=currentRound;
             wordBoxMatrix(rootObject);
-
             parseRounds(gameRoomObject);
-
             roundCountdown();
         }
-
         if (state.equals("game_started")) {
             int capacity = rootObject.get("capacity").getAsInt();
             fetchPoints(gameRoomObject, capacity);
-            gameStart();
+            if (x==currentRound) gameStart();
+            x++;
         }
 
         if(state.equals("game_done")){
