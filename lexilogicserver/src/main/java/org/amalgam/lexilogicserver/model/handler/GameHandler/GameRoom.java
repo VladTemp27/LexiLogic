@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -34,6 +35,7 @@ public class GameRoom implements NTimerCallback {
 
     private final LinkedHashMap<String,PlayerGameDetail> defaultDetails;
 
+    private ConcurrentHashMap<String, Boolean> readyToReceive = new ConcurrentHashMap<String, Boolean>();
     private ExecutorService executor = Executors.newSingleThreadExecutor();
 
 
@@ -44,8 +46,27 @@ public class GameRoom implements NTimerCallback {
         this.playerCallbacks = playerCallbacks;
         currentRound = 1;
         generateWordBox();
+        initializeReadyToReceive(playerCallbacks);
         //stagePlayers();
 
+    }
+
+    private void initializeReadyToReceive(LinkedHashMap<String, PlayerCallback> callbacks){
+        for(String key: callbacks.keySet()){
+            readyToReceive.put(key, false);
+        }
+    }
+
+    public synchronized void markPlayerReadyToReceive(String username){
+        System.out.println("Marking "+username+" ready for response");
+        readyToReceive.replace(username,true);
+        System.out.println("All Players Ready to Receive: "+(!readyToReceive.contains(false)));
+        if(readyToReceive.contains(false)){
+            return;
+        }
+
+        System.out.println("Staging players");
+        stagePlayers();
     }
 
     //This method is invoked to mark the players in the room as ready
@@ -282,7 +303,7 @@ public class GameRoom implements NTimerCallback {
     }
 
     //Checker if winner is available returns null if winner is nut available
-    private String winnerAvailable(){
+    public String winnerAvailable(){
         StringBuilder winner = new StringBuilder();
         LinkedHashMap<String, Integer> roundWinners = new LinkedHashMap<>();
         for(int x = 1; x <= rounds.size(); x++){
