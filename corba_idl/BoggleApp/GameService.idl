@@ -12,6 +12,8 @@ module org {
                     string matchMake(in PlayerCallback player_callback)
                         raises (org::amalgam::Utils::Exceptions::MatchCreationFailedException);
 
+                    void readyHandshake(in string username, in long callback);
+
                     typedef char Matrix[6][6];
                     Matrix fetchWordBox(in long roomID)
                         raises (org::amalgam::Utils::Exceptions::WordFetchFailedException, org::amalgam::Utils::Exceptions::InvalidRoomIDException);
