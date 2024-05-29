@@ -79,7 +79,7 @@ public class MatchmakingService implements NTimerCallback{
     }
 
     public boolean isRoomValid(){
-        System.out.println("Returning room validity: "+roomValidity.get());
+//        System.out.println("Returning room validity: "+roomValidity.get());
         return roomValidity.get();
     }
 
