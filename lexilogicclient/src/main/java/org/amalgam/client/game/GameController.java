@@ -121,7 +121,6 @@ public class GameController implements UpdateDispatcher {
     private Label[] arr_playerScore_label;
     private static GameModel gameModel;
     private int totalRoundWon = 0;
-    private int totalPts=0;
     public String[][] fetchLetters = new String[4][5];
     private int currentRound;
     private int roomID;
