@@ -35,7 +35,6 @@ public class LeaderBoardDAL {
 
             stmt.setString(1, gameDetail.getUsername());
             stmt.setInt(2, gameDetail.getPoints());
-            stmt.setInt(3, gameDetail.getPoints());
 
         }catch(Exception e){
             e.printStackTrace();
