@@ -286,6 +286,7 @@ public class GameController implements UpdateDispatcher {
             String response = LoadingController.response;
             gameRoomID = Integer.parseInt(Objects.requireNonNull(JsonObjectParser.parseMatchMaking(response, "gameRoomID")));
             gameModel = new GameModel(MainController.orbConnection);
+            Thread.sleep(1000);
             gameModel.submitReadyHandshake(LoginController.username, gameRoomID);
         } catch (Exception e) {
             System.out.println(e.getMessage());
