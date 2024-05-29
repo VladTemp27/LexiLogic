@@ -71,7 +71,7 @@ public class MatchMakeTest implements ControllerInterface {
 
     public void getAllStubs(){
         try {
-            ORB orb = ORB.init(generateArguments(2018, "localhost"), null);
+            ORB orb = ORB.init(generateArguments(2121, "corbaserver"), null);
             rootPOA = POAHelper.narrow(orb.resolve_initial_references("RootPOA"));
             rootPOA.the_POAManager().activate();
 
