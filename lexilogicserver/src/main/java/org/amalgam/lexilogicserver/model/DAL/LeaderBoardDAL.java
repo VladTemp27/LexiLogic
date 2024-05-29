@@ -31,10 +31,12 @@ public class LeaderBoardDAL {
     public static void updateLeaderBoard(PlayerGameDetail gameDetail){
         try(Connection conn = DatabaseUtil.getConnection()){
             PreparedStatement stmt = conn.prepareStatement("INSERT INTO leaderboards(userID, totalPoints) VALUES((SELECT playerID FROM player WHERE name = ?),?)" +
-                                                                "ON DUPLICATE KEY UPDATE totalPoints = totalPoints + ");
+                                                                "ON DUPLICATE KEY UPDATE totalPoints = totalPoints + " +
+                    "? ");
 
             stmt.setString(1, gameDetail.getUsername());
             stmt.setInt(2, gameDetail.getPoints());
+            stmt.setInt(3, gameDetail.getPoints());
 
         }catch(Exception e){
             e.printStackTrace();
