@@ -16,6 +16,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import org.amalgam.UpdateDispatcher;
 import org.amalgam.client.MainController;
+import org.amalgam.client.UIPathResolver;
 import org.amalgam.client.loading.LoadingController;
 import org.amalgam.client.login.LoginController;
 
@@ -352,13 +353,14 @@ public class GameController implements UpdateDispatcher {
         });
     }
 
-
     @FXML
     private void defeatPanelBackButton() {
+        MainController.changeScreen(UIPathResolver.main_menu_path);
     }
 
     @FXML
     private void victoryPanelBackButton() {
+        MainController.changeScreen(UIPathResolver.main_menu_path);
     }
 
     private void updateData(String json){
@@ -370,19 +372,13 @@ public class GameController implements UpdateDispatcher {
         String state = rootObject.get("state").getAsString();
         JsonObject gameRoomObject = rootObject.getAsJsonObject("game_room");
         if (state.equals("staging")) { // components of game is initialized before game begins
-            //For current round
-            System.out.println("STAGING");
-
             currentRound = rootObject.get("current_round").getAsInt();
-            //End
 
             if (rootObject.get("room_id") != null) {
                 roomID = rootObject.get("room_id").getAsInt();
             }
 
-            //For character matrix
             wordBoxMatrix(rootObject);
-            //End
 
             parseRounds(gameRoomObject);
 
@@ -410,20 +406,6 @@ public class GameController implements UpdateDispatcher {
         if (state.equals("invalid_word")) {
               showAlert("INVALID WORD");
         }
-
-         //For Game room
-//         for(String key : gameRoomObject.keySet()){
-//            JsonObject currentObject = gameRoomObject.getAsJsonObject(key);
-//
-//            String username = currentObject.get("username").getAsString();
-//            int points = currentObject.get("points").getAsInt();
-//            boolean ready = currentObject.get("ready").getAsBoolean();
-//            JsonArray words = currentObject.getAsJsonArray("words");
-//            JsonArray dupedWords = currentObject.getAsJsonArray("dupedWords");
-//            System.out.println(username+","+points+","+ready);
-//
-//         }
-         //End
     }
 
     public void parseRounds(JsonObject gameRoomObject){
