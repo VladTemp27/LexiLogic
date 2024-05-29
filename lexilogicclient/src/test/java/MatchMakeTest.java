@@ -57,6 +57,8 @@ public class MatchMakeTest implements ControllerInterface {
         System.out.println("Sending handshake");
         program.gameService.readyHandshake(program.user, program.getIDFromResponse(response));
 
+        //states will then be handled by the callback method check line 101
+
 
         //Game logic below
         while(!program.currentState.equals("game_ended")){
