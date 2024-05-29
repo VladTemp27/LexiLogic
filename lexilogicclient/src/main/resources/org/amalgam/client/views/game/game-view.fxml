@@ -387,12 +387,15 @@
             <Font name="Bowlby One SC Regular" size="80.0" />
          </font>
       </Label>
-      <Button fx:id="backbtnVictory" layoutX="372.0" layoutY="311.0" mnemonicParsing="false" prefHeight="63.0" prefWidth="63.0" style="-fx-background-color: transparent;" />
-      <ImageView fitHeight="64.0" fitWidth="63.0" layoutX="372.0" layoutY="311.0" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="@../../../icons/BackButton.png" />
-         </image>
-      </ImageView>
+      <Button fx:id="backbtnVictory" layoutX="372.0" layoutY="311.0" mnemonicParsing="false" prefHeight="63.0" prefWidth="63.0" style="-fx-background-color: transparent;" >
+          <graphic>
+              <ImageView fitHeight="64.0" fitWidth="63.0" layoutX="372.0" layoutY="311.0" pickOnBounds="true" preserveRatio="true">
+             <image>
+                <Image url="@../../../icons/BackButton.png" />
+             </image>
+              </ImageView>
+          </graphic>
+      </Button>
    </children>
 </AnchorPane>
 </AnchorPane>
