@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -29,6 +30,8 @@ public class GameRoom implements NTimerCallback {
     private LinkedHashMap<String,PlayerCallback> playerCallbacks = new LinkedHashMap<>();
     private LinkedHashMap<String, Integer> totalPointsPerPlayer = new LinkedHashMap<>();
     private final LinkedHashMap<String,PlayerGameDetail> defaultDetails;
+
+    private ConcurrentHashMap<String, Boolean> readyToReceive = new ConcurrentHashMap<String, Boolean>();
     private ExecutorService executor = Executors.newSingleThreadExecutor();
 
     public GameRoom(int roomID, LinkedHashMap<String,PlayerGameDetail> details, LinkedHashMap<String,PlayerCallback> playerCallbacks , int secondsRoundDuration, int capacity) throws FileNotFoundException {
@@ -39,7 +42,26 @@ public class GameRoom implements NTimerCallback {
         currentRound = 1;
         this.capacity = capacity;
         generateWordBox();
+        initializeReadyToReceive(playerCallbacks);
         //stagePlayers();
+    }
+
+    private void initializeReadyToReceive(LinkedHashMap<String, PlayerCallback> callbacks){
+        for(String key: callbacks.keySet()){
+            readyToReceive.put(key, false);
+        }
+    }
+
+    public synchronized void markPlayerReadyToReceive(String username){
+        System.out.println("Marking "+username+" ready for response");
+        readyToReceive.replace(username,true);
+        System.out.println("All Players Ready to Receive: "+(!readyToReceive.contains(false)));
+        if(readyToReceive.contains(false)){
+            return;
+        }
+
+        System.out.println("Staging players");
+        stagePlayers();
     }
 
     //This method is invoked to mark the players in the room as ready
@@ -63,17 +85,6 @@ public class GameRoom implements NTimerCallback {
         System.out.println("Staging, "+currentRound);
         details = new LinkedHashMap<>();
         details = flushWith(defaultDetails); // resets details to default unready state
-        String w;
-        if((w = winnerAvailable())!=null){
-            try{
-                String response = GameRoomResponseBuilder.buildWinnerResponse(w); // Use response builder for this, broadcast state game done, + winner(variable w)
-                broadcast(response);
-                int lobbyID = LobbyDAL.insertGameRoomAsLobby(this);
-                updatePlayerDataDB(lobbyID);
-            }catch(Exception e){
-                e.printStackTrace();
-            }
-        }
         roundDone = false;
         //give initial gameroom object + state = staging(countdown 5 secs then send request ready)
         String jsonString = GameRoomResponseBuilder.buildStagePlayersResponse(this,5); //Use response builder here
@@ -195,6 +206,19 @@ public class GameRoom implements NTimerCallback {
             throw new RuntimeException(e);
         }
         //Use broadcast with builder
+        String w;
+        if((w = winnerAvailable())!=null){
+            System.out.println("----ROOM:"+this.roomID+" GAME ENDED WINNER:"+w+"----");
+            try{
+                String response = GameRoomResponseBuilder.buildWinnerResponse(w); // Use response builder for this, broadcast state game done, + winner(variable w)
+                broadcast(response);
+                int lobbyID = LobbyDAL.insertGameRoomAsLobby(this);
+                updatePlayerDataDB(lobbyID);
+                return;
+            }catch(Exception e){
+                e.printStackTrace();
+            }
+        }
         stagePlayers();
     }
 
@@ -275,8 +299,8 @@ public class GameRoom implements NTimerCallback {
         return roundDone;
     }
 
-    //Checker if winner is available returns null if winner is not available
-    private String winnerAvailable(){
+    //Checker if winner is available returns null if winner is nut available
+    public String winnerAvailable(){
         StringBuilder winner = new StringBuilder();
         LinkedHashMap<String, Integer> roundWinners = new LinkedHashMap<>();
         for(int x = 1; x <= rounds.size(); x++){
