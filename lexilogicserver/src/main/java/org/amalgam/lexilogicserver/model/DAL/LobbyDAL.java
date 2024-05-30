@@ -29,7 +29,7 @@ public class LobbyDAL {
             stmt.setInt(1, lobbyId);
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
-                    return new Lobby(rs.getInt("lobbyID"), rs.getString("createdBy"), rs.getString("winner"));
+                    return new Lobby(rs.getInt("lobbyID"), rs.getString("winner"));
                 } else {
                     return null;
                 }
@@ -90,7 +90,6 @@ public class LobbyDAL {
             while (resultSet.next()){
                 Lobby lobby = new Lobby();
                 lobby.setLobbyID(resultSet.getInt("lobbyID"));
-                lobby.setCreatedBy(resultSet.getString("createdBy"));
                 lobby.setWinner(resultSet.getString("winner"));
                 lobbies.add(lobby);
 
@@ -113,6 +112,7 @@ public class LobbyDAL {
     public synchronized static int insertGameRoomAsLobby(GameRoom gameRoom){
         try(Connection conn = DatabaseUtil.getConnection()){
             PreparedStatement stmt = conn.prepareStatement("INSERT INTO lobby (winner) VALUE (?)", Statement.RETURN_GENERATED_KEYS);
+            stmt.setString(1, gameRoom.winnerAvailable());
             stmt.executeUpdate();
 
             ResultSet rs = stmt.getGeneratedKeys();

@@ -5,7 +5,7 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class DatabaseUtil {
-	private static final String JDBC_URL = "jdbc:mysql://localhost:3306/lexi?user=root&password";
+	private static final String JDBC_URL = "jdbc:mysql://localhost:3306/lexi?user=root&password=";
 	private static Connection connection;
 	public static Connection getConnection() throws SQLException, ClassNotFoundException, InstantiationException, IllegalAccessException {
 		if (connection == null || connection.isClosed()) {
