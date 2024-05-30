@@ -33,8 +33,6 @@ public class GameServiceImpl extends GameServicePOA {
    private final AtomicBoolean roomCreationAllowed = new AtomicBoolean(true);
    private final AtomicBoolean roomCreated = new AtomicBoolean(false);
 
-   private final ConcurrentHashMap<String, AtomicBoolean> sentResponse = new ConcurrentHashMap<>();
-
 
     /**
      * Matches players for a game. Waits up to 10 seconds for another player to join.
@@ -44,7 +42,6 @@ public class GameServiceImpl extends GameServicePOA {
      */
     public String matchMake(PlayerCallback playerCallback) {
         addPlayerToQueue(playerCallback);
-        sentResponse.put(playerCallback.username(), new AtomicBoolean(false));  // Tracks users that have received a response
 
         System.out.println(playerCallback.username()+" entered matchmake");
         try {
@@ -72,8 +69,6 @@ public class GameServiceImpl extends GameServicePOA {
                     // request
                     System.out.println("RETURNGING GAME ROOM: "+roomID.get());
 
-                    sentResponse.replace(playerCallback.username(), new AtomicBoolean(true));// marks the use to have
-                    // been responded to
                     return "{\"status\": \"success\", \"message\": \"Matchmaking Successful!\",\"gameRoomID\":"+roomID.get()+"}";
                 }catch(Exception e){
                     e.printStackTrace();
@@ -85,32 +80,16 @@ public class GameServiceImpl extends GameServicePOA {
         } finally {
             System.out.println("Executing finally block for user "+playerCallback.username());
             System.out.println("Clearing maps and services");
-            do {
-                if(!matchmakingService.isRoomValid()) {
-                    System.out.println("Invalid ROOM");
-                    break;
-                } //if room was invalid ignore loop
-            }while(!allReceivedResponse()); // Loops if all players haven't gotten a response yet
+
             this.matchmakingService.clearQueue();
             this.playerCallbackMap.clear();
             this.roomCreationAllowed.set(true);
             this.roomCreated.set(false);
-            sentResponse.clear();
         }
         //returns if matchmake has failed
         return "{\"status\": \"timeout\", \"message\": \"Timer Done\"}";
     }
 
-    //Method checks if all players in the matchmake have received a response
-    private boolean allReceivedResponse(){
-        for(String key : sentResponse.keySet()){
-            AtomicBoolean value = sentResponse.get(key);
-            if(!value.get()){
-                return false;
-            }
-        }
-        return true;
-    }
 
 
     /**
