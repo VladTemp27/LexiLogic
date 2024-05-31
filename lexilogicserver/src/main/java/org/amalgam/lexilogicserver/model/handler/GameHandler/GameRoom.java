@@ -86,7 +86,7 @@ public class GameRoom implements NTimerCallback {
         List<String> keys = new ArrayList<>(details.keySet());
         for(String key: keys){
             PlayerGameDetail detail = details.get(key);
-            GameDetailDAL.insertGameDetailFromPlayerDetail(detail, lobbyID);
+            GameDetailDAL.insertNewGameDetail(key, lobbyID, totalPointsPerPlayer.get(key));
             LeaderBoardDAL.updateLeaderBoard(detail);
         }
     }
