@@ -8,12 +8,12 @@
         <outputRelativeToContentRoot value="true" />
         <module name="lexilogicserver" />
         <module name="newlexilogicclient" />
-        <module name="lexilogicclient" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="backend" target="1.8" />
       <module name="clientbackend" target="1.8" />
+      <module name="lexilogicclient" target="1.8" />
     </bytecodeTargetLevel>
   </component>
 </project>
