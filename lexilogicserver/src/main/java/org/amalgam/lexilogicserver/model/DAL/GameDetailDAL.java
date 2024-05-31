@@ -14,10 +14,10 @@ import java.util.LinkedList;
 
 public class GameDetailDAL {
 
-    public void insertNewGameDetail(int playerID, int lobbyID, int totalPoints) {
+    public static void insertNewGameDetail(String username, int lobbyID, int totalPoints) {
         try (Connection conn = DatabaseUtil.getConnection()){
-            PreparedStatement stmt = conn.prepareStatement("INSERT INTO gamedetails (playerID, lobbyID, totalPoints) VALUES (?, ?, ?)");
-            stmt.setInt(1, playerID);
+            PreparedStatement stmt = conn.prepareStatement("INSERT INTO gamedetails (playerID, lobbyID, totalPoints) VALUES (SELECT playerID from player WHERE name = ?), ?, ?)");
+            stmt.setString(1, username);
             stmt.setInt(2, lobbyID);
             stmt.setInt(3, totalPoints);
             int rowsAffected = stmt.executeUpdate();
