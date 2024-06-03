@@ -56,7 +56,7 @@ public class GameServiceImpl extends GameServicePOA {
                     }
                     break;  // Break out of the loop
                 }
-                //Thread.sleep(100); //!keep this shall we revert to not using roomCreated variable and sentResponse!
+                Thread.sleep(100); //!keep this shall we revert to not using roomCreated variable and sentResponse!
             }
             matchmakingLock.release(); // Releases the locked code so other clients can execute it
             do{

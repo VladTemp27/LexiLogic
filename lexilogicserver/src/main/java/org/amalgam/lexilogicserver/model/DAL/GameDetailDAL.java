@@ -16,10 +16,10 @@ public class GameDetailDAL {
 
     public static void insertNewGameDetail(String username, int lobbyID, int totalPoints) {
         try (Connection conn = DatabaseUtil.getConnection()){
-            PreparedStatement stmt = conn.prepareStatement("INSERT INTO gamedetails (playerID, lobbyID, totalPoints) VALUES (SELECT playerID from player WHERE name = ?), ?, ?)");
-            stmt.setString(1, username);
-            stmt.setInt(2, lobbyID);
-            stmt.setInt(3, totalPoints);
+            PreparedStatement stmt = conn.prepareStatement("INSERT INTO gamedetails (playerID, lobbyID, totalPoints) SELECT playerID, ?, ? FROM player WHERE name = ?");
+            stmt.setInt(1, lobbyID);
+            stmt.setInt(2, totalPoints);
+            stmt.setString(3, username);
             int rowsAffected = stmt.executeUpdate();
             if (rowsAffected > 0) {
                 System.out.println("INSERT NEW GAME DETAIL SUCCESS");
@@ -28,6 +28,7 @@ public class GameDetailDAL {
             throw new RuntimeException(e);
         }
     }
+
 
     public GameDetail getGameDetailByID(int lobbyID) {
         try (Connection conn = DatabaseUtil.getConnection()) {
