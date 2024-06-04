@@ -376,7 +376,8 @@ public class GameRoom implements NTimerCallback {
                 System.out.println(keys);
                 PlayerGameDetail playerGameDetail = details.get(key);
                 System.out.println(key+" Pts: "+playerGameDetail.getPoints());
-                totalPointsPerPlayer.replace(key, playerGameDetail.getPoints());
+                int initialPts = totalPointsPerPlayer.get(key);
+                totalPointsPerPlayer.replace(key, (playerGameDetail.getPoints()+initialPts));
             }
             return;
         }
