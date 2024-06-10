@@ -14,6 +14,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.transform.Rotate;
 import javafx.util.Duration;
 import org.amalgam.UpdateDispatcher;
+import org.amalgam.backend.microservices.objectparser.JsonObjectParser;
 import org.amalgam.client.MainController;
 import javafx.scene.image.ImageView;
 import org.amalgam.client.UIPathResolver;
@@ -26,7 +27,7 @@ import java.util.concurrent.Executors;
 public class LoadingController {
     // Private Variables
     public static ExecutorService executorService = Executors.newSingleThreadExecutor();
-    private String statusBody = "";
+    public static String response = "";
     @FXML
     private AnchorPane loadingPane;
     @FXML
@@ -74,15 +75,14 @@ public class LoadingController {
 
     public void findMatch()  {
         System.out.println("FINDING MATCH...");
-        String response = loadingModel.matchMake();
+        response = loadingModel.matchMake();
         System.out.println("LOADING RESPONSE " + response);
-        JsonElement rootElement = JsonParser.parseString(response);
-        JsonObject jsonObject = rootElement.getAsJsonObject();
-        statusBody = jsonObject.get("status").getAsString();
     }
 
     public void checkMatch() {
-        if(statusBody.equals("timeout")){
+        String status = JsonObjectParser.parseMatchMaking(response, "status");
+        assert status != null;
+        if(status.equals("timeout")){
             MainController.changeScreen(UIPathResolver.main_menu_path);
         } else {
             System.out.println("MATCH FOUND...");

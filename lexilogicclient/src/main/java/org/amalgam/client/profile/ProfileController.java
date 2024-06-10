@@ -28,18 +28,7 @@ public class ProfileController {
     private Button editUsernameButton;
     @FXML
     private Label usernameLabel;
-    private MainController mainController;
     private ProfileModel profileModel = new ProfileModel(MainController.orbConnection, LoginController.playerCallback);
-
-
-    /**
-     * Sets the Main Controller.
-     *
-     * @param mainController
-     */
-    public void setMainController(MainController mainController) {
-        this.mainController = mainController;
-    }
 
     /**
      * Adds hover effect to the given button.

@@ -83,8 +83,10 @@ public class Generator {
         };
         switch(charType){
             case 0:
+                vowelCount++;
                 return vowels;
             case 1:
+                consonantCount++;
                 return consonants;
         }
         return null;

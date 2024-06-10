@@ -1,10 +1,8 @@
 package org.amalgam.client;
 
-import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import org.amalgam.backend.microservices.serverconnection.ORBConnection;
@@ -20,7 +18,6 @@ import org.amalgam.client.profile.ProfileChangeUsernameController;
 import org.amalgam.client.profile.ProfileController;
 import org.omg.CORBA.ORBPackage.InvalidName;
 import org.omg.PortableServer.POAManagerPackage.AdapterInactive;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -102,17 +99,5 @@ public class MainController {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-
-//        ArrayList<Object> objects = new ArrayList<>();
-//        objects.add(loginController);
-//        objects.add(loadingController);
-//        objects.add(gameController);
-//        objects.add(mainMenuController);
-//        objects.add(matchHistoryController);
-//        objects.add(leaderboardsController);
-//        objects.add(howToPlayController);
-//        objects.add(profileController);
-//        objects.add(profileChangeUsernameController);
-//        objects.add(profileChangePassController);
     }
 }
