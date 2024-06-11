@@ -225,17 +225,20 @@ public class GameRoom implements NTimerCallback {
     private void updatePoints(String username){
 
         PlayerGameDetail detail = details.get(username);
-        int pts = calculatePoints(detail.getWords());
+        int pts = calculatePoints(detail.getWords(), detail.getDupedWords());
         detail.setPoints(pts);
         details.replace(username, detail);
 
     }
 
-    private int calculatePoints(LinkedList<String> listOfWords){
+    private int calculatePoints(LinkedList<String> listOfWords, LinkedList<String> duplicateWords){
         int pts = 0;
         for(String word : listOfWords){
-            pts += word.length();
+            if(!duplicateWords.contains(word)){
+                pts += word.length();
+            }
         }
+
         return pts;
     }
 
@@ -268,6 +271,7 @@ public class GameRoom implements NTimerCallback {
             PlayerGameDetail gameDetail = details.get(key);
             if(gameDetail.listOfWordsContains(submittedWord)){
                 markWordAsDuped(submittedWord);
+
                 return true;
             }
         }
@@ -280,6 +284,7 @@ public class GameRoom implements NTimerCallback {
             PlayerGameDetail gameDetail = details.get(key);
             gameDetail.addDupedWord(dupeWord);
         }
+
     }
 
     public int getRoomID() {
