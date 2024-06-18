@@ -230,6 +230,8 @@ public class GameRoom implements NTimerCallback {
         detail.setPoints(pts);
         details.replace(username, detail);
 
+        System.out.println(username+ ":"+pts);
+
     }
 
     private int calculatePoints(LinkedList<String> listOfWords, LinkedList<String> duplicateWords){
@@ -376,7 +378,7 @@ public class GameRoom implements NTimerCallback {
 
     private void tallyRoundTotalPoints(){
         List<String> keys = new ArrayList<>(details.keySet());
-        System.out.println(!totalPointsPerPlayer.isEmpty());
+        System.out.println("Is total points list empty: "+!totalPointsPerPlayer.isEmpty());
         if(!totalPointsPerPlayer.isEmpty()) {
             for (String key : keys) {
                 System.out.println(keys);
@@ -388,6 +390,7 @@ public class GameRoom implements NTimerCallback {
             return;
         }
 
+        System.out.println("Initializing list of total points");
         for(String key : keys){
             PlayerGameDetail playergameDetail = details.get(key);
             System.out.println(key+" Pts: "+playergameDetail.getPoints());
