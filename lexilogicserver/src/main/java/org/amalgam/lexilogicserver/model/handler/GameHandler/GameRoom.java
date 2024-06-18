@@ -156,6 +156,7 @@ public class GameRoom implements NTimerCallback {
             if(word.length()==4){
                 System.out.println("word too short");
                 broadcast(username, GameRoomResponseBuilder.buildInvalidWordResponse());
+                return;
             }
 
             System.out.println("Checking if dupe");
