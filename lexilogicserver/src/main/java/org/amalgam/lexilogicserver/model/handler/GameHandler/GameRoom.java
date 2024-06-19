@@ -265,13 +265,14 @@ public class GameRoom implements NTimerCallback {
 
 
     //Check if word submitted is not unique
-    private boolean checkIfDupe(String submittedWord){
+    private boolean checkIfDupe(String submittedWord) throws InvalidRequestException {
         List<String> keys = new ArrayList<>(details.keySet());
         for(String key : keys){
             PlayerGameDetail gameDetail = details.get(key);
             if(gameDetail.listOfWordsContains(submittedWord)){
                 markWordAsDuped(submittedWord);
-
+                String response = GameRoomResponseBuilder.buildDupedWordResponse(submittedWord);
+                broadcast(response);
                 return true;
             }
         }

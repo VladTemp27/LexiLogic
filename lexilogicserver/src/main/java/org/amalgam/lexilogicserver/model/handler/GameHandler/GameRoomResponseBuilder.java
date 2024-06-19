@@ -195,4 +195,11 @@ public class GameRoomResponseBuilder {
         response.addProperty("winner", winner);
         return gson.toJson(response);
     }
+
+    public static String buildDupedWordResponse (String submittedWord){
+        JsonObject response = new JsonObject();
+        response.addProperty("state", "duped_word");
+        response.addProperty("word", submittedWord);
+        return gson.toJson(response);
+    }
 }
