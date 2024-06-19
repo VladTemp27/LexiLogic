@@ -199,6 +199,7 @@ public class GameRoom implements NTimerCallback {
         rounds.put(currentRound, roundWinner);
         System.out.println("winner saved");
         tallyRoundTotalPoints();
+        debugTotalPointsPerPlayer(); // Debug method for checking data of totalPointsPerPlayer
         currentRound++;
         System.out.println("next round: "+currentRound);
         try {
@@ -429,6 +430,14 @@ public class GameRoom implements NTimerCallback {
         }
 
         return flushedData;
+    }
+
+    private void debugTotalPointsPerPlayer(){
+        ArrayList<String> keys = new ArrayList<>(totalPointsPerPlayer.keySet());
+        System.out.println("TOTAL POINTS PER PLAYER DEBUG");
+        for(String key : keys){
+            System.out.println(key+": "+totalPointsPerPlayer.get(key));
+        }
     }
 
     public int getCapacity() {
