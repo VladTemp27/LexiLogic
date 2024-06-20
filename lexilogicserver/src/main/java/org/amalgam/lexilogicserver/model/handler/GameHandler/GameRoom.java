@@ -106,6 +106,7 @@ public class GameRoom implements NTimerCallback {
         List<String> keys = new ArrayList<>(details.keySet());
         for(String key: keys){
             PlayerGameDetail detail = details.get(key);
+            detail.setPoints(totalPointsPerPlayer.get(key));
             GameDetailDAL.insertNewGameDetail(key, lobbyID, totalPointsPerPlayer.get(key));
             LeaderBoardDAL.updateLeaderBoard(detail);
         }
@@ -156,6 +157,7 @@ public class GameRoom implements NTimerCallback {
             if(word.length()==4){
                 System.out.println("word too short");
                 broadcast(username, GameRoomResponseBuilder.buildInvalidWordResponse());
+                return;
             }
 
             System.out.println("Checking if dupe");
@@ -198,6 +200,7 @@ public class GameRoom implements NTimerCallback {
         rounds.put(currentRound, roundWinner);
         System.out.println("winner saved");
         tallyRoundTotalPoints();
+        debugTotalPointsPerPlayer(); // Debug method for checking data of totalPointsPerPlayer
         currentRound++;
         System.out.println("next round: "+currentRound);
         try {
@@ -228,6 +231,8 @@ public class GameRoom implements NTimerCallback {
         int pts = calculatePoints(detail.getWords(), detail.getDupedWords());
         detail.setPoints(pts);
         details.replace(username, detail);
+
+        System.out.println(username+ ":"+pts);
 
     }
 
@@ -283,7 +288,9 @@ public class GameRoom implements NTimerCallback {
         List<String> keys = new ArrayList<>(details.keySet());
         for(String key : keys){
             PlayerGameDetail gameDetail = details.get(key);
-            gameDetail.addDupedWord(dupeWord);
+            if(!gameDetail.listOfDupesContains(dupeWord)) {
+                gameDetail.addDupedWord(dupeWord);
+            }
         }
 
     }
@@ -376,7 +383,7 @@ public class GameRoom implements NTimerCallback {
 
     private void tallyRoundTotalPoints(){
         List<String> keys = new ArrayList<>(details.keySet());
-        System.out.println(!totalPointsPerPlayer.isEmpty());
+        System.out.println("Is total points list empty: "+!totalPointsPerPlayer.isEmpty());
         if(!totalPointsPerPlayer.isEmpty()) {
             for (String key : keys) {
                 System.out.println(keys);
@@ -388,6 +395,7 @@ public class GameRoom implements NTimerCallback {
             return;
         }
 
+        System.out.println("Initializing list of total points");
         for(String key : keys){
             PlayerGameDetail playergameDetail = details.get(key);
             System.out.println(key+" Pts: "+playergameDetail.getPoints());
@@ -426,6 +434,14 @@ public class GameRoom implements NTimerCallback {
         }
 
         return flushedData;
+    }
+
+    private void debugTotalPointsPerPlayer(){
+        ArrayList<String> keys = new ArrayList<>(totalPointsPerPlayer.keySet());
+        System.out.println("TOTAL POINTS PER PLAYER DEBUG");
+        for(String key : keys){
+            System.out.println(key+": "+totalPointsPerPlayer.get(key));
+        }
     }
 
     public int getCapacity() {
