@@ -287,7 +287,9 @@ public class GameRoom implements NTimerCallback {
         List<String> keys = new ArrayList<>(details.keySet());
         for(String key : keys){
             PlayerGameDetail gameDetail = details.get(key);
-            gameDetail.addDupedWord(dupeWord);
+            if(!gameDetail.listOfDupesContains(dupeWord)) {
+                gameDetail.addDupedWord(dupeWord);
+            }
         }
 
     }
