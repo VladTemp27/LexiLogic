@@ -1,9 +1,12 @@
 package org.amalgam.lexilogicserver.model.handler.GameHandler;
 
 import com.google.gson.JsonArray;
+import org.amalgam.lexilogicserver.model.utilities.referenceobjects.GameDetail;
 import org.amalgam.lexilogicserver.model.utilities.referenceobjects.PlayerGameDetail;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -194,5 +197,21 @@ public class GameRoomResponseBuilder {
         response.addProperty("state", "game_done");
         response.addProperty("winner", winner);
         return gson.toJson(response);
+    }
+
+    public static String dupedWordResponseOwner (){
+        JsonObject response = new JsonObject();
+        response.addProperty("state", "duped");
+        response.addProperty("message", "You've been duped!");
+
+        return response.toString();
+    }
+
+    public static String dupedWordResponseDuper (){
+        JsonObject response = new JsonObject();
+        response.addProperty("state", "duped_word");
+        response.addProperty("message", "You have duped");
+
+        return response.toString();
     }
 }

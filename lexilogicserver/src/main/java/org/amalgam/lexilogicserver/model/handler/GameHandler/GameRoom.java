@@ -30,6 +30,7 @@ public class GameRoom implements NTimerCallback {
     private LinkedHashMap<String,PlayerCallback> playerCallbacks = new LinkedHashMap<>();
     private LinkedHashMap<String, Integer> totalPointsPerPlayer = new LinkedHashMap<>();
     private final LinkedHashMap<String,PlayerGameDetail> defaultDetails;
+    private LinkedList<String> notifiedOwner = new LinkedList<>();
 
     private ConcurrentHashMap<String, Boolean> readyToReceive = new ConcurrentHashMap<String, Boolean>();
     private ExecutorService executor = Executors.newSingleThreadExecutor();
@@ -164,7 +165,7 @@ public class GameRoom implements NTimerCallback {
             System.out.println(checkIfDupe(word));
             if (checkIfDupe(word)) {
                 System.out.println("Duped word");
-                broadcast(username, GameRoomResponseBuilder.buildInvalidWordResponse());
+                duplication(word);
                 return;
             } // should just throw exception of duped word
 
@@ -270,13 +271,12 @@ public class GameRoom implements NTimerCallback {
 
 
     //Check if word submitted is not unique
-    private boolean checkIfDupe(String submittedWord){
+    private boolean checkIfDupe(String submittedWord) throws InvalidRequestException {
         List<String> keys = new ArrayList<>(details.keySet());
         for(String key : keys){
             PlayerGameDetail gameDetail = details.get(key);
             if(gameDetail.listOfWordsContains(submittedWord)){
                 markWordAsDuped(submittedWord);
-
                 return true;
             }
         }
@@ -287,7 +287,9 @@ public class GameRoom implements NTimerCallback {
         List<String> keys = new ArrayList<>(details.keySet());
         for(String key : keys){
             PlayerGameDetail gameDetail = details.get(key);
-            gameDetail.addDupedWord(dupeWord);
+            if(!gameDetail.listOfDupesContains(dupeWord)) {
+                gameDetail.addDupedWord(dupeWord);
+            }
         }
 
     }
@@ -444,4 +446,24 @@ public class GameRoom implements NTimerCallback {
     public int getCapacity() {
         return capacity;
     }
+
+    public void duplication (String submittedWord) throws InvalidRequestException {
+
+        List<String> keys = new ArrayList<>(details.keySet());
+
+        for (String key: keys){
+            PlayerGameDetail gameDetail = details.get(key);
+            if (gameDetail.listOfWordsContains(submittedWord) && (!notifiedOwner.contains(key + " " + submittedWord))){
+                broadcast(key, GameRoomResponseBuilder.dupedWordResponseOwner());
+                String details = key + " " + submittedWord;
+                notifiedOwner.add(details);
+                String appointedSonOfGOd = notifiedOwner.toString();
+                System.out.println(appointedSonOfGOd);
+            } else {
+                broadcast(key, GameRoomResponseBuilder.dupedWordResponseDuper());
+            }
+        }
+
+    }
+
 }

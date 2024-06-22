@@ -44,6 +44,8 @@ public class PlayerGameDetail {
         return words.contains(word);
     }
 
+    public boolean listOfDupesContains(String word) { return dupedWords.contains(word);}
+
     public boolean isReady() {
         return ready;
     }
