@@ -15,6 +15,7 @@ public class GameRoomResponseBuilder {
         int roomID = gameRoom.getRoomID();
         LinkedHashMap<String, PlayerGameDetail> details = gameRoom.getDetails();
         char[][] charMatrix = gameRoom.getCharMatrix();
+        int capacity = gameRoom.getCapacity();
 
         JsonObject response = new JsonObject();
         response.addProperty("state", "game_started");
@@ -22,6 +23,7 @@ public class GameRoomResponseBuilder {
         response.addProperty("current_round", gameRoom.getCurrentRound());
         response.addProperty("seconds_round_duration", gameRoom.getSecondsRoundDuration());
         response.addProperty("round_done", gameRoom.isRoundDone());
+        response.addProperty("capacity", capacity);
 
         JsonArray matrixArray = new JsonArray();
         for (char[] row : charMatrix) {
@@ -34,6 +36,7 @@ public class GameRoomResponseBuilder {
         response.add("char_matrix", matrixArray);
 
         JsonObject gameRoomJson = new JsonObject();
+        int i=0;
         for (Map.Entry<String, PlayerGameDetail> entry : details.entrySet()) {
             String username = entry.getKey();
             PlayerGameDetail playerDetail = entry.getValue();
@@ -44,12 +47,11 @@ public class GameRoomResponseBuilder {
             JsonArray wordsArray = new JsonArray();
             playerDetail.getWords().forEach(wordsArray::add);
             playerInfo.add("words", wordsArray);
-
             JsonArray dupedWordsArray = new JsonArray();
             playerDetail.getDupedWords().forEach(dupedWordsArray::add);
             playerInfo.add("duped_words", dupedWordsArray);
-
-            gameRoomJson.add(username, playerInfo);
+            gameRoomJson.add("player_" + i, playerInfo);
+            i++;
         }
 
         JsonObject roundsJson = new JsonObject();
@@ -130,6 +132,62 @@ public class GameRoomResponseBuilder {
 
         return response.toString();
     }
+
+    public static String roundDoneResponse(GameRoom gameRoom) {
+        int roomID = gameRoom.getRoomID();
+        LinkedHashMap<String, PlayerGameDetail> details = gameRoom.getDetails();
+        char[][] charMatrix = gameRoom.getCharMatrix();
+
+        JsonObject response = new JsonObject();
+        response.addProperty("state", "round_done");
+        response.addProperty("room_id", roomID);
+        response.addProperty("current_round", gameRoom.getCurrentRound());
+        response.addProperty("seconds_round_duration", gameRoom.getSecondsRoundDuration());
+        response.addProperty("round_done", gameRoom.isRoundDone());
+
+        JsonArray matrixArray = new JsonArray();
+        for (char[] row : charMatrix) {
+            JsonArray rowArray = new JsonArray();
+            for (char c : row) {
+                rowArray.add(String.valueOf(c));
+            }
+            matrixArray.add(rowArray);
+        }
+        response.add("char_matrix", matrixArray);
+
+        JsonObject gameRoomJson = new JsonObject();
+        for (Map.Entry<String, PlayerGameDetail> entry : details.entrySet()) {
+            String username = entry.getKey();
+            PlayerGameDetail playerDetail = entry.getValue();
+            JsonObject playerInfo = new JsonObject();
+            playerInfo.addProperty("username", username);
+            playerInfo.addProperty("points", playerDetail.getPoints());
+            playerInfo.addProperty("ready", playerDetail.isReady());
+
+            JsonArray wordsArray = new JsonArray();
+            playerDetail.getWords().forEach(wordsArray::add);
+            playerInfo.add("words", wordsArray);
+
+            JsonArray dupedWordsArray = new JsonArray();
+            playerDetail.getDupedWords().forEach(dupedWordsArray::add);
+            playerInfo.add("duped_words", dupedWordsArray);
+
+            gameRoomJson.add(username, playerInfo);
+        }
+
+        JsonObject roundsJson = new JsonObject();
+        for (Map.Entry<Integer, String> entry : gameRoom.getRounds().entrySet()) {
+            int roundNumber = entry.getKey();
+            String winner = entry.getValue();
+            roundsJson.addProperty("round_" + roundNumber, winner);
+        }
+        gameRoomJson.add("rounds", roundsJson);
+
+        response.add("game_room", gameRoomJson);
+
+        return response.toString();
+    }
+
 
     public static String buildWinnerResponse(String winner) {
         JsonObject response = new JsonObject();

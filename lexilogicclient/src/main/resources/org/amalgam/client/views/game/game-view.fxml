@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="gamePane" prefHeight="500.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.amalgam.client.game.GameController">
+<AnchorPane fx:id="gamePane" prefHeight="500.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.amalgam.client.game.GameController">
    <ImageView fx:id="backgroundImage" fitHeight="522.0" fitWidth="800.0" layoutY="-6.0" pickOnBounds="true">
       <image>
          <Image url="@../../../icons/Background.png" />
@@ -140,7 +140,7 @@
             <Font name="Bowlby One SC Regular" size="48.0" />
          </font>
       </Label>
-      <Label fx:id="fourthLetter" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="79.0" prefWidth="53.0"  textAlignment="JUSTIFY" textFill="#6b4406" GridPane.columnIndex="3">
+      <Label fx:id="fourthLetter" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="79.0" prefWidth="53.0" textAlignment="JUSTIFY" textFill="#6b4406" GridPane.columnIndex="3">
          <font>
             <Font name="Bowlby One SC Regular" size="48.0" />
          </font>
@@ -155,12 +155,12 @@
             <Font name="Bowlby One SC Regular" size="48.0" />
          </font>
       </Label>
-      <Label fx:id="seventhLetter" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="79.0" prefWidth="53.0"  textAlignment="JUSTIFY" textFill="#6b4406" GridPane.columnIndex="1" GridPane.rowIndex="1">
+      <Label fx:id="seventhLetter" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="79.0" prefWidth="53.0" textAlignment="JUSTIFY" textFill="#6b4406" GridPane.columnIndex="1" GridPane.rowIndex="1">
          <font>
             <Font name="Bowlby One SC Regular" size="48.0" />
          </font>
       </Label>
-      <Label fx:id="eightLetter" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="79.0" prefWidth="53.0"  textAlignment="JUSTIFY" textFill="#6b4406" GridPane.columnIndex="2" GridPane.rowIndex="1">
+      <Label fx:id="eightLetter" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="79.0" prefWidth="53.0" textAlignment="JUSTIFY" textFill="#6b4406" GridPane.columnIndex="2" GridPane.rowIndex="1">
          <font>
             <Font name="Bowlby One SC Regular" size="48.0" />
          </font>
@@ -185,7 +185,7 @@
             <Font name="Bowlby One SC Regular" size="48.0" />
          </font>
       </Label>
-      <Label fx:id="thirteenthLetter" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="79.0" prefWidth="53.0"  textAlignment="JUSTIFY" textFill="#6b4406" GridPane.columnIndex="2" GridPane.rowIndex="2">
+      <Label fx:id="thirteenthLetter" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="79.0" prefWidth="53.0" textAlignment="JUSTIFY" textFill="#6b4406" GridPane.columnIndex="2" GridPane.rowIndex="2">
          <font>
             <Font name="Bowlby One SC Regular" size="48.0" />
          </font>
@@ -200,7 +200,7 @@
             <Font name="Bowlby One SC Regular" size="48.0" />
          </font>
       </Label>
-      <Label fx:id="sixteenthLetter" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="79.0" prefWidth="53.0"  textAlignment="JUSTIFY" textFill="#6b4406" GridPane.rowIndex="3">
+      <Label fx:id="sixteenthLetter" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="79.0" prefWidth="53.0" textAlignment="JUSTIFY" textFill="#6b4406" GridPane.rowIndex="3">
          <font>
             <Font name="Bowlby One SC Regular" size="48.0" />
          </font>
@@ -210,7 +210,7 @@
             <Font name="Bowlby One SC Regular" size="48.0" />
          </font>
       </Label>
-      <Label fx:id="sixthLetter" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="79.0" prefWidth="53.0"  textAlignment="JUSTIFY" textFill="#6b4406" GridPane.rowIndex="1">
+      <Label fx:id="sixthLetter" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="79.0" prefWidth="53.0" textAlignment="JUSTIFY" textFill="#6b4406" GridPane.rowIndex="1">
          <font>
             <Font name="Bowlby One SC Regular" size="48.0" />
          </font>
@@ -220,7 +220,7 @@
             <Font name="Bowlby One SC Regular" size="48.0" />
          </font>
       </Label>
-      <Label fx:id="twentiethLetter" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="79.0" prefWidth="53.0"  textAlignment="JUSTIFY" textFill="#6b4406" GridPane.columnIndex="4" GridPane.rowIndex="3">
+      <Label fx:id="twentiethLetter" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="79.0" prefWidth="53.0" textAlignment="JUSTIFY" textFill="#6b4406" GridPane.columnIndex="4" GridPane.rowIndex="3">
          <font>
             <Font name="Bowlby One SC Regular" size="48.0" />
          </font>
@@ -262,7 +262,7 @@
       </font>
    </Label>
     <TextField fx:id="lexiTextfield" layoutX="550.0" layoutY="460.0" prefWidth="200.0" style="-fx-background-color: D9E0A2;" />
-   <Label fx:id="roundsWonNumberLabel" layoutX="210.0" layoutY="157.0" text="0" textFill="#7c814e">
+   <Label fx:id="roundsWonNumberLabel" layoutX="210.0" layoutY="157.0" textFill="#7c814e">
       <font>
          <Font name="Bowlby One SC Regular" size="48.0" />
       </font>
@@ -282,32 +282,32 @@
          <Font name="Bowlby One SC Regular" size="22.0" />
       </font>
    </Label>
-    <Label fx:id="player1Label" layoutX="40.0" layoutY="333.0" text="player 1">
+    <Label fx:id="player1Label" layoutX="40.0" layoutY="333.0">
         <font>
             <Font name="Brygada 1918 Regular" size="24.0" />
         </font>
     </Label>
-   <Label fx:id="player2Label" layoutX="40.0" layoutY="375.0" text="player 2">
+   <Label fx:id="player2Label" layoutX="40.0" layoutY="375.0">
       <font>
          <Font name="Brygada 1918 Regular" size="24.0" />
       </font>
    </Label>
-   <Label fx:id="player3Label" layoutX="40.0" layoutY="419.0" text="player 3">
+   <Label fx:id="player3Label" layoutX="40.0" layoutY="419.0">
       <font>
          <Font name="Brygada 1918 Regular" size="24.0" />
       </font>
    </Label>
-   <Label fx:id="score1Label" layoutX="193.0" layoutY="321.0" text="1293" textFill="#d9e0a2">
+   <Label fx:id="player1ScoreLabel" layoutX="193.0" layoutY="321.0" textFill="#d9e0a2">
       <font>
          <Font name="Bowlby One SC Regular" size="24.0" />
       </font>
    </Label>
-   <Label fx:id="score2Label" layoutX="193.0" layoutY="369.0" text="1093" textFill="#d9e0a2">
+   <Label fx:id="player2ScoreLabel" layoutX="193.0" layoutY="369.0" textFill="#d9e0a2">
       <font>
          <Font name="Bowlby One SC Regular" size="24.0" />
       </font>
    </Label>
-   <Label fx:id="score3Label" layoutX="193.0" layoutY="413.0" text="987" textFill="#d9e0a2">
+   <Label fx:id="player3ScoreLabel" layoutX="193.0" layoutY="413.0" textFill="#d9e0a2">
       <font>
          <Font name="Bowlby One SC Regular" size="24.0" />
       </font>
@@ -365,7 +365,7 @@
                 <Font name="Bowlby One SC Regular" size="70.0" />
             </font>
         </Label>
-        <Button fx:id="backbtnDefeeat" layoutX="228.0" layoutY="307.0" mnemonicParsing="false" style="-fx-background-color: transparent;">
+        <Button fx:id="backbtnDefeeat" layoutX="372.0" layoutY="311.0" mnemonicParsing="false" prefHeight="63.0" prefWidth="63.0" style="-fx-background-color: transparent;">
             <graphic>
                 <ImageView fitHeight="64.0" fitWidth="63.0" pickOnBounds="true" preserveRatio="true">
                     <image>
@@ -375,7 +375,7 @@
             </graphic></Button>
     </children>
 </AnchorPane>
-    <AnchorPane fx:id="victoryPanel" prefHeight="500.0" prefWidth="800.0" style="-fx-background-color: transparent;" >
+    <AnchorPane fx:id="victoryPanel" prefHeight="500.0" prefWidth="800.0" style="-fx-background-color: transparent;">
    <children>
       <ImageView fitHeight="500.0" fitWidth="800.0" layoutX="40.0" pickOnBounds="true" preserveRatio="true">
          <image>
@@ -387,19 +387,15 @@
             <Font name="Bowlby One SC Regular" size="80.0" />
          </font>
       </Label>
-      <Button fx:id="playAgainButtonV" layoutX="355.0" layoutY="314.0" mnemonicParsing="false" style="-fx-background-color: #9CA16F;" text="PLAY AGAIN" textFill="WHITE">
-         <font>
-            <Font name="Brygada 1918 Regular" size="30.0" />
-         </font>
+      <Button fx:id="backbtnVictory" layoutX="372.0" layoutY="311.0" mnemonicParsing="false" prefHeight="63.0" prefWidth="63.0" style="-fx-background-color: transparent;" >
+          <graphic>
+              <ImageView fitHeight="64.0" fitWidth="63.0" layoutX="372.0" layoutY="311.0" pickOnBounds="true" preserveRatio="true">
+             <image>
+                <Image url="@../../../icons/BackButton.png" />
+             </image>
+              </ImageView>
+          </graphic>
       </Button>
-      <Button fx:id="backbtnVictory" layoutX="228.0" layoutY="307.0" mnemonicParsing="false" style="-fx-background-color: transparent;">
-         <graphic>
-            <ImageView fitHeight="64.0" fitWidth="63.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@../../../icons/BackButton.png" />
-               </image>
-            </ImageView>
-         </graphic></Button>
    </children>
 </AnchorPane>
 </AnchorPane>

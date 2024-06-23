@@ -7,6 +7,8 @@ import org.amalgam.Service.GameServiceModule.GameServiceHelper;
 import org.amalgam.Service.PlayerServiceModule.PlayerService;
 import org.amalgam.Service.PlayerServiceModule.PlayerServiceHelper;
 import org.amalgam.UIControllers.PlayerCallbackHelper;
+import org.amalgam.Utils.Exceptions.DuplicateWordException;
+import org.amalgam.Utils.Exceptions.InvalidWordFormatException;
 import org.amalgam.Utils.Exceptions.MatchCreationFailedException;
 import org.omg.CORBA.ORB;
 import org.omg.CosNaming.NamingContextExt;
@@ -26,22 +28,28 @@ public class MatchMakeTest implements ControllerInterface{
     private int gameRoomID;
     private String currentState = "";
     private String user;
+    private boolean gameValid = true;
 
     private static Scanner kInput = new Scanner(System.in);
 
-    public static void main(String[] args) throws WrongPolicy, ServantNotActive, MatchCreationFailedException {
+    public static void main(String[] args) throws WrongPolicy, ServantNotActive, MatchCreationFailedException, DuplicateWordException, InvalidWordFormatException {
         MatchMakeTest program = new MatchMakeTest();
         program.getAllStubs();
 
+        //Prompts user for mock username
         System.out.print("Enter username: ");
         program.user = kInput.nextLine();
 
+        //Creates a new playercallback
         program.callback = new CallbackImpl();
         program.callback.username(program.user);
 
+        //Sets this as the controller
         program.callback.setController(program);
 
+        //Sends matchmake request from server and waits for a response
         String response = program.gameService.matchMake(PlayerCallbackHelper.narrow(program.rootPOA.servant_to_reference(program.callback)));
+        System.out.println("SERVER RESPONSE:");
         System.out.println(response);
 
 
@@ -68,13 +76,15 @@ public class MatchMakeTest implements ControllerInterface{
 //        }
 
         while(!program.currentState.equals("game_ended")){
-
+            String word = "";
+            word = kInput.nextLine();
+            program.gameService.verifyWord(word, program.user, program.gameRoomID);
         }
     }
 
     public void getAllStubs(){
         try {
-            ORB orb = ORB.init(generateArguments(2020, "localhost"), null);
+            ORB orb = ORB.init(generateArguments(2121, "corbaserver"), null);
             rootPOA = POAHelper.narrow(orb.resolve_initial_references("RootPOA"));
             rootPOA.the_POAManager().activate();
 
@@ -102,6 +112,7 @@ public class MatchMakeTest implements ControllerInterface{
 
     @Override
     public void testUICall(String jsonString) {
+        System.out.println(jsonString);
 //        System.out.println(jsonString);
 //        JsonElement rootElement = JsonParser.parseString(jsonString);
 //        JsonObject rootObject = rootElement.getAsJsonObject();
@@ -112,10 +123,12 @@ public class MatchMakeTest implements ControllerInterface{
         JsonElement rootElement = JsonParser.parseString(jsonString);
         JsonObject rootObject = rootElement.getAsJsonObject();
         currentState = rootObject.get("state").getAsString();
+        gameRoomID = rootObject.get("room_id").getAsInt();
 
         if(currentState.equals("staging")){
             System.out.println("staging");
-            stagingStateHandler();
+            //stagingStateHandler();
+            System.out.println("sending read...");
             System.out.println(this.user+" "+gameRoomID);
             gameService.playerReady(user, gameRoomID);
             System.out.println("ready sent");
@@ -127,6 +140,10 @@ public class MatchMakeTest implements ControllerInterface{
             gameStartedHandler();
             System.out.println("simulating game");
             return;
+        }
+
+        if(currentState.equals("invalid_word")){
+            System.out.println("Invalid Word");
         }
 
 
@@ -149,4 +166,9 @@ public class MatchMakeTest implements ControllerInterface{
     }
 
 
+    private int getIDFromResponse(String response){
+        JsonElement rootElement = JsonParser.parseString(response);
+        JsonObject rootObject = rootElement.getAsJsonObject();
+        return rootObject.get("gameRoomID").getAsInt();
+    }
 }
