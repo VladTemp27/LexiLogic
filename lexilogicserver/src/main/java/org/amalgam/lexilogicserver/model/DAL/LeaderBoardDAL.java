@@ -28,16 +28,28 @@ public class LeaderBoardDAL {
         }
     }
 
-    public static void updateLeaderBoard(PlayerGameDetail gameDetail){
-        try(Connection conn = DatabaseUtil.getConnection()){
-            PreparedStatement stmt = conn.prepareStatement("INSERT INTO leaderboards(userID, totalPoints) VALUES((SELECT playerID FROM player WHERE name = ?),?)" +
-                                                                "ON DUPLICATE KEY UPDATE totalPoints = totalPoints + ");
+    public static void updateLeaderBoard(PlayerGameDetail gameDetail) {
+        try (Connection conn = DatabaseUtil.getConnection()) {
+            String updateQuery = "UPDATE leaderboards SET totalPoints = totalPoints + ? " +
+                    "WHERE userID = (SELECT playerID FROM player WHERE name = ?)";
+            PreparedStatement updateStmt = conn.prepareStatement(updateQuery);
+            updateStmt.setInt(1, gameDetail.getPoints());
+            updateStmt.setString(2, gameDetail.getUsername());
 
-            stmt.setString(1, gameDetail.getUsername());
-            stmt.setInt(2, gameDetail.getPoints());
-            stmt.setInt(3, gameDetail.getPoints());
+            int rowsAffected = updateStmt.executeUpdate();
 
-        }catch(Exception e){
+            //If the user is not in the leaderboard, then add a new row for the player
+            // *Not AI generated please lang
+            if (rowsAffected == 0) {
+
+                String insertQuery = "INSERT INTO leaderboards(userID, totalPoints) " +
+                        "VALUES((SELECT playerID FROM player WHERE name = ?), ?)";
+                PreparedStatement insertStmt = conn.prepareStatement(insertQuery);
+                insertStmt.setString(1, gameDetail.getUsername());
+                insertStmt.setInt(2, gameDetail.getPoints());
+                insertStmt.executeUpdate();
+            }
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

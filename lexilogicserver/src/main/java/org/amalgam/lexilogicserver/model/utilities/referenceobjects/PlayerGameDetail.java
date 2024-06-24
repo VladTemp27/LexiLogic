@@ -1,7 +1,4 @@
 package org.amalgam.lexilogicserver.model.utilities.referenceobjects;
-
-import org.amalgam.lexilogicserver.model.microservices.wordbox.WordBox;
-
 import java.util.LinkedList;
 
 public class PlayerGameDetail {
@@ -35,7 +32,6 @@ public class PlayerGameDetail {
         return words;
     }
 
-
     public void addWord(String word){
         words.add(word);
     }
@@ -47,6 +43,8 @@ public class PlayerGameDetail {
     public boolean listOfWordsContains(String word){
         return words.contains(word);
     }
+
+    public boolean listOfDupesContains(String word) { return dupedWords.contains(word);}
 
     public boolean isReady() {
         return ready;

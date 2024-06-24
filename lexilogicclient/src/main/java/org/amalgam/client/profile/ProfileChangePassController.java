@@ -27,17 +27,8 @@ public class ProfileChangePassController {
     private TextField newPasswordField;
     @FXML
     private Label usernameLabel;
-    private MainController mainController;
     public ProfileChangePassModel profileChangePassModel = new ProfileChangePassModel(MainController.orbConnection,
             LoginController.playerCallback);
-    /**
-     * Sets the Main Controller.
-     *
-     * @param mainController
-     */
-    public void setMainController(MainController mainController) {
-        this.mainController = mainController;
-    }
 
     /**
      * Adds hover effect to the given button.
