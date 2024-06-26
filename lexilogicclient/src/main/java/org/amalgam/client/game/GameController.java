@@ -375,6 +375,9 @@ public class GameController implements UpdateDispatcher {
 
         if (state.equals("invalid_word")) {
               showAlert("INVALID WORD");
+        } else if (state.equals("duped")) {
+            showAlert("You've been duped");
+            
         }
     }
 
