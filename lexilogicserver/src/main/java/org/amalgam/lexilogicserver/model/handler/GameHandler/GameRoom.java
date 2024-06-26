@@ -450,21 +450,20 @@ public class GameRoom implements NTimerCallback {
     public void duplication (String submittedWord) throws InvalidRequestException {
 
         List<String> keys = new ArrayList<>(details.keySet());
+//        LinkedList <String> wordOwner = new LinkedList<>();
 
         for (String key: keys){
             PlayerGameDetail gameDetail = details.get(key);
-            String wordOwner = "";
+
             if (gameDetail.listOfWordsContains(submittedWord) && (!notifiedOwner.contains(key + " " + submittedWord))){
-                wordOwner = key;
-                if (wordOwner.equalsIgnoreCase(key)){
-                    broadcast(key, GameRoomResponseBuilder.dupedWordResponseGeneric());
-                } else {
                     broadcast(key, GameRoomResponseBuilder.dupedWordResponseOwner());
                     String details = key + " " + submittedWord;
                     notifiedOwner.add(details);
+//                    wordOwner.add(key);
                     String appointedSonOfGOd = notifiedOwner.toString();
                     System.out.println(appointedSonOfGOd);
-                }
+            } else if (notifiedOwner.contains(key + " " + submittedWord)) {
+                broadcast(key, GameRoomResponseBuilder.dupedWordResponseGeneric());
             } else {
                 broadcast(key, GameRoomResponseBuilder.dupedWordResponseDuper());
             }

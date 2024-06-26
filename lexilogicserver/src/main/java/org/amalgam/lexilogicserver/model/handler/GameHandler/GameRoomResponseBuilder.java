@@ -210,7 +210,9 @@ public class GameRoomResponseBuilder {
     public static String dupedWordResponseGeneric(){
         JsonObject response = new JsonObject();
         response.addProperty("state", "self_duplicate");
-        response.addProperty("message", "You already entered that word!");
+        response.addProperty("message", "You've already entered that word!");
+        return response.toString();
+
     }
 
     public static String dupedWordResponseDuper (){
