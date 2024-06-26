@@ -52,7 +52,7 @@ public class GameRoom implements NTimerCallback {
         }
     }
 
-    public synchronized void markPlayerReadyToReceive(String username){
+    public void markPlayerReadyToReceive(String username){
         System.out.println("Marking "+username+" ready for response");
         readyToReceive.replace(username,true);
         System.out.println("All Players Ready to Receive: "+(!readyToReceive.contains(false)));
@@ -252,7 +252,7 @@ public class GameRoom implements NTimerCallback {
         for(String key: keys){
             PlayerCallback callback = playerCallbacks.get(key);
             callback.uiCall(jsonString);
-            System.out.println(callback.username() + " " + jsonString);
+            System.out.println("BROADCAST: "+callback.username() + " " + jsonString);
         }
     }
 

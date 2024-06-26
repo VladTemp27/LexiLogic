@@ -9,11 +9,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class LobbyDAL {
-    public void insertNewLobby(int lobbyId, String createdBy, String winner) {
+    public static void  insertNewLobby(String winner) {
         try (Connection conn = DatabaseUtil.getConnection()) {
-            PreparedStatement stmt = conn.prepareStatement("INSERT INTO lobby (createdBy, winner) VALUES (?, ?)");
-            stmt.setString(1, createdBy);
-            stmt.setString(2, winner);
+            PreparedStatement stmt = conn.prepareStatement("INSERT INTO lobby (winner) VALUES (?)");
+            stmt.setString(1, winner);
             int rowsAffected = stmt.executeUpdate();
             if (rowsAffected > 0) {
                 System.out.println("INSERT NEW LOBBY SUCCESS");

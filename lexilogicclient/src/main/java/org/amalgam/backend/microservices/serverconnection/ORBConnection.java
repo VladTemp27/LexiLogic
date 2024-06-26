@@ -4,8 +4,6 @@ import org.amalgam.Service.GameServiceModule.GameService;
 import org.amalgam.Service.GameServiceModule.GameServiceHelper;
 import org.amalgam.Service.PlayerServiceModule.PlayerService;
 import org.amalgam.Service.PlayerServiceModule.PlayerServiceHelper;
-import org.amalgam.UIControllers.PlayerCallback;
-import org.amalgam.UIControllers.PlayerCallbackHelper;
 import org.omg.CORBA.ORB;
 import org.omg.CORBA.ORBPackage.InvalidName;
 import org.omg.CosNaming.NamingContextExt;
@@ -22,7 +20,6 @@ public class ORBConnection {
     private ORB orb;
     private NamingContextExt namingContextExt;
     private POA rootPOA;
-
     public ORBConnection(int port, String hostname){
         this.port = port;
         this.hostname = hostname;

@@ -1,7 +1,6 @@
 package org.amalgam.lexilogicserver.model.DAL;
 
 import org.amalgam.lexilogicserver.model.DatabaseUtil;
-import org.amalgam.lexilogicserver.model.handler.GameHandler.GameRoom;
 import org.amalgam.lexilogicserver.model.utilities.referenceobjects.GameDetail;
 import org.amalgam.lexilogicserver.model.utilities.referenceobjects.Player;
 import org.amalgam.lexilogicserver.model.utilities.referenceobjects.PlayerGameDetail;
