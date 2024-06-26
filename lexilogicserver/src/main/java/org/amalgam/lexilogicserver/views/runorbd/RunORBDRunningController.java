@@ -7,6 +7,8 @@ import javafx.scene.effect.ColorAdjust;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import org.amalgam.lexilogicserver.ServerController;
+import org.amalgam.lexilogicserver.model.microservices.daemonHandler.ORBDException;
+import org.amalgam.lexilogicserver.model.microservices.daemonHandler.ORBDOperationCallback;
 
 import java.util.concurrent.TimeUnit;
 
@@ -19,6 +21,7 @@ public class RunORBDRunningController {
     @FXML
     private Button backButton;
     private ServerController serverController;
+    private ORBDOperationCallback daemonCallback;
 
     /**
      * Sets the Main Controller.
@@ -56,8 +59,15 @@ public class RunORBDRunningController {
 
     @FXML
     public void handleStopORBDButton() {
+        if(ServerController.isServerRunning){
+            //Prompt user to close server first
+            showAlert("Shutdown Server First");
+            return;
+        }
+
         if (RunORBDController.process != null) {
             RunORBDController.process.destroyForcibly();
+            ServerController.isDaemonRunning = false;
 
             try {
                 RunORBDController.process.waitFor();

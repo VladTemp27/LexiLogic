@@ -7,44 +7,39 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="runServerRunningPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="500.0" style="-fx-background-color: #674C33;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.amalgam.lexilogicserver.views.runserver.RunServerRunningController">
+<AnchorPane fx:id="runServerRunningPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="334.0" prefWidth="477.0" style="-fx-background-color: #674C33;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.amalgam.lexilogicserver.views.runserver.RunServerRunningController">
    <children>
-      <ImageView fitHeight="324.0" fitWidth="397.0" layoutX="53.0" layoutY="38.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fitHeight="303.0" fitWidth="354.0" layoutX="107.0" layoutY="19.0" pickOnBounds="true">
          <image>
             <Image url="@../../../icons/YellowBox.png" />
          </image>
       </ImageView>
-      <ImageView fitHeight="177.0" fitWidth="172.0" layoutX="-20.0" layoutY="222.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fitHeight="177.0" fitWidth="172.0" layoutX="-3.0" layoutY="136.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../../../icons/Axel.png" />
          </image>
       </ImageView>
-      <ImageView fitHeight="143.0" fitWidth="250.0" layoutX="134.0" layoutY="57.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fitHeight="143.0" fitWidth="246.0" layoutX="167.0" layoutY="57.0" pickOnBounds="true">
          <image>
             <Image url="@../../../icons/GreenBox.png" />
          </image>
       </ImageView>
-      <Label layoutX="158.0" layoutY="72.0" text="Server is" textFill="#6b4406">
+      <Label layoutX="198.0" layoutY="78.0" text="Server is" textFill="#6b4406">
          <font>
             <Font name="Bowlby One SC Regular" size="35.0" />
          </font>
       </Label>
-      <Label layoutX="157.0" layoutY="120.0" text="Running!" textFill="#6b4406">
+      <Label layoutX="198.0" layoutY="129.0" text="Running!" textFill="#6b4406">
          <font>
             <Font name="Bowlby One SC Regular" size="35.0" />
          </font>
       </Label>
-      <Button fx:id="addPlayerButton" layoutX="135.0" layoutY="218.0" mnemonicParsing="false" prefHeight="47.0" prefWidth="230.0" style="-fx-background-color: #B07C3B;" text="Add Player" textFill="WHITE">
+      <Button fx:id="stopServerButton" layoutX="169.0" layoutY="221.0" mnemonicParsing="false" prefHeight="47.0" prefWidth="246.0" style="-fx-background-color: #E42323;" text="Stop Server" textFill="WHITE">
          <font>
             <Font name="Brygada 1918 Regular" size="25.0" />
          </font>
       </Button>
-      <Button fx:id="stopServerButton" layoutX="136.0" layoutY="282.0" mnemonicParsing="false" prefHeight="47.0" prefWidth="230.0" style="-fx-background-color: #E42323;" text="Stop Server" textFill="WHITE">
-         <font>
-            <Font name="Brygada 1918 Regular" size="25.0" />
-         </font>
-      </Button>
-      <Button fx:id="backButton" mnemonicParsing="false" style="-fx-background-color: transparent;">
+      <Button fx:id="backButton" layoutX="14.0" layoutY="19.0" mnemonicParsing="false" style="-fx-background-color: transparent;">
          <graphic>
             <ImageView fitHeight="40.0" fitWidth="49.0" pickOnBounds="true">
                <image>

@@ -14,11 +14,15 @@ import org.amalgam.lexilogicserver.model.microservices.daemonHandler.ORBDOperati
 import org.amalgam.lexilogicserver.model.microservices.daemonHandler.ORBDRunner;
 import org.amalgam.lexilogicserver.model.microservices.serverHandler.ORBServer;
 import org.amalgam.lexilogicserver.views.runorbd.RunORBDController;
+import org.amalgam.lexilogicserver.views.runserver.RunServerController;
 
+import java.io.IOException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-public class ServerMainMenuController {
+import static org.amalgam.lexilogicserver.views.runorbd.RunORBDController.process;
+
+public class ServerMainMenuController{
     //private variables
     @FXML
     private AnchorPane serverMainMenuPane;
@@ -33,6 +37,9 @@ public class ServerMainMenuController {
     @FXML
     private Button accountDeletionButton;
     private ServerController serverController;
+    private boolean isServerRunning;
+
+
 
     /**
      * Sets the Main Controller.
@@ -66,6 +73,13 @@ public class ServerMainMenuController {
     private void showAlert(String message){
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Error");
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
+    }
+    private void showSuccess(String message){
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Success!");
         alert.setHeaderText(null);
         alert.setContentText(message);
         alert.showAndWait();
@@ -109,22 +123,50 @@ public class ServerMainMenuController {
      */
     @FXML
     public void handleRunORBDButton(){
-        if(serverController !=null){
-            serverController.loadRunORBD();
-        }else {
+        if (serverController != null) {
+            // Check if both server and ORBD are running
+            boolean isServerRunning = isServerRunning();
+            boolean isORBDRunning = isORBDRunning();
+
+            if (isORBDRunning || isServerRunning) {
+                serverController.loadRunORBDRunningView();
+            } else {
+                serverController.loadRunORBD();
+            }
+        } else {
             System.out.println("Server Controller is not set.");
         }
+    }
+
+    private boolean isServerRunning() {
+        return process !=null && process.isAlive();
+    }
+
+    private boolean isORBDRunning() {
+        return ServerController.isDaemonRunning;
     }
     /**
      * Handles the runServer Button
      */
     @FXML
     public void handleRunServerButton(){
-//        ServerController.ORBExitCode = executorServer.submit(new ORBServer(serverController, ))
-        if(serverController !=null){
-            serverController.loadRunServer();
-        }else {
-            System.out.println("Server controller is not set");
+        if (serverController != null) {
+            try {
+                if(!ServerController.isServerRunning && ServerController.isDaemonRunning){
+                    serverController.startServer();
+                    serverController.loadRunServerRunning();
+                }else if (ServerController.isDaemonRunning){
+                    showSuccess("Server Already Running");
+                    serverController.loadRunServerRunning();
+                } else {
+                    showAlert("Run Daemon First");
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                System.out.println("Error starting server: ");
+            }
+        } else {
+            System.out.println("Server Controller is not set.");
         }
     }
     /**

@@ -138,6 +138,9 @@ public class RunORBDController implements ORBDOperationCallback {
         String hostname = hostNameField.getText().trim();
         String portText = portField.getText().trim();
 
+        ServerController.hostname = hostname;
+        ServerController.port = Integer.parseInt(portText);
+
         // Check if hostname or port is empty
         if (hostname.isEmpty() || portText.isEmpty()) {
             showAlert("Please enter both hostname and port.");
@@ -148,6 +151,8 @@ public class RunORBDController implements ORBDOperationCallback {
             int portNo = Integer.parseInt(portText);
             ServerController.ORBExitCode = executorService.submit(new ORBDRunner(this, portNo, hostname));
             showSuccess("ORB Daemon successfully run.");
+            ServerController.isDaemonRunning =true;
+
             if (serverController != null) {
                 serverController.loadRunORBDRunningView();
             } else {
@@ -183,7 +188,7 @@ public class RunORBDController implements ORBDOperationCallback {
 
     @Override
     public void notifyOrbExit() throws ORBDException {
-
+        ServerController.isDaemonRunning = false;
     }
 
     @Override

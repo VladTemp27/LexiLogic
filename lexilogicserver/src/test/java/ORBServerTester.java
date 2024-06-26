@@ -13,12 +13,12 @@ public class ORBServerTester implements ORBServerCallback, ORBDOperationCallback
     boolean daemonRunning;
     Process process;
     public void runServer(){
-        ORBServer server = new ORBServer(this, 2121, "corbaserver");
-        executorDaemon.submit(server);
+        ORBServer server = new ORBServer(this, 2018, "localhost");
+        executorServer.submit(server);
     }
 
     public void runDaemon(){
-        ORBDRunner daemon = new ORBDRunner(this, 2121, "corbaserver");
+        ORBDRunner daemon = new ORBDRunner(this, 2018, "localhost");
         executorDaemon.submit(daemon);
     }
 
@@ -27,7 +27,6 @@ public class ORBServerTester implements ORBServerCallback, ORBDOperationCallback
         program.runDaemon();
         Thread.sleep(3000);
         program.runServer();
-        System.out.println("The server has been initialized");
         while(program.daemonRunning){
 
         }

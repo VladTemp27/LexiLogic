@@ -1,6 +1,7 @@
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.sun.org.apache.xalan.internal.xsltc.runtime.InternalRuntimeError;
 import org.amalgam.Service.GameServiceModule.GameService;
 import org.amalgam.Service.GameServiceModule.GameServiceHelper;
 import org.amalgam.Service.PlayerServiceModule.PlayerService;
@@ -19,7 +20,7 @@ import org.omg.PortableServer.POAPackage.WrongPolicy;
 
 import java.util.Scanner;
 
-public class MatchMakeTest implements ControllerInterface {
+public class MatchMakeTest implements ControllerInterface{
     private PlayerService playerService;
     private GameService gameService;
     private POA rootPOA;
@@ -51,22 +52,34 @@ public class MatchMakeTest implements ControllerInterface {
         System.out.println("SERVER RESPONSE:");
         System.out.println(response);
 
-        //Performs a handshake via gameService with the corresponding gameroom using the id from the response of
-        // matchmake. This is important, it is needed to start communications between game room and client without
-        // this, players would not be staged.
-        System.out.println("Sending handshake");
-        program.gameService.readyHandshake(program.user, program.getIDFromResponse(response));
 
-        //states will then be handled by the callback method check line 101
+        //TODO: move this to ui call, for the most part majority of the bugs are fixed here im gonna sleep
+        // ive been awake for 28 hours right now with 1 month of no actual sleep
+//        while(!program.currentState.equals("game_ended")){
+//            if(program.currentState.equals("staging")){
+//                System.out.println("staging");
+//                program.stagingStateHandler();
+//                System.out.println(user+" "+program.gameRoomID);
+//                program.gameService.playerReady(user, program.gameRoomID);
+//                System.out.println("ready sent");
+//                program.currentState = "ready sent";
+//                continue;
+//            }
+//
+//            if(program.currentState.equals("game_started")){
+//                program.gameStartedHandler();
+//                System.out.println("round done");
+//                program.currentState = "";
+//                continue;
+//            }
+//
+//        }
 
-
-        //Game logic below
         while(!program.currentState.equals("game_ended")){
             String word = "";
             word = kInput.nextLine();
             program.gameService.verifyWord(word, program.user, program.gameRoomID);
         }
-
     }
 
     public void getAllStubs(){
@@ -118,6 +131,7 @@ public class MatchMakeTest implements ControllerInterface {
             System.out.println("sending read...");
             System.out.println(this.user+" "+gameRoomID);
             gameService.playerReady(user, gameRoomID);
+            System.out.println("ready sent");
 
             return;
         }
