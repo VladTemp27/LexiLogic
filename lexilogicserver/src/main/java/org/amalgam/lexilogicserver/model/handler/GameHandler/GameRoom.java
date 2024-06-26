@@ -165,7 +165,7 @@ public class GameRoom implements NTimerCallback {
             System.out.println(checkIfDupe(word));
             if (checkIfDupe(word)) {
                 System.out.println("Duped word");
-                duplication(word);
+                duplication(word, username);
                 return;
             } // should just throw exception of duped word
 
@@ -447,24 +447,25 @@ public class GameRoom implements NTimerCallback {
         return capacity;
     }
 
-    public void duplication (String submittedWord) throws InvalidRequestException {
+    public void duplication (String submittedWord, String duperUser) throws InvalidRequestException {
 
         List<String> keys = new ArrayList<>(details.keySet());
-//        LinkedList <String> wordOwner = new LinkedList<>();
 
         for (String key: keys){
             PlayerGameDetail gameDetail = details.get(key);
 
-            if (gameDetail.listOfWordsContains(submittedWord) && (!notifiedOwner.contains(key + " " + submittedWord))){
-                    broadcast(key, GameRoomResponseBuilder.dupedWordResponseOwner());
-                    String details = key + " " + submittedWord;
-                    notifiedOwner.add(details);
-//                    wordOwner.add(key);
-                    String appointedSonOfGOd = notifiedOwner.toString();
-                    System.out.println(appointedSonOfGOd);
-            } else if (notifiedOwner.contains(key + " " + submittedWord)) {
+            if (gameDetail.listOfWordsContains(submittedWord)&& (!key.equals(duperUser)) && (!notifiedOwner.contains(key + " " + submittedWord))) {
+                broadcast(key, GameRoomResponseBuilder.dupedWordResponseOwner());
+                String details = key + " " + submittedWord;
+                notifiedOwner.add(details);
+                String owner = notifiedOwner.toString();
+                System.out.println(owner);
+            }
+            else if(gameDetail.listOfWordsContains(submittedWord)){
                 broadcast(key, GameRoomResponseBuilder.dupedWordResponseGeneric());
-            } else {
+            } /*else if (notifiedOwner.contains(key + " " + submittedWord)) {
+                broadcast(key, GameRoomResponseBuilder.dupedWordResponseGeneric());
+            } */else if (key.equals(duperUser)){
                 broadcast(key, GameRoomResponseBuilder.dupedWordResponseDuper());
             }
         }

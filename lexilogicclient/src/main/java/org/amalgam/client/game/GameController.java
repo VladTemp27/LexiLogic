@@ -375,9 +375,12 @@ public class GameController implements UpdateDispatcher {
 
         if (state.equals("invalid_word")) {
               showAlert("INVALID WORD");
-        } else if (state.equals("duped")) {
+        } if (state.equals("self_duplicate")){
+            showAlert("You've already entered that word!");
+        } if (state.equals("duped")) {
             showAlert("You've been duped");
-            
+        } if (state.equals("duped_word")){
+            showAlert("You have duped someone!");
         }
     }
 
