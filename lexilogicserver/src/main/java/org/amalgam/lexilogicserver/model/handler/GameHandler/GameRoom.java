@@ -453,12 +453,18 @@ public class GameRoom implements NTimerCallback {
 
         for (String key: keys){
             PlayerGameDetail gameDetail = details.get(key);
+            String wordOwner = "";
             if (gameDetail.listOfWordsContains(submittedWord) && (!notifiedOwner.contains(key + " " + submittedWord))){
-                broadcast(key, GameRoomResponseBuilder.dupedWordResponseOwner());
-                String details = key + " " + submittedWord;
-                notifiedOwner.add(details);
-                String appointedSonOfGOd = notifiedOwner.toString();
-                System.out.println(appointedSonOfGOd);
+                wordOwner = key;
+                if (wordOwner.equalsIgnoreCase(key)){
+                    broadcast(key, GameRoomResponseBuilder.dupedWordResponseGeneric());
+                } else {
+                    broadcast(key, GameRoomResponseBuilder.dupedWordResponseOwner());
+                    String details = key + " " + submittedWord;
+                    notifiedOwner.add(details);
+                    String appointedSonOfGOd = notifiedOwner.toString();
+                    System.out.println(appointedSonOfGOd);
+                }
             } else {
                 broadcast(key, GameRoomResponseBuilder.dupedWordResponseDuper());
             }
