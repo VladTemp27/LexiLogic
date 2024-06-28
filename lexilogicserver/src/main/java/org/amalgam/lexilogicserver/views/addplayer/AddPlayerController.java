@@ -90,7 +90,7 @@ public class AddPlayerController {
     @FXML
     public void handleBackButton(){
         if(serverController !=null){
-            serverController.loadServerMainMenu();
+            serverController.loadPlayerManagement();
         }else {
             System.out.println("Server controller is not set.");
         }
