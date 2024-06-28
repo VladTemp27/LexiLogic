@@ -455,7 +455,7 @@ public class GameRoom implements NTimerCallback {
             PlayerGameDetail gameDetail = details.get(key);
 
             if (gameDetail.listOfWordsContains(submittedWord)&& (!key.equals(duperUser)) && (!notifiedOwner.contains(key + " " + submittedWord))) {
-                broadcast(key, GameRoomResponseBuilder.dupedWordResponseOwner());
+                broadcast(key, GameRoomResponseBuilder.dupedWordResponseOwner(this, key));
                 String details = key + " " + submittedWord;
                 notifiedOwner.add(details);
                 String owner = notifiedOwner.toString();
