@@ -90,6 +90,7 @@ public class MatchmakingService implements NTimerCallback{
     public boolean clearQueue(){
         if(timerDoneValue.get()){
             queue.clear();
+            timerStarted.set(false);
             return queue.isEmpty();
         }
         return false;
