@@ -17,6 +17,7 @@ public class MatchmakingService implements NTimerCallback{
     private ExecutorService executorService = Executors.newSingleThreadExecutor();
 
     private final AtomicBoolean roomValidity = new AtomicBoolean(false);
+    private final AtomicBoolean timerStarted = new AtomicBoolean(false);
 
     public boolean isQueueEmpty(){
         return queue.isEmpty();
@@ -24,8 +25,9 @@ public class MatchmakingService implements NTimerCallback{
 
     public void addToQueue(PlayerGameDetail playerGameDetail) {
         queue.add(playerGameDetail);
-        if (queue.size() == 1) {
+        if (queue.size() == 1 && !timerStarted.get()) {
             startTimer();
+            timerStarted.set(true);
         }
     }
 
@@ -56,6 +58,7 @@ public class MatchmakingService implements NTimerCallback{
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
         } finally {
+            timerStarted.set(false);
             queueLock.release();
         }
     }
