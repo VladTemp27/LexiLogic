@@ -6,7 +6,9 @@ import org.amalgam.lexilogicserver.model.utilities.referenceobjects.Player;
 
 import javax.xml.crypto.Data;
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.List;
 
 public class PlayerDAL {
 
@@ -152,6 +154,25 @@ public class PlayerDAL {
         }catch (SQLException | ClassNotFoundException | InstantiationException | IllegalAccessException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public static List<Player> fetchPlayers() {
+        List<Player> players = new ArrayList<>();
+        try (Connection conn = DatabaseUtil.getConnection()) {
+            String query = "SELECT playerID, name FROM player";
+            try (PreparedStatement stmt = conn.prepareStatement(query);
+                 ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    int playerID = rs.getInt("playerID");
+                    String name = rs.getString("name");
+                    Player player = new Player(playerID, name);
+                    players.add(player);
+                }
+            }
+        } catch (SQLException | ClassNotFoundException | InstantiationException | IllegalAccessException e) {
+            throw new RuntimeException(e);
+        }
+        return players;
     }
 
 

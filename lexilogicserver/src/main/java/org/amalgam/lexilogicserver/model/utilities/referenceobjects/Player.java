@@ -11,6 +11,11 @@ public class Player {
         this.username = username;
         this.password = password;
     }
+
+    public Player (int playerID, String username){
+        this.userID = playerID;
+        this.username = username;
+    }
     public Player(int userID, String username, String password, String lastLoggedIn) {
         this.userID = userID;
         this.username = username;
