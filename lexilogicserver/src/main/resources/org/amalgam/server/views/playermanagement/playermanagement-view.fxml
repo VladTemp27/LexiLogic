@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="playerManagementPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="500.0" style="-fx-background-color: #674C33;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.amalgam.lexilogicserver.views.playermanagement.PlayerManagementController">
+<AnchorPane fx:id="playerManagementPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="500.0" style="-fx-background-color: #674C33;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.amalgam.lexilogicserver.views.playermanagement.PlayerManagementController">
    <children>
       <ImageView fitHeight="200.0" fitWidth="200.0" layoutX="-21.0" layoutY="162.0" pickOnBounds="true" rotate="270.0">
          <image>
@@ -41,9 +41,8 @@
       </Button>
       <TableView fx:id="playerTableView" layoutX="111.0" layoutY="85.0" prefHeight="230.0" prefWidth="350.0" stylesheets="@../../../css/tableview.css">
         <columns>
-            <TableColumn fx:id="usernameColumn" prefWidth="150.0" text="Username" />
-            <TableColumn fx:id="editColumn" prefWidth="100.0" text="Edit" />
-            <TableColumn fx:id="deleteColumn" prefWidth="100.0" text="Delete" />
+            <TableColumn fx:id="usernameColumn" prefWidth="220.0" text="Username" />
+            <TableColumn fx:id="deleteColumn" prefWidth="128.0" text="Delete" />
         </columns>
       </TableView>
    </children>
