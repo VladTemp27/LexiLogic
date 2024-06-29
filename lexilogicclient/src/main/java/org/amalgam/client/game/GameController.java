@@ -140,7 +140,7 @@ public class GameController implements UpdateDispatcher {
      * round counter before game to start
      */
     private void roundCountdown() {
-        System.out.printf("ROUND COUNTDOWN");
+        System.out.println("ROUND COUNTDOWN");
         final int[] countdown = {5};
         Platform.runLater(() -> {
             RCTimeLabel.setText(String.format("00:0%d", countdown[0]));
@@ -355,12 +355,14 @@ public class GameController implements UpdateDispatcher {
             wordBoxMatrix(rootObject);
             parseRounds(gameRoomObject);
             roundCountdown();
+            System.out.println("ROUND COUNTDOWN ENDED");
         }
         if (state.equals("game_started")) {
             int capacity = rootObject.get("capacity").getAsInt();
             fetchPoints(gameRoomObject, capacity);
             if (x==currentRound) gameStart();
             x++;
+            System.out.println("ROUND ENDED");
         }
 
         if(state.equals("game_done")){

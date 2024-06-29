@@ -153,7 +153,7 @@ public class GameServiceImpl extends GameServicePOA {
         this.roomID.set(roomID);
         System.out.println("Room ID: "+roomID);
         LinkedHashMap<String, PlayerGameDetail> playerDetailsMap = new LinkedHashMap<>();
-        LinkedHashMap<String, PlayerCallback> playerCallbacksMap = new LinkedHashMap<>();
+        ConcurrentHashMap<String, PlayerCallback> playerCallbacksMap = new ConcurrentHashMap<>();
 
         for (PlayerGameDetail player : players) {
             playerDetailsMap.put(player.getUsername(), player);
