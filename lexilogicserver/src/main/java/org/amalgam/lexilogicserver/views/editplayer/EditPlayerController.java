@@ -1,4 +1,4 @@
-package org.amalgam.lexilogicserver.views.addplayer;
+package org.amalgam.lexilogicserver.views.editplayer;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
@@ -9,24 +9,18 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import org.amalgam.lexilogicserver.ServerController;
 import org.amalgam.lexilogicserver.model.utilities.referenceobjects.Player;
-
-import java.util.ArrayList;
 import java.util.List;
 
-
-public class AddPlayerController {
-
-    @FXML
-    private AnchorPane addPlayerPane;
+public class EditPlayerController {
 
     @FXML
-    private Button addPlayerButton;
-
+    private AnchorPane editPlayerPane;
     @FXML
-    private TextField usernameTextfield;
+    private Button saveButton;
     @FXML
-    private TextField passwordTextfield;
-
+    private TextField usernameTextField;
+    @FXML
+    private TextField passwordTextField;
     @FXML
     private Button backButton;
 
@@ -72,25 +66,16 @@ public class AddPlayerController {
     }
 
     @FXML
-    public void handleAddPlayer(){
-        if(serverController != null){
-            String username = usernameTextfield.getText();
-            String password = passwordTextfield.getText();
-            if (!username.isEmpty()) {
-
-             AddPlayerModel.process(username,password);
-            } else {
-                showAlert("Username cannot be empty.");
-            }
-        } else {
-            System.out.println("Server controller is not set.");
+    public void handleEditPlayer() {
+        if (serverController != null) {
+            //TODO: Implementation
         }
     }
 
     @FXML
     public void handleBackButton(){
         if(serverController !=null){
-            serverController.loadPlayerManagement();
+            serverController.loadServerMainMenu();
         }else {
             System.out.println("Server controller is not set.");
         }
@@ -98,9 +83,9 @@ public class AddPlayerController {
 
     @FXML
     public void initialize() {
-        addHoverEffect(addPlayerButton);
+        addHoverEffect(saveButton);
         addHoverEffectImage(backButton);
-        addPlayerButton.setOnAction(event -> handleAddPlayer());
         backButton.setOnAction(event -> handleBackButton());
+        saveButton.setOnAction(event -> handleEditPlayer());
     }
 }

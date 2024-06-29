@@ -24,22 +24,22 @@
             <Font name="Bowlby One SC Regular" size="18.0" />
          </font>
       </Label>
-      <Button fx:id="addPlayerButton" layoutX="165.0" layoutY="125.0" mnemonicParsing="false" prefHeight="41.0" prefWidth="190.0" style="-fx-background-color: B07C3B;" text="Add Player" textFill="WHITE">
+      <Button fx:id="playerManagementButton" layoutX="165.0" layoutY="138.0" mnemonicParsing="false" prefHeight="41.0" prefWidth="190.0" style="-fx-background-color: B07C3B;" text="Player Management" textFill="WHITE">
          <font>
             <Font name="Brygada 1918 Regular" size="14.0" />
          </font>
       </Button>
-      <Button fx:id="changeGameButton" layoutX="165.0" layoutY="220.0" mnemonicParsing="false" prefHeight="41.0" prefWidth="190.0" style="-fx-background-color: B07C3B;" text="Change Game Option" textFill="WHITE">
+      <Button fx:id="changeGameButton" layoutX="165.0" layoutY="190.0" mnemonicParsing="false" prefHeight="41.0" prefWidth="190.0" style="-fx-background-color: B07C3B;" text="Change Game Option" textFill="WHITE">
          <font>
             <Font name="Brygada 1918 Regular" size="14.0" />
          </font>
       </Button>
-      <Button fx:id="runORBDButton" layoutX="165.0" layoutY="267.0" mnemonicParsing="false" prefHeight="41.0" prefWidth="190.0" style="-fx-background-color: B07C3B;" text="Run ORB Daemon" textFill="WHITE">
+      <Button fx:id="runORBDButton" layoutX="165.0" layoutY="242.0" mnemonicParsing="false" prefHeight="41.0" prefWidth="190.0" style="-fx-background-color: B07C3B;" text="Run ORB Daemon" textFill="WHITE">
          <font>
             <Font name="Brygada 1918 Regular" size="14.0" />
          </font>
       </Button>
-      <Button fx:id="runServerButton" layoutX="165.0" layoutY="314.0" mnemonicParsing="false" prefHeight="41.0" prefWidth="190.0" style="-fx-background-color: #9CA16F;" text="Run Server" textFill="WHITE">
+      <Button fx:id="runServerButton" layoutX="165.0" layoutY="294.0" mnemonicParsing="false" prefHeight="41.0" prefWidth="190.0" style="-fx-background-color: #9CA16F;" text="Run Server" textFill="WHITE">
          <font>
             <Font name="Brygada 1918 Regular" size="14.0" />
          </font>
@@ -49,10 +49,5 @@
             <Image url="@../../../icons/Axel.png" />
          </image>
       </ImageView>
-      <Button fx:id="accountDeletionButton" layoutX="165.0" layoutY="173.0" mnemonicParsing="false" prefHeight="41.0" prefWidth="190.0" style="-fx-background-color: B07C3B;" text="Account Deletion" textFill="WHITE">
-         <font>
-            <Font name="Brygada 1918 Regular" size="14.0" />
-         </font>
-      </Button>
    </children>
 </AnchorPane>
