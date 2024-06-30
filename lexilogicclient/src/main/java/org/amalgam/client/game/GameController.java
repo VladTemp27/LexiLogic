@@ -145,6 +145,7 @@ public class GameController implements UpdateDispatcher {
         Platform.runLater(() -> {
             RCTimeLabel.setText(String.format("00:0%d", countdown[0]));
             timer = new Timer();
+            yourLexiLabel.setText("Your Lexi:");
             timer.schedule(new TimerTask() {
                 @Override
                 public void run() {
@@ -246,7 +247,7 @@ public class GameController implements UpdateDispatcher {
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new));
 
         int x = 0;
-        for (String username : topNPlayer.keySet()){
+        for (String username : topNPlayer.keySet()) {
             int pts = topNPlayer.get(username);
             int finalX = x;
             Platform.runLater(() -> {
@@ -311,7 +312,7 @@ public class GameController implements UpdateDispatcher {
                         @Override
                         protected Void call() throws Exception {
                             // Verify the word using GameModel
-                            gameModel.verifyWord(input, LoginController.username, roomID);
+                            gameModel.verifyWord(input, LoginController.username, gameRoomID);
                             System.out.println("VERIFY WORD");
                             return null;
                         }
@@ -341,8 +342,8 @@ public class GameController implements UpdateDispatcher {
         MainController.changeScreen(UIPathResolver.main_menu_path);
     }
     int x = 0; // reverse guard clause
-    private void updateData(String json){
-//        System.out.println("GAME "+json);
+
+    private void updateData(String json) {
         JsonElement rootElement = JsonParser.parseString(json);
         JsonObject rootObject = rootElement.getAsJsonObject();
 
@@ -356,30 +357,34 @@ public class GameController implements UpdateDispatcher {
         JsonObject gameRoomObject = rootObject.getAsJsonObject("game_room");
         if (state.equals("staging")) { // components of game is initialized before game begins
             currentRound = rootObject.get("current_round").getAsInt();
-            x=currentRound;
+            x = currentRound;
             wordBoxMatrix(rootObject);
             parseRounds(gameRoomObject);
             roundCountdown();
             System.out.println("ROUND COUNTDOWN ENDED");
         }
-        if (state.equals("game_started")) {
-            int capacity = rootObject.get("capacity").getAsInt();
-            fetchPoints(gameRoomObject, capacity);
-            if (x==currentRound) gameStart();
+
+        if (state.equals("game_started")) { // main components of game is initialized
+            if (x == currentRound) gameStart();
             x++;
             System.out.println("ROUND ENDED");
         }
 
-        if(state.equals("game_done")){
-          Platform.runLater(() -> {
-              String winner = rootObject.get("winner").getAsString();
-              System.out.println(winner);
-              if (Objects.equals(LoginController.username, winner)){
+        if (state.equals("game_room")) { // returns true if submitted word is valid otherwise false
+            int capacity = rootObject.get("capacity").getAsInt();
+            fetchPoints(rootObject.getAsJsonObject("game_room_property"), capacity);
+        }
+
+        if (state.equals("game_done")) { // if there is a winner on particular game room
+            Platform.runLater(() -> {
+                String winner = rootObject.get("winner").getAsString();
+                System.out.println(winner);
+                if (Objects.equals(LoginController.username, winner)) {
                     victoryPanel.setVisible(true);
-              } else {
+                } else {
                     gameOverPanel.setVisible(true);
-              }
-          });
+                }
+            });
         }
 
         if (state.equals("invalid_word")) {
@@ -393,7 +398,7 @@ public class GameController implements UpdateDispatcher {
         }
     }
 
-    public void parseRounds(JsonObject gameRoomObject){
+    public void parseRounds(JsonObject gameRoomObject) {
         int previousRound = currentRound - 1;
         if (previousRound == 0) return;
         try {
@@ -414,16 +419,16 @@ public class GameController implements UpdateDispatcher {
             } else {
                 System.out.println(LoginController.username + " " + winner);
             }
-        } catch (Exception e){
+        } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
 
-    public void fetchPoints(JsonObject gameRoomObject, int capacity){
+    public void fetchPoints(JsonObject gameRoomObject, int capacity) {
         try {
             LinkedHashMap<String, Integer> pointsList = new LinkedHashMap<>();
             System.out.println("PARSING POINTS");
-            for (int i=0; i<capacity; i++){
+            for (int i = 0; i < capacity; i++) {
                 String key = "player_" + i;
                 JsonObject playerObject = gameRoomObject.getAsJsonObject(key);
                 String player_name = playerObject.get("username").getAsString();
@@ -443,13 +448,13 @@ public class GameController implements UpdateDispatcher {
         int x = 0;
         int y = 0;
         for (JsonElement element : rowArray) { //This iterates through the rows
-         JsonArray colArray = element.getAsJsonArray();
-             for(JsonElement colElement : colArray){ //This iterates through the col inside the rows
-                 fetchLetters[x][y]=colElement.getAsString();
-                 y++;
-             }
-         y=0;
-         x++;
+            JsonArray colArray = element.getAsJsonArray();
+            for (JsonElement colElement : colArray) { //This iterates through the col inside the rows
+                fetchLetters[x][y] = colElement.getAsString();
+                y++;
+            }
+            y = 0;
+            x++;
         }
     }
 
