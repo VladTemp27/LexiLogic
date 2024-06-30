@@ -199,11 +199,47 @@ public class GameRoomResponseBuilder {
         return gson.toJson(response);
     }
 
-    public static String dupedWordResponseOwner (){
+//    public static String dupedWordResponseOwner (GameRoom gameRoom, String owner){
+//        LinkedHashMap<String, PlayerGameDetail> details = gameRoom.getDetails();
+//        JsonObject response = new JsonObject();
+//        response.addProperty("state", "duped");
+//        response.addProperty("message", "You've been duped!");
+//
+//        JsonObject playerDetails = new JsonObject();
+//        int i=0;
+//
+//        for (Map.Entry<String, PlayerGameDetail> entry : details.entrySet()) {
+//            String username = entry.getKey();
+//            PlayerGameDetail playerDetail = entry.getValue();
+//            JsonObject playerInfo = new JsonObject();
+//            playerInfo.addProperty("username", username);
+//            playerInfo.addProperty("points", playerDetail.getPoints());
+//            playerDetails.add("player_" + i, playerInfo);
+//            i++;
+//        }
+//        response.add("player_details", playerDetails);
+//        return response.toString();
+//    }
+
+        public static String dupedWordResponseOwner (GameRoom gameRoom, String owner){
+        LinkedHashMap<String, PlayerGameDetail> details = gameRoom.getDetails();
         JsonObject response = new JsonObject();
         response.addProperty("state", "duped");
         response.addProperty("message", "You've been duped!");
 
+        JsonObject playerDetails = new JsonObject();
+        int i=0;
+
+        for (Map.Entry<String, PlayerGameDetail> entry : details.entrySet()) {
+            String username = entry.getKey();
+            PlayerGameDetail playerDetail = entry.getValue();
+            JsonObject playerInfo = new JsonObject();
+            playerInfo.addProperty("username", username);
+            playerInfo.addProperty("points", playerDetail.getPoints());
+            playerDetails.add("player_" + i, playerInfo);
+            i++;
+        }
+        response.add("player_details", playerDetails);
         return response.toString();
     }
 

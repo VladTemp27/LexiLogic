@@ -189,13 +189,18 @@ public class GameController implements UpdateDispatcher {
         });
 
     }
-
+    private int getGameTimeFromResponse(String jsonResponse) {
+        JsonElement rootElement = JsonParser.parseString(jsonResponse);
+        JsonObject rootObject = rootElement.getAsJsonObject();
+        return rootObject.get("gameTime").getAsInt();
+    }
     /**
      * Start the game of the program.
      */
     private void gameStart() {
         System.out.println("GAME START");
-        final int[] finalGameTime = {30};
+        String response = LoadingController.response;
+        final int[] finalGameTime = {getGameTimeFromResponse(response)};
         Platform.runLater(() -> {
             populateWordMatrix();
             timer = new Timer();

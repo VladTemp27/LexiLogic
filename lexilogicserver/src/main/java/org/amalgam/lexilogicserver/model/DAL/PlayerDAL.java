@@ -33,6 +33,26 @@ public class PlayerDAL {
         }
         return null;
     }
+    public static LinkedList<Player> getAllPlayers() {
+        LinkedList<Player> listOfPlayers = new LinkedList<>();
+        try (Connection conn = DatabaseUtil.getConnection()) {
+            PreparedStatement stmt = conn.prepareStatement("SELECT * FROM player");
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    int playerID = rs.getInt("playerID");
+                    String username = rs.getString("name");
+                    String password = rs.getString("password");
+                    String lastLogin = rs.getString("lastLogin");
+                    Player player = new Player(playerID, username, password, lastLogin);
+                    listOfPlayers.add(player);
+                }
+            }
+        } catch (SQLException | ClassNotFoundException | InstantiationException | IllegalAccessException e) {
+            throw new RuntimeException(e);
+        }
+        return listOfPlayers;
+    }
+
 
     public static void insertNewPlayer(String username, String password) {
         try (Connection conn = DatabaseUtil.getConnection()) {

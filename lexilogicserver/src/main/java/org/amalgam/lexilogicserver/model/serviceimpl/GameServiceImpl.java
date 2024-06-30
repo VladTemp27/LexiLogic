@@ -9,6 +9,7 @@ import org.amalgam.Utils.Exceptions.DuplicateWordException;
 import org.amalgam.lexilogicserver.model.DAL.LeaderBoardDAL;
 import org.amalgam.lexilogicserver.model.microservices.Matchmaking.MatchmakingService;
 import org.amalgam.lexilogicserver.model.DAL.LobbyDAL;
+import org.amalgam.lexilogicserver.model.microservices.gamesettings.SettingsHandler;
 import org.amalgam.lexilogicserver.model.utilities.referenceobjects.LeaderBoard;
 import java.io.FileNotFoundException;
 
@@ -64,12 +65,13 @@ public class GameServiceImpl extends GameServicePOA {
             }while(!roomCreated.get());
             if(matchmakingService.isRoomValid()){   // if room is valid sends response to user
                 try {
+                    int gameTime = SettingsHandler.getGameTime(); // Get gameTime from SettingsHandler
                     // this returns success status as well as gameRoomID
                     // parse gameRoomID in client side to specify where to make the handshake call the readyHandshake
                     // request
                     System.out.println("RETURNGING GAME ROOM: "+roomID.get());
 
-                    return "{\"status\": \"success\", \"message\": \"Matchmaking Successful!\",\"gameRoomID\":"+roomID.get()+"}";
+                    return "{\"status\": \"success\", \"message\": \"Matchmaking Successful!\",\"gameRoomID\":" + roomID.get() + ", \"gameTime\": " + gameTime + "}";
                 }catch(Exception e){
                     e.printStackTrace();
                 }
@@ -164,7 +166,8 @@ public class GameServiceImpl extends GameServicePOA {
         }
 
         try {
-            GameRoom gameRoom = new GameRoom(roomID, playerDetailsMap, playerCallbacksMap, 30, players.size());
+            GameRoom gameRoom = new GameRoom(roomID, playerDetailsMap, playerCallbacksMap, SettingsHandler.getGameTime(),
+                    players.size());
             System.out.println("GameRoom Created");
             if (matchmakingService.isTimerDone()) {
                 rooms.add(gameRoom);
