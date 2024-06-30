@@ -30,6 +30,7 @@ public class GameRoom implements NTimerCallback {
     private ConcurrentHashMap<String,PlayerCallback> playerCallbacks = new ConcurrentHashMap<>();
     private LinkedHashMap<String, Integer> totalPointsPerPlayer = new LinkedHashMap<>();
     private final LinkedHashMap<String,PlayerGameDetail> defaultDetails;
+    private LinkedList<String> notifiedOwner = new LinkedList<>();
 
     private ConcurrentHashMap<String, Boolean> readyToReceive = new ConcurrentHashMap<String, Boolean>();
     private ExecutorService executor = Executors.newCachedThreadPool();
@@ -230,7 +231,7 @@ public class GameRoom implements NTimerCallback {
             System.out.println(checkIfDupe(word));
             if (checkIfDupe(word)) {
                 System.out.println("Duped word");
-                broadcast(username, GameRoomResponseBuilder.buildInvalidWordResponse());
+                duplication(word, username);
                 return;
             } // should just throw exception of duped word
 
@@ -349,13 +350,12 @@ public class GameRoom implements NTimerCallback {
 
 
     //Check if word submitted is not unique
-    private boolean checkIfDupe(String submittedWord){
+    private boolean checkIfDupe(String submittedWord) throws InvalidRequestException {
         List<String> keys = new ArrayList<>(details.keySet());
         for(String key : keys){
             PlayerGameDetail gameDetail = details.get(key);
             if(gameDetail.listOfWordsContains(submittedWord)){
                 markWordAsDuped(submittedWord);
-
                 return true;
             }
         }
@@ -525,4 +525,30 @@ public class GameRoom implements NTimerCallback {
     public int getCapacity() {
         return capacity;
     }
+
+    public void duplication (String submittedWord, String duperUser) throws InvalidRequestException {
+
+        List<String> keys = new ArrayList<>(details.keySet());
+
+        for (String key: keys){
+            PlayerGameDetail gameDetail = details.get(key);
+
+            if (gameDetail.listOfWordsContains(submittedWord)&& (!key.equals(duperUser)) && (!notifiedOwner.contains(key + " " + submittedWord))) {
+                broadcast(key, GameRoomResponseBuilder.dupedWordResponseOwner());
+                String details = key + " " + submittedWord;
+                notifiedOwner.add(details);
+                String owner = notifiedOwner.toString();
+                System.out.println(owner);
+            }
+            else if(gameDetail.listOfWordsContains(submittedWord)){
+                broadcast(key, GameRoomResponseBuilder.dupedWordResponseGeneric());
+            } /*else if (notifiedOwner.contains(key + " " + submittedWord)) {
+                broadcast(key, GameRoomResponseBuilder.dupedWordResponseGeneric());
+            } */else if (key.equals(duperUser)){
+                broadcast(key, GameRoomResponseBuilder.dupedWordResponseDuper());
+            }
+        }
+
+    }
+
 }
