@@ -3,15 +3,18 @@ package org.amalgam.lexilogicserver.views.addplayer;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.TextField;
 import javafx.scene.effect.ColorAdjust;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import org.amalgam.lexilogicserver.ServerController;
 import org.amalgam.lexilogicserver.model.utilities.referenceobjects.Player;
+import org.amalgam.lexilogicserver.views.playermanagement.PlayerManagementModel;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 
 public class AddPlayerController {
@@ -76,9 +79,16 @@ public class AddPlayerController {
         if(serverController != null){
             String username = usernameTextfield.getText();
             String password = passwordTextfield.getText();
-            if (!username.isEmpty()) {
 
-             AddPlayerModel.process(username,password);
+            if (!username.isEmpty()) {
+                AddPlayerModel.process(username,password);
+                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                alert.setTitle("Add Player");
+                alert.setHeaderText("Player successfully added: " + username);
+                alert.showAndWait();
+                usernameTextfield.clear();
+                passwordTextfield.clear();
+
             } else {
                 showAlert("Username cannot be empty.");
             }

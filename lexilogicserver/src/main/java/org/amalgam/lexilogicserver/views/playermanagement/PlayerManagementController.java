@@ -5,10 +5,7 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.TableCell;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
@@ -19,6 +16,7 @@ import org.amalgam.lexilogicserver.model.utilities.referenceobjects.Player;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 
 public class PlayerManagementController {
 
@@ -114,12 +112,19 @@ public class PlayerManagementController {
                         });
 
                         deleteButton.setOnAction(event -> {
-                            System.out.println("Delete button clicked!");
                             Player selectedPlayer = getTableView().getSelectionModel().getSelectedItem();
                             if (selectedPlayer != null) {
-                                observableItems.remove(selectedPlayer);
-                                PlayerManagementModel.deletePlayer(selectedPlayer.getUsername()); // Delete from server
-                                System.out.println("Selected Player (deleted): " + selectedPlayer.getUsername());
+                                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                                alert.setTitle("Delete Player");
+                                alert.setHeaderText("Are you sure you want to delete " + selectedPlayer.getUsername() + "?");
+                                alert.setContentText("This action cannot be undone.");
+
+                                Optional<ButtonType> result = alert.showAndWait();
+                                if (result.isPresent() && result.get() == ButtonType.OK) {
+                                    observableItems.remove(selectedPlayer);
+                                    PlayerManagementModel.deletePlayer(selectedPlayer.getUsername());
+                                    System.out.println("Selected Player (deleted): " + selectedPlayer.getUsername());
+                                }
                             }
                         });
                     }
@@ -154,6 +159,8 @@ public class PlayerManagementController {
             System.out.println("Error: Table or columns are null. Cannot populate table.");
         }
     }
+
+
 
     @FXML
     public void initialize() {
