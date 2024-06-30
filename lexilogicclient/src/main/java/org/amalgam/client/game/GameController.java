@@ -31,7 +31,6 @@ public class GameController implements UpdateDispatcher {
     private  AnchorPane gameOverPanel;
     @FXML
     private AnchorPane victoryPanel;
-    // Round Countdown private variables
     @FXML
     private AnchorPane roundCountdownPane;
     @FXML
@@ -141,6 +140,7 @@ public class GameController implements UpdateDispatcher {
      * round counter before game to start
      */
     private void roundCountdown() {
+        System.out.println("ROUND COUNTDOWN");
         final int[] countdown = {5};
         Platform.runLater(() -> {
             RCTimeLabel.setText(String.format("00:0%d", countdown[0]));
@@ -198,6 +198,7 @@ public class GameController implements UpdateDispatcher {
      * Start the game of the program.
      */
     private void gameStart() {
+        System.out.println("GAME START");
         String response = LoadingController.response;
         final int[] finalGameTime = {getGameTimeFromResponse(response)};
         Platform.runLater(() -> {
@@ -270,6 +271,7 @@ public class GameController implements UpdateDispatcher {
             gameRoomID = Integer.parseInt(Objects.requireNonNull(JsonObjectParser.parseMatchMaking(response, "gameRoomID")));
             gameModel = new GameModel(MainController.orbConnection);
             Thread.sleep(1000);
+            System.out.println("HANDSHAKE");
             gameModel.submitReadyHandshake(LoginController.username, gameRoomID);
         } catch (Exception e) {
             System.out.println(e.getMessage());
@@ -358,12 +360,14 @@ public class GameController implements UpdateDispatcher {
             wordBoxMatrix(rootObject);
             parseRounds(gameRoomObject);
             roundCountdown();
+            System.out.println("ROUND COUNTDOWN ENDED");
         }
         if (state.equals("game_started")) {
             int capacity = rootObject.get("capacity").getAsInt();
             fetchPoints(gameRoomObject, capacity);
             if (x==currentRound) gameStart();
             x++;
+            System.out.println("ROUND ENDED");
         }
 
         if(state.equals("game_done")){

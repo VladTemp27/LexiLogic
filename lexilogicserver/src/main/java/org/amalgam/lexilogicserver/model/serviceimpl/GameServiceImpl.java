@@ -155,7 +155,7 @@ public class GameServiceImpl extends GameServicePOA {
         this.roomID.set(roomID);
         System.out.println("Room ID: "+roomID);
         LinkedHashMap<String, PlayerGameDetail> playerDetailsMap = new LinkedHashMap<>();
-        LinkedHashMap<String, PlayerCallback> playerCallbacksMap = new LinkedHashMap<>();
+        ConcurrentHashMap<String, PlayerCallback> playerCallbacksMap = new ConcurrentHashMap<>();
 
         for (PlayerGameDetail player : players) {
             playerDetailsMap.put(player.getUsername(), player);
@@ -218,7 +218,7 @@ public class GameServiceImpl extends GameServicePOA {
 
 
     @Override
-    public synchronized void verifyWord(String word, String username, int gameRoomID) throws InvalidWordFormatException, DuplicateWordException {
+    public void verifyWord(String word, String username, int gameRoomID) throws InvalidWordFormatException, DuplicateWordException {
         int tempIndex = getRoomIndexFromID(gameRoomID);
         System.out.println(username+" submitted word: "+word);
 //        GameRoom temp = rooms.get(tempIndex);
@@ -243,7 +243,7 @@ public class GameServiceImpl extends GameServicePOA {
 
     //TODO test if synchronized makes it buggy
     @Override
-    public synchronized String playerReady(String username, int gameRoomID) {
+    public String playerReady(String username, int gameRoomID) {
         int origIndex = getRoomIndexFromID(gameRoomID);
         GameRoom temp = rooms.get(origIndex);
 
