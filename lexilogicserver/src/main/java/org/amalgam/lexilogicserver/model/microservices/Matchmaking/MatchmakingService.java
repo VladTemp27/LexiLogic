@@ -11,7 +11,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 public class MatchmakingService implements NTimerCallback{
     private final ConcurrentLinkedQueue<PlayerGameDetail> queue = new ConcurrentLinkedQueue<>();
-    private final Semaphore queueLock = new Semaphore(1);
+    public final Semaphore queueLock = new Semaphore(1);
     private final int MATCHMAKING_TIMEOUT = SettingsHandler.getQueueTime()*1000;
     private final AtomicBoolean timerDoneValue = new AtomicBoolean(false);
     private ExecutorService executorService = Executors.newSingleThreadExecutor();
@@ -19,12 +19,15 @@ public class MatchmakingService implements NTimerCallback{
     private final AtomicBoolean roomValidity = new AtomicBoolean(false);
     private final AtomicBoolean timerStarted = new AtomicBoolean(false);
 
+    private final ConcurrentHashMap<String, Boolean> responsesSent = new ConcurrentHashMap<>();
+
     public boolean isQueueEmpty(){
         return queue.isEmpty();
     }
 
     public void addToQueue(PlayerGameDetail playerGameDetail) {
         queue.add(playerGameDetail);
+        responsesSent.put(playerGameDetail.getUsername(), false);
         if (queue.size() == 1 && !timerStarted.get()) {
             startTimer();
             timerStarted.set(true);
@@ -55,7 +58,7 @@ public class MatchmakingService implements NTimerCallback{
             if (queue.size() == 1) {
                 queue.clear();
             }
-        } catch (InterruptedException e) {
+        } catch (Exception e) {
             Thread.currentThread().interrupt();
         } finally {
             timerStarted.set(false);
@@ -93,5 +96,20 @@ public class MatchmakingService implements NTimerCallback{
             return queue.isEmpty();
         }
         return false;
+    }
+
+    public void markAsSent(String username){
+        if(responsesSent.get(username)) return;
+        responsesSent.replace(username, true);
+    }
+
+    public boolean responsesDone(){
+        ArrayList<String> keys = new ArrayList<>(responsesSent.keySet());
+        for(String key: keys){
+            if(!responsesSent.get(key)){
+                return false;
+            }
+        }
+        return true;
     }
 }
