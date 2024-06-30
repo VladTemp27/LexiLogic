@@ -7,6 +7,7 @@ import org.amalgam.UIControllers.PlayerCallback;
 import org.amalgam.Utils.Exceptions.*;
 import org.amalgam.Utils.Exceptions.DuplicateWordException;
 import org.amalgam.lexilogicserver.model.DAL.LeaderBoardDAL;
+import org.amalgam.lexilogicserver.model.helpers.MatchMakeCleaner;
 import org.amalgam.lexilogicserver.model.microservices.Matchmaking.MatchmakingService;
 import org.amalgam.lexilogicserver.model.DAL.LobbyDAL;
 import org.amalgam.lexilogicserver.model.utilities.referenceobjects.LeaderBoard;
@@ -14,11 +15,12 @@ import java.io.FileNotFoundException;
 
 import org.amalgam.lexilogicserver.model.utilities.referenceobjects.PlayerGameDetail;
 
+import java.sql.SQLOutput;
 import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.Semaphore;
+import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicReference;
 
 import org.amalgam.lexilogicserver.model.handler.GameHandler.GameRoom;
 
@@ -27,12 +29,25 @@ public class GameServiceImpl extends GameServicePOA {
     private final ConcurrentHashMap<String, PlayerCallback> playerCallbackMap = new ConcurrentHashMap<>();
     private final List<GameRoom> rooms = new LinkedList<>();
     private final Semaphore matchmakingLock = new Semaphore(1);
+    private final Semaphore returnLock = new Semaphore(1);
 
     private final AtomicInteger roomID = new AtomicInteger(-1);
 
    private final AtomicBoolean roomCreationAllowed = new AtomicBoolean(true);
    private final AtomicBoolean roomCreated = new AtomicBoolean(false);
 
+   private final AtomicReference<String> owner = new AtomicReference<>();
+
+   private final ExecutorService cleanerExecutor = Executors.newCachedThreadPool();
+
+
+   public void resetMatchMake(){
+       matchmakingLock.release();
+       this.matchmakingService.clearQueue();
+       this.playerCallbackMap.clear();
+       this.roomCreationAllowed.set(true);
+       this.roomCreated.set(false);
+   }
 
     /**
      * Matches players for a game. Waits up to 10 seconds for another player to join.
@@ -40,55 +55,58 @@ public class GameServiceImpl extends GameServicePOA {
      * @param playerCallback The player callback object.
      * @return A JSON string containing the game room response.
      */
-    public String matchMake(PlayerCallback playerCallback) {
-        addPlayerToQueue(playerCallback);
-
-        System.out.println(playerCallback.username()+" entered matchmake");
+    public String matchMake(PlayerCallback playerCallback){
         try {
-            matchmakingLock.acquire(); // Locks the following code below, to prevent deadlock
-            while (true) { // Change loop condition to always true
-                //matchPlayers();
-                if (matchmakingService.isTimerDone()) { //condition to check if timer is done
-                    System.out.println("Matchmake Timer done");
-                    if(matchmakingService.isRoomValid()){   // Checks if room is valid using atomic boolean
-                        createGameRoom(this.matchmakingService.checkAndMatchPlayers()); // Creates a room but does
-                        // not stage
-                    }
-                    break;  // Break out of the loop
-                }
-                Thread.sleep(100); //!keep this shall we revert to not using roomCreated variable and sentResponse!
-            }
-            matchmakingLock.release(); // Releases the locked code so other clients can execute it
-            do{
-                if(!matchmakingService.isRoomValid()) return "{\"status\": \"timeout\", \"message\": \"Timer Done\"}";
-            }while(!roomCreated.get());
-            if(matchmakingService.isRoomValid()){   // if room is valid sends response to user
-                try {
-                    // this returns success status as well as gameRoomID
-                    // parse gameRoomID in client side to specify where to make the handshake call the readyHandshake
-                    // request
-                    System.out.println("RETURNGING GAME ROOM: "+roomID.get());
+            if (matchmakingLock.tryAcquire(0, TimeUnit.SECONDS)) {
+                owner.set(playerCallback.username());
+                MatchMakeCleaner cleaner = new MatchMakeCleaner(matchmakingLock,matchmakingService,roomCreationAllowed,
+                        roomCreated, playerCallbackMap);
 
-                    return "{\"status\": \"success\", \"message\": \"Matchmaking Successful!\",\"gameRoomID\":"+roomID.get()+"}";
-                }catch(Exception e){
-                    e.printStackTrace();
-                }
+                cleanerExecutor.submit(cleaner);
+                matchmakingLock.release();
             }
-        } catch (InterruptedException e) {
-            System.out.println("Interrupted Thread");
-            Thread.currentThread().interrupt();
-        } finally {
-            System.out.println("Executing finally block for user "+playerCallback.username());
-            System.out.println("Clearing maps and services");
-
-            this.matchmakingService.clearQueue();
-            this.playerCallbackMap.clear();
-            this.roomCreationAllowed.set(true);
-            this.roomCreated.set(false);
+        }catch(Exception e){
+            e.printStackTrace();
         }
-        //returns if matchmake has failed
+
+        addPlayerToQueue(playerCallback);
+        System.out.println("Added "+playerCallback.username()+" to the queue");
+        while(true){
+            if(matchmakingService.isTimerDone()) break;
+        }
+        try{
+            matchmakingService.queueLock.acquire();
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        matchmakingService.queueLock.release();
+        if(!matchmakingService.isRoomValid()){
+            System.out.println("invalid room");
+            matchmakingService.markAsSent(playerCallback.username());
+            System.out.println("sent response to "+playerCallback.username());
+            return "{\"status\": \"timeout\", \"message\": \"Timer Done\"}";
+        }
+        //If method invocation was done by owner it creates room
+        if(matchmakingService.isRoomValid() && playerCallback.username().equals(owner.get())){
+            System.out.println("Owner Creating room");
+            try {
+                createGameRoom(this.matchmakingService.checkAndMatchPlayers());
+                System.out.println("GAME ROOM Created");
+            }catch(Exception e ){
+                e.printStackTrace();
+            }
+            roomCreated.set(true);
+        }
+        while(!roomCreated.get()){}
+        if(matchmakingService.isRoomValid() && roomCreated.get()){    // Returns to child players
+            matchmakingService.markAsSent(playerCallback.username());
+            System.out.println("Sending success response to user: "+playerCallback.username());
+            return "{\"status\": \"success\", \"message\": \"Matchmaking Successful!\",\"gameRoomID\":"+roomID.get()+"}";
+        }
         return "{\"status\": \"timeout\", \"message\": \"Timer Done\"}";
     }
+
+
 
 
 
@@ -166,13 +184,14 @@ public class GameServiceImpl extends GameServicePOA {
         try {
             GameRoom gameRoom = new GameRoom(roomID, playerDetailsMap, playerCallbacksMap, 30, players.size());
             System.out.println("GameRoom Created");
-            if (matchmakingService.isTimerDone()) {
-                rooms.add(gameRoom);
-                System.out.println(gameRoom);
-                roomCreated.set(true);
-                //System.out.println("SENDING GAME ROOM DETAILS");
-                //gameRoom.stagePlayers();
-            }
+
+            rooms.add(gameRoom);
+            System.out.println(gameRoom);
+            roomCreated.set(true);
+            return;
+            //System.out.println("SENDING GAME ROOM DETAILS");
+            //gameRoom.stagePlayers();
+
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         }
