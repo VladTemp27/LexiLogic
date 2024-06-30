@@ -59,8 +59,6 @@ public class ServerController implements ORBDOperationCallback,ORBServerCallback
     public static String hostname;
     public static int port;
 
-    private EditPlayerController editPlayerController;
-    private PlayerManagementController playerManagementController;
 
     /**
      * Getters and Setters of Controllers and Panels
@@ -399,11 +397,8 @@ public class ServerController implements ORBDOperationCallback,ORBServerCallback
     /**
      * Loading the EditPlayerController
      */
-    public void loadEditPlayer(Player player){
+    public void loadEditPlayer(){
         try {
-            if (editPlayerController != null) {
-                editPlayerController.setPlayer(player);
-            }
             Font.loadFont(getClass().getResourceAsStream("/org/amalgam/fonts/BowlbyOneSC.ttf"), 20);
             Font.loadFont(getClass().getResourceAsStream("/org/amalgam/fonts/Brygada1918.ttf"), 20);
 
@@ -429,7 +424,6 @@ public class ServerController implements ORBDOperationCallback,ORBServerCallback
             stage.setTitle("Lexi Logic");
             EditPlayerController editPlayerController = fxmlLoader.getController();
             editPlayerController.setServerController(this);
-            editPlayerController.setPlayer(player);
             editPlayerController.initialize();
 
         } catch (IOException e) {

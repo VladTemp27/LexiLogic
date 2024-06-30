@@ -1,15 +1,16 @@
 package org.amalgam.lexilogicserver.views.editplayer;
 
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.effect.ColorAdjust;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import org.amalgam.lexilogicserver.ServerController;
 import org.amalgam.lexilogicserver.model.utilities.referenceobjects.Player;
-import java.util.List;
+import org.amalgam.lexilogicserver.views.playermanagement.PlayerManagementModel;
+
+import java.util.Objects;
+import java.util.Optional;
 
 public class EditPlayerController {
 
@@ -18,14 +19,14 @@ public class EditPlayerController {
     @FXML
     private Button saveButton;
     @FXML
+    private Label usernameLabel;
+    @FXML
     private TextField usernameTextField;
     @FXML
     private TextField passwordTextField;
     @FXML
     private Button backButton;
-
-    private List<Player> players;
-
+    //    private List<Player> players;
     private ServerController serverController;
 
     public void setServerController(ServerController serverController) {
@@ -57,7 +58,7 @@ public class EditPlayerController {
         button.setOnMouseExited(e -> button.setStyle("-fx-background-color: #9CA16F;"));
     }
 
-    private void showAlert(String message){
+    private void showAlert(String message) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Error");
         alert.setHeaderText(null);
@@ -66,26 +67,71 @@ public class EditPlayerController {
     }
 
     @FXML
-    public void handleEditPlayer() {
+    public void handleSaveButton() {
         if (serverController != null) {
-            //TODO: Implementation
+            int playerID = PlayerManagementModel.getSelectedPlayer().getUserID();
+            String username = "";
+            String password = "";
+            if (!Objects.equals(usernameTextField.getText(), "") && Objects.equals(passwordTextField.getText(), "")) {
+                username = usernameTextField.getText();
+                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                alert.setTitle("Edit Player");
+                alert.setHeaderText("Are you sure you want to edit " + PlayerManagementModel.getSelectedPlayer().getUsername() + "'s username?");
+                alert.setContentText("This action cannot be undone.");
+
+                Optional<ButtonType> result = alert.showAndWait();
+                if (result.isPresent() && result.get() == ButtonType.OK) {
+                    PlayerManagementModel.changeUsername(playerID, username);
+                    serverController.loadPlayerManagement();
+                }
+            }
+            if (Objects.equals(usernameTextField.getText(), "") && !Objects.equals(passwordTextField.getText(), "")) {
+                password = passwordTextField.getText();
+                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                alert.setTitle("Edit Player");
+                alert.setHeaderText("Are you sure you want to change " + PlayerManagementModel.getSelectedPlayer().getUsername() + "'s password?");
+                alert.setContentText("This action cannot be undone.");
+
+                Optional<ButtonType> result = alert.showAndWait();
+                if (result.isPresent() && result.get() == ButtonType.OK) {
+                    PlayerManagementModel.changePassword(playerID, password);
+                    serverController.loadPlayerManagement();
+                }
+            }
+            if (!Objects.equals(usernameTextField.getText(), "") && !Objects.equals(passwordTextField.getText(), "")) {
+                username = usernameTextField.getText();
+                password = passwordTextField.getText();
+                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                alert.setTitle("Edit Player");
+                alert.setHeaderText("Are you sure you want to change " + PlayerManagementModel.getSelectedPlayer().getUsername() +
+                        "'s username and " +
+                        "password?");
+                alert.setContentText("This action cannot be undone.");
+
+                Optional<ButtonType> result = alert.showAndWait();
+                if (result.isPresent() && result.get() == ButtonType.OK) {
+                    PlayerManagementModel.changeUsername(playerID, username);
+                    PlayerManagementModel.changePassword(playerID, password);
+                    serverController.loadPlayerManagement();
+                }
+            }
         }
     }
 
     @FXML
-    public void handleBackButton(){
-        if(serverController !=null){
-            serverController.loadServerMainMenu();
-        }else {
+    public void handleBackButton() {
+        if (serverController != null) {
+            serverController.loadPlayerManagement();
+        } else {
             System.out.println("Server controller is not set.");
         }
     }
 
     @FXML
     public void initialize() {
-        addHoverEffect(saveButton);
-        addHoverEffectImage(backButton);
-        backButton.setOnAction(event -> handleBackButton());
-        saveButton.setOnAction(event -> handleEditPlayer());
+            addHoverEffect(saveButton);
+            addHoverEffectImage(backButton);
+            backButton.setOnAction(event -> handleBackButton());
+            saveButton.setOnAction(event -> handleSaveButton());
     }
 }

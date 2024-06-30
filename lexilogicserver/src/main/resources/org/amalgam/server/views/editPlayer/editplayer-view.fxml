@@ -15,7 +15,7 @@
             <Image url="@../../../icons/YellowBox.png" />
          </image>
       </ImageView>
-      <Label fx:id="username" layoutX="174.0" layoutY="81.0" textAlignment="CENTER" textFill="#674c33">
+      <Label fx:id="username" layoutX="164.0" layoutY="80.0" text="Edit Player" textAlignment="CENTER" textFill="#674c33">
          <font>
             <Font name="Bowlby One SC Regular" size="30.0" />
          </font>

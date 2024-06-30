@@ -107,8 +107,9 @@ public class PlayerManagementController {
                         addHoverEffect(deleteButton, "#E42323");
 
                         editButton.setOnAction(event -> {
-                            Player player = getTableView().getItems().get(getIndex());
-                            serverController.loadEditPlayer(player);
+                            Player selectedPlayer = getTableView().getSelectionModel().getSelectedItem();
+                            PlayerManagementModel.setSelectedPlayer(selectedPlayer);
+                            serverController.loadEditPlayer();
                         });
 
                         deleteButton.setOnAction(event -> {
