@@ -173,23 +173,6 @@ public class GameRoom implements NTimerCallback {
         System.out.println("broadcastGameStarted method completed.");
     }
 
-
-
-//    private void broadcastGameStarted(String data) throws InvalidRequestException {
-//        List<String> keys = new ArrayList<>(playerCallbacks.keySet());
-//        System.out.println("Playercallback size " + keys.size());
-//        for (String key : keys) {
-//            PlayerCallback callback = playerCallbacks.get(key);
-//            try {
-//                System.out.println("BROADCAST GAME STARTED: " + callback.username() + " " + data);
-//                callback.uiCall(data);
-//            } catch (Exception e) {
-//                System.err.println("Failed to broadcast to " + callback.username() + ": " + e.getMessage());
-//                e.printStackTrace();
-//            }
-//        }
-//    }
-
     //Checks if all players are ready
     private boolean isAllPlayersReady(){
         List<String> keys = new ArrayList<>(details.keySet());
@@ -250,7 +233,7 @@ public class GameRoom implements NTimerCallback {
 
             System.out.println("Updating points");
             updatePoints(username);
-            broadcast(GameRoomResponseBuilder.buildGameStartedResponse(this));
+            broadcast(GameRoomResponseBuilder.buildPlayerScoreResponse(this));
         }catch(Exception e){
             e.printStackTrace();
         }

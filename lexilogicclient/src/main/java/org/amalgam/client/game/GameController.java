@@ -123,8 +123,7 @@ public class GameController implements UpdateDispatcher {
     private int totalRoundWon = 0;
     public String[][] fetchLetters = new String[4][5];
     private int currentRound;
-    private int roomID;
-    public static int gameRoomID;
+    private int gameRoomID;
 
     private static void showAlert(String message) {
         Platform.runLater(() -> {
@@ -164,7 +163,7 @@ public class GameController implements UpdateDispatcher {
                                 Task<Void> t1 = new Task<Void>() {
                                     @Override
                                     protected Void call() throws Exception {
-                                        gameModel.submitReadyPlayer(LoginController.username, roomID);
+                                        gameModel.submitReadyPlayer(LoginController.username, gameRoomID);
                                         return null;
                                     }
 
@@ -189,18 +188,13 @@ public class GameController implements UpdateDispatcher {
         });
 
     }
-    private int getGameTimeFromResponse(String jsonResponse) {
-        JsonElement rootElement = JsonParser.parseString(jsonResponse);
-        JsonObject rootObject = rootElement.getAsJsonObject();
-        return rootObject.get("gameTime").getAsInt();
-    }
+
     /**
      * Start the game of the program.
      */
     private void gameStart() {
         System.out.println("GAME START");
-        String response = LoadingController.response;
-        final int[] finalGameTime = {getGameTimeFromResponse(response)};
+        final int[] finalGameTime = {30}; // todo: game time must be dynamic
         Platform.runLater(() -> {
             populateWordMatrix();
             timer = new Timer();
@@ -311,7 +305,7 @@ public class GameController implements UpdateDispatcher {
                         @Override
                         protected Void call() throws Exception {
                             // Verify the word using GameModel
-                            gameModel.verifyWord(input, LoginController.username, roomID);
+                            gameModel.verifyWord(input, LoginController.username, gameRoomID);
                             System.out.println("VERIFY WORD");
                             return null;
                         }
@@ -342,19 +336,14 @@ public class GameController implements UpdateDispatcher {
     }
     int x = 0; // reverse guard clause
     private void updateData(String json){
-//        System.out.println("GAME "+json);
         JsonElement rootElement = JsonParser.parseString(json);
         JsonObject rootObject = rootElement.getAsJsonObject();
 
         //Checker for state
         String state = rootObject.get("state").getAsString();
 
-        if (rootObject.get("room_id") != null) {
-            roomID = rootObject.get("room_id").getAsInt();
-        }
-
         JsonObject gameRoomObject = rootObject.getAsJsonObject("game_room");
-        if (state.equals("staging")) { // components of game is initialized before game begins
+        if (state.equals("staging")) { // subcomponents of game is initialized before game begins
             currentRound = rootObject.get("current_round").getAsInt();
             x=currentRound;
             wordBoxMatrix(rootObject);
@@ -362,15 +351,19 @@ public class GameController implements UpdateDispatcher {
             roundCountdown();
             System.out.println("ROUND COUNTDOWN ENDED");
         }
-        if (state.equals("game_started")) {
-            int capacity = rootObject.get("capacity").getAsInt();
-            fetchPoints(gameRoomObject, capacity);
+
+        if (state.equals("game_started")) { // main components of game is initialized
             if (x==currentRound) gameStart();
             x++;
             System.out.println("ROUND ENDED");
         }
 
-        if(state.equals("game_done")){
+        if (state.equals("game_room")) { // returns true if submitted word is valid otherwise false
+            int capacity = rootObject.get("capacity").getAsInt();
+            fetchPoints(rootObject.getAsJsonObject("game_room_property"), capacity);
+        }
+
+        if(state.equals("game_done")){ // if there is a winner on particular game room
           Platform.runLater(() -> {
               String winner = rootObject.get("winner").getAsString();
               System.out.println(winner);
@@ -382,7 +375,7 @@ public class GameController implements UpdateDispatcher {
           });
         }
 
-        if (state.equals("invalid_word")) {
+        if (state.equals("invalid_word")) { // if submitted word is invalid
               showAlert("INVALID WORD");
         } if (state.equals("self_duplicate")){
             showAlert("You've already entered that word!");
