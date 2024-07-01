@@ -3,6 +3,7 @@ package org.amalgam.lexilogicserver.model.serviceimpl;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import org.amalgam.Service.GameServiceModule.GameServicePOA;
+import org.amalgam.UIControllers.MatchmakeCallback;
 import org.amalgam.UIControllers.PlayerCallback;
 import org.amalgam.Utils.Exceptions.*;
 import org.amalgam.Utils.Exceptions.DuplicateWordException;
@@ -55,7 +56,7 @@ public class GameServiceImpl extends GameServicePOA {
      * @param playerCallback The player callback object.
      * @return A JSON string containing the game room response.
      */
-    public String matchMake(PlayerCallback playerCallback){
+    public String matchMake(PlayerCallback playerCallback, MatchmakeCallback matchMakeCallback){
         try {
             if (matchmakingLock.tryAcquire(0, TimeUnit.SECONDS)) {
                 owner.set(playerCallback.username());
@@ -80,6 +81,15 @@ public class GameServiceImpl extends GameServicePOA {
             e.printStackTrace();
         }
         matchmakingService.queueLock.release();
+
+        if(matchmakingService.isRoomValid()){
+            try {
+                matchMakeCallback.joiningCall("{\"status\": \"joining\", \"message\": \"room valid, creating game\"}");
+            }catch(Exception e){
+                return "{\"status\": \"Error\", \"message\": \"joining callback failed\"}";
+            }
+        }
+
         if(!matchmakingService.isRoomValid()){
             System.out.println("invalid room");
             matchmakingService.markAsSent(playerCallback.username());

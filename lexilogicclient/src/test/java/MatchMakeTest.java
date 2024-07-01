@@ -2,11 +2,14 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.sun.org.apache.xalan.internal.xsltc.runtime.InternalRuntimeError;
+import org.amalgam.MatchmakeCallbackImpl;
 import org.amalgam.Service.GameServiceModule.GameService;
 import org.amalgam.Service.GameServiceModule.GameServiceHelper;
 import org.amalgam.Service.PlayerServiceModule.PlayerService;
 import org.amalgam.Service.PlayerServiceModule.PlayerServiceHelper;
+import org.amalgam.UIControllers.MatchmakeCallbackHelper;
 import org.amalgam.UIControllers.PlayerCallbackHelper;
+import org.amalgam.UpdateDispatcher;
 import org.amalgam.Utils.Exceptions.DuplicateWordException;
 import org.amalgam.Utils.Exceptions.InvalidWordFormatException;
 import org.amalgam.Utils.Exceptions.MatchCreationFailedException;
@@ -20,7 +23,7 @@ import org.omg.PortableServer.POAPackage.WrongPolicy;
 
 import java.util.Scanner;
 
-public class MatchMakeTest implements ControllerInterface{
+public class MatchMakeTest implements ControllerInterface, UpdateDispatcher {
     private PlayerService playerService;
     private GameService gameService;
     private POA rootPOA;
@@ -29,6 +32,8 @@ public class MatchMakeTest implements ControllerInterface{
     private String currentState = "";
     private String user;
     private boolean gameValid = true;
+
+    private MatchmakeCallbackImpl mmCallbackImpl;
 
     private static Scanner kInput = new Scanner(System.in);
 
@@ -44,11 +49,16 @@ public class MatchMakeTest implements ControllerInterface{
         program.callback = new CallbackImpl();
         program.callback.username(program.user);
 
+        program.mmCallbackImpl = new MatchmakeCallbackImpl();
+        program.mmCallbackImpl.username(program.user);
+
         //Sets this as the controller
         program.callback.setController(program);
+        program.mmCallbackImpl.setDispatcher(program);
 
         //Sends matchmake request from server and waits for a response
-        String response = program.gameService.matchMake(PlayerCallbackHelper.narrow(program.rootPOA.servant_to_reference(program.callback)));
+        String response = program.gameService.matchMake(PlayerCallbackHelper.narrow(program.rootPOA.servant_to_reference(program.callback)),
+                MatchmakeCallbackHelper.narrow(program.rootPOA.servant_to_reference(program.mmCallbackImpl)));
         System.out.println("SERVER RESPONSE:");
         System.out.println(response);
 
@@ -170,5 +180,10 @@ public class MatchMakeTest implements ControllerInterface{
         JsonElement rootElement = JsonParser.parseString(response);
         JsonObject rootObject = rootElement.getAsJsonObject();
         return rootObject.get("gameRoomID").getAsInt();
+    }
+
+    @Override
+    public void update(String jsonString) {
+        System.out.println(jsonString);
     }
 }
