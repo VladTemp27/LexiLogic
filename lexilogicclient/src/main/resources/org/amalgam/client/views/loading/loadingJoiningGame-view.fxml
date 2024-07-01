@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
 
 <AnchorPane fx:id="loadingPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.amalgam.client.loading.LoadingController">
    <children>
@@ -21,10 +23,15 @@
             <Image url="@../../../icons/Logo.png" />
          </image>
       </ImageView>
-      <ImageView fx:id="loadingLogImage" fitHeight="77.0" fitWidth="97.0" layoutX="375.0" layoutY="307.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="loadingLogImage" fitHeight="77.0" fitWidth="97.0" layoutX="373.0" layoutY="318.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../../../icons/LoadingLog.png" />
          </image>
       </ImageView>
+      <Label fx:id="joiningGameLabel" layoutX="352.0" layoutY="300.0" text="Joining Game..." textFill="WHITE">
+         <font>
+            <Font name="Brygada 1918 Regular" size="18.0" />
+         </font>
+      </Label>
    </children>
 </AnchorPane>
