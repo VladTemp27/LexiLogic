@@ -11,8 +11,7 @@ public class MatchMake {
 
     public String process (ORBConnection orbConnection, PlayerCallback playerCallback){
         try {
-            //TODO: Change the overall structure of the game to make place for matchmake_callback
-          return orbConnection.retrieveGameService().matchMake(playerCallback, null);
+          return orbConnection.retrieveGameService().matchMake(playerCallback);
         } catch (MatchCreationFailedException | InvalidName | CannotProceed | NotFound e) {
             throw new RuntimeException(e);
         }

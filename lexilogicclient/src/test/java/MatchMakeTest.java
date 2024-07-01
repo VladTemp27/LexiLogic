@@ -1,13 +1,10 @@
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.sun.org.apache.xalan.internal.xsltc.runtime.InternalRuntimeError;
-import org.amalgam.MatchmakeCallbackImpl;
 import org.amalgam.Service.GameServiceModule.GameService;
 import org.amalgam.Service.GameServiceModule.GameServiceHelper;
 import org.amalgam.Service.PlayerServiceModule.PlayerService;
 import org.amalgam.Service.PlayerServiceModule.PlayerServiceHelper;
-import org.amalgam.UIControllers.MatchmakeCallbackHelper;
 import org.amalgam.UIControllers.PlayerCallbackHelper;
 import org.amalgam.UpdateDispatcher;
 import org.amalgam.Utils.Exceptions.DuplicateWordException;
@@ -33,8 +30,6 @@ public class MatchMakeTest implements ControllerInterface, UpdateDispatcher {
     private String user;
     private boolean gameValid = true;
 
-    private MatchmakeCallbackImpl mmCallbackImpl;
-
     private static Scanner kInput = new Scanner(System.in);
 
     public static void main(String[] args) throws WrongPolicy, ServantNotActive, MatchCreationFailedException, DuplicateWordException, InvalidWordFormatException {
@@ -49,16 +44,15 @@ public class MatchMakeTest implements ControllerInterface, UpdateDispatcher {
         program.callback = new CallbackImpl();
         program.callback.username(program.user);
 
-        program.mmCallbackImpl = new MatchmakeCallbackImpl();
-        program.mmCallbackImpl.username(program.user);
+
 
         //Sets this as the controller
         program.callback.setController(program);
-        program.mmCallbackImpl.setDispatcher(program);
+
 
         //Sends matchmake request from server and waits for a response
-        String response = program.gameService.matchMake(PlayerCallbackHelper.narrow(program.rootPOA.servant_to_reference(program.callback)),
-                MatchmakeCallbackHelper.narrow(program.rootPOA.servant_to_reference(program.mmCallbackImpl)));
+        String response =
+                program.gameService.matchMake(PlayerCallbackHelper.narrow(program.rootPOA.servant_to_reference(program.callback)));
         System.out.println("SERVER RESPONSE:");
         System.out.println(response);
 

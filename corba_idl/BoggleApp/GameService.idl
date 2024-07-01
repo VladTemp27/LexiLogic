@@ -8,9 +8,8 @@ module org {
                 interface GameService {
 
                     typedef org::amalgam::UIControllers::PlayerCallback PlayerCallback;
-                    typedef org::amalgam::UIControllers::MatchmakeCallback MatchmakeCallback;
 
-                    string matchMake(in PlayerCallback player_callback, in MatchmakeCallback matchmake_callback)
+                    string matchMake(in PlayerCallback player_callback)
                         raises (org::amalgam::Utils::Exceptions::MatchCreationFailedException);
 
                     void readyHandshake(in string username, in long callback);

@@ -37,7 +37,7 @@ public class Reader {
      * @return              returns a LinkedList of String that will hold the words from the file
      * @throws ReadFailure  Throws ReadFailure if IOException occurs
      */
-    protected LinkedList<String> retrieveListOfWords(boolean isCSV) throws ReadFailure {
+    public LinkedList<String> retrieveListOfWords(boolean isCSV) throws ReadFailure {
         BufferedReader bufferedreader = new BufferedReader(fileReader);
 
         try{

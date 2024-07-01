@@ -3,7 +3,6 @@ package org.amalgam.lexilogicserver.model.serviceimpl;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import org.amalgam.Service.GameServiceModule.GameServicePOA;
-import org.amalgam.UIControllers.MatchmakeCallback;
 import org.amalgam.UIControllers.PlayerCallback;
 import org.amalgam.Utils.Exceptions.*;
 import org.amalgam.Utils.Exceptions.DuplicateWordException;
@@ -11,7 +10,10 @@ import org.amalgam.lexilogicserver.model.DAL.LeaderBoardDAL;
 import org.amalgam.lexilogicserver.model.helpers.MatchMakeCleaner;
 import org.amalgam.lexilogicserver.model.microservices.Matchmaking.MatchmakingService;
 import org.amalgam.lexilogicserver.model.DAL.LobbyDAL;
+import org.amalgam.lexilogicserver.model.microservices.wordbox.Reader;
 import org.amalgam.lexilogicserver.model.utilities.referenceobjects.LeaderBoard;
+
+import java.io.File;
 import java.io.FileNotFoundException;
 
 import org.amalgam.lexilogicserver.model.utilities.referenceobjects.PlayerGameDetail;
@@ -27,7 +29,10 @@ import org.amalgam.lexilogicserver.model.handler.GameHandler.GameRoom;
 
 public class GameServiceImpl extends GameServicePOA {
     private final MatchmakingService matchmakingService = new MatchmakingService();
+
     private final ConcurrentHashMap<String, PlayerCallback> playerCallbackMap = new ConcurrentHashMap<>();
+    private final ConcurrentHashMap<String, PlayerGameDetail> playerGameDetailsMap = new ConcurrentHashMap<>();
+
     private final List<GameRoom> rooms = new LinkedList<>();
     private final Semaphore matchmakingLock = new Semaphore(1);
     private final Semaphore returnLock = new Semaphore(1);
@@ -40,6 +45,12 @@ public class GameServiceImpl extends GameServicePOA {
    private final AtomicReference<String> owner = new AtomicReference<>();
 
    private final ExecutorService cleanerExecutor = Executors.newCachedThreadPool();
+
+   private LinkedList<String> dictionary = new LinkedList<>();
+
+   public GameServiceImpl(LinkedList<String> dictionary){
+       this.dictionary = dictionary;
+   }
 
 
    public void resetMatchMake(){
@@ -56,10 +67,11 @@ public class GameServiceImpl extends GameServicePOA {
      * @param playerCallback The player callback object.
      * @return A JSON string containing the game room response.
      */
-    public String matchMake(PlayerCallback playerCallback, MatchmakeCallback matchMakeCallback){
+    public String matchMake(PlayerCallback playerCallback){
+        String username = playerCallback.username();
         try {
             if (matchmakingLock.tryAcquire(0, TimeUnit.SECONDS)) {
-                owner.set(playerCallback.username());
+                owner.set(username);
                 MatchMakeCleaner cleaner = new MatchMakeCleaner(matchmakingLock,matchmakingService,roomCreationAllowed,
                         roomCreated, playerCallbackMap);
 
@@ -71,7 +83,7 @@ public class GameServiceImpl extends GameServicePOA {
         }
 
         addPlayerToQueue(playerCallback);
-        System.out.println("Added "+playerCallback.username()+" to the queue");
+        System.out.println("Added "+username+" to the queue");
         while(true){
             if(matchmakingService.isTimerDone()) break;
         }
@@ -82,22 +94,15 @@ public class GameServiceImpl extends GameServicePOA {
         }
         matchmakingService.queueLock.release();
 
-        if(matchmakingService.isRoomValid()){
-            try {
-                matchMakeCallback.joiningCall("{\"status\": \"joining\", \"message\": \"room valid, creating game\"}");
-            }catch(Exception e){
-                return "{\"status\": \"Error\", \"message\": \"joining callback failed\"}";
-            }
-        }
 
         if(!matchmakingService.isRoomValid()){
             System.out.println("invalid room");
-            matchmakingService.markAsSent(playerCallback.username());
-            System.out.println("sent response to "+playerCallback.username());
+            matchmakingService.markAsSent(username);
+            System.out.println("sent response to "+username);
             return "{\"status\": \"timeout\", \"message\": \"Timer Done\"}";
         }
         //If method invocation was done by owner it creates room
-        if(matchmakingService.isRoomValid() && playerCallback.username().equals(owner.get())){
+        if(matchmakingService.isRoomValid() && username.equals(owner.get())){
             System.out.println("Owner Creating room");
             try {
                 createGameRoom(this.matchmakingService.checkAndMatchPlayers());
@@ -109,8 +114,8 @@ public class GameServiceImpl extends GameServicePOA {
         }
         while(!roomCreated.get()){}
         if(matchmakingService.isRoomValid() && roomCreated.get()){    // Returns to child players
-            matchmakingService.markAsSent(playerCallback.username());
-            System.out.println("Sending success response to user: "+playerCallback.username());
+            matchmakingService.markAsSent(username);
+            System.out.println("Sending success response to user: "+username);
             return "{\"status\": \"success\", \"message\": \"Matchmaking Successful!\",\"gameRoomID\":"+roomID.get()+"}";
         }
         return "{\"status\": \"timeout\", \"message\": \"Timer Done\"}";
@@ -141,9 +146,12 @@ public class GameServiceImpl extends GameServicePOA {
      * @param playerCallback The player callback object.
      */
     private void addPlayerToQueue(PlayerCallback playerCallback) {
-        PlayerGameDetail playerDetail = new PlayerGameDetail(playerCallback.username());
+        String username = playerCallback.username();
+        PlayerGameDetail playerDetail = new PlayerGameDetail(username);
         matchmakingService.addToQueue(playerDetail);
-        playerCallbackMap.put(playerCallback.username(), playerCallback);
+        playerCallbackMap.put(username, playerCallback);
+        playerGameDetailsMap.put(username, playerDetail);
+
     }
 
     /**
@@ -180,19 +188,11 @@ public class GameServiceImpl extends GameServicePOA {
         roomID++;
         this.roomID.set(roomID);
         System.out.println("Room ID: "+roomID);
-        LinkedHashMap<String, PlayerGameDetail> playerDetailsMap = new LinkedHashMap<>();
-        LinkedHashMap<String, PlayerCallback> playerCallbacksMap = new LinkedHashMap<>();
-
-        for (PlayerGameDetail player : players) {
-            playerDetailsMap.put(player.getUsername(), player);
-            PlayerCallback callback = playerCallbackMap.get(player.getUsername());
-            if (callback != null) {
-                playerCallbacksMap.put(player.getUsername(), callback);
-            }
-        }
 
         try {
-            GameRoom gameRoom = new GameRoom(roomID, playerDetailsMap, playerCallbacksMap, 30, players.size());
+            GameRoom gameRoom = new GameRoom(roomID, new LinkedHashMap<>(playerGameDetailsMap),
+                    new LinkedHashMap<>(playerCallbackMap), 30,
+                    players.size(), this.dictionary);
             System.out.println("GameRoom Created");
 
             rooms.add(gameRoom);

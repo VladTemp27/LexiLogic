@@ -35,7 +35,12 @@ public class GameRoom implements NTimerCallback {
     private ConcurrentHashMap<String, Boolean> readyToReceive = new ConcurrentHashMap<String, Boolean>();
     private ExecutorService executor = Executors.newSingleThreadExecutor();
 
-    public GameRoom(int roomID, LinkedHashMap<String,PlayerGameDetail> details, LinkedHashMap<String,PlayerCallback> playerCallbacks , int secondsRoundDuration, int capacity) throws FileNotFoundException {
+    private LinkedList<String> dictionary;
+
+    public GameRoom(int roomID, LinkedHashMap<String,PlayerGameDetail> details,
+                    LinkedHashMap<String,PlayerCallback> playerCallbacks , int secondsRoundDuration, int capacity,
+                    LinkedList<String> dictionary) throws FileNotFoundException {
+        this.dictionary = dictionary;
         this.roomID = roomID;
         this.defaultDetails = details;
         this.secondsRoundDuration = secondsRoundDuration;
@@ -91,6 +96,7 @@ public class GameRoom implements NTimerCallback {
         String jsonString = GameRoomResponseBuilder.buildStagePlayersResponse(this,5); //Use response builder here
         System.out.println(jsonString);
         try {
+            //generateWordBox();
             Thread.sleep(400);
             broadcast(jsonString);
         }catch(Exception e){
@@ -142,7 +148,8 @@ public class GameRoom implements NTimerCallback {
 
     //call this to generate a wordBox, generates a new wordbox for every invocation
     private void generateWordBox() throws FileNotFoundException {
-        wordBox = new WordBox(new Generator(new Reader("lexilogicserver/src/main/java/org/amalgam/lexilogicserver/model/microservices/wordbox/words.txt"), false, 4, 5));
+        Generator generator = new Generator(dictionary, 4, 5);
+        wordBox = new WordBox(generator);
     }
 
     //Method to be invoked once words are submitted via the game service request

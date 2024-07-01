@@ -13,13 +13,6 @@ module org{
                 void uiCall(in string jsonString)
                     raises (org::amalgam::ControllerException::InvalidRequestException);
              };
-
-             interface MatchmakeCallback{
-                attribute string username;
-
-                void joiningCall(in string jsonString)
-                    raises (org::amalgam::ControllerException::InvalidRequestException);
-             };
         };
     };
 };
