@@ -39,9 +39,9 @@ public class GameServiceImpl extends GameServicePOA {
     private final Semaphore returnLock = new Semaphore(1);
 
     private final AtomicInteger roomID = new AtomicInteger(-1);
-
-   private final AtomicBoolean roomCreationAllowed = new AtomicBoolean(true);
-   private final AtomicBoolean roomCreated = new AtomicBoolean(false);
+    private final AtomicBoolean roomCreationAllowed = new AtomicBoolean(true);
+    private final AtomicBoolean roomCreated = new AtomicBoolean(false);
+//    WaitingRoom waitingRoom = new WaitingRoom(); // todo: consider this approach
 
    private final AtomicReference<String> owner = new AtomicReference<>();
 
@@ -117,14 +117,10 @@ public class GameServiceImpl extends GameServicePOA {
         if(matchmakingService.isRoomValid() && roomCreated.get()){    // Returns to child players
             matchmakingService.markAsSent(username);
             System.out.println("Sending success response to user: "+username);
-            return "{\"status\": \"success\", \"message\": \"Matchmaking Successful!\",\"gameRoomID\":"+roomID.get()+"}";
+            return "{\"status\": \"success\", \"message\": \"Matchmaking Successful!\",\"gameRoomID\":"+roomID.get() + ", \"gameTime\": " + SettingsHandler.getGameTime() + "}";
         }
         return "{\"status\": \"timeout\", \"message\": \"Timer Done\"}";
     }
-
-
-
-
 
     /**
      * Method to invoke when to handshake with the object of Game Room
@@ -245,7 +241,7 @@ public class GameServiceImpl extends GameServicePOA {
 
 
     @Override
-    public synchronized void verifyWord(String word, String username, int gameRoomID) throws InvalidWordFormatException, DuplicateWordException {
+    public void verifyWord(String word, String username, int gameRoomID) throws InvalidWordFormatException, DuplicateWordException {
         int tempIndex = getRoomIndexFromID(gameRoomID);
         System.out.println(username+" submitted word: "+word);
 //        GameRoom temp = rooms.get(tempIndex);

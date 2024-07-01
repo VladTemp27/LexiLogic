@@ -321,6 +321,7 @@ public class GameRoom implements NTimerCallback {
 
     //Method overload
     private void broadcast(String username, String jsonString) throws InvalidRequestException{
+        System.out.println("BROADCAST " + jsonString);
         List<String> keys = new ArrayList<>(playerCallbacks.keySet());
         for(String key: keys){
             if(!key.equals(username)){

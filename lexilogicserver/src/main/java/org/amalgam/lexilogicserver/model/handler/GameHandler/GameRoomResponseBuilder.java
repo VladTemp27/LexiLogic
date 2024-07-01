@@ -231,13 +231,6 @@ public class GameRoomResponseBuilder {
             gameRoomJson.add("player_" + i, playerInfo);
             i++;
         }
-//        JsonObject roundsJson = new JsonObject();
-//        for (Map.Entry<Integer, String> entry : gameRoom.getRounds().entrySet()) {
-//            int roundNumber = entry.getKey();
-//            String winner = entry.getValue();
-//            roundsJson.addProperty("round_" + roundNumber, winner);
-//        }
-//        gameRoomJson.add("rounds", roundsJson);
 
         response.add("game_room_property", gameRoomJson);
 

@@ -49,7 +49,7 @@ public class MainController {
         classes.add(ProfileChangeUsernameController.class);
         classes.add(ProfileChangePassController.class);
 
-        orbConnection = new ORBConnection(2018, "localhost");
+        orbConnection = new ORBConnection(2121, "corbaserver");
         try {
             orbConnection.start();
         } catch (InvalidName | AdapterInactive e) {
