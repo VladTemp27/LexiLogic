@@ -46,7 +46,6 @@ public class GameServiceImpl extends GameServicePOA {
    private final AtomicReference<String> owner = new AtomicReference<>();
 
    private final ExecutorService cleanerExecutor = Executors.newCachedThreadPool();
-
    private LinkedList<String> dictionary = new LinkedList<>();
 
    public GameServiceImpl(LinkedList<String> dictionary){

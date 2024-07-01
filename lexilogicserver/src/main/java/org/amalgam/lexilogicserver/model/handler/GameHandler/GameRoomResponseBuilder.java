@@ -97,12 +97,9 @@ public class GameRoomResponseBuilder {
         return response.toString();
     }
 
-        public static String buildInvalidWordResponse() {
-
+    public static String buildInvalidWordResponse() {
         JsonObject response = new JsonObject();
         response.addProperty("state", "invalid_word");
-
-
         return response.toString();
     }
 

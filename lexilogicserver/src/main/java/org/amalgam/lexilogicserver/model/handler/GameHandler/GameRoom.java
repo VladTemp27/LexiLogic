@@ -33,7 +33,7 @@ public class GameRoom implements NTimerCallback {
     private LinkedList<String> notifiedOwner = new LinkedList<>();
 
     private ConcurrentHashMap<String, Boolean> readyToReceive = new ConcurrentHashMap<String, Boolean>();
-    private ExecutorService executor = Executors.newSingleThreadExecutor();
+    private ExecutorService executor = Executors.newCachedThreadPool();
 
     private LinkedList<String> dictionary;
 
@@ -215,9 +215,8 @@ public class GameRoom implements NTimerCallback {
                 broadcast(username, GameRoomResponseBuilder.buildInvalidWordResponse());
                 return;
             }
-
             System.out.println("Checking if dupe");
-            System.out.println(checkIfDupe(word));
+            System.out.println("DUPE: " + checkIfDupe(word));
             if (checkIfDupe(word)) {
                 System.out.println("Duped word");
                 duplication(word, username);
