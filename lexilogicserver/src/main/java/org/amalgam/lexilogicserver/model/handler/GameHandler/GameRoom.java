@@ -27,18 +27,18 @@ public class GameRoom implements NTimerCallback {
     private WordBox wordBox;
     private LinkedHashMap<String,PlayerGameDetail> details;
     private LinkedHashMap<Integer, String> rounds = new LinkedHashMap<>();
-    private LinkedHashMap<String,PlayerCallback> playerCallbacks = new LinkedHashMap<>();
+    private ConcurrentHashMap<String,PlayerCallback> playerCallbacks = new ConcurrentHashMap<>();
     private LinkedHashMap<String, Integer> totalPointsPerPlayer = new LinkedHashMap<>();
     private final LinkedHashMap<String,PlayerGameDetail> defaultDetails;
     private LinkedList<String> notifiedOwner = new LinkedList<>();
 
     private ConcurrentHashMap<String, Boolean> readyToReceive = new ConcurrentHashMap<String, Boolean>();
-    private ExecutorService executor = Executors.newSingleThreadExecutor();
+    private ExecutorService executor = Executors.newCachedThreadPool();
 
     private LinkedList<String> dictionary;
 
     public GameRoom(int roomID, LinkedHashMap<String,PlayerGameDetail> details,
-                    LinkedHashMap<String,PlayerCallback> playerCallbacks , int secondsRoundDuration, int capacity,
+                    ConcurrentHashMap<String,PlayerCallback> playerCallbacks , int secondsRoundDuration, int capacity,
                     LinkedList<String> dictionary) throws FileNotFoundException {
         this.dictionary = dictionary;
         this.roomID = roomID;
@@ -52,7 +52,7 @@ public class GameRoom implements NTimerCallback {
         //stagePlayers();
     }
 
-    private void initializeReadyToReceive(LinkedHashMap<String, PlayerCallback> callbacks){
+    private void initializeReadyToReceive(ConcurrentHashMap<String, PlayerCallback> callbacks){
         for(String key: callbacks.keySet()){
             readyToReceive.put(key, false);
         }
@@ -75,7 +75,7 @@ public class GameRoom implements NTimerCallback {
     public void setPlayerReady(String username){
         PlayerGameDetail detail = details.get(username);
         detail.setReady(true);
-
+        System.out.println("size " + details.size());
         System.out.println(username +" triggered ready");
         if(!isAllPlayersReady()){
             System.out.println("Waiting for other players");
@@ -96,11 +96,26 @@ public class GameRoom implements NTimerCallback {
         String jsonString = GameRoomResponseBuilder.buildStagePlayersResponse(this,5); //Use response builder here
         System.out.println(jsonString);
         try {
-            //generateWordBox();
             Thread.sleep(400);
-            broadcast(jsonString);
+            broadcastStaging(jsonString);
         }catch(Exception e){
             e.printStackTrace();
+        }
+    }
+
+    private void broadcastStaging(String jsonString) throws InvalidRequestException {
+        List<String> keys = new ArrayList<>(playerCallbacks.keySet());
+        System.out.println("Playercallback size " + keys.size());
+        for(String key: keys){
+            PlayerCallback callback = playerCallbacks.get(key);
+            System.out.println("BROADCAST STAGING: " + callback.username() + " " + jsonString);
+            executor.submit(() -> {
+                try {
+                    callback.uiCall(jsonString);
+                } catch (InvalidRequestException e) {
+                    throw new RuntimeException(e);
+                }
+            });
         }
     }
 
@@ -124,12 +139,42 @@ public class GameRoom implements NTimerCallback {
         try {
             //Use GameRoomResponseBuilder here to tell clients state is game started + game rooms 😁
             String data = GameRoomResponseBuilder.buildGameStartedResponse(this);
-            broadcast(data);
-        }catch(InvalidRequestException e){
-            System.out.println(e.getMessage());
+            Thread.sleep(400);
+            broadcastGameStart(data);
+            System.out.println("Broadcast completed");
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
+        System.out.println("Before submitting new timer");
         executor.submit(new NTimer(secondsRoundDuration, this));
-        System.out.println("New timer submitted with duration "+secondsRoundDuration+"s");
+        System.out.println("New timer submitted with duration " + secondsRoundDuration + "s");
+    }
+    private void broadcastGameStart(String data) throws InvalidRequestException {
+        List<String> keys = new ArrayList<>(playerCallbacks.keySet());
+        System.out.println("Playercallback size " + keys.size());
+        for (String key : keys) {
+            PlayerCallback callback = playerCallbacks.get(key);
+            if (callback != null) {
+                try {
+                    System.out.println("BROADCAST GAME STARTED: " + callback.username() + " " + data);
+                    executor.submit(() ->
+                    {
+                        try {
+                            callback.uiCall(data);
+                        } catch (InvalidRequestException e) {
+                            throw new RuntimeException(e);
+                        }
+                    });
+                    System.out.println("Broadcast to " + callback.username() + " completed.");
+                } catch (Exception e) {
+                    System.err.println("Failed to broadcast to " + callback.username() + ": " + e.getMessage());
+                    e.printStackTrace();
+                }
+            } else {
+                System.err.println("Callback for key " + key + " is null.");
+            }
+        }
+        System.out.println("broadcastGameStarted method completed.");
     }
 
     //Checks if all players are ready
@@ -140,6 +185,8 @@ public class GameRoom implements NTimerCallback {
             if(!currentPlayer.isReady()){
                 System.out.println("returned false");
                 return false;
+            } else {
+                System.out.println(currentPlayer.getUsername() + " is now ready");
             }
         }
         System.out.println("executed return true;");
@@ -191,7 +238,7 @@ public class GameRoom implements NTimerCallback {
 
             System.out.println("Updating points");
             updatePoints(username);
-            broadcast(GameRoomResponseBuilder.buildGameStartedResponse(this));
+            broadcast(GameRoomResponseBuilder.buildPlayerScoreResponse(this));
         }catch(Exception e){
             e.printStackTrace();
         }
@@ -257,10 +304,17 @@ public class GameRoom implements NTimerCallback {
 
     private void broadcast(String jsonString) throws InvalidRequestException {
         List<String> keys = new ArrayList<>(playerCallbacks.keySet());
+        System.out.println("Playercallback size " + keys.size());
         for(String key: keys){
             PlayerCallback callback = playerCallbacks.get(key);
-            callback.uiCall(jsonString);
-            System.out.println(callback.username() + " " + jsonString);
+            System.out.println("BROADCAST: " + callback.username() + " " + jsonString);
+            executor.submit(() -> {
+                try {
+                    callback.uiCall(jsonString);
+                } catch (InvalidRequestException e) {
+                    throw new RuntimeException(e);
+                }
+            });
         }
     }
 
@@ -272,7 +326,13 @@ public class GameRoom implements NTimerCallback {
                 continue;
             }
             PlayerCallback callback = playerCallbacks.get(key);
-            callback.uiCall(jsonString);
+            executor.submit(() -> {
+                try {
+                    callback.uiCall(jsonString);
+                } catch (InvalidRequestException e) {
+                    throw new RuntimeException(e);
+                }
+            });
         }
     }
 
@@ -462,7 +522,7 @@ public class GameRoom implements NTimerCallback {
             PlayerGameDetail gameDetail = details.get(key);
 
             if (gameDetail.listOfWordsContains(submittedWord)&& (!key.equals(duperUser)) && (!notifiedOwner.contains(key + " " + submittedWord))) {
-                broadcast(key, GameRoomResponseBuilder.dupedWordResponseOwner());
+                broadcast(key, GameRoomResponseBuilder.dupedWordResponseOwner(this, key));
                 String details = key + " " + submittedWord;
                 notifiedOwner.add(details);
                 String owner = notifiedOwner.toString();

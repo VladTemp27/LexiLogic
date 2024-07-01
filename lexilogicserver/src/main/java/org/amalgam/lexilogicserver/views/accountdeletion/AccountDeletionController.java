@@ -15,6 +15,7 @@ import org.amalgam.lexilogicserver.model.utilities.referenceobjects.Player;
 import java.util.LinkedList;
 import java.util.Optional;
 
+@Deprecated
 public class AccountDeletionController {
     //private variables
     @FXML

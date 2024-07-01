@@ -27,15 +27,15 @@ public class ServerMainMenuController{
     @FXML
     private AnchorPane serverMainMenuPane;
     @FXML
-    private Button addPlayerButton;
+    private Button playerManagementButton;
     @FXML
     private Button changeGameButton;
     @FXML
     private Button runORBDButton;
     @FXML
     private Button runServerButton;
-    @FXML
-    private Button accountDeletionButton;
+//    @FXML
+//    private Button accountDeletionButton;
     private ServerController serverController;
     private boolean isServerRunning;
 
@@ -89,9 +89,9 @@ public class ServerMainMenuController{
      * Handles the add player button
      */
     @FXML
-    public void handleAddPlayerButton(){
+    public void handlePlayerManagement(){
         if (serverController != null) {
-            serverController.loadAddPlayer();
+            serverController.loadPlayerManagement();
         }else {
             System.out.println("Server controller is not set.");
         }
@@ -107,17 +107,17 @@ public class ServerMainMenuController{
             System.out.println("Server controller is not set.");
         }
     }
-    /**
-     * Handles the account deletion button
-     */
-    @FXML
-    public void handleAccountDeletionButton(){
-        if(serverController !=null){
-            serverController.loadAccountDeletion();
-        }else {
-            System.out.println("Server controller is not set.");
-        }
-    }
+//    /**
+//     * Handles the account deletion button
+//     */
+//    @FXML
+//    public void handleAccountDeletionButton(){
+//        if(serverController !=null){
+//            serverController.loadAccountDeletion();
+//        }else {
+//            System.out.println("Server controller is not set.");
+//        }
+//    }
     /**
      * Handles the run ORBD Button
      */
@@ -175,16 +175,16 @@ public class ServerMainMenuController{
      */
     @FXML
     public void initialize() {
-        addHoverEffect(addPlayerButton);
+        addHoverEffect(playerManagementButton);
         addHoverEffect(changeGameButton);
         addHoverEffect(runORBDButton);
-        addHoverEffect(accountDeletionButton);
+//        addHoverEffect(accountDeletionButton);
         addRunHoverEffect(runServerButton);
-        addPlayerButton.setOnAction(event -> handleAddPlayerButton());
+        playerManagementButton.setOnAction(event -> handlePlayerManagement());
         changeGameButton.setOnAction(event -> handleChangeGameButton());
         runORBDButton.setOnAction(event -> handleRunORBDButton());
         runServerButton.setOnAction(event -> handleRunServerButton());
-        accountDeletionButton.setOnAction(event -> handleAccountDeletionButton());
+//        accountDeletionButton.setOnAction(event -> handleAccountDeletionButton());
 
     }
 }
