@@ -21,6 +21,10 @@ import org.amalgam.client.UIPathResolver;
 import org.amalgam.client.loading.LoadingController;
 import org.amalgam.client.login.LoginController;
 
+import java.time.Duration;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -145,7 +149,7 @@ public class GameController implements UpdateDispatcher {
             RCTimeLabel.setText(String.format("00:0%d", countdown[0]));
             timer = new Timer();
             yourLexiLabel.setText("Your Lexi:");
-            timer.schedule(new TimerTask() {
+            timer.scheduleAtFixedRate(new TimerTask() {
                 @Override
                 public void run() {
                     Platform.runLater(() -> {
@@ -204,22 +208,23 @@ public class GameController implements UpdateDispatcher {
         Platform.runLater(() -> {
             populateWordMatrix();
             timer = new Timer();
-            timer.schedule(new TimerTask() {
+            timer.scheduleAtFixedRate(new TimerTask() {
                 @Override
                 public void run() {
+                    LocalTime time = LocalTime.ofSecondOfDay(Duration.ofSeconds(finalGameTime[0]).getSeconds());
                     Platform.runLater(() -> {
-                        timeLabel.setText(String.format("00:%d", finalGameTime[0]));
-                        if (finalGameTime[0] > 0) {
+                        timeLabel.setText(time.format(DateTimeFormatter.ofPattern("mm:ss")));
+                        if (!Objects.equals(timeLabel.getText(), "00:00")) {
+                            timeLabel.setText(time.format(DateTimeFormatter.ofPattern("mm:ss")));
                             finalGameTime[0]--;
-                            timeLabel.setText(String.format("00:%d", finalGameTime[0]));
-                            if (finalGameTime[0] == 0) {
-                                roundCountdownPane.setVisible(true);
-                                timer.cancel();
-                            }
+                        }
+                        else {
+                            roundCountdownPane.setVisible(true);
+                            timer.cancel();
                         }
                     });
                 }
-            }, 1000, 1000);
+            }, 0, 1000);
         });
 
     }
