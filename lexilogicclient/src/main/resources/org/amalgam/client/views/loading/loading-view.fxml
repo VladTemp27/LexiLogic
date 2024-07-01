@@ -28,7 +28,7 @@
                 <Image url="@../../../icons/LoadingLog.png" />
             </image>
         </ImageView>
-        <Label fx:id="findingMatchLabel" layoutX="348.0" layoutY="296.0" text="Finding Match..." textFill="WHITE">
+        <Label fx:id="loadingLabel" layoutX="348.0" layoutY="296.0" text="Finding Match..." textFill="WHITE">
             <font>
                 <Font name="Brygada 1918 Regular" size="18.0" />
             </font>
