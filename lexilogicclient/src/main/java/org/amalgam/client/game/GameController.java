@@ -22,7 +22,6 @@ import org.amalgam.client.loading.LoadingController;
 import org.amalgam.client.login.LoginController;
 
 import java.time.Duration;
-import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -201,7 +200,9 @@ public class GameController implements UpdateDispatcher {
     /**
      * Start the game of the program.
      */
+    private boolean isEndRound = false;
     private void gameStart() {
+        isEndRound = false;
         System.out.println("GAME START");
         String response = LoadingController.response;
         final int[] finalGameTime = {getGameTimeFromResponse(response)};
@@ -214,11 +215,12 @@ public class GameController implements UpdateDispatcher {
                     LocalTime time = LocalTime.ofSecondOfDay(Duration.ofSeconds(finalGameTime[0]).getSeconds());
                     Platform.runLater(() -> {
                         timeLabel.setText(time.format(DateTimeFormatter.ofPattern("mm:ss")));
-                        if (!Objects.equals(timeLabel.getText(), "00:00")) {
+                        if (!Objects.equals(timeLabel.getText(), "00:00") && !isEndRound) {
                             timeLabel.setText(time.format(DateTimeFormatter.ofPattern("mm:ss")));
                             finalGameTime[0]--;
                         }
                         else {
+                            isEndRound = true;
                             roundCountdownPane.setVisible(true);
                             timer.cancel();
                         }
@@ -226,7 +228,6 @@ public class GameController implements UpdateDispatcher {
                 }
             }, 0, 1000);
         });
-
     }
 
     private void populateWordMatrix() {
@@ -240,7 +241,6 @@ public class GameController implements UpdateDispatcher {
             }
         } catch (Exception e) {
             System.out.println(e.getMessage());
-            System.out.println("fetchAndDisplayLetters");
         }
     }
 
@@ -311,29 +311,35 @@ public class GameController implements UpdateDispatcher {
                 lexiTextfield.clear(); // Clear the text field
 
                 if (!input.isEmpty()) {
-                    System.out.println("SUBMITTING WORD...");
-                    Task<Void> task = new Task<Void>() {
-                        @Override
-                        protected Void call() throws Exception {
-                            // Verify the word using GameModel
-                            gameModel.verifyWord(input, LoginController.username, gameRoomID);
-                            System.out.println("VERIFY WORD");
-                            return null;
-                        }
+                    System.out.println("INPUT NOT EMPTY");
+                    if (isEndRound) {
+                        showAlert("Round Ended!");
+                    }
+                    else {
+                        System.out.println("SUBMITTING WORD...");
+                        Task<Void> task = new Task<Void>() {
+                            @Override
+                            protected Void call() throws Exception {
+                                // Verify the word using GameModel
+                                gameModel.verifyWord(input, LoginController.username, gameRoomID);
+                                System.out.println("VERIFY WORD");
+                                return null;
+                            }
 
-                        @Override
-                        protected void succeeded() {
-                            super.succeeded();
-                            System.out.println("SUBMITTED WORD");
-                        }
-                    };
-
-                    LoadingController.executorService.submit(task);
+                            @Override
+                            protected void succeeded() {
+                                super.succeeded();
+                                System.out.println("SUBMITTED WORD");
+                            }
+                        };
+                        LoadingController.executorService.submit(task);
+                    }
                 } else {
                     showAlert("Please enter a word.");
                 }
             }
         });
+
     }
 
     @FXML
@@ -352,8 +358,6 @@ public class GameController implements UpdateDispatcher {
 
         //Checker for state
         String state = rootObject.get("state").getAsString();
-
-
 
         if (state.equals("staging")) { // subcomponents of game is initialized before game begins
             JsonObject gameRoomObject = rootObject.getAsJsonObject("game_room_property");
