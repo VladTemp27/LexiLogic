@@ -6,9 +6,14 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.layout.AnchorPane;
+import javafx.stage.WindowEvent;
 import org.amalgam.ControllerException.InvalidRequestException;
+import org.amalgam.backend.microservices.client.LogoutRequest;
 import org.amalgam.client.MainController;
 import org.amalgam.client.UIPathResolver;
+import org.amalgam.client.login.LoginController;
+import org.amalgam.client.profile.ProfileModel;
+import sun.java2d.cmm.Profile;
 
 import java.util.Optional;
 
@@ -27,6 +32,7 @@ public class MainMenuController {
     private Button profileButton;
     @FXML
     private Button howToPlayButton;
+    private MainMenuModel mainMenuModel = new MainMenuModel(MainController.orbConnection, LoginController.playerCallback);
 
     /**
      * Adds hover effect to the given button.
@@ -77,7 +83,7 @@ public class MainMenuController {
 
        Optional<ButtonType> result = alert.showAndWait();
        if (result.isPresent() && result.get() == ButtonType.OK) {
-           // Exit the application
+           mainMenuModel.logout();
            Platform.exit();
        }
     }

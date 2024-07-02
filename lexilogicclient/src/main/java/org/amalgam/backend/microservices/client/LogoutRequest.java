@@ -16,4 +16,13 @@ public class LogoutRequest {
             throw new RuntimeException(e);
         }
     }
+
+    public static void processExit (ORBConnection orbConnection, String username){
+        try {
+            orbConnection.retrievePlayerRequestStub().logout(username);
+
+        } catch (InvalidName | CannotProceed | NotLoggedInException | NotFound e) {
+            throw new RuntimeException(e);
+        }
+    }
 }

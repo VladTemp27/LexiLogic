@@ -1,10 +1,15 @@
 package org.amalgam.client;
 
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.scene.image.Image;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
+import org.amalgam.backend.microservices.client.LogoutRequest;
 import org.amalgam.backend.microservices.serverconnection.ORBConnection;
 import org.amalgam.client.game.GameController;
 import org.amalgam.client.howtoplay.HowToPlayController;
@@ -16,12 +21,14 @@ import org.amalgam.client.matchhistory.MatchHistoryController;
 import org.amalgam.client.profile.ProfileChangePassController;
 import org.amalgam.client.profile.ProfileChangeUsernameController;
 import org.amalgam.client.profile.ProfileController;
+import org.amalgam.client.profile.ProfileModel;
 import org.omg.CORBA.ORBPackage.InvalidName;
 import org.omg.PortableServer.POAManagerPackage.AdapterInactive;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Objects;
+import java.util.Optional;
 
 /**
  * Design Technique: Aggregation [whole-part relationship] special form of association
@@ -49,7 +56,7 @@ public class MainController {
         classes.add(ProfileChangeUsernameController.class);
         classes.add(ProfileChangePassController.class);
 
-        orbConnection = new ORBConnection(2121, "localhost");
+        orbConnection = new ORBConnection(2121, "corbaserver");
         try {
             orbConnection.start();
         } catch (InvalidName | AdapterInactive e) {
@@ -94,10 +101,25 @@ public class MainController {
                     primaryStage.show(); // show the window
                     primaryStage.setResizable(false);
                     primaryStage.setTitle("Lexi Logic");
+                    primaryStage.setOnCloseRequest(event -> handleWindowClose(event));
                 }
             }
         } catch (IOException e) {
             throw new RuntimeException(e);
+        }
+    }
+    public static void handleWindowClose(WindowEvent event) {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Exit Confirmation");
+        alert.setHeaderText(null);
+        alert.setContentText("Are you sure you want to exit the application?");
+
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.isPresent() && result.get() == ButtonType.OK) {
+            LogoutRequest.processExit(orbConnection, LoginController.username);
+            Platform.exit();
+        } else {
+            event.consume();
         }
     }
 }
