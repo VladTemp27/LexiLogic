@@ -353,12 +353,15 @@ public class GameController implements UpdateDispatcher {
         //Checker for state
         String state = rootObject.get("state").getAsString();
 
-        JsonObject gameRoomObject = rootObject.getAsJsonObject("game_room");
+        JsonObject gameRoomObject = rootObject.getAsJsonObject("game_room_property");
+        int capacity = rootObject.get("capacity").getAsInt();
+
         if (state.equals("staging")) { // subcomponents of game is initialized before game begins
             currentRound = rootObject.get("current_round").getAsInt();
             x = currentRound;
             wordBoxMatrix(rootObject);
             parseRounds(gameRoomObject);
+            fetchPoints(gameRoomObject, capacity);
             roundCountdown();
             System.out.println("ROUND COUNTDOWN ENDED");
         }
@@ -370,8 +373,7 @@ public class GameController implements UpdateDispatcher {
         }
 
         if (state.equals("game_room")) { // returns true if submitted word is valid otherwise false
-            int capacity = rootObject.get("capacity").getAsInt();
-            fetchPoints(rootObject.getAsJsonObject("game_room_property"), capacity);
+            fetchPoints(gameRoomObject, capacity);
         }
 
         if(state.equals("game_done")){ // if there is a winner on particular game room

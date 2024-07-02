@@ -52,7 +52,6 @@ public class GameServiceImpl extends GameServicePOA {
        this.dictionary = dictionary;
    }
 
-
    public void resetMatchMake(){
        matchmakingLock.release();
        this.matchmakingService.clearQueue();

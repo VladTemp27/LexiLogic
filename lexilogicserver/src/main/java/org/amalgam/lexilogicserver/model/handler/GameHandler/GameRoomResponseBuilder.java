@@ -42,6 +42,7 @@ public class GameRoomResponseBuilder {
 
 
     public static String buildStagePlayersResponse(GameRoom gameRoom, int countdown) {
+        int capacity = gameRoom.getCapacity();
         int roomID = gameRoom.getRoomID();
         LinkedHashMap<String, PlayerGameDetail> details = gameRoom.getDetails();
         char[][] charMatrix = gameRoom.getCharMatrix();
@@ -53,6 +54,7 @@ public class GameRoomResponseBuilder {
         response.addProperty("current_round", gameRoom.getCurrentRound());
         response.addProperty("seconds_round_duration", gameRoom.getSecondsRoundDuration());
         response.addProperty("round_done", gameRoom.isRoundDone());
+        response.addProperty("capacity", capacity);
 
         JsonArray matrixArray = new JsonArray();
         for (char[] row : charMatrix) {
@@ -65,6 +67,7 @@ public class GameRoomResponseBuilder {
         response.add("char_matrix", matrixArray);
 
         JsonObject gameRoomJson = new JsonObject();
+        int i=0;
         for (Map.Entry<String, PlayerGameDetail> entry : details.entrySet()) {
             String username = entry.getKey();
             PlayerGameDetail playerDetail = entry.getValue();
@@ -72,17 +75,16 @@ public class GameRoomResponseBuilder {
             playerInfo.addProperty("username", username);
             playerInfo.addProperty("points", playerDetail.getPoints());
             playerInfo.addProperty("ready", playerDetail.isReady());
-
             JsonArray wordsArray = new JsonArray();
             playerDetail.getWords().forEach(wordsArray::add);
             playerInfo.add("words", wordsArray);
-
             JsonArray dupedWordsArray = new JsonArray();
             playerDetail.getDupedWords().forEach(dupedWordsArray::add);
             playerInfo.add("duped_words", dupedWordsArray);
-
-            gameRoomJson.add(username, playerInfo);
+            gameRoomJson.add("player_" + i, playerInfo);
+            i++;
         }
+
 
         JsonObject roundsJson = new JsonObject();
         for (Map.Entry<Integer, String> entry : gameRoom.getRounds().entrySet()) {
@@ -92,7 +94,7 @@ public class GameRoomResponseBuilder {
         }
         gameRoomJson.add("rounds", roundsJson);
 
-        response.add("game_room", gameRoomJson);
+        response.add("game_room_property", gameRoomJson);
 
         return response.toString();
     }
