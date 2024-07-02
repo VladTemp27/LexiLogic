@@ -397,8 +397,12 @@ public class GameController implements UpdateDispatcher {
             showAlert("You've already entered that word!");
         } if (state.equals("duped")) {
             showAlert("You've been duped");
+            fetchPointsAfterDupe(rootObject);
+            System.out.println(rootElement);
         } if (state.equals("duped_word")){
             showAlert("You have duped someone!");
+            fetchPointsAfterDupe(rootObject);
+            System.out.println(rootElement);
         }
     }
 
@@ -425,6 +429,37 @@ public class GameController implements UpdateDispatcher {
             }
         } catch (Exception e) {
             throw new RuntimeException(e);
+        }
+    }
+
+    public void fetchPointsAfterDupe(JsonObject rootObject) {
+        if (rootObject == null) {
+            System.err.println("Error: rootObject is null");
+            return;
+        }
+
+        try {
+            if (!rootObject.has("player_details")) {
+                System.err.println("Error: player_details not found in rootObject");
+                return;
+            }
+
+            JsonObject playerDetailsObject = rootObject.getAsJsonObject("player_details");
+
+            LinkedHashMap<String, Integer> pointsList = new LinkedHashMap<>();
+            System.out.println("PARSING POINTS");
+            for (Map.Entry<String, JsonElement> entry : playerDetailsObject.entrySet()) {
+                String key = entry.getKey();
+                JsonObject playerObject = entry.getValue().getAsJsonObject();
+                String player_name = playerObject.get("username").getAsString();
+                int player_pts = playerObject.get("points").getAsInt();
+                System.out.println(player_name + " " + player_pts);
+                pointsList.put(player_name, player_pts);
+            }
+            updateScores(pointsList);
+        } catch (Exception e) {
+            System.err.println("Exception while fetching points: " + e.getMessage());
+            e.printStackTrace();
         }
     }
 
