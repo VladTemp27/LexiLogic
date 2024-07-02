@@ -536,6 +536,10 @@ public class GameRoom implements NTimerCallback {
             } */else if (key.equals(duperUser)){
                 broadcast(key, GameRoomResponseBuilder.dupedWordResponseDuper(this, key));
             }
+
+            else{
+                broadcast(key, GameRoomResponseBuilder.buildPlayerScoreResponse(this));
+            }
         }
 
     }
