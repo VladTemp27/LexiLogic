@@ -431,50 +431,6 @@ public class ServerController implements ORBDOperationCallback,ORBServerCallback
         }
     }
 
-//    /**
-//     * Load and displays the Account Deletion view
-//     */
-//    public void loadAccountDeletion(){
-//        try {
-//            Font.loadFont(getClass().getResourceAsStream("/org/amalgam/fonts/BowlbyOneSC.ttf"), 20);
-//            Font.loadFont(getClass().getResourceAsStream("/org/amalgam/fonts/Brygada1918.ttf"), 20);
-//
-//            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/org/amalgam/server/views/accountdeletion/accountdeletion-view.fxml"));
-//            AnchorPane accountDeletionPane = fxmlLoader.load();
-//
-//            InputStream inputStream = getClass().getResourceAsStream("/org/amalgam/icons/Logo.png");
-//            if (inputStream != null) {
-//                Image image = new Image(inputStream);
-//                stage.getIcons().add(image);
-//            } else {
-//                System.err.println("Failed to load image: Logo.png");
-//            }
-//
-//            Scene scene = new Scene(accountDeletionPane);
-//
-//            if (stage == null) {
-//                throw new IllegalStateException("Stage is not set. Please set the stage before calling the panel.");
-//            }
-//
-//            stage.setScene(scene);
-//            stage.setResizable(false);
-//            stage.setTitle("Lexi Logic");
-//            AccountDeletionController accountDeletionController = fxmlLoader.getController();
-//            accountDeletionController.setServerController(this);
-//            accountDeletionController.initialize();
-//
-//            stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
-//                @Override
-//                public void handle(WindowEvent event) {
-//                    System.exit(0);
-//                }
-//            });
-//
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//    }
-
     public void loadRunORBDRunningView(){
         try {
             Font.loadFont(getClass().getResourceAsStream("/org/amalgam/fonts/BowlbyOneSC.ttf"), 20);

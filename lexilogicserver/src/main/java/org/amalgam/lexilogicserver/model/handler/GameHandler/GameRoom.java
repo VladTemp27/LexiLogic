@@ -71,7 +71,6 @@ public class GameRoom implements NTimerCallback {
     }
 
     //This method is invoked to mark the players in the room as ready
-    // TODO: explore if concurrently accessing hashmaps would pose a problem
     public void setPlayerReady(String username){
         PlayerGameDetail detail = details.get(username);
         detail.setReady(true);

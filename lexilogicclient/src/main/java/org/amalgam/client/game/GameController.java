@@ -28,6 +28,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class GameController implements UpdateDispatcher {
+    private boolean isEndRound = false;
     @FXML
     private AnchorPane gamePane;
     @FXML
@@ -200,7 +201,6 @@ public class GameController implements UpdateDispatcher {
     /**
      * Start the game of the program.
      */
-    private boolean isEndRound = false;
     private void gameStart() {
         isEndRound = false;
         System.out.println("GAME START");

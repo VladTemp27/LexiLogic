@@ -44,40 +44,14 @@ public class MatchMakeTest implements ControllerInterface, UpdateDispatcher {
         program.callback = new CallbackImpl();
         program.callback.username(program.user);
 
-
-
         //Sets this as the controller
         program.callback.setController(program);
-
 
         //Sends matchmake request from server and waits for a response
         String response =
                 program.gameService.matchMake(PlayerCallbackHelper.narrow(program.rootPOA.servant_to_reference(program.callback)));
         System.out.println("SERVER RESPONSE:");
         System.out.println(response);
-
-
-        //TODO: move this to ui call, for the most part majority of the bugs are fixed here im gonna sleep
-        // ive been awake for 28 hours right now with 1 month of no actual sleep
-//        while(!program.currentState.equals("game_ended")){
-//            if(program.currentState.equals("staging")){
-//                System.out.println("staging");
-//                program.stagingStateHandler();
-//                System.out.println(user+" "+program.gameRoomID);
-//                program.gameService.playerReady(user, program.gameRoomID);
-//                System.out.println("ready sent");
-//                program.currentState = "ready sent";
-//                continue;
-//            }
-//
-//            if(program.currentState.equals("game_started")){
-//                program.gameStartedHandler();
-//                System.out.println("round done");
-//                program.currentState = "";
-//                continue;
-//            }
-//
-//        }
 
         while(!program.currentState.equals("game_ended")){
             String word = "";

@@ -89,7 +89,6 @@ public class LoadingController {
             MainController.changeScreen(UIPathResolver.main_menu_path);
         } else if (status.equals("success")){
             System.out.println("MATCH FOUND...");
-            // todo: act as a buffer such that creation of game room is finished in server-side
             loadingLabel.setText("Joining Game...");
             MainController.changeScreen(UIPathResolver.game_path);
         }

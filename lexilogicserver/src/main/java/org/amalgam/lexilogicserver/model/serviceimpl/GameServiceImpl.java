@@ -41,7 +41,6 @@ public class GameServiceImpl extends GameServicePOA {
     private final AtomicInteger roomID = new AtomicInteger(-1);
     private final AtomicBoolean roomCreationAllowed = new AtomicBoolean(true);
     private final AtomicBoolean roomCreated = new AtomicBoolean(false);
-//    WaitingRoom waitingRoom = new WaitingRoom(); // todo: consider this approach
 
    private final AtomicReference<String> owner = new AtomicReference<>();
 
