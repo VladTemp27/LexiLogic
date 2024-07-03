@@ -4,6 +4,8 @@ import org.amalgam.Service.GameServiceModule.GameService;
 import org.amalgam.Service.GameServiceModule.GameServiceHelper;
 import org.amalgam.Service.PlayerServiceModule.PlayerService;
 import org.amalgam.Service.PlayerServiceModule.PlayerServiceHelper;
+import org.amalgam.lexilogicserver.model.microservices.wordbox.Exceptions.ReadFailure;
+import org.amalgam.lexilogicserver.model.microservices.wordbox.Reader;
 import org.amalgam.lexilogicserver.model.serviceimpl.GameServiceImpl;
 import org.amalgam.lexilogicserver.model.serviceimpl.PlayerServiceImpl;
 import org.omg.CORBA.ORB;
@@ -18,6 +20,8 @@ import org.omg.PortableServer.POAHelper;
 import org.omg.PortableServer.POAManagerPackage.AdapterInactive;
 import org.omg.PortableServer.POAPackage.ServantNotActive;
 import org.omg.PortableServer.POAPackage.WrongPolicy;
+
+import java.io.FileNotFoundException;
 
 public class ORBServer implements Runnable{
     private int port;
@@ -38,7 +42,10 @@ public class ORBServer implements Runnable{
             POA rootPOA = POAHelper.narrow(orb.resolve_initial_references("RootPOA"));
             rootPOA.the_POAManager().activate();
 
-            GameServiceImpl gameServiceServant = new GameServiceImpl();
+            Reader reader = new Reader("lexilogicserver/src/main/java/org/amalgam/lexilogicserver/model/microservices" +
+                    "/wordbox/words.txt");
+
+            GameServiceImpl gameServiceServant = new GameServiceImpl(reader.retrieveListOfWords(false));
             GameService gameServiceReference = GameServiceHelper.narrow(rootPOA.servant_to_reference(gameServiceServant));
 
             PlayerServiceImpl playerServiceServant = new PlayerServiceImpl();
@@ -62,6 +69,10 @@ public class ORBServer implements Runnable{
         } catch (CannotProceed e) {
             throw new RuntimeException(e);
         } catch (NotFound e) {
+            throw new RuntimeException(e);
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        } catch (ReadFailure e) {
             throw new RuntimeException(e);
         }
     }

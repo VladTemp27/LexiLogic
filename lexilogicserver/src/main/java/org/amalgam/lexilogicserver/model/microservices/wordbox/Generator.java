@@ -15,18 +15,13 @@ public class Generator {
 
     /**
      * Default constructor of generator, this object will be used when generating a wordbox
-     * @param wordReader    Object of Reader that will read the word list file
-     * @param isCSV         if the file where the words are stored is csv or not
+     * @param dictionary    LinkedList of String that will be dictionary word list for the validator
      * @param rowSize       Row size of the word box to be generated
      * @param colSize       Col size of the word box to be generated
      * @throws InvalidParameterException    Throws invalid param if file given within the Reader object is invalid
      */
-    public Generator(Reader wordReader, boolean isCSV, int rowSize, int colSize) throws InvalidParameterException {
-        try {
-            wordList = wordReader.retrieveListOfWords(isCSV);
-        }catch(ReadFailure e){
-            throw new InvalidParameterException(e.getMessage());
-        }
+    public Generator(LinkedList<String> dictionary, int rowSize, int colSize) throws InvalidParameterException {
+        this.wordList = dictionary;
         this.rowSize = rowSize;
         this.colSize = colSize;
     }

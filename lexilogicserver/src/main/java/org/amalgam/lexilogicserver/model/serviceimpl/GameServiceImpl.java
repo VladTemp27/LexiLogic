@@ -10,6 +10,7 @@ import org.amalgam.lexilogicserver.model.DAL.LeaderBoardDAL;
 import org.amalgam.lexilogicserver.model.microservices.Matchmaking.MatchmakingService;
 import org.amalgam.lexilogicserver.model.DAL.LobbyDAL;
 import org.amalgam.lexilogicserver.model.microservices.gamesettings.SettingsHandler;
+import org.amalgam.lexilogicserver.model.microservices.wordbox.Exceptions.ReadFailure;
 import org.amalgam.lexilogicserver.model.utilities.referenceobjects.LeaderBoard;
 import java.io.FileNotFoundException;
 
@@ -33,6 +34,12 @@ public class GameServiceImpl extends GameServicePOA {
 
    private final AtomicBoolean roomCreationAllowed = new AtomicBoolean(true);
    private final AtomicBoolean roomCreated = new AtomicBoolean(false);
+
+   private LinkedList<String> dictionary = new LinkedList<>();
+
+   public GameServiceImpl(LinkedList<String> dictionary){
+       this.dictionary = dictionary;
+   }
 
 
     /**
@@ -166,7 +173,8 @@ public class GameServiceImpl extends GameServicePOA {
         }
 
         try {
-            GameRoom gameRoom = new GameRoom(roomID, playerDetailsMap, playerCallbacksMap, SettingsHandler.getGameTime(),
+            GameRoom gameRoom = new GameRoom(this.dictionary,roomID, playerDetailsMap, playerCallbacksMap,
+                    SettingsHandler.getGameTime(),
                     players.size());
             System.out.println("GameRoom Created");
             if (matchmakingService.isTimerDone()) {
@@ -177,6 +185,8 @@ public class GameServiceImpl extends GameServicePOA {
                 //gameRoom.stagePlayers();
             }
         } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        } catch (ReadFailure e) {
             throw new RuntimeException(e);
         }
     }

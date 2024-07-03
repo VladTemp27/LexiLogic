@@ -7,6 +7,7 @@ import org.amalgam.lexilogicserver.model.DAL.LeaderBoardDAL;
 import org.amalgam.lexilogicserver.model.DAL.LobbyDAL;
 import org.amalgam.lexilogicserver.model.microservices.NTimer;
 import org.amalgam.lexilogicserver.model.microservices.NTimerCallback;
+import org.amalgam.lexilogicserver.model.microservices.wordbox.Exceptions.ReadFailure;
 import org.amalgam.lexilogicserver.model.microservices.wordbox.Generator;
 import org.amalgam.lexilogicserver.model.microservices.wordbox.Reader;
 import org.amalgam.lexilogicserver.model.microservices.wordbox.WordBox;
@@ -35,14 +36,17 @@ public class GameRoom implements NTimerCallback {
     private ConcurrentHashMap<String, Boolean> readyToReceive = new ConcurrentHashMap<String, Boolean>();
     private ExecutorService executor = Executors.newCachedThreadPool();
 
-    public GameRoom(int roomID, LinkedHashMap<String,PlayerGameDetail> details,
-                    ConcurrentHashMap<String,PlayerCallback> playerCallbacks , int secondsRoundDuration, int capacity) throws FileNotFoundException {
+    private LinkedList<String> dictionary;
+
+    public GameRoom(LinkedList<String> dictionary,int roomID, LinkedHashMap<String,PlayerGameDetail> details,
+                    ConcurrentHashMap<String,PlayerCallback> playerCallbacks , int secondsRoundDuration, int capacity) throws FileNotFoundException, ReadFailure {
         this.roomID = roomID;
         this.defaultDetails = details;
         this.secondsRoundDuration = secondsRoundDuration;
         this.playerCallbacks = playerCallbacks;
         currentRound = 1;
         this.capacity = capacity;
+        this.dictionary = dictionary;
         generateWordBox();
         initializeReadyToReceive(playerCallbacks);
         //stagePlayers();
@@ -190,8 +194,9 @@ public class GameRoom implements NTimerCallback {
     }
 
     //call this to generate a wordBox, generates a new wordbox for every invocation
-    private void generateWordBox() throws FileNotFoundException {
-        wordBox = new WordBox(new Generator(new Reader("lexilogicserver/src/main/java/org/amalgam/lexilogicserver/model/microservices/wordbox/words.txt"), false, 4, 5));
+    private void generateWordBox() throws FileNotFoundException, ReadFailure {
+        Generator generator = new Generator(this.dictionary, 4, 5) ;
+        wordBox = new WordBox(generator);
     }
 
     //Method to be invoked once words are submitted via the game service request
@@ -255,7 +260,7 @@ public class GameRoom implements NTimerCallback {
         System.out.println("next round: "+currentRound);
         try {
             generateWordBox();
-        } catch (FileNotFoundException e) {
+        } catch (FileNotFoundException | ReadFailure e) {
             throw new RuntimeException(e);
         }
         //Use broadcast with builder
