@@ -228,7 +228,7 @@ public class GameServiceImpl extends GameServicePOA {
 
 
     @Override
-    public void verifyWord(String word, String username, int gameRoomID) throws InvalidWordFormatException, DuplicateWordException {
+    public synchronized void verifyWord(String word, String username, int gameRoomID) throws InvalidWordFormatException, DuplicateWordException {
         int tempIndex = getRoomIndexFromID(gameRoomID);
         System.out.println(username+" submitted word: "+word);
 //        GameRoom temp = rooms.get(tempIndex);
@@ -253,7 +253,7 @@ public class GameServiceImpl extends GameServicePOA {
 
     //TODO test if synchronized makes it buggy
     @Override
-    public String playerReady(String username, int gameRoomID) {
+    public synchronized String playerReady(String username, int gameRoomID) {
         int origIndex = getRoomIndexFromID(gameRoomID);
         GameRoom temp = rooms.get(origIndex);
 

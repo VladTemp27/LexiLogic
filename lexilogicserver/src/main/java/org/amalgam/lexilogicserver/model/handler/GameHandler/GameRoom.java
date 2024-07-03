@@ -49,7 +49,6 @@ public class GameRoom implements NTimerCallback {
         this.dictionary = dictionary;
         generateWordBox();
         initializeReadyToReceive(playerCallbacks);
-        //stagePlayers();
     }
 
     private void initializeReadyToReceive(ConcurrentHashMap<String, PlayerCallback> callbacks){
