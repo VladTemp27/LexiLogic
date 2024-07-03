@@ -528,7 +528,7 @@ public class GameRoom implements NTimerCallback {
                 String owner = notifiedOwner.toString();
                 System.out.println(owner);
             }
-            else if(gameDetail.listOfWordsContains(submittedWord)){
+            else if(gameDetail.listOfWordsContains(submittedWord) && duperUser.equals(gameDetail.getUsername())){
                 broadcast(key, GameRoomResponseBuilder.dupedWordResponseGeneric());
             } /*else if (notifiedOwner.contains(key + " " + submittedWord)) {
                 broadcast(key, GameRoomResponseBuilder.dupedWordResponseGeneric());
