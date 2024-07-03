@@ -13,8 +13,6 @@ import org.amalgam.lexilogicserver.model.microservices.daemonHandler.ORBDExcepti
 import org.amalgam.lexilogicserver.model.microservices.daemonHandler.ORBDOperationCallback;
 import org.amalgam.lexilogicserver.model.microservices.serverHandler.ORBServer;
 import org.amalgam.lexilogicserver.model.microservices.serverHandler.ORBServerCallback;
-import org.amalgam.lexilogicserver.model.utilities.referenceobjects.Player;
-import org.amalgam.lexilogicserver.views.accountdeletion.AccountDeletionController;
 import org.amalgam.lexilogicserver.views.addplayer.AddPlayerController;
 import org.amalgam.lexilogicserver.views.changegame.ChangeGameController;
 import org.amalgam.lexilogicserver.views.editplayer.EditPlayerController;
@@ -43,7 +41,6 @@ public class ServerController implements ORBDOperationCallback,ORBServerCallback
     public static RunServerController runServerController;
     public static AnchorPane runServerPane;
 
-    public static AccountDeletionController accountDeletionController;
     public static AnchorPane accountDeletionPane;
 
     public static RunORBDRunningController runORBDRunningController;
@@ -82,8 +79,6 @@ public class ServerController implements ORBDOperationCallback,ORBServerCallback
     public RunServerController getRunServerController() {
         return runServerController;
     }
-    public AccountDeletionController getAccountDeletionController(){return accountDeletionController;}
-
     public RunORBDRunningController getRunORBDRunningController(){return runORBDRunningController;}
 
     /**
