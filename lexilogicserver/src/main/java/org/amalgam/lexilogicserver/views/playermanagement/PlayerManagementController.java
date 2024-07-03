@@ -63,6 +63,11 @@ public class PlayerManagementController {
         button.setOnMouseExited(e -> button.setStyle("-fx-background-color:  #9CA16F;"));
     }
 
+    private void addHoverEffectRow(TableRow<Player> row) {
+        row.setOnMouseEntered(event -> row.setStyle("-fx-background-color: derive(#F0E68C, -10%);"));
+        row.setOnMouseExited(event -> row.setStyle("-fx-background-color: transparent;"));
+    }
+
     @FXML
     public void handleBackButton() {
         if (serverController != null) {
@@ -180,6 +185,12 @@ public class PlayerManagementController {
         // Set button actions
         addPlayerButton.setOnAction(event -> handleAddPlayer());
         backButton.setOnAction(event -> handleBackButton());
+
+        playerTableView.setRowFactory(tv -> {
+            TableRow<Player> row = new TableRow<>();
+            addHoverEffectRow(row);
+            return row;
+        });
 
         populateTableView(PlayerManagementModel.fetchPlayers());
     }
