@@ -36,6 +36,7 @@ public class MatchmakingService implements NTimerCallback{
     }
 
     public void startTimer() {
+        int MATCHMAKING_TIMEOUT = SettingsHandler.getQueueTime()*1000;
         timerDoneValue.set(false);
         roomValidity.set(false);
         executorService.submit(new NTimer(MATCHMAKING_TIMEOUT / 1000, this));
