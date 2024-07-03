@@ -203,6 +203,7 @@ public class GameController implements UpdateDispatcher {
         final int[] finalGameTime = {getGameTimeFromResponse(response)};
         Platform.runLater(() -> {
             populateWordMatrix();
+            clearScore();
             timer = new Timer();
             timer.schedule(new TimerTask() {
                 @Override
@@ -255,6 +256,16 @@ public class GameController implements UpdateDispatcher {
             });
             x++;
         }
+    }
+
+    private void clearScore(){
+        Platform.runLater(() ->{
+            int maxX = arr_playerName_label.length;
+            for(int x = 0; x < maxX; x++){
+                arr_playerName_label[x].setText("");
+                arr_playerScore_label[x].setText("");
+            }
+        });
     }
 
     /**
