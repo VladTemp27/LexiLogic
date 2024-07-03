@@ -81,12 +81,6 @@ public class PlayerManagementController {
         }
     }
 
-    public void passPlayer(Player player){
-        selectedPlayer = player;
-        observableItems = FXCollections.observableArrayList(selectedPlayer);
-
-    }
-
     private void addButtonToTable() {
         Callback<TableColumn<Player, Void>, TableCell<Player, Void>> cellFactory = new Callback<TableColumn<Player, Void>, TableCell<Player, Void>>() {
             @Override

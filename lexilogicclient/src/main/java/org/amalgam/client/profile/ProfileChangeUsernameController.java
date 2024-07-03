@@ -1,10 +1,7 @@
 package org.amalgam.client.profile;
 
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.effect.ColorAdjust;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
@@ -12,6 +9,8 @@ import org.amalgam.ControllerException.InvalidRequestException;
 import org.amalgam.client.MainController;
 import org.amalgam.client.UIPathResolver;
 import org.amalgam.client.login.LoginController;
+
+import java.util.Optional;
 
 public class ProfileChangeUsernameController {
     // private variables
@@ -90,7 +89,17 @@ public class ProfileChangeUsernameController {
     @FXML
     public void handleSave(){
         // handles the save button when the username is changed
-        profileChangeUsernameModel.changeUsername(newUsernameField.getText());
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Change Username");
+        alert.setHeaderText("Are you sure you want to change username?");
+        alert.setContentText("This action cannot be undone.");
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.isPresent() && result.get() == ButtonType.OK) {
+            profileChangeUsernameModel.changeUsername(newUsernameField.getText());
+            usernameLabel.setText(newUsernameField.getText());
+            ProfileModel.setUsername(newUsernameField.getText());
+            MainController.changeScreen(UIPathResolver.profile_path);
+        }
     }
     @FXML
     public void handleBack(){
@@ -102,7 +111,7 @@ public class ProfileChangeUsernameController {
      */
     @FXML
     public void initialize() {
-        usernameLabel.setText(LoginController.username);
+        usernameLabel.setText(ProfileModel.username);
         addHoverEffect(saveButton);
         addHoverEffectImage(backButton);
         saveButton.setOnAction(event -> handleSave());

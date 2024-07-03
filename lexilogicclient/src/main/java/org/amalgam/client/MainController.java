@@ -101,7 +101,7 @@ public class MainController {
                     primaryStage.show(); // show the window
                     primaryStage.setResizable(false);
                     primaryStage.setTitle("Lexi Logic");
-                    primaryStage.setOnCloseRequest(event -> handleWindowClose(event));
+                    primaryStage.setOnCloseRequest(MainController::handleWindowClose);
                 }
             }
         } catch (IOException e) {
@@ -116,6 +116,7 @@ public class MainController {
 
         Optional<ButtonType> result = alert.showAndWait();
         if (result.isPresent() && result.get() == ButtonType.OK) {
+            if (Objects.equals(UIPathResolver.login_path, scene.getUserAgentStylesheet()))
             LogoutRequest.processExit(orbConnection, LoginController.username);
             Platform.exit();
         } else {

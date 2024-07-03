@@ -51,7 +51,7 @@ public class ProfileChangePassController {
     }
 
     private void addHoverEffect(Button button){
-        button.setOnMouseEntered(e -> button.setStyle("-fx-background-color: derive(#9CA16F, -10%);"));
+        button.setOnMouseEntered(e -> button.setStyle("-fx-background-color: derive (#9CA16F, -10%);"));
         button.setOnMouseExited(e -> button.setStyle("-fx-background-color: #9CA16F;"));
     }
 
@@ -83,6 +83,8 @@ public class ProfileChangePassController {
         } else {
             showSuccess("Password has been changed");
             profileChangePassModel.changePassword(newPasswordField.getText());
+            oldPasswordField.clear();
+            newPasswordField.clear();
         }
         // handles the save button when the username is changed
     }

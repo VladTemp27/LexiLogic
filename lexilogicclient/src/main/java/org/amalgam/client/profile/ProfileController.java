@@ -19,8 +19,6 @@ public class ProfileController {
     @FXML
     private Button changePasswordButton;
     @FXML
-    private Button deleteButton;
-    @FXML
     private Button logoutButton;
     @FXML
     private Button backButton;
@@ -133,9 +131,8 @@ public class ProfileController {
      */
     @FXML
     public void initialize() {
-        usernameLabel.setText(LoginController.username);
+        usernameLabel.setText(ProfileModel.username);
         addChangePasswordHoverEffect(changePasswordButton);
-        addDeleteHoverEffect(deleteButton);
         addLogoutHoverEffect(logoutButton);
         addHoverEffectImage(editUsernameButton);
         addHoverEffectImage(backButton);
@@ -143,6 +140,5 @@ public class ProfileController {
         editUsernameButton.setOnAction(event -> handleEditUsername());
         backButton.setOnAction(event -> handleBack());
         logoutButton.setOnAction(event -> handleLogout());
-        deleteButton.setOnAction(event -> handleDelete());
     }
 }
