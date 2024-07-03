@@ -23,10 +23,10 @@ public class PlayerGameDetail {
     }
 
     public int getPoints() {
-        int calculatedPoints = points;
-        for(String word:dupedWords){
-            if (listOfWordsContains(word)){
-                calculatedPoints-= word.length();
+        int calculatedPoints = 0;
+        for(String word: words){
+            if(!dupedWords.contains(word)){
+                calculatedPoints += word.length();
             }
         }
         return calculatedPoints;
