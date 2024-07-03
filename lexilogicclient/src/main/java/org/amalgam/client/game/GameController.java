@@ -144,6 +144,7 @@ public class GameController implements UpdateDispatcher {
         Platform.runLater(() -> {
             RCTimeLabel.setText(String.format("00:0%d", countdown[0]));
             timer = new Timer();
+            yourLexiLabel.setText("Your Lexi:");
             timer.schedule(new TimerTask() {
                 @Override
                 public void run() {
