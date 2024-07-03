@@ -22,7 +22,6 @@ import org.omg.PortableServer.POAPackage.ServantNotActive;
 import org.omg.PortableServer.POAPackage.WrongPolicy;
 
 import java.io.FileNotFoundException;
-import java.util.LinkedList;
 
 public class ORBServer implements Runnable{
     private int port;
@@ -43,7 +42,10 @@ public class ORBServer implements Runnable{
             POA rootPOA = POAHelper.narrow(orb.resolve_initial_references("RootPOA"));
             rootPOA.the_POAManager().activate();
 
-            GameServiceImpl gameServiceServant = new GameServiceImpl(retrieveDictionary());
+            Reader reader = new Reader("lexilogicserver/src/main/java/org/amalgam/lexilogicserver/model/microservices" +
+                    "/wordbox/words.txt");
+
+            GameServiceImpl gameServiceServant = new GameServiceImpl(reader.retrieveListOfWords(false));
             GameService gameServiceReference = GameServiceHelper.narrow(rootPOA.servant_to_reference(gameServiceServant));
 
             PlayerServiceImpl playerServiceServant = new PlayerServiceImpl();
@@ -68,9 +70,9 @@ public class ORBServer implements Runnable{
             throw new RuntimeException(e);
         } catch (NotFound e) {
             throw new RuntimeException(e);
-        } catch (ReadFailure e) {
-            throw new RuntimeException(e);
         } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        } catch (ReadFailure e) {
             throw new RuntimeException(e);
         }
     }
@@ -85,11 +87,5 @@ public class ORBServer implements Runnable{
         //-ORBInitialHost <hostname>
         arguments[2] = "-ORBInitialHost";
         arguments[3] = hostname;
-    }
-
-    public LinkedList<String> retrieveDictionary() throws ReadFailure, FileNotFoundException {
-        Reader reader = new Reader("lexilogicserver/src/main/java/org/amalgam/lexilogicserver/model/microservices/wordbox/words.txt");
-
-        return reader.retrieveListOfWords(false);
     }
 }

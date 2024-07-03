@@ -7,7 +7,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="profilePane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.amalgam.client.profile.ProfileController">
+<AnchorPane fx:id="profilePane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.amalgam.client.profile.ProfileController">
    <children>
       <ImageView fx:id="backgroundImage" fitHeight="500.0" fitWidth="806.0" pickOnBounds="true">
          <image>
@@ -44,12 +44,7 @@
             <Font name="Bowlby One SC Regular" size="14.0" />
          </font>
       </Button>
-      <Button fx:id="deleteButton" layoutX="317.0" layoutY="411.0" mnemonicParsing="false" style="-fx-background-color: A94949;" text="DELETE" textFill="WHITE">
-         <font>
-            <Font name="Bowlby One SC Regular" size="14.0" />
-         </font>
-      </Button>
-      <Button fx:id="logoutButton" layoutX="414.0" layoutY="411.0" mnemonicParsing="false" style="-fx-background-color: #9CA16F;" text="LOGOUT" textFill="WHITE">
+      <Button fx:id="logoutButton" layoutX="368.0" layoutY="418.0" mnemonicParsing="false" style="-fx-background-color: #9CA16F;" text="LOGOUT" textFill="WHITE">
          <font>
             <Font name="Bowlby One SC Regular" size="14.0" />
          </font>

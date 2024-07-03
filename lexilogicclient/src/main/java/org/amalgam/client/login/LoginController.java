@@ -104,8 +104,6 @@ public class LoginController {
 
         if (isLoggedIn) {
             MainController.changeScreen(UIPathResolver.main_menu_path);
-        } else {
-            showAlert("Invalid username or password");
         }
     }
 

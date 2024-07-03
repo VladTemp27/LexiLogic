@@ -19,8 +19,6 @@ public class ProfileController {
     @FXML
     private Button changePasswordButton;
     @FXML
-    private Button deleteButton;
-    @FXML
     private Button logoutButton;
     @FXML
     private Button backButton;
@@ -115,19 +113,6 @@ public class ProfileController {
         }    }
 
     /**
-     * delete the user account when pressed
-     */
-    @FXML
-    public void handleDelete(){
-        try {
-            profileModel.accountDeletionRequest();
-            showAlert("Account deletion request sent successfully.");
-        } catch (Exception e) {
-            System.out.println(e.getCause());
-            showAlert("Error during account deletion: " + e.getMessage());
-        }    }
-
-    /**
      * Initializes the controller.
      * This method sets up the UI components and initializes the data model.
      */
@@ -135,7 +120,6 @@ public class ProfileController {
     public void initialize() {
         usernameLabel.setText(LoginController.username);
         addChangePasswordHoverEffect(changePasswordButton);
-        addDeleteHoverEffect(deleteButton);
         addLogoutHoverEffect(logoutButton);
         addHoverEffectImage(editUsernameButton);
         addHoverEffectImage(backButton);
@@ -143,6 +127,5 @@ public class ProfileController {
         editUsernameButton.setOnAction(event -> handleEditUsername());
         backButton.setOnAction(event -> handleBack());
         logoutButton.setOnAction(event -> handleLogout());
-        deleteButton.setOnAction(event -> handleDelete());
     }
 }

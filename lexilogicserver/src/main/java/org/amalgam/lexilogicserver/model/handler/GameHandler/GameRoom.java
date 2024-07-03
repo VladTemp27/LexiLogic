@@ -7,6 +7,7 @@ import org.amalgam.lexilogicserver.model.DAL.LeaderBoardDAL;
 import org.amalgam.lexilogicserver.model.DAL.LobbyDAL;
 import org.amalgam.lexilogicserver.model.microservices.NTimer;
 import org.amalgam.lexilogicserver.model.microservices.NTimerCallback;
+import org.amalgam.lexilogicserver.model.microservices.wordbox.Exceptions.ReadFailure;
 import org.amalgam.lexilogicserver.model.microservices.wordbox.Generator;
 import org.amalgam.lexilogicserver.model.microservices.wordbox.Reader;
 import org.amalgam.lexilogicserver.model.microservices.wordbox.WordBox;
@@ -27,7 +28,7 @@ public class GameRoom implements NTimerCallback {
     private WordBox wordBox;
     private LinkedHashMap<String,PlayerGameDetail> details;
     private LinkedHashMap<Integer, String> rounds = new LinkedHashMap<>();
-    private LinkedHashMap<String,PlayerCallback> playerCallbacks = new LinkedHashMap<>();
+    private ConcurrentHashMap<String,PlayerCallback> playerCallbacks = new ConcurrentHashMap<>();
     private LinkedHashMap<String, Integer> totalPointsPerPlayer = new LinkedHashMap<>();
     private final LinkedHashMap<String,PlayerGameDetail> defaultDetails;
     private LinkedList<String> notifiedOwner = new LinkedList<>();
@@ -37,22 +38,21 @@ public class GameRoom implements NTimerCallback {
 
     private LinkedList<String> dictionary;
 
-    public GameRoom(int roomID, LinkedHashMap<String,PlayerGameDetail> details,
-                    LinkedHashMap<String,PlayerCallback> playerCallbacks , int secondsRoundDuration, int capacity,
-                    LinkedList<String> dictionary) throws FileNotFoundException {
-        this.dictionary = dictionary;
+    public GameRoom(LinkedList<String> dictionary,int roomID, LinkedHashMap<String,PlayerGameDetail> details,
+                    ConcurrentHashMap<String,PlayerCallback> playerCallbacks , int secondsRoundDuration, int capacity) throws FileNotFoundException, ReadFailure {
         this.roomID = roomID;
         this.defaultDetails = details;
         this.secondsRoundDuration = secondsRoundDuration;
         this.playerCallbacks = playerCallbacks;
         currentRound = 1;
         this.capacity = capacity;
+        this.dictionary = dictionary;
         generateWordBox();
         initializeReadyToReceive(playerCallbacks);
         //stagePlayers();
     }
 
-    private void initializeReadyToReceive(LinkedHashMap<String, PlayerCallback> callbacks){
+    private void initializeReadyToReceive(ConcurrentHashMap<String, PlayerCallback> callbacks){
         for(String key: callbacks.keySet()){
             readyToReceive.put(key, false);
         }
@@ -95,7 +95,6 @@ public class GameRoom implements NTimerCallback {
         String jsonString = GameRoomResponseBuilder.buildStagePlayersResponse(this,5); //Use response builder here
         System.out.println(jsonString);
         try {
-            //generateWordBox();
             Thread.sleep(400);
             broadcastStaging(jsonString);
         }catch(Exception e){
@@ -194,8 +193,8 @@ public class GameRoom implements NTimerCallback {
     }
 
     //call this to generate a wordBox, generates a new wordbox for every invocation
-    private void generateWordBox() throws FileNotFoundException {
-        Generator generator = new Generator(dictionary, 4, 5);
+    private void generateWordBox() throws FileNotFoundException, ReadFailure {
+        Generator generator = new Generator(this.dictionary, 4, 5) ;
         wordBox = new WordBox(generator);
     }
 
@@ -259,7 +258,7 @@ public class GameRoom implements NTimerCallback {
         System.out.println("next round: "+currentRound);
         try {
             generateWordBox();
-        } catch (FileNotFoundException e) {
+        } catch (FileNotFoundException | ReadFailure e) {
             throw new RuntimeException(e);
         }
         //Use broadcast with builder
@@ -528,12 +527,15 @@ public class GameRoom implements NTimerCallback {
                 String owner = notifiedOwner.toString();
                 System.out.println(owner);
             }
-            else if(gameDetail.listOfWordsContains(submittedWord)){
+            else if(gameDetail.listOfWordsContains(submittedWord) && duperUser.equals(gameDetail.getUsername())){
                 broadcast(key, GameRoomResponseBuilder.dupedWordResponseGeneric());
             } /*else if (notifiedOwner.contains(key + " " + submittedWord)) {
                 broadcast(key, GameRoomResponseBuilder.dupedWordResponseGeneric());
             } */else if (key.equals(duperUser)){
-                broadcast(key, GameRoomResponseBuilder.dupedWordResponseDuper());
+                broadcast(key, GameRoomResponseBuilder.dupedWordResponseDuper(this, key));
+            }
+            else{
+                broadcast(key, GameRoomResponseBuilder.buildPlayerScoreResponse(this));
             }
         }
 

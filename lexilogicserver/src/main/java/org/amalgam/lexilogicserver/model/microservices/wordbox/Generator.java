@@ -15,7 +15,7 @@ public class Generator {
 
     /**
      * Default constructor of generator, this object will be used when generating a wordbox
-     * @param dictionary    LinkedList of String that servers as a word dictionary
+     * @param dictionary    LinkedList of String that will be dictionary word list for the validator
      * @param rowSize       Row size of the word box to be generated
      * @param colSize       Col size of the word box to be generated
      * @throws InvalidParameterException    Throws invalid param if file given within the Reader object is invalid
