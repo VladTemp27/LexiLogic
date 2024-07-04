@@ -96,45 +96,10 @@ public class RunORBDController implements ORBDOperationCallback {
     }
 
     /**
-     * Validates the hostname and port.
-     *
-     * @param hostname The hostname to validate.
-     * @param port     The port to validate.
-     * @return True if hostname and port are valid, false otherwise.
-     */
-    @Deprecated
-    private boolean isValidHostAndPort(String hostname, int port) { //TODO: Checking of Validity of Host and Port
-        if (hostname == null || hostname.isEmpty() || port < 1 || port > 65535) {
-            showAlert("Invalid Hostname or Port. Please check your input.");
-            return false;
-        }
-
-        Socket socket = new Socket();
-        int timeout = 5000; // 5 seconds timeout for connection
-
-        try {
-            socket.connect(new InetSocketAddress(hostname, port), timeout);
-            socket.close();
-            return true; // Connection successful
-        } catch (SocketTimeoutException e) {
-            showAlert("Connection timed out. The host may be down or unreachable.");
-        } catch (Exception e) {
-            showAlert("Invalid Hostname or Port. Please check your input.");
-        } finally {
-            try {
-                socket.close();
-            } catch (Exception e) {
-                // Ignore
-            }
-        }
-        return false; // Connection failed
-    }
-
-    /**
      * Handles the Run ORBD Button.
      */
     @FXML
-    public void handleRunORBDButton() { //TODO: Checking of Validity of Host and Port
+    public void handleRunORBDButton() { // Checking of Validity of Host and Port
         String hostname = hostNameField.getText().trim();
         String portText = portField.getText().trim();
 

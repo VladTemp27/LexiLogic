@@ -463,7 +463,6 @@ public class ServerController implements ORBDOperationCallback,ORBServerCallback
     
     public void notifyOrbExit() throws ORBDException {
         try {
-            //TODO: Prompt with ui that ORB has exited
             System.out.println("ORB has exited with exit code: ");
         }catch(Exception e){
             System.out.println(e.getMessage());

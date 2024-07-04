@@ -52,7 +52,6 @@ public class RunServerController {
     }
 
     public void showServerRunning() {
-        //TODO: Text should show all running things for the server.
         serverUpdateLabel.setText("Server is Running...");
     }
 

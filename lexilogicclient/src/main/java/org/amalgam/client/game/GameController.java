@@ -204,8 +204,7 @@ public class GameController implements UpdateDispatcher {
     private void gameStart() {
         isEndRound = false;
         System.out.println("GAME START");
-        String response = LoadingController.response;
-        final int[] finalGameTime = {getGameTimeFromResponse(response)};
+        final int[] finalGameTime = {getGameTimeFromResponse(LoadingController.response)};
         Platform.runLater(() -> {
             populateWordMatrix();
             timer = new Timer();

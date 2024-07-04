@@ -38,50 +38,6 @@ public class LeaderboardsController {
     public static LeaderboardsModel leaderboardsModel = new LeaderboardsModel(MainController.orbConnection,
             LoginController.playerCallback);
 
-     // TODO: This should be moved into an object for client side
-    public static class LeaderboardsData {
-        private String rank;
-        private String username;
-        private Integer score;
-        private int highestRank;
-        private int highestScore;
-
-
-        public LeaderboardsData(String rank, String username, int score) {
-            this.rank = rank;
-            this.username = username;
-            this.score = score;
-            }
-
-            public String getRank() {
-                return rank;
-            }
-
-            public String getUsername() {
-                return username;
-            }
-
-            public int getScore() {
-                return score;
-            }
-
-            public int getHighestRank() {
-                return highestRank;
-            }
-
-            public void setHighestRank ( int highestRank){
-                this.highestRank = highestRank;
-            }
-
-            public int getHighestScore () {
-                return highestScore;
-            }
-
-            public void setHighestScore ( int highestScore){
-                this.highestScore = highestScore;
-            }
-        }
-
     /**
      * Adds hover effect to the given button.
      *

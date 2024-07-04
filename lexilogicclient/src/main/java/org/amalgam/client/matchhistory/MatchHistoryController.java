@@ -102,7 +102,6 @@ public class MatchHistoryController{
 
     }
 
-    //TODO: This should be moved into an Object for Client Side
     private static class MatchData {
         private String standing;
         private int score;
