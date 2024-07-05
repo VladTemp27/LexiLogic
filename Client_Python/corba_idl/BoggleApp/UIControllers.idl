@@ -1,0 +1,18 @@
+module org{
+    module amalgam {
+        module ControllerException {
+             exception InvalidRequestException {
+                  string message;
+            };
+        };
+
+        module UIControllers {
+             interface PlayerCallback {
+                attribute string username;
+
+                void uiCall(in string jsonString)
+                    raises (org::amalgam::ControllerException::InvalidRequestException);
+             };
+        };
+    };
+};

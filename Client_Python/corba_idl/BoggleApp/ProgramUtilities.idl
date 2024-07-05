@@ -1,0 +1,178 @@
+module org {
+    module amalgam {
+        module Utils {
+            module Exceptions {
+                exception DuplicatePlayerIDException {
+                    string message;
+                };
+
+                exception InvalidPlayerDataException {
+                    string message;
+                };
+
+                exception SQLError {
+                    string message;
+                };
+
+                exception InvalidNameException {
+                    string message;
+                };
+
+                exception InvalidPasswordException {
+                    string message;
+                };
+
+                exception UpdateLastLoginException {
+                    string message;
+                };
+
+                exception InvalidPointsException {
+                    string message;
+                };
+
+                exception PlayerAlreadyInRoomException {
+                    string message;
+                };
+
+                exception LobbyIDRetrievalException {
+                    string message;
+                };
+
+                exception CreatedByRetrievalException {
+                    string message;
+                };
+
+                exception CloseLobbyException {
+                    string message;
+                };
+
+                exception PlayerDoesNotExistException {
+                    string message;
+                };
+
+                exception RoomDoesNotExistException {
+                    string message;
+                };
+
+                exception PlayerListRetrievalException {
+                    string message;
+                };
+
+                exception LeaderboardIDRetrievalException {
+                    string message;
+                };
+
+
+                exception AlreadyLoggedInException {
+                    string message;
+                };
+
+                exception InvalidCredentialsException {
+                    string message;
+                };
+
+                exception InvalidWordException {
+                    string message;
+                };
+
+                exception NoPlayersAvailableException {
+                    string message;
+                };
+
+                exception NotLoggedInException {
+                    string message;
+                };
+
+                exception ObjectExistenceException {
+                    string message;
+                };
+
+                exception UserExistenceException {
+                    string message;
+                };
+
+                exception ChangeUsernameFailedException {
+                    string message;
+                };
+
+                exception ChangePasswordFailedException {
+                    string message;
+                };
+
+                exception DeleteAccountFailedException {
+                    string message;
+                };
+
+                exception SubmitWordFailedException {
+                    string message;
+                };
+
+                exception StartGameFailedException {
+                    string message;
+                };
+
+                exception GameHistoryUnavailableException {
+                    string message;
+                };
+
+                exception GameResultUnavailableException {
+                    string message;
+                };
+
+                exception InGameException {
+                    string message;
+                };
+
+                exception MatchCreationFailedException {
+                    string message;
+                };
+
+                exception AccountCreationFailedException{
+                    string message;
+                };
+
+
+
+                exception WordFetchFailedException {
+                    string message;
+                };
+
+                exception InvalidWordFormatException {
+                    string message;
+                };
+
+                exception InvalidRoomIDException {
+                    string message;
+                };
+
+                exception EmptyLeaderBoardException {
+                    string message;
+                };
+
+                exception InvalidLobbyDataException {
+                    string message;
+                };
+
+                exception LobbyDoesNotExistException {
+                    string message;
+                };
+
+                exception DuplicateWordException {
+                    string message;
+                };
+
+                exception InsufficientWordPointsException {
+                    string message;
+                };
+
+                exception InvalidTotalPointsException {
+                    string message;
+                };
+
+                exception WinnerDoesNotExistException {
+                    string message;
+                };
+            };
+        };
+    };
+};

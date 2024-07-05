@@ -1,0 +1,15 @@
+[tool.poetry]
+name = "2024-2-9329-finteam1-python"
+version = "0.1.0"
+description = ""
+authors = ["Lestat <2233915@slu.edul.ph>. Lou <2233672@slu.edu.ph>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+urwid = "^2.6.13"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

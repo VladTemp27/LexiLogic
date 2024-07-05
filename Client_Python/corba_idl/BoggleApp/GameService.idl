@@ -1,0 +1,38 @@
+#include "ProgramUtilities.idl"
+#include "UIControllers.idl"
+
+module org {
+    module amalgam {
+        module Service {
+            module GameServiceModule {
+                interface GameService {
+
+                    typedef org::amalgam::UIControllers::PlayerCallback PlayerCallback;
+
+                    string matchMake(in PlayerCallback player_callback)
+                        raises (org::amalgam::Utils::Exceptions::MatchCreationFailedException);
+
+                    void readyHandshake(in string username, in long callback);
+
+                    typedef char Matrix[6][6];
+                    Matrix fetchWordBox(in long roomID)
+                        raises (org::amalgam::Utils::Exceptions::WordFetchFailedException, org::amalgam::Utils::Exceptions::InvalidRoomIDException);
+
+                    string getLeaderboards()
+                        raises (org::amalgam::Utils::Exceptions::EmptyLeaderBoardException);
+
+                    void verifyWord(in string word,in string username ,in long gameRoomID)
+                        raises (org::amalgam::Utils::Exceptions::InvalidWordFormatException, org::amalgam::Utils::Exceptions::DuplicateWordException);
+
+                    long validateTotalPoints()
+                        raises (org::amalgam::Utils::Exceptions::InsufficientWordPointsException, org::amalgam::Utils::Exceptions::InvalidTotalPointsException);
+
+                    string fetchWinner(in long lobbyId)
+                        raises (org::amalgam::Utils::Exceptions::LobbyDoesNotExistException, org::amalgam::Utils::Exceptions::WinnerDoesNotExistException);
+
+                   string playerReady(in string username, in long gameRoomID);
+                };
+            };
+        };
+    };
+};
