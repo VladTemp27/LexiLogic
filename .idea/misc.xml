@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ExternalStorageConfigurationManager" enabled="true" />
   <component name="MavenProjectsManager">
@@ -8,12 +9,16 @@
         <option value="$PROJECT_DIR$/newlexilogicclient/pom.xml" />
         <option value="$PROJECT_DIR$/lexilogicclient/pom.xml" />
         <option value="$PROJECT_DIR$/lexilogicserver/pom.xml" />
+        <option value="$PROJECT_DIR$/Client_Java/pom.xml" />
+        <option value="$PROJECT_DIR$/Server_Java/pom.xml" />
+        <option value="$PROJECT_DIR$/lexilogicserver/src/main/java/Server_Java/pom.xml" />
       </list>
     </option>
     <option name="ignoredFiles">
       <set>
         <option value="$PROJECT_DIR$/backend/pom.xml" />
         <option value="$PROJECT_DIR$/clientbackend/pom.xml" />
+        <option value="$PROJECT_DIR$/lexilogicserver/src/main/java/Server_Java/pom.xml" />
       </set>
     </option>
   </component>
